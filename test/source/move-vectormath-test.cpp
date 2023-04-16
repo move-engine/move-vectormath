@@ -7,8 +7,7 @@
 
 SCENARIO("Test move-vectormath", "[move-vectormath]")
 {
-  GIVEN("A transformation matrix")
-  {
-    move::matrix4 transformation = move::matrix4::Identity;
-  }
+    GIVEN("A transformation matrix")
+    {
+    }
 }
