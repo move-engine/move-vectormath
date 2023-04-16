@@ -1,0 +1,27 @@
+cmake_minimum_required(VERSION 3.14)
+
+project(move-vectormathTests LANGUAGES CXX)
+
+include(../cmake/project-is-top-level.cmake)
+include(../cmake/folders.cmake)
+include(../cmake/windows-set-path.cmake)
+
+# ---- Dependencies ----
+
+CPMAddPackage("gh:catchorg/Catch2@3.2.0")
+if(PROJECT_IS_TOP_LEVEL)
+  find_package(move-vectormath REQUIRED)
+  enable_testing()
+endif()
+
+# ---- Tests ----
+
+add_executable(move-vectormath-test "source/move-vectormath-test.cpp")
+target_link_libraries(move-vectormath-test PUBLIC Catch2WithMain move::vectormath)
+target_compile_features(move-vectormath-test PRIVATE cxx_std_17)
+
+add_test(NAME move-vectormath-test COMMAND move-vectormath-test)
+
+# ---- End-of-file commands ----
+
+add_folders(Test)
