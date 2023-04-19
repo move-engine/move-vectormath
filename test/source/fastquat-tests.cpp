@@ -23,4 +23,6 @@ SCENARIO("Test fastquat", "[move::vectormath::fastquat]")
             }
         }
     }
+
+    // TODO: Write more tests
 }

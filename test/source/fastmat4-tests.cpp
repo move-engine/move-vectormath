@@ -25,4 +25,6 @@ SCENARIO("Test fastmat4", "[move::vectormath::fastmat4]")
             }
         }
     }
+
+    // TODO: Write more tests
 }

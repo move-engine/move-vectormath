@@ -117,12 +117,16 @@ namespace move::vectormath
         static inline fastmat4 create_perspective_rh(
             float fov, float aspect, float near, float far) noexcept
         {
+            // TODO: Look at algorithm from Sony's vectormath.  It seems to be
+            // faster.
             return fastmath::XMMatrixPerspectiveFovRH(fov, aspect, near, far);
         }
 
         static inline fastmat4 create_perspective_lh(
             float fov, float aspect, float near, float far) noexcept
         {
+            // TODO: Look at algorithm from Sony's vectormath.  It seems to be
+            // faster.
             return fastmath::XMMatrixPerspectiveFovLH(fov, aspect, near, far);
         }
 

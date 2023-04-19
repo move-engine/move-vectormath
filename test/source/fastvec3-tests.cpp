@@ -39,4 +39,6 @@ SCENARIO("Test fastvec3", "[move::vectormath::fastvec3]")
             }
         }
     }
+
+    // TODO: Write more tests
 }

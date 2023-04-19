@@ -2,6 +2,9 @@
 #if !defined(MOVE_FASTMAT4_HPP)
 #include "fastmat4.hpp"
 #endif
+#if !defined(MOVE_FASTVEC2_HPP)
+#include "fastvec2.hpp"
+#endif
 #if !defined(MOVE_FASTVEC3_HPP)
 #include "fastvec3.hpp"
 #endif
