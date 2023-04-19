@@ -261,7 +261,7 @@ namespace move::vectormath
                 fastmath::XMVectorSet(g, g, g, g));
         }
 
-        static inline fastquat rotation_pitch_yaw_roll(
+        static inline fastquat from_pitch_yaw_roll(
             float pitch, float yaw, float roll) noexcept
         {
             return fastmath::XMQuaternionRotationRollPitchYaw(pitch, yaw, roll);
