@@ -40,7 +40,8 @@ namespace DirectX::SimpleMath
                (float(y) <= point.y) && (point.y < float(y + height));
     }
 
-    inline void Rectangle::Inflate(long horizAmount, long vertAmount) noexcept
+    inline void Rectangle::Inflate(
+        int32_t horizAmount, int32_t vertAmount) noexcept
     {
         x -= horizAmount;
         y -= vertAmount;
@@ -55,17 +56,17 @@ namespace DirectX::SimpleMath
     inline Rectangle Rectangle::Intersect(
         const Rectangle& ra, const Rectangle& rb) noexcept
     {
-        const long righta = ra.x + ra.width;
-        const long rightb = rb.x + rb.width;
+        const int32_t righta = ra.x + ra.width;
+        const int32_t rightb = rb.x + rb.width;
 
-        const long bottoma = ra.y + ra.height;
-        const long bottomb = rb.y + rb.height;
+        const int32_t bottoma = ra.y + ra.height;
+        const int32_t bottomb = rb.y + rb.height;
 
-        const long maxX = ra.x > rb.x ? ra.x : rb.x;
-        const long maxY = ra.y > rb.y ? ra.y : rb.y;
+        const int32_t maxX = ra.x > rb.x ? ra.x : rb.x;
+        const int32_t maxY = ra.y > rb.y ? ra.y : rb.y;
 
-        const long minRight = righta < rightb ? righta : rightb;
-        const long minBottom = bottoma < bottomb ? bottoma : bottomb;
+        const int32_t minRight = righta < rightb ? righta : rightb;
+        const int32_t minBottom = bottoma < bottomb ? bottoma : bottomb;
 
         Rectangle result;
 
@@ -90,11 +91,12 @@ namespace DirectX::SimpleMath
     inline RECT Rectangle::Intersect(
         const RECT& rcta, const RECT& rctb) noexcept
     {
-        const long maxX = rcta.left > rctb.left ? rcta.left : rctb.left;
-        const long maxY = rcta.top > rctb.top ? rcta.top : rctb.top;
+        const int32_t maxX = rcta.left > rctb.left ? rcta.left : rctb.left;
+        const int32_t maxY = rcta.top > rctb.top ? rcta.top : rctb.top;
 
-        const long minRight = rcta.right < rctb.right ? rcta.right : rctb.right;
-        const long minBottom =
+        const int32_t minRight =
+            rcta.right < rctb.right ? rcta.right : rctb.right;
+        const int32_t minBottom =
             rcta.bottom < rctb.bottom ? rcta.bottom : rctb.bottom;
 
         RECT result;
@@ -120,11 +122,11 @@ namespace DirectX::SimpleMath
     inline Rectangle Rectangle::Union(
         const Rectangle& ra, const Rectangle& rb) noexcept
     {
-        const long righta = ra.x + ra.width;
-        const long rightb = rb.x + rb.width;
+        const int32_t righta = ra.x + ra.width;
+        const int32_t rightb = rb.x + rb.width;
 
-        const long bottoma = ra.y + ra.height;
-        const long bottomb = rb.y + rb.height;
+        const int32_t bottoma = ra.y + ra.height;
+        const int32_t bottomb = rb.y + rb.height;
 
         const int minX = ra.x < rb.x ? ra.x : rb.x;
         const int minY = ra.y < rb.y ? ra.y : rb.y;

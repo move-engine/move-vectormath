@@ -15,8 +15,9 @@ if(PROJECT_IS_TOP_LEVEL)
 endif()
 
 # ---- Tests ----
-
-add_executable(move-vectormath-test "source/move-vectormath-test.cpp")
+# Get all cpp files in the source directory
+file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS "source/*.cpp")
+add_executable(move-vectormath-test ${TEST_SOURCES})
 target_link_libraries(move-vectormath-test PUBLIC Catch2WithMain move::vectormath)
 target_compile_features(move-vectormath-test PRIVATE cxx_std_17)
 
