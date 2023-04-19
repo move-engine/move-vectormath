@@ -10,17 +10,16 @@ SCENARIO("Test fastquat", "[move::vectormath::fastquat]")
     {
         using namespace move::vectormath;
         fastquat rotation =
-            fastquat::rotation_axis(fastvec3::y_axis(), deg_to_rad(90.0f));
+            fastquat::from_rotation_axis(fastvec3::up(), deg_to_rad(90));
 
-        WHEN("The 4o5q5ion is applied to a vector")
+        WHEN("The rotation is applied to a vector")
         {
             fastvec3 v = fastvec3(1, 0, 0) * rotation;
-
             THEN("The result is correct")
             {
-                REQUIRE(v.x() == 0);
-                REQUIRE(v.y() == 0);
-                REQUIRE(v.z() == -1);
+                REQUIRE(v.x() == Catch::Approx(0).margin(0.0000001f));
+                REQUIRE(v.y() == Catch::Approx(0).margin(0.0000001f));
+                REQUIRE(v.z() == Catch::Approx(-1).margin(0.0000001f));
             }
         }
     }

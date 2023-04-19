@@ -52,21 +52,21 @@ namespace move::vectormath
     }
 
     // Quat
-    MVM_INL fastquat fastquat::rotation_roll_pitch_yaw_from_vector(
+    MVM_INL fastquat fastquat::from_pitch_yaw_roll(
         const fastvec3& angles) noexcept
     {
         return fastquat{
             fastmath::XMQuaternionRotationRollPitchYawFromVector(angles)};
     }
 
-    MVM_INL fastquat fastquat::rotation_normal(
+    MVM_INL fastquat fastquat::from_rotation_normal(
         const fastvec3& normal_axis, float angle) noexcept
     {
         return fastquat{
             fastmath::XMQuaternionRotationNormal(normal_axis, angle)};
     }
 
-    MVM_INL fastquat fastquat::rotation_axis(
+    MVM_INL fastquat fastquat::from_rotation_axis(
         const fastvec3& axis, float angleRad) noexcept
     {
         return fastquat{fastmath::XMQuaternionRotationAxis(axis, angleRad)};
@@ -93,7 +93,7 @@ namespace move::vectormath
     // fastvec3
     inline fastvec3 fastvec3::operator*(const fastquat& v) const noexcept
     {
-        return fastmath::XMVector3Rotate(v, _vec);
+        return fastmath::XMVector3Rotate(_vec, v);
     }
 
 }  // namespace move::vectormath

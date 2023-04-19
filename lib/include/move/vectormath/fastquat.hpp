@@ -261,20 +261,19 @@ namespace move::vectormath
                 fastmath::XMVectorSet(g, g, g, g));
         }
 
-        static inline fastquat rotation_roll_pitch_yaw(
+        static inline fastquat rotation_pitch_yaw_roll(
             float pitch, float yaw, float roll) noexcept
         {
-            return fastquat{
-                fastmath::XMQuaternionRotationRollPitchYaw(pitch, yaw, roll)};
+            return fastmath::XMQuaternionRotationRollPitchYaw(pitch, yaw, roll);
         }
 
-        static inline fastquat rotation_roll_pitch_yaw_from_vector(
+        static inline fastquat from_pitch_yaw_roll(
             const fastvec3& angles) noexcept;
 
-        static inline fastquat rotation_normal(
+        static inline fastquat from_rotation_normal(
             const fastvec3& normal_axis, float angle) noexcept;
 
-        static inline fastquat rotation_axis(
+        static inline fastquat from_rotation_axis(
             const fastvec3& axis, float angle) noexcept;
         static inline fastquat rotation_matrix_to_quaternion(
             const fastmat4& matrix) noexcept;
