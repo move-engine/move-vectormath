@@ -78,6 +78,11 @@ namespace move::vectormath
         return fastmath::XMQuaternionRotationMatrix(matrix);
     }
 
+    MVM_INL fastmat4 fastquat::to_rotation_matrix() const noexcept
+    {
+        return fastmath::XMMatrixRotationQuaternion(_quat);
+    }
+
     MVM_INL void fastquat::to_axis_angle(
         fastvec3& axis, float& angleRad) noexcept
     {

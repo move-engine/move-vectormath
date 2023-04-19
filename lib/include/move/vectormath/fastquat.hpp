@@ -275,12 +275,14 @@ namespace move::vectormath
 
         static inline fastquat from_rotation_axis(
             const fastvec3& axis, float angle) noexcept;
+
         static inline fastquat rotation_matrix_to_quaternion(
             const fastmat4& matrix) noexcept;
 
     public:
-        inline void to_axis_angle(fastvec3& axis, float& angle) noexcept;
-        inline fastvec3 operator*(const fastvec3& v) const noexcept;
+        void to_axis_angle(fastvec3& axis, float& angle) noexcept;
+        fastvec3 operator*(const fastvec3& v) const noexcept;
+        fastmat4 to_rotation_matrix() const noexcept;
 
     private:
         XMVECTOR _quat;
