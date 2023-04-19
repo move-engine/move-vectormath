@@ -14,7 +14,10 @@
 
 namespace move::vectormath
 {
-    namespace fastmath = DirectX;
+    namespace internal
+    {
+        namespace DirectX = ::DirectX;  // NOLINT
+    }
     struct fastvec2;
     struct fastvec3;
     struct fastnorm3;
@@ -23,22 +26,22 @@ namespace move::vectormath
     struct fastmat4;
     struct fastquat;
 
-    struct vector2;
-    struct vector3;
-    struct vector4;
-    struct quaternion;
-    struct matrix3;
-    struct matrix4;
+    struct vec2;
+    struct vec3;
+    struct vec4;
+    struct quat;
+    struct matr3;
+    struct matr4;
     struct irect;
     struct frect;
 
     inline float deg_to_rad(float deg)
     {
-        return fastmath::XMConvertToRadians(deg);
+        return internal::DirectX::XMConvertToRadians(deg);
     }
 
     inline float rad_to_deg(float rad)
     {
-        return fastmath::XMConvertToDegrees(rad);
+        return internal::DirectX::XMConvertToDegrees(rad);
     }
 }  // namespace move::vectormath

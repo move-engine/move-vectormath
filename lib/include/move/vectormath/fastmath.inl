@@ -17,24 +17,24 @@ namespace move::vectormath
     // fastmat4
     MVM_INL fastvec3 fastmat4::operator*(const fastvec3& v) const noexcept
     {
-        return fastmath::XMVector3Transform(v, _mat);
+        return internal::DirectX::XMVector3Transform(v, _mat);
     }
 
     MVM_INL fastvec4 fastmat4::operator*(const fastvec4& v) const noexcept
     {
-        return fastmath::XMVector4Transform(v, _mat);
+        return internal::DirectX::XMVector4Transform(v, _mat);
     }
 
     MVM_INL fastmat4 fastmat4::create_look_at_rh(const fastvec3& eye,
         const fastvec3& target, const fastvec3& up) noexcept
     {
-        return fastmath::XMMatrixLookAtRH(eye, target, up);
+        return internal::DirectX::XMMatrixLookAtRH(eye, target, up);
     }
 
     MVM_INL fastmat4 fastmat4::create_look_at_lh(const fastvec3& eye,
         const fastvec3& target, const fastvec3& up) noexcept
     {
-        return fastmath::XMMatrixLookAtLH(eye, target, up);
+        return internal::DirectX::XMMatrixLookAtLH(eye, target, up);
     }
 
     MVM_INL fastmat4 fastmat4::create_look_at(const fastvec3& eye,
@@ -47,8 +47,8 @@ namespace move::vectormath
         const fastvec3& translation, const fastquat& rotation,
         const fastvec3& scale) noexcept
     {
-        return fastmath::XMMatrixTransformation(fastvec3::zero(), rotation,
-            scale, fastvec3::zero(), rotation, translation);
+        return internal::DirectX::XMMatrixTransformation(fastvec3::zero(),
+            rotation, scale, fastvec3::zero(), rotation, translation);
     }
 
     // Quat
@@ -56,49 +56,51 @@ namespace move::vectormath
         const fastvec3& angles) noexcept
     {
         return fastquat{
-            fastmath::XMQuaternionRotationRollPitchYawFromVector(angles)};
+            internal::DirectX::XMQuaternionRotationRollPitchYawFromVector(
+                angles)};
     }
 
     MVM_INL fastquat fastquat::from_rotation_normal(
         const fastvec3& normal_axis, float angle) noexcept
     {
         return fastquat{
-            fastmath::XMQuaternionRotationNormal(normal_axis, angle)};
+            internal::DirectX::XMQuaternionRotationNormal(normal_axis, angle)};
     }
 
     MVM_INL fastquat fastquat::from_rotation_axis(
         const fastvec3& axis, float angleRad) noexcept
     {
-        return fastquat{fastmath::XMQuaternionRotationAxis(axis, angleRad)};
+        return fastquat{
+            internal::DirectX::XMQuaternionRotationAxis(axis, angleRad)};
     }
 
     MVM_INL fastquat fastquat::rotation_matrix_to_quaternion(
         const fastmat4& matrix) noexcept
     {
-        return fastmath::XMQuaternionRotationMatrix(matrix);
+        return internal::DirectX::XMQuaternionRotationMatrix(matrix);
     }
 
     MVM_INL fastmat4 fastquat::to_rotation_matrix() const noexcept
     {
-        return fastmath::XMMatrixRotationQuaternion(_quat);
+        return internal::DirectX::XMMatrixRotationQuaternion(_quat);
     }
 
     MVM_INL void fastquat::to_axis_angle(
         fastvec3& axis, float& angleRad) noexcept
     {
-        fastmath::XMVECTOR& _axis = axis;
-        fastmath::XMQuaternionToAxisAngle(&_axis, &angleRad, _quat);
+        internal::DirectX::XMVECTOR& _axis = axis;
+        internal::DirectX::XMQuaternionToAxisAngle(&_axis, &angleRad, _quat);
     }
 
     MVM_INL fastvec3 fastquat::operator*(const fastvec3& v) const noexcept
     {
-        return fastmath::XMVector3Rotate(v, _quat);
+        return internal::DirectX::XMVector3Rotate(v, _quat);
     }
 
     // fastvec3
     inline fastvec3 fastvec3::operator*(const fastquat& v) const noexcept
     {
-        return fastmath::XMVector3Rotate(_vec, v);
+        return internal::DirectX::XMVector3Rotate(_vec, v);
     }
 
 }  // namespace move::vectormath

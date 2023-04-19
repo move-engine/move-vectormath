@@ -6,7 +6,7 @@ namespace move::vectormath
 {
     struct vec2
     {
-        using XMFLOAT2 = fastmath::XMFLOAT2;
+        using XMFLOAT2 = internal::DirectX::XMFLOAT2;
 
     public:
         inline vec2() noexcept : _value(0, 0)
@@ -101,9 +101,37 @@ namespace move::vectormath
             return (i & (0x1)) == 0 ? _value.x : _value.y;
         }
 
+    public:
+        inline float& x() noexcept
+        {
+            return _value.x;
+        }
+
+        inline float& y() noexcept
+        {
+            return _value.y;
+        }
+
+        inline vec2& set_x(float x) noexcept
+        {
+            _value.x = x;
+            return *this;
+        }
+
+        inline vec2& set_y(float y) noexcept
+        {
+            _value.y = y;
+            return *this;
+        }
+
         inline float length() const noexcept
         {
             return fast().length();
+        }
+
+        inline float length_approximate() const noexcept
+        {
+            return fast().length_approximate();
         }
 
         inline float squared_length() const noexcept
@@ -213,8 +241,8 @@ namespace move::vectormath
         }
 
         inline norm2(float x, float y) noexcept
-            : vec2(fastmath::XMVector2Normalize(
-                  fastmath::XMVectorSet(x, y, 0.0f, 0.0f)))
+            : vec2(internal::DirectX::XMVector2Normalize(
+                  internal::DirectX::XMVectorSet(x, y, 0.0f, 0.0f)))
         {
         }
     };

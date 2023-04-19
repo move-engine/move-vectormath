@@ -10,11 +10,11 @@ namespace move::vectormath
 {
     struct fastmat4
     {
-        using XMMATRIX = fastmath::XMMATRIX;
-        using CXMMATRIX = fastmath::CXMMATRIX;
-        using XMFLOAT4X4 = fastmath::XMFLOAT4X4;
+        using XMMATRIX = internal::DirectX::XMMATRIX;
+        using CXMMATRIX = internal::DirectX::CXMMATRIX;
+        using XMFLOAT4X4 = internal::DirectX::XMFLOAT4X4;
 
-        inline fastmat4() noexcept : _mat(fastmath::XMMatrixIdentity())
+        inline fastmat4() noexcept : _mat(internal::DirectX::XMMatrixIdentity())
         {
         }
 
@@ -23,7 +23,7 @@ namespace move::vectormath
         }
 
         inline fastmat4(const XMFLOAT4X4& m) noexcept
-            : _mat(fastmath::XMLoadFloat4x4(&m))
+            : _mat(internal::DirectX::XMLoadFloat4x4(&m))
         {
         }
 
@@ -41,7 +41,7 @@ namespace move::vectormath
         inline operator XMFLOAT4X4() noexcept
         {
             XMFLOAT4X4 res;
-            fastmath::XMStoreFloat4x4(&res, _mat);
+            internal::DirectX::XMStoreFloat4x4(&res, _mat);
             return res;
         }
 
@@ -53,65 +53,65 @@ namespace move::vectormath
 
         inline fastmat4& operator=(const XMFLOAT4X4& m) noexcept
         {
-            _mat = fastmath::XMLoadFloat4x4(&m);
+            _mat = internal::DirectX::XMLoadFloat4x4(&m);
             return *this;
         }
 
         inline fastmat4 operator*(const fastmat4& m) const noexcept
         {
-            return fastmath::XMMatrixMultiply(_mat, m._mat);
+            return internal::DirectX::XMMatrixMultiply(_mat, m._mat);
         }
 
         inline fastmat4& operator*=(const fastmat4& m) noexcept
         {
-            _mat = fastmath::XMMatrixMultiply(_mat, m._mat);
+            _mat = internal::DirectX::XMMatrixMultiply(_mat, m._mat);
             return *this;
         }
 
     public:
         inline fastmat4 inverse()
         {
-            return fastmath::XMMatrixInverse(0, _mat);
+            return internal::DirectX::XMMatrixInverse(0, _mat);
         }
 
         inline fastmat4 inverse_get_determinant(float& outDeterminant)
         {
-            fastmath::XMVECTOR detvec;
-            auto res = fastmath::XMMatrixInverse(&detvec, _mat);
-            outDeterminant = fastmath::XMVectorGetX(detvec);
+            internal::DirectX::XMVECTOR detvec;
+            auto res = internal::DirectX::XMMatrixInverse(&detvec, _mat);
+            outDeterminant = internal::DirectX::XMVectorGetX(detvec);
             return res;
         }
 
     public:
         static inline fastmat4 create_identity() noexcept
         {
-            return fastmath::XMMatrixIdentity();
+            return internal::DirectX::XMMatrixIdentity();
         }
 
         static inline fastmat4 create_rotation_x(float angle) noexcept
         {
-            return fastmath::XMMatrixRotationX(angle);
+            return internal::DirectX::XMMatrixRotationX(angle);
         }
 
         static inline fastmat4 create_rotation_y(float angle) noexcept
         {
-            return fastmath::XMMatrixRotationY(angle);
+            return internal::DirectX::XMMatrixRotationY(angle);
         }
 
         static inline fastmat4 create_rotation_z(float angle) noexcept
         {
-            return fastmath::XMMatrixRotationZ(angle);
+            return internal::DirectX::XMMatrixRotationZ(angle);
         }
 
         static inline fastmat4 create_translation(
             float x, float y, float z) noexcept
         {
-            return fastmath::XMMatrixTranslation(x, y, z);
+            return internal::DirectX::XMMatrixTranslation(x, y, z);
         }
 
         static inline fastmat4 create_scale(float x, float y, float z) noexcept
         {
-            return fastmath::XMMatrixScaling(x, y, z);
+            return internal::DirectX::XMMatrixScaling(x, y, z);
         }
 
         static inline fastmat4 create_perspective_rh(
@@ -119,7 +119,8 @@ namespace move::vectormath
         {
             // TODO: Look at algorithm from Sony's vectormath.  It seems to be
             // faster.
-            return fastmath::XMMatrixPerspectiveFovRH(fov, aspect, near, far);
+            return internal::DirectX::XMMatrixPerspectiveFovRH(
+                fov, aspect, near, far);
         }
 
         static inline fastmat4 create_perspective_lh(
@@ -127,7 +128,8 @@ namespace move::vectormath
         {
             // TODO: Look at algorithm from Sony's vectormath.  It seems to be
             // faster.
-            return fastmath::XMMatrixPerspectiveFovLH(fov, aspect, near, far);
+            return internal::DirectX::XMMatrixPerspectiveFovLH(
+                fov, aspect, near, far);
         }
 
         static inline fastmat4 create_perspective(
@@ -139,13 +141,15 @@ namespace move::vectormath
         static inline fastmat4 create_ortho_rh(
             float width, float height, float near, float far) noexcept
         {
-            return fastmath::XMMatrixOrthographicRH(width, height, near, far);
+            return internal::DirectX::XMMatrixOrthographicRH(
+                width, height, near, far);
         }
 
         static inline fastmat4 create_ortho_lh(
             float width, float height, float near, float far) noexcept
         {
-            return fastmath::XMMatrixOrthographicLH(width, height, near, far);
+            return internal::DirectX::XMMatrixOrthographicLH(
+                width, height, near, far);
         }
 
         static inline fastmat4 create_ortho(
@@ -158,7 +162,7 @@ namespace move::vectormath
             float right, float bottom, float top, float near,
             float far) noexcept
         {
-            return fastmath::XMMatrixOrthographicOffCenterRH(
+            return internal::DirectX::XMMatrixOrthographicOffCenterRH(
                 left, right, bottom, top, near, far);
         }
 
@@ -166,7 +170,7 @@ namespace move::vectormath
             float right, float bottom, float top, float near,
             float far) noexcept
         {
-            return fastmath::XMMatrixOrthographicOffCenterLH(
+            return internal::DirectX::XMMatrixOrthographicOffCenterLH(
                 left, right, bottom, top, near, far);
         }
 
