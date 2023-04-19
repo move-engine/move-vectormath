@@ -143,7 +143,7 @@ namespace move::vectormath
                 fastmath::XMQuaternionDot(_quat, v._quat));
         }
 
-        inline float length_squared() const noexcept
+        inline float squared_length() const noexcept
         {
             return fastmath::XMVectorGetX(
                 fastmath::XMQuaternionLengthSq(_quat));
@@ -192,7 +192,13 @@ namespace move::vectormath
 
         inline fastquat slerp(const fastquat& q1, float t) const noexcept
         {
-            return fastmath::XMQuaternionSlerp(_quat, q1._quat, t);
+            return slerp(*this, q1, t);
+        }
+
+        static inline fastquat slerp(
+            const fastquat& q1, const fastquat& q2, float t) noexcept
+        {
+            return fastmath::XMQuaternionSlerp(q1._quat, q2._quat, t);
         }
 
     public:

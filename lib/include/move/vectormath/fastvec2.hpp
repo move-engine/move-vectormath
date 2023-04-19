@@ -43,6 +43,11 @@ namespace move::vectormath
             return _vec;
         }
 
+        inline void store(XMFLOAT2& v) const noexcept
+        {
+            fastmath::XMStoreFloat2(&v, _vec);
+        }
+
         inline operator XMFLOAT2() const noexcept
         {
             XMFLOAT2 res;
@@ -275,6 +280,14 @@ namespace move::vectormath
         static inline fastvec2 up() noexcept
         {
             return y_axis();
+        }
+
+        inline static fastvec2 intersect_line(const fastvec2& line1point1,
+            const fastvec2& line1point2, const fastvec2& line2point1,
+            const fastvec2& line2point2) noexcept
+        {
+            return fastmath::XMVector2IntersectLine(line1point1._vec,
+                line1point2._vec, line2point1._vec, line2point2._vec);
         }
 
     public:
