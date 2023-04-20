@@ -103,4 +103,32 @@ namespace move::vectormath
         return internal::DirectX::XMVector3Rotate(_vec, v);
     }
 
+    // mat4
+    MVM_INL mat4 mat4::create_look_at_rh(
+        const vec3& eye, const vec3& target, const vec3& up) noexcept
+    {
+        return mat4(
+            fastmat4::create_look_at_rh(eye.fast(), target.fast(), up.fast()));
+    }
+
+    MVM_INL mat4 mat4::create_look_at_lh(
+        const vec3& eye, const vec3& target, const vec3& up) noexcept
+    {
+        return mat4(
+            fastmat4::create_look_at_lh(eye.fast(), target.fast(), up.fast()));
+    }
+
+    MVM_INL mat4 mat4::create_look_at(
+        const vec3& eye, const vec3& target, const vec3& up) noexcept
+    {
+        return mat4(
+            fastmat4::create_look_at(eye.fast(), target.fast(), up.fast()));
+    }
+
+    MVM_INL mat4 mat4::create_transformation_matrix(const vec3& translation,
+        const quat& rotation, const vec3& scale) noexcept
+    {
+        return mat4(fastmat4::create_transformation_matrix(
+            translation.fast(), rotation.fast(), scale.fast()));
+    }
 }  // namespace move::vectormath

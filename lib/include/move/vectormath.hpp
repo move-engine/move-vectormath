@@ -1,3 +1,3 @@
 #pragma once
 
-#include "vectormath/fastmath.inl"
+#include "vectormath/math.inl"

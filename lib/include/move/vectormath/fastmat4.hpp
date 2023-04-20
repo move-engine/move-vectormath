@@ -38,6 +38,11 @@ namespace move::vectormath
             return _mat;
         }
 
+        inline void store(XMFLOAT4X4& m) noexcept
+        {
+            internal::DirectX::XMStoreFloat4x4(&m, _mat);
+        }
+
         inline operator XMFLOAT4X4() noexcept
         {
             XMFLOAT4X4 res;
