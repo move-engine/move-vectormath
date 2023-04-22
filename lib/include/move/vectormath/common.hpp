@@ -30,10 +30,14 @@ namespace move::vectormath
     struct vec3;
     struct vec4;
     struct quat;
-    struct matr3;
-    struct matr4;
+    struct mat3;
+    struct mat4;
     struct irect;
     struct frect;
+
+    struct ivec2;
+    struct ivec3;
+    struct ivec4;
 
     inline float deg_to_rad(float deg)
     {

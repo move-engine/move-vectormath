@@ -112,6 +112,16 @@ namespace move::vectormath
             return _value.y;
         }
 
+        inline float x() const noexcept
+        {
+            return _value.x;
+        }
+
+        inline float y() const noexcept
+        {
+            return _value.y;
+        }
+
         inline vec2& set_x(float x) noexcept
         {
             _value.x = x;
@@ -245,5 +255,181 @@ namespace move::vectormath
                   internal::DirectX::XMVectorSet(x, y, 0.0f, 0.0f)))
         {
         }
+    };
+
+    struct ivec2
+    {
+    public:
+        inline ivec2() noexcept : _x(0), _y(0)
+        {
+        }
+
+        inline ivec2(int x, int y = 0) noexcept : _x(x), _y(y)
+        {
+        }
+
+        inline ivec2(const ivec2& v) noexcept : _x(v._x), _y(v._y)
+        {
+        }
+
+        inline ivec2(const vec2& v) noexcept
+            : _x(static_cast<int>(v.x())), _y(static_cast<int>(v.y()))
+        {
+        }
+
+    public:
+        inline ivec2& operator=(const ivec2& v) noexcept
+        {
+            _x = v._x;
+            _y = v._y;
+            return *this;
+        }
+
+        inline ivec2& operator+=(const ivec2& v) noexcept
+        {
+            _x += v._x;
+            _y += v._y;
+            return *this;
+        }
+
+        inline ivec2& operator-=(const ivec2& v) noexcept
+        {
+            _x -= v._x;
+            _y -= v._y;
+            return *this;
+        }
+
+        inline ivec2& operator*=(const ivec2& v) noexcept
+        {
+            _x *= v._x;
+            _y *= v._y;
+            return *this;
+        }
+
+        inline ivec2& operator/=(const ivec2& v) noexcept
+        {
+            _x /= v._x;
+            _y /= v._y;
+            return *this;
+        }
+
+        inline ivec2& operator%=(const ivec2& v) noexcept
+        {
+            _x %= v._x;
+            _y %= v._y;
+            return *this;
+        }
+
+        inline ivec2& operator*=(int v) noexcept
+        {
+            _x *= v;
+            _y *= v;
+            return *this;
+        }
+
+        inline ivec2& operator/=(int v) noexcept
+        {
+            _x /= v;
+            _y /= v;
+            return *this;
+        }
+
+        inline ivec2& operator%=(int v) noexcept
+        {
+            _x %= v;
+            _y %= v;
+            return *this;
+        }
+
+        inline ivec2 operator-() const noexcept
+        {
+            return ivec2(-_x, -_y);
+        }
+
+        inline ivec2 operator+(const ivec2& v) const noexcept
+        {
+            return ivec2(_x + v._x, _y + v._y);
+        }
+
+        inline ivec2 operator-(const ivec2& v) const noexcept
+        {
+            return ivec2(_x - v._x, _y - v._y);
+        }
+
+        inline ivec2 operator*(const ivec2& v) const noexcept
+        {
+            return ivec2(_x * v._x, _y * v._y);
+        }
+
+        inline ivec2 operator/(const ivec2& v) const noexcept
+        {
+            return ivec2(_x / v._x, _y / v._y);
+        }
+
+        inline ivec2 operator%(const ivec2& v) const noexcept
+        {
+            return ivec2(_x % v._x, _y % v._y);
+        }
+
+        inline ivec2 operator*(int v) const noexcept
+        {
+            return ivec2(_x * v, _y * v);
+        }
+
+        inline ivec2 operator/(int v) const noexcept
+        {
+            return ivec2(_x / v, _y / v);
+        }
+
+        inline ivec2 operator%(int v) const noexcept
+        {
+            return ivec2(_x % v, _y % v);
+        }
+
+        inline bool operator==(const ivec2& v) const noexcept
+        {
+            return _x == v._x && _y == v._y;
+        }
+
+        inline bool operator!=(const ivec2& v) const noexcept
+        {
+            return _x != v._x || _y != v._y;
+        }
+
+    public:
+        inline int& x()
+        {
+            return _x;
+        }
+
+        inline int& y()
+        {
+            return _y;
+        }
+
+        inline int x() const
+        {
+            return _x;
+        }
+
+        inline int y() const
+        {
+            return _y;
+        }
+
+        inline ivec2& set_x(int x)
+        {
+            _x = x;
+            return *this;
+        }
+
+        inline ivec2& set_y(int y)
+        {
+            _y = y;
+            return *this;
+        }
+
+    public:
+        int _x, _y;
     };
 }  // namespace move::vectormath

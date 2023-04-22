@@ -2,7 +2,6 @@
 
 #include "DirectXMath.h"
 #include "all.hpp"
-#include "move/vectormath/common.hpp"
 
 #if !defined(MVM_INL)
 #if defined(MOVE_FASTMATH_NO_INLINE)
