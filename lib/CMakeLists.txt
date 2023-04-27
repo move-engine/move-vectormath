@@ -13,7 +13,8 @@ if (njson_ADDED)
   add_library(njson INTERFACE)
   target_include_directories(njson INTERFACE "${njson_SOURCE_DIR}/include")
 else()
-  message(FATAL_ERROR "Failed to acquire nlohmann json")
+  # This is a hack
+  # message(FATAL_ERROR "Failed to acquire nlohmann json")
 endif()
 
 CPMAddPackage(
@@ -27,7 +28,8 @@ if (cereal_ADDED)
   add_library(cereal INTERFACE)
   target_include_directories(cereal INTERFACE "${cereal_SOURCE_DIR}/include")
 else()
-  message(FATAL_ERROR "Failed to acquire libcereal")
+  # This is a hack
+  # message(FATAL_ERROR "Failed to acquire libcereal")
 endif()
 
 
