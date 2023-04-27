@@ -9,6 +9,8 @@ namespace move::vectormath
         using XMFLOAT2 = internal::DirectX::XMFLOAT2;
 
     public:
+        constexpr static uint32_t num_elements = 2;
+
         inline vec2() noexcept : _value(0, 0)
         {
         }
@@ -32,6 +34,16 @@ namespace move::vectormath
         }
 
     public:
+        inline bool operator==(const vec2& v) const noexcept
+        {
+            return _value.x == v._value.x && _value.y == v._value.y;
+        }
+
+        inline bool operator!=(const vec2& v) const noexcept
+        {
+            return _value.x != v._value.x || _value.y != v._value.y;
+        }
+
         inline vec2& operator=(const vec2& v) noexcept
         {
             _value = v._value;
@@ -240,6 +252,46 @@ namespace move::vectormath
                 line1point2.fast(), line2point1.fast(), line2point2.fast());
         }
 
+        inline static vec2 zero() noexcept
+        {
+            return vec2(0.0f, 0.0f);
+        }
+
+        inline static vec2 one() noexcept
+        {
+            return vec2(1.0f, 1.0f);
+        }
+
+        inline static vec2 x_axis() noexcept
+        {
+            return vec2(1.0f, 0.0f);
+        }
+
+        inline static vec2 y_axis() noexcept
+        {
+            return vec2(0.0f, 1.0f);
+        }
+
+        inline static vec2 right() noexcept
+        {
+            return vec2(1.0f, 0.0f);
+        }
+
+        inline static vec2 left() noexcept
+        {
+            return vec2(-1.0f, 0.0f);
+        }
+
+        inline static vec2 up() noexcept
+        {
+            return vec2(0.0f, 1.0f);
+        }
+
+        inline static vec2 down() noexcept
+        {
+            return vec2(0.0f, -1.0f);
+        }
+
     private:
         XMFLOAT2 _value;
     };
@@ -260,6 +312,8 @@ namespace move::vectormath
     struct ivec2
     {
     public:
+        constexpr static uint32_t num_elements = 2;
+
         inline ivec2() noexcept : _x(0), _y(0)
         {
         }
@@ -396,6 +450,16 @@ namespace move::vectormath
             return _x != v._x || _y != v._y;
         }
 
+        inline int operator[](int i) const noexcept
+        {
+            return (i & (0x1)) == 0 ? _x : _y;
+        }
+
+        inline int& operator[](int i) noexcept
+        {
+            return (i & (0x1)) == 0 ? _x : _y;
+        }
+
     public:
         inline int& x()
         {
@@ -430,6 +494,59 @@ namespace move::vectormath
         }
 
     public:
+        static inline ivec2 zero() noexcept
+        {
+            return ivec2(0, 0);
+        }
+
+        static inline ivec2 one() noexcept
+        {
+            return ivec2(1, 1);
+        }
+
+        static inline ivec2 x_axis() noexcept
+        {
+            return ivec2(1, 0);
+        }
+
+        static inline ivec2 y_axis() noexcept
+        {
+            return ivec2(0, 1);
+        }
+
+        static inline ivec2 right() noexcept
+        {
+            return ivec2(1, 0);
+        }
+
+        static inline ivec2 left() noexcept
+        {
+            return ivec2(-1, 0);
+        }
+
+        static inline ivec2 up() noexcept
+        {
+            return ivec2(0, 1);
+        }
+
+        static inline ivec2 down() noexcept
+        {
+            return ivec2(0, -1);
+        }
+
+    public:
         int _x, _y;
     };
 }  // namespace move::vectormath
+
+#if !defined(MOVE_VECTORMATH_NO_SERIALIZATION)
+#include "vmathcereal.hpp"
+#include "vmathjson.hpp"
+
+MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2);
+MOVE_VECTORMATH_CEREAL_SERIALIZER(move::vectormath::vec2);
+MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::norm2);
+MOVE_VECTORMATH_CEREAL_SERIALIZER(move::vectormath::norm2);
+MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::ivec2);
+MOVE_VECTORMATH_CEREAL_SERIALIZER(move::vectormath::ivec2);
+#endif

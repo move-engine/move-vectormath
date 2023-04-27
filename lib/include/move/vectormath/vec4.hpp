@@ -1,5 +1,8 @@
 #pragma once
 
+#include <ostream>
+
+#include <fmt/format.h>
 #include "fastvec4.hpp"
 
 namespace move::vectormath
@@ -9,6 +12,8 @@ namespace move::vectormath
         using XMFLOAT4 = internal::DirectX::XMFLOAT4;
 
     public:
+        constexpr static uint32_t num_elements = 4;
+
         inline vec4() noexcept : _value(0, 0, 0, 0)
         {
         }
@@ -132,7 +137,7 @@ namespace move::vectormath
                 case 2:
                     return _value.z;
                 default:
-                    return _value.z;
+                    return _value.w;
             }
         }
 
@@ -153,6 +158,26 @@ namespace move::vectormath
         }
 
         inline float& w() noexcept
+        {
+            return _value.w;
+        }
+
+        inline float x() const noexcept
+        {
+            return _value.x;
+        }
+
+        inline float y() const noexcept
+        {
+            return _value.y;
+        }
+
+        inline float z() const noexcept
+        {
+            return _value.z;
+        }
+
+        inline float w() const noexcept
         {
             return _value.w;
         }
@@ -322,6 +347,13 @@ namespace move::vectormath
         XMFLOAT4 _value;
     };
 
+    inline std::ostream& operator<<(
+        std::ostream& os, const move::vectormath::vec4& v)
+    {
+        return os << "(" << v.x() << ", " << v.y() << ", " << v.z() << ", "
+                  << v.w() << ")";
+    }
+
     struct norm4 : public vec4
     {
         inline norm4(const vec4& v) noexcept : vec4(v.normalized())
@@ -335,3 +367,54 @@ namespace move::vectormath
         }
     };
 }  // namespace move::vectormath
+
+#if !defined(MOVE_VECTORMATH_NO_SERIALIZATION)
+#include "vmathcereal.hpp"
+#include "vmathjson.hpp"
+MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec4);
+MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::norm4);
+MOVE_VECTORMATH_CEREAL_SERIALIZER(move::vectormath::vec4);
+MOVE_VECTORMATH_CEREAL_SERIALIZER(move::vectormath::norm4);
+#endif
+
+template <>
+struct fmt::formatter<move::vectormath::vec4>
+{
+    template <typename ParseContext>
+    constexpr inline auto parse(ParseContext& ctx)
+    {
+        return ctx.begin();
+    }
+
+    template <typename FormatContext>
+    auto inline format(move::vectormath::vec4 const& number, FormatContext& ctx)
+    {
+        return format_to(ctx.out(), "({}, {}, {}, {})", number.x(), number.y(),
+            number.z(), number.w());
+    }
+};
+
+template <>
+struct fmt::formatter<move::vectormath::norm4>
+{
+    template <typename ParseContext>
+    constexpr inline auto parse(ParseContext& ctx)
+    {
+        return ctx.begin();
+    }
+
+    template <typename FormatContext>
+    auto inline format(
+        move::vectormath::norm4 const& number, FormatContext& ctx)
+    {
+        return format_to(ctx.out(), "({}, {}, {}, {})", number.x(), number.y(),
+            number.z(), number.w());
+    }
+};
+
+inline std::ostream& operator<<(
+    std::ostream& os, const move::vectormath::norm4& v)
+{
+    return os << "(" << v.x() << ", " << v.y() << ", " << v.z() << ", " << v.w()
+              << ")";
+}
