@@ -5,7 +5,7 @@ include(cmake/prelude.cmake)
 
 project(
     move-vectormath
-    VERSION 0.1.0
+    VERSION 0.1.1
     DESCRIPTION "The vectormath module of the Move engine"
     HOMEPAGE_URL "https://github.com/move-engine/move-vectormath"
     LANGUAGES NONE

@@ -8,25 +8,55 @@
 
 namespace move::vectormath
 {
+    /**
+     *  @brief A 2D vector class optimized for speed.
+     *  A 2D vector class optimized for speed.
+     *  This class is a wrapper around the DirectXMath XMVECTOR type. It is
+     *  designed to be used in places where speed is more important than
+     *  convenience. As such, it does not provide any of the conveniences of
+     *  the vec2 class. It does, however, provide a number of functions that
+     *  operate on fastvec2s, and it can be converted to and from vec2s.
+     *  @see vec2
+     */
     struct fastvec2
     {
         using XMVECTOR = internal::DirectX::XMVECTOR;
         using CXMVECTOR = internal::DirectX::CXMVECTOR;
         using XMFLOAT2 = internal::DirectX::XMFLOAT2;
 
+        /**
+         * @brief Default constructor.  Initializes to (0, 0).
+         * Default constructor.  Initializes the vector to (0, 0).
+         */
         inline fastvec2() noexcept : _vec(internal::DirectX::XMVectorZero())
         {
         }
 
+        /**
+         * @brief Initializes the vector to (x, y).
+         * Initializes the vector to (x, y).
+         * @param x The x component of the vector.
+         * @param y The y component of the vector.
+         */
         inline fastvec2(float x, float y = 0) noexcept
             : _vec(internal::DirectX::XMVectorSet(x, y, 0, 0))
         {
         }
 
+        /**
+         * @brief Initializes the vector to (v.x, v.y).
+         * Initializes the vector to (v.x, v.y).
+         * @param v The vector to copy.
+         */
         inline fastvec2(const XMVECTOR& v) noexcept : _vec(v)
         {
         }
 
+        /**
+         * @brief Initializes the vector to (v.x, v.y).
+         * Initializes the vector to (v.x, v.y).
+         * @param v The vector to copy.
+         */
         inline fastvec2(const XMFLOAT2& v) noexcept
             : _vec(internal::DirectX::XMLoadFloat2(&v))
         {
