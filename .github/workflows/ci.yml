@@ -141,7 +141,7 @@ jobs:
     # simply delete this job similarly to the coverage one.
     if: github.ref == 'refs/heads/main'
       && github.event_name == 'push'
-      && github.repository_owner == 'shadowndacorner'
+      && github.repository_owner == 'move-engine'
 
     steps:
       - uses: actions/checkout@v2
