@@ -147,6 +147,11 @@ namespace move::vectormath
         vec3 operator*(const vec3& v) const noexcept;
         vec4 operator*(const vec4& v) const noexcept;
 
+        inline float operator[](size_t index) const noexcept
+        {
+            return _mat.m[index / 4][index % 4];
+        }
+
     public:
         static mat4 create_look_at_rh(
             const vec3& eye, const vec3& target, const vec3& up) noexcept;

@@ -47,6 +47,11 @@ namespace move::vectormath
         {
         }
 
+        inline float* as_array()
+        {
+            return &x;
+        }
+
         float x, y;
     };
 }  // namespace move::vectormath
