@@ -19,7 +19,7 @@ namespace move::vectormath
         inline gpuvec4& operator=(const gpuvec4&) = default;
         inline gpuvec4& operator=(gpuvec4&&) = default;
 
-        inline gpuvec4(const vec4& v) : x(v.x()), y(v.y()), z(v.z()), w(v.w())
+        inline gpuvec4(const vec4f& v) : x(v.x()), y(v.y()), z(v.z()), w(v.w())
         {
         }
 
@@ -28,9 +28,9 @@ namespace move::vectormath
         {
         }
 
-        inline operator vec4() const
+        inline operator vec4f() const
         {
-            return vec4(x, y, z, w);
+            return vec4f(x, y, z, w);
         }
 
         inline operator fastvec4() const

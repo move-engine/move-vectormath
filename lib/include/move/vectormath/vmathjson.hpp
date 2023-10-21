@@ -19,13 +19,15 @@ namespace move::vectormath
 
         static inline void from_json(const nlohmann::json& j, T& data)
         {
-            MOVE_ERROR_IF(!j.is_array(),
-                "Attempted to load a vector from a JSON object that was "
-                "not an array");
+            // MOVE_ERROR_IF(!j.is_array(),
+            //     "Attempted to load a vector from a JSON object that was "
+            //     "not an array");
 
             for (size_t i = 0; i < L; ++i)
             {
-                j.at(i).get_to(data[i]);
+                typename T::component_type val;
+                j.at(i).get_to(val);
+                data[i] = val;
             }
         }
     };

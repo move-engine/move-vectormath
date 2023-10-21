@@ -1,401 +1,503 @@
 #pragma once
-
 #include <ostream>
 
+#include "underlying_types.hpp"
+
+#include <rtm/mask4d.h>
+#include <rtm/mask4f.h>
+#include <rtm/scalard.h>
+#include <rtm/types.h>
+#include <rtm/vector4d.h>
+#include <rtm/vector4f.h>
+
 #include <fmt/format.h>
-#include "fastvec4.hpp"
 
 namespace move::vectormath
 {
-    struct vec4
-    {
-        using XMFLOAT4 = internal::DirectX::XMFLOAT4;
+    // using value_type = float;
+    // using vector_type = rtm::vector4f;
 
+    template <typename value_type, typename vector_type>
+    struct generic_vec4
+    {
     public:
+        using component_type = value_type;
+        using underlying_type = vector_type;
         constexpr static uint32_t num_elements = 4;
 
-        inline vec4() noexcept : _value(0, 0, 0, 0)
+        inline generic_vec4() noexcept
+            : _value(rtm::vector_set(
+                  value_type(0), value_type(0), value_type(0), value_type(0)))
         {
         }
 
-        inline vec4(float x, float y = 0, float z = 0, float w = 0) noexcept
-            : _value(x, y, z, w)
+        inline generic_vec4(value_type x, value_type y = 0, value_type z = 0,
+            value_type w = 0) noexcept
+            : _value(rtm::vector_set(x, y, z, w))
         {
         }
 
-        inline vec4(const XMFLOAT4& v) noexcept : _value(v)
-        {
-        }
-
-        inline vec4(const fastvec4& v) noexcept : _value(v)
+        inline generic_vec4(const vector_type& v) noexcept : _value(v)
         {
         }
 
     public:
-        inline fastvec4 fast() const
+        template <typename Archive>
+        inline void serialize(Archive& ar)
         {
-            return _value;
+            for (uint32_t i = 0; i < num_elements; ++i)
+            {
+                /* If is reading */
+                if constexpr (Archive::is_loading::value)
+                {
+                    value_type val;
+                    ar(val);
+                    set_component(i, val);
+                }
+                else
+                {
+                    ar(get_component(i));
+                }
+            }
         }
 
     public:
-        inline operator XMFLOAT4&()
+        inline operator vector_type&()
         {
             return _value;
         }
 
-        inline bool operator==(const vec4& v) const noexcept
+        inline bool operator==(const generic_vec4& v) const noexcept
         {
-            return fast() == v.fast();
+            return rtm::mask_all_true(rtm::vector_equal(_value, v._value));
         }
 
-        inline bool operator!=(const vec4& v) const noexcept
+        inline bool operator!=(const generic_vec4& v) const noexcept
         {
-            return fast() != v.fast();
+            return !rtm::mask_all_true(rtm::vector_equal(_value, v._value));
         }
 
-        inline vec4& operator=(const vec4& v) noexcept
+        inline generic_vec4& operator=(const generic_vec4& v) noexcept
         {
             _value = v._value;
             return *this;
         }
 
-        inline vec4& operator+=(const vec4& v) noexcept
+        inline generic_vec4& operator+=(const generic_vec4& v) noexcept
         {
-            (fast() + v.fast()).store(_value);
+            _value = rtm::vector_add(_value, v._value);
             return *this;
         }
 
-        inline vec4& operator-=(const vec4& v) noexcept
+        inline generic_vec4& operator-=(const generic_vec4& v) noexcept
         {
-            (fast() - v.fast()).store(_value);
+            _value = rtm::vector_sub(_value, v._value);
             return *this;
         }
 
-        inline vec4& operator*=(const vec4& v) noexcept
+        inline generic_vec4& operator*=(const generic_vec4& v) noexcept
         {
-            (fast() * v.fast()).store(_value);
+            _value = rtm::vector_mul(_value, v._value);
             return *this;
         }
 
-        inline vec4& operator/=(const vec4& v) noexcept
+        inline generic_vec4& operator/=(const generic_vec4& v) noexcept
         {
-            (fast() / v.fast()).store(_value);
+            _value = rtm::vector_div(_value, v._value);
             return *this;
         }
 
-        inline vec4 operator+(const vec4& v) const noexcept
+        inline generic_vec4 operator+(const generic_vec4& v) const noexcept
         {
-            return vec4(fast() + v.fast());
+            return generic_vec4(rtm::vector_add(_value, v._value));
         }
 
-        inline vec4 operator-(const vec4& v) const noexcept
+        inline generic_vec4 operator-(const generic_vec4& v) const noexcept
         {
-            return vec4(fast() - v.fast());
+            return generic_vec4(rtm::vector_sub(_value, v._value));
         }
 
-        inline vec4 operator*(const vec4& v) const noexcept
+        inline generic_vec4 operator*(const generic_vec4& v) const noexcept
         {
-            return vec4(fast() * v.fast());
+            return generic_vec4(rtm::vector_mul(_value, v._value));
         }
 
-        inline vec4 operator/(const vec4& v) const noexcept
+        inline generic_vec4 operator/(const generic_vec4& v) const noexcept
         {
-            return vec4(fast() / v.fast());
+            return generic_vec4(rtm::vector_div(_value, v._value));
         }
 
-        inline vec4 operator-() const noexcept
+        inline generic_vec4 operator-() const noexcept
         {
-            return -fast();
+            return generic_vec4(rtm::vector_neg(_value));
         }
 
-        inline float operator[](int i) const noexcept
+        inline value_type get_component(int index) const noexcept
         {
-            int index = i % 4;
             switch (index)
             {
                 case 0:
-                    return _value.x;
+                    return rtm::vector_get_x(_value);
                 case 1:
-                    return _value.y;
+                    return rtm::vector_get_y(_value);
                 case 2:
-                    return _value.z;
+                    return rtm::vector_get_z(_value);
                 default:
-                    return _value.w;
+                    return rtm::vector_get_w(_value);
             }
-            return 0;
         }
 
-        inline float& operator[](int i) noexcept
+        inline void set_component(int index, value_type value)
         {
-            int index = i % 4;
             switch (index)
             {
                 case 0:
-                    return _value.x;
+                    set_x(value);
+                    break;
                 case 1:
-                    return _value.y;
+                    set_y(value);
+                    break;
                 case 2:
-                    return _value.z;
+                    set_z(value);
+                    break;
                 default:
-                    return _value.w;
+                    set_w(value);
+                    break;
             }
+        }
+
+        class component_accessor
+        {
+        public:
+            inline component_accessor(generic_vec4& vec, int index) noexcept
+                : _vec(vec), _index(index)
+            {
+            }
+
+            inline operator value_type() const noexcept
+            {
+                return _vec.get_component(_index);
+            }
+
+            inline component_accessor& operator=(const value_type& v) noexcept
+            {
+                _vec.set_component(_index, v);
+                return *this;
+            }
+
+        private:
+            generic_vec4& _vec;
+            int _index;
+        };
+
+        inline value_type operator[](int i) const noexcept
+        {
+            return get_component(i);
+        }
+
+        inline component_accessor operator[](int i) noexcept
+        {
+            return component_accessor(*this, i);
         }
 
     public:
-        inline float& x() noexcept
+        inline component_accessor x() noexcept
         {
-            return _value.x;
+            return component_accessor(*this, 0);
         }
 
-        inline float& y() noexcept
+        inline component_accessor y() noexcept
         {
-            return _value.y;
+            return component_accessor(*this, 1);
         }
 
-        inline float& z() noexcept
+        inline component_accessor z() noexcept
         {
-            return _value.z;
+            return component_accessor(*this, 2);
         }
 
-        inline float& w() noexcept
+        inline component_accessor w() noexcept
         {
-            return _value.w;
+            return component_accessor(*this, 3);
         }
 
-        inline float x() const noexcept
+        inline value_type x() const noexcept
         {
-            return _value.x;
+            return rtm::vector_get_x(_value);
         }
 
-        inline float y() const noexcept
+        inline value_type y() const noexcept
         {
-            return _value.y;
+            return rtm::vector_get_y(_value);
         }
 
-        inline float z() const noexcept
+        inline value_type z() const noexcept
         {
-            return _value.z;
+            return rtm::vector_get_z(_value);
         }
 
-        inline float w() const noexcept
+        inline value_type w() const noexcept
         {
-            return _value.w;
+            return rtm::vector_get_w(_value);
         }
 
-        inline vec4& set_x(float x) noexcept
+        inline generic_vec4& set_x(value_type x) noexcept
         {
-            _value.x = x;
+            _value = rtm::vector_set_x(_value, x);
             return *this;
         }
 
-        inline vec4& set_y(float y) noexcept
+        inline generic_vec4& set_y(value_type y) noexcept
         {
-            _value.y = y;
+            _value = rtm::vector_set_y(_value, y);
             return *this;
         }
 
-        inline vec4& set_z(float z) noexcept
+        inline generic_vec4& set_z(value_type z) noexcept
         {
-            _value.z = z;
+            _value = rtm::vector_set_z(_value, z);
             return *this;
         }
 
-        inline vec4& set_w(float w) noexcept
+        inline generic_vec4& set_w(value_type w) noexcept
         {
-            _value.w = w;
+            _value = rtm::vector_set_w(_value, w);
             return *this;
         }
 
-        inline float length() const noexcept
+        inline value_type length() const noexcept
         {
-            return fast().length();
+            return rtm::vector_length(_value);
         }
 
-        inline float length_approximate() const noexcept
+        inline value_type length_approximate() const noexcept
         {
-            return fast().length_approximate();
+            // TODO: Find a better approximation?
+            return rtm::vector_length(_value);
         }
 
-        inline float squared_length() const noexcept
+        inline value_type squared_length() const noexcept
         {
-            return fast().squared_length();
+            return rtm::vector_length_squared(_value);
         }
 
-        inline vec4 normalized() const noexcept
+        inline generic_vec4 normalized() const noexcept
         {
-            return fast().normalized();
+            return rtm::vector_mul(_value, value_type(1) / length());
         }
 
-        inline fastvec4 normalized_approximate() const noexcept
+        inline generic_vec4 normalized_approximate() const noexcept
         {
-            return fast().normalized_approximate();
+            return rtm::vector_mul(
+                _value, value_type(1) / length_approximate());
         }
 
-        inline float dot(const vec4& v) const noexcept
+        inline value_type dot(const generic_vec4& v) const noexcept
         {
-            return fast().dot(v._value);
+            return rtm::vector_dot(_value, v._value);
         }
 
-        inline float distance_to_point(const vec4& v) const noexcept
+        inline value_type distance_to_point(
+            const generic_vec4& v) const noexcept
         {
-            return fast().distance_to_point(v.fast());
+            return (v - *this).length();
         }
 
-        inline float distance_to_point_approximate(const vec4& v) const noexcept
+        inline value_type distance_to_point_approximate(
+            const generic_vec4& v) const noexcept
         {
-            return fast().distance_to_point_approximate(v.fast());
+            return (v - *this).length_approximate();
         }
 
-        inline float squared_distance_to_point(const vec4& v) const noexcept
+        inline value_type squared_distance_to_point(
+            const generic_vec4& v) const noexcept
         {
-            return fast().squared_distance_to_point(v.fast());
+            return (v - *this).squared_length();
         }
 
-        inline fastvec4 cross(const vec4& v0, const vec4& v1) const noexcept
+        inline generic_vec4 cross(
+            const generic_vec4& v2, const generic_vec4& v3) const noexcept
         {
-            return fast().cross(v0.fast(), v1.fast());
+            const auto& v1 = *this;
+
+            // TODO: Write a faster implementation, because this is terrible
+            vector_type Result = {{{
+                (((v2.z() * v3.w()) - (v2.w() * v3.z())) * v1.y()) -
+                    (((v2.y() * v3.w()) - (v2.w() * v3.y())) * v1.z()) +
+                    (((v2.y() * v3.z()) - (v2.z() * v3.y())) * v1.w()),
+                (((v2.w() * v3.z()) - (v2.z() * v3.w())) * v1.x()) -
+                    (((v2.w() * v3.x()) - (v2.x() * v3.w())) * v1.z()) +
+                    (((v2.z() * v3.x()) - (v2.x() * v3.z())) * v1.w()),
+                (((v2.y() * v3.w()) - (v2.w() * v3.y())) * v1.x()) -
+                    (((v2.x() * v3.w()) - (v2.w() * v3.x())) * v1.y()) +
+                    (((v2.x() * v3.y()) - (v2.y() * v3.x())) * v1.w()),
+                (((v2.z() * v3.y()) - (v2.y() * v3.z())) * v1.x()) -
+                    (((v2.z() * v3.x()) - (v2.x() * v3.z())) * v1.y()) +
+                    (((v2.y() * v3.x()) - (v2.x() * v3.y())) * v1.z()),
+            }}};
+
+            return Result;
         }
 
-        inline float angle_between_normals(const vec4& v) const noexcept
+        inline value_type angle_between_normalized_vectors(
+            const generic_vec4& v) const noexcept
         {
-            return fast().angle_between_normals(v.fast());
+            return std::acos(rtm::vector_dot(_value, v._value));
         }
 
-        inline float angle_between_vectors(const vec4& v) const noexcept
+        inline value_type angle_between_vectors(
+            const generic_vec4& v) const noexcept
         {
-            return fast().angle_between_vectors(v.fast());
+            // Compute with dot product
+            auto norm = normalized();
+            auto vnorm = v.normalized();
+            return norm.angle_between_normalized_vectors(vnorm);
         }
 
-        inline vec4 reflect(const vec4& v) const noexcept
+        inline generic_vec4 reflect(const generic_vec4& normal) const noexcept
         {
-            return fast().reflect(v.fast());
+            return *this - (normal * (2 * dot(normal)));
         }
 
-        inline vec4 refract(const vec4& v, float eta) const noexcept
+        inline generic_vec4 refract(
+            const generic_vec4& normal, value_type ior) const noexcept
         {
-            return fast().refract(v.fast(), eta);
+            using namespace rtm;
+            const vector_type& incident = _value;
+            const vector_type& nrm = normal._value;
+            const vector_type& index = vector_set(ior);
+
+            // clang-format off
+            // Algorithm:
+            // Result = RefractionIndex * Incident - Normal * (RefractionIndex * dot(Incident, Normal) + sqrt(1 - RefractionIndex * RefractionIndex * (1 - dot(Incident, Normal) * dot(Incident, Normal))))
+            // 
+            // Expanded:
+            // dotinorm = dot(Incident, Normal);
+            // roiPlusDotinorm = RefractionIndex * dotinorm
+            // innerSqrt = sqrt(1 - RefractionIndex * RefractionIndex * (1 -
+            //             dotinorm * dotinorm))
+            //
+            // Result = RefractionIndex * Incident - Normal * (
+            //     roiPlusDotinorm +
+            //     innerSqrt
+            // )
+            //
+            // clang-format on
+
+            value_type dotinorm = vector_dot(incident, nrm);
+            vector_type roiPlusDotinorm = vector_mul(index, dotinorm);
+            vector_type innerSqrt = vector_set(
+                scalar_sqrt(1 - ior * ior * (1 - dotinorm * dotinorm)));
+            ;
+
+            return vector_sub(vector_mul(index, incident),
+                vector_mul(nrm, vector_add(roiPlusDotinorm, innerSqrt)));
         }
 
-        inline vec4 min(const vec4& v) const noexcept
+        inline generic_vec4 min(const generic_vec4& v) const noexcept
         {
-            return fast().min(v.fast());
+            using namespace rtm;
+            return generic_vec4(vector_min(_value, v._value));
         }
 
-        inline vec4 max(const vec4& v) const noexcept
+        inline generic_vec4 max(const generic_vec4& v) const noexcept
         {
-            return fast().max(v.fast());
+            using namespace rtm;
+            return generic_vec4(vector_max(_value, v._value));
         }
 
     public:
         inline void normalize() noexcept
         {
-            fast().normalized().store(_value);
+            // TODO: there's probably a faster way to do this?
+            _value = normalized();
         }
 
         inline void normalize_approximate() noexcept
         {
-            fast().normalized_approximate().store(_value);
+            // TODO: there's probably a faster way to do this?
+            _value = normalized_approximate();
         }
 
     public:
-        inline static vec4 zero() noexcept
+        inline static generic_vec4 zero() noexcept
         {
-            return vec4(0, 0, 0, 0);
+            return generic_vec4(0, 0, 0, 0);
         }
 
-        inline static vec4 one() noexcept
+        inline static generic_vec4 one() noexcept
         {
-            return vec4(1, 1, 1, 1);
+            return generic_vec4(1, 1, 1, 1);
         }
 
-        inline static vec4 x_axis() noexcept
+        inline static generic_vec4 x_axis() noexcept
         {
-            return vec4(1, 0, 0);
+            return generic_vec4(1, 0, 0);
         }
 
-        inline static vec4 y_axis() noexcept
+        inline static generic_vec4 y_axis() noexcept
         {
-            return vec4(0, 1, 0);
+            return generic_vec4(0, 1, 0);
         }
 
-        inline static vec4 z_axis() noexcept
+        inline static generic_vec4 z_axis() noexcept
         {
-            return vec4(0, 0, 1);
+            return generic_vec4(0, 0, 1);
         }
 
-        inline static vec4 w_axis() noexcept
+        inline static generic_vec4 w_axis() noexcept
         {
-            return vec4(0, 0, 0, 1);
+            return generic_vec4(0, 0, 0, 1);
         }
 
-        inline static vec4 right() noexcept
+        inline static generic_vec4 right() noexcept
         {
             return x_axis();
         }
 
-        inline static vec4 up() noexcept
+        inline static generic_vec4 up() noexcept
         {
             return y_axis();
         }
 
-        inline static vec4 forward() noexcept
+        inline static generic_vec4 forward() noexcept
         {
             return z_axis();
         }
 
     private:
-        XMFLOAT4 _value;
+        vector_type _value;
     };
 
-    inline std::ostream& operator<<(
-        std::ostream& os, const move::vectormath::vec4& v)
+    using vec4f = generic_vec4<float, rtm::vector4f>;
+    using vec4d = generic_vec4<double, rtm::vector4d>;
+
+#if MOVE_VECTORMATH_USE_DOUBLE_PRECISION
+    using vec4 = vec4d;
+#else
+    using vec4 = vec4f;
+#endif
+
+    template <typename value_type, typename vector_type>
+    inline std::ostream& operator<<(std::ostream& os,
+        const move::vectormath::generic_vec4<value_type, vector_type>& v)
     {
         return os << "(" << v.x() << ", " << v.y() << ", " << v.z() << ", "
                   << v.w() << ")";
     }
-
-    struct norm4 : public vec4
-    {
-        inline norm4(const vec4& v) noexcept : vec4(v.normalized())
-        {
-        }
-
-        inline norm4(float x, float y, float z, float w) noexcept
-            : vec4(internal::DirectX::XMVector2Normalize(
-                  internal::DirectX::XMVectorSet(x, y, z, w)))
-        {
-        }
-    };
 }  // namespace move::vectormath
 
 #if !defined(MOVE_VECTORMATH_NO_SERIALIZATION)
 #include "vmathcereal.hpp"
 #include "vmathjson.hpp"
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec4);
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::norm4);
-MOVE_VECTORMATH_CEREAL_SERIALIZER(move::vectormath::vec4);
-MOVE_VECTORMATH_CEREAL_SERIALIZER(move::vectormath::norm4);
+MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec4f);
+MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec4d);
+// MOVE_VECTORMATH_CEREAL_SERIALIZER(move::vectormath::vec4f);
+// MOVE_VECTORMATH_CEREAL_SERIALIZER(move::vectormath::vec4d);
 #endif
 
-template <>
-struct fmt::formatter<move::vectormath::vec4>
-{
-    template <typename ParseContext>
-    constexpr inline auto parse(ParseContext& ctx)
-    {
-        return ctx.begin();
-    }
-
-    template <typename FormatContext>
-    auto inline format(move::vectormath::vec4 const& number, FormatContext& ctx)
-    {
-        return format_to(ctx.out(), "({}, {}, {}, {})", number.x(), number.y(),
-            number.z(), number.w());
-    }
-};
-
-template <>
-struct fmt::formatter<move::vectormath::norm4>
+template <typename value_type, typename vector_type>
+struct fmt::formatter<move::vectormath::generic_vec4<value_type, vector_type>>
 {
     template <typename ParseContext>
     constexpr inline auto parse(ParseContext& ctx)
@@ -405,16 +507,10 @@ struct fmt::formatter<move::vectormath::norm4>
 
     template <typename FormatContext>
     auto inline format(
-        move::vectormath::norm4 const& number, FormatContext& ctx)
+        move::vectormath::generic_vec4<value_type, vector_type> const& number,
+        FormatContext& ctx)
     {
         return format_to(ctx.out(), "({}, {}, {}, {})", number.x(), number.y(),
             number.z(), number.w());
     }
 };
-
-inline std::ostream& operator<<(
-    std::ostream& os, const move::vectormath::norm4& v)
-{
-    return os << "(" << v.x() << ", " << v.y() << ", " << v.z() << ", " << v.w()
-              << ")";
-}

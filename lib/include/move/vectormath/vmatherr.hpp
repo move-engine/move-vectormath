@@ -13,10 +13,9 @@
 #endif
 #endif
 
-inline void move_break_execution(const char* file, int line, const char* reason)
-{
-    throw std::runtime_error(fmt::format("{}:{}: {}", file, line, reason));
-}
+void move_break_execution(const char* file, int line, const char* reason);
+bool move_attach_debugger();
+bool move_debug_break();
 
 #if defined(MOVE_WINDOWS)
 #define __MOVE_ERR_VA_ARGS(...) , __VA_ARGS__

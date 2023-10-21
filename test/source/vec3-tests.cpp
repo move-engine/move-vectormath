@@ -6,7 +6,7 @@
 #include "catch2/catch_test_macros.hpp"
 #include "nlohmann/json_fwd.hpp"
 
-#include <move/vectormath.hpp>
+#include <move/vectormath/vec3.hpp>
 
 SCENARIO("Test vec3", "[move::vectormath::vec3]")
 {

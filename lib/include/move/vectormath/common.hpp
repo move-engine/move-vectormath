@@ -28,7 +28,7 @@ namespace move::vectormath
 
     struct vec2;
     struct vec3;
-    struct vec4;
+    // struct vec4f;
     struct quat;
     struct mat3;
     struct mat4;

@@ -145,7 +145,7 @@ namespace move::vectormath
     public:
         // Externally defined
         vec3 operator*(const vec3& v) const noexcept;
-        vec4 operator*(const vec4& v) const noexcept;
+        vec4f operator*(const vec4f& v) const noexcept;
 
         inline float operator[](size_t index) const noexcept
         {
