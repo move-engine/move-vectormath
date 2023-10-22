@@ -1,6 +1,7 @@
 #pragma once
 
-#include <DirectXMath.h>
+#include <rtm/macros.h>
+#include <rtm/scalard.h>
 
 #if defined(_MSC_VER)
 #define MVM_ALIGNED __declspec(align(16))
@@ -14,18 +15,6 @@
 
 namespace move::vectormath
 {
-    namespace internal
-    {
-        namespace DirectX = ::DirectX;  // NOLINT
-    }
-    struct fastvec2;
-    struct fastvec3;
-    struct fastnorm3;
-    struct fastvec4;
-    struct fastmat3;
-    struct fastmat4;
-    struct fastquat;
-
     struct vec2;
     struct vec3;
     // struct vec4f;
@@ -41,11 +30,11 @@ namespace move::vectormath
 
     inline float deg_to_rad(float deg)
     {
-        return internal::DirectX::XMConvertToRadians(deg);
+        return rtm::scalar_deg_to_rad(deg);
     }
 
     inline float rad_to_deg(float rad)
     {
-        return internal::DirectX::XMConvertToDegrees(rad);
+        return rtm::scalar_rad_to_deg(rad);
     }
 }  // namespace move::vectormath

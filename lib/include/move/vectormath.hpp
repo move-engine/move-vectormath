@@ -1,3 +1,3 @@
 #pragma once
 
-#include "vectormath/math.inl"
+#include "vectormath/all.hpp"
