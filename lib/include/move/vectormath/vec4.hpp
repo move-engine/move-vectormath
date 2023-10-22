@@ -318,10 +318,9 @@ namespace move::vectormath
         inline generic_vec4 cross(
             const generic_vec4& v2, const generic_vec4& v3) const noexcept
         {
-            const auto& v1 = *this;
-
             // TODO: Write a faster implementation, because this is terrible
-            vector_type Result = {{{
+            const auto& v1 = *this;
+            return {
                 (((v2.z() * v3.w()) - (v2.w() * v3.z())) * v1.y()) -
                     (((v2.y() * v3.w()) - (v2.w() * v3.y())) * v1.z()) +
                     (((v2.y() * v3.z()) - (v2.z() * v3.y())) * v1.w()),
@@ -334,9 +333,7 @@ namespace move::vectormath
                 (((v2.z() * v3.y()) - (v2.y() * v3.z())) * v1.x()) -
                     (((v2.z() * v3.x()) - (v2.x() * v3.z())) * v1.y()) +
                     (((v2.y() * v3.x()) - (v2.x() * v3.y())) * v1.z()),
-            }}};
-
-            return Result;
+            };
         }
 
         inline value_type angle_between_normalized_vectors(

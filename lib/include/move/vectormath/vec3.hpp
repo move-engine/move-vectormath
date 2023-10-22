@@ -316,7 +316,13 @@ namespace move::vectormath
 
         inline generic_vec3 reflect(const generic_vec3& normal) const noexcept
         {
-            return *this - (normal * (2 * dot(normal)));
+            using namespace rtm;
+            const vector_type& incident = _value;
+            const vector_type& nrm = normal._value;
+
+            auto dot = vector_dot(incident, nrm);
+            auto dot2 = vector_add(dot, dot);
+            return incident - (dot2 * nrm);
         }
 
         inline generic_vec3 refract(
