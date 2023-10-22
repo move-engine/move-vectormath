@@ -9,20 +9,7 @@
 // #include <move/vectormath.hpp>
 #include <move/vectormath/vec3.hpp>
 
-#include <DirectXMath.h>
-
-template <typename vec_type>
-inline vec_type vec3_from_dxm(const DirectX::XMVECTOR& vec)
-{
-    return vec_type(DirectX::XMVectorGetX(vec), DirectX::XMVectorGetY(vec),
-        DirectX::XMVectorGetZ(vec));
-}
-
-template <typename vec_type>
-inline DirectX::XMVECTOR vec3_to_dxm(const vec_type& vec)
-{
-    return DirectX::XMVectorSet(vec.x(), vec.y(), vec.z(), 0.0f);
-}
+#include "mvm_test_utils.hpp"
 
 SCENARIO("Test vec3f", "[move::vectormath::vec3f]")
 {

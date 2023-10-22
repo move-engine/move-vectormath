@@ -43,6 +43,12 @@ namespace move::vectormath
         }
 
     public:
+        inline vector_type get_internal() const noexcept
+        {
+            return _value;
+        }
+
+    public:
         template <typename Archive>
         inline void serialize(Archive& ar)
         {

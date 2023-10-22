@@ -75,6 +75,12 @@ namespace move::vectormath
         }
 
     public:
+        inline underlying_matrix4x4_type get_internal() const noexcept
+        {
+            return _value;
+        }
+
+    public:
         inline operator underlying_matrix4x4_type&() noexcept
         {
             return _value;
@@ -222,9 +228,10 @@ namespace move::vectormath
         }
 
     public:
-        // Externally defined
-        // vector3_type operator*(const vector3_type& v) const noexcept;
-        // vector4_type operator*(const vector4_type& v) const noexcept;
+        inline vec4_type operator*(const vec4_type& v) const noexcept
+        {
+            return rtm::matrix_mul_vector(v.get_internal(), _value);
+        }
 
         inline value_type operator[](size_t index) const noexcept
         {

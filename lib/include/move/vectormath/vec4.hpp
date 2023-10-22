@@ -40,6 +40,12 @@ namespace move::vectormath
         }
 
     public:
+        inline vector_type get_internal() const noexcept
+        {
+            return _value;
+        }
+
+    public:
         template <typename Archive>
         inline void serialize(Archive& ar)
         {
@@ -152,6 +158,7 @@ namespace move::vectormath
             return generic_vec4(rtm::vector_neg(_value));
         }
 
+    public:
         inline value_type get_component(int index) const noexcept
         {
             switch (index)
@@ -220,7 +227,6 @@ namespace move::vectormath
             return component_accessor(*this, i);
         }
 
-    public:
         inline component_accessor x() noexcept
         {
             return component_accessor(*this, 0);
@@ -285,6 +291,7 @@ namespace move::vectormath
             return *this;
         }
 
+    public:
         inline value_type length() const noexcept
         {
             return rtm::vector_length(_value);
