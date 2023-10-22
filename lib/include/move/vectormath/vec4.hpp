@@ -14,14 +14,12 @@
 
 namespace move::vectormath
 {
-    // using value_type = float;
-    // using vector_type = rtm::vector4f;
-
-    template <typename value_type, typename vector_type>
+    template <typename value_type, typename vector_type_raw>
     struct generic_vec4
     {
     public:
         using component_type = value_type;
+        using vector_type = typename vector_type_raw::type;
         using underlying_type = vector_type;
         constexpr static uint32_t num_elements = 4;
 
@@ -353,7 +351,15 @@ namespace move::vectormath
 
         inline generic_vec4 reflect(const generic_vec4& normal) const noexcept
         {
-            return *this - (normal * (2 * dot(normal)));
+            using namespace rtm;
+            const vector_type& incident = _value;
+            const vector_type& nrm = normal._value;
+
+            auto dot = vector_dot(incident, nrm);
+            auto dot2 = vector_add(dot, dot);
+            auto mul = vector_mul(nrm, dot2);
+            auto res = vector_sub(incident, mul);
+            return res;
         }
 
         inline generic_vec4 refract(
@@ -466,8 +472,8 @@ namespace move::vectormath
         vector_type _value;
     };
 
-    using vec4f = generic_vec4<float, rtm::vector4f>;
-    using vec4d = generic_vec4<double, rtm::vector4d>;
+    using vec4f = generic_vec4<float, wrappers::v4fw>;
+    using vec4d = generic_vec4<double, wrappers::v4dw>;
 
 #if MOVE_VECTORMATH_USE_DOUBLE_PRECISION
     using vec4 = vec4d;

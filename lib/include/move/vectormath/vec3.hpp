@@ -17,11 +17,12 @@ namespace move::vectormath
     // using value_type = float;
     // using vector_type = rtm::vector4f;
 
-    template <typename value_type, typename vector_type>
+    template <typename value_type, typename vector_type_raw>
     struct generic_vec3
     {
     public:
         using component_type = value_type;
+        using vector_type = typename vector_type_raw::type;
         using underlying_type = vector_type;
         constexpr static uint32_t num_elements = 3;
 
@@ -294,6 +295,25 @@ namespace move::vectormath
             return (v - *this).squared_length();
         }
 
+        inline float distance_to_line(
+            const generic_vec3& v0, const generic_vec3& v1) const noexcept
+        {
+            // Implementation based on XMVector3LinePointDistance
+            using namespace rtm;
+            const vector_type& point = _value;
+            const vector_type& line_point1 = v0._value;
+            const vector_type& line_point2 = v1._value;
+
+            const auto point_vector = vector_sub(point, line_point1);
+            const auto line_vector = vector_sub(line_point2, line_point1);
+            const auto length_sq = vector_length_squared3(line_vector);
+            const auto point_projection_scale =
+                vector_div(vector_dot3(point_vector, line_vector), length_sq);
+            const auto distance_vector = vector_sub(
+                point_vector, vector_mul(line_vector, point_projection_scale));
+            return vector_length3(distance_vector);
+        }
+
         inline generic_vec3 cross(const generic_vec3& v2) const noexcept
         {
             return rtm::vector_cross3(_value, v2._value);
@@ -316,18 +336,22 @@ namespace move::vectormath
 
         inline generic_vec3 reflect(const generic_vec3& normal) const noexcept
         {
+            // Based on XMVector3Reflect
             using namespace rtm;
             const vector_type& incident = _value;
             const vector_type& nrm = normal._value;
 
             auto dot = vector_dot(incident, nrm);
             auto dot2 = vector_add(dot, dot);
-            return incident - (dot2 * nrm);
+            auto mul = vector_mul(nrm, dot2);
+            auto res = vector_sub(incident, mul);
+            return res;
         }
 
         inline generic_vec3 refract(
             const generic_vec3& normal, value_type ior) const noexcept
         {
+            // Based on XMVector3Refract
             using namespace rtm;
             const vector_type& incident = _value;
             const vector_type& nrm = normal._value;
@@ -413,8 +437,8 @@ namespace move::vectormath
         vector_type _value;
     };
 
-    using vec3f = generic_vec3<float, rtm::vector4f>;
-    using vec3d = generic_vec3<double, rtm::vector4d>;
+    using vec3f = generic_vec3<float, wrappers::v4fw>;
+    using vec3d = generic_vec3<double, wrappers::v4dw>;
 
 #if MOVE_VECTORMATH_USE_DOUBLE_PRECISION
     using vec3 = vec3d;

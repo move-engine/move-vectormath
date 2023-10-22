@@ -2,23 +2,17 @@
 
 #include <rtm/macros.h>
 
-#define MVM_RTM_WRAPPER(name, type)                  \
-    struct name                                      \
-    {                                                \
-        type v;                                      \
-        inline operator type&() noexcept             \
-        {                                            \
-            return v;                                \
-        }                                            \
-        inline operator const type&() const noexcept \
-        {                                            \
-            return v;                                \
-        }                                            \
-        inline name& operator=(const type& other)    \
-        {                                            \
-            v = other;                               \
-            return *this;                            \
-        }                                            \
-        name() = default;                            \
-        name(const name&) = default;                 \
-    }
+#include <rtm/vector4d.h>
+#include <rtm/vector4f.h>
+
+#define MVM_VECTOR_TYPE_WRAPPER(name, vector_type) \
+    struct name                                    \
+    {                                              \
+        using type = vector_type;                  \
+    };
+
+namespace move::vectormath::wrappers
+{
+    MVM_VECTOR_TYPE_WRAPPER(v4fw, rtm::vector4f);
+    MVM_VECTOR_TYPE_WRAPPER(v4dw, rtm::vector4d);
+}  // namespace move::vectormath::wrappers
