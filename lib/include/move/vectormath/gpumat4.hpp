@@ -19,7 +19,7 @@ namespace move::vectormath
         inline gpumat4& operator=(const gpumat4&) = default;
         inline gpumat4& operator=(gpumat4&&) = default;
 
-        inline gpumat4(const move::vectormath::mat4& v)
+        inline gpumat4(const move::vectormath::generic_mat4& v)
         {
             for (int i = 0; i < 16; i++)
             {
@@ -31,9 +31,9 @@ namespace move::vectormath
         {
         }
 
-        inline mat4 as_mat4() const
+        inline generic_mat4 as_mat4() const
         {
-            mat4 res;
+            generic_mat4 res;
             for (int i = 0; i < 16; i++)
             {
                 res[i] = data[i];
@@ -46,7 +46,7 @@ namespace move::vectormath
             return data;
         }
 
-        inline operator mat4() const
+        inline operator generic_mat4() const
         {
             return as_mat4();
         }

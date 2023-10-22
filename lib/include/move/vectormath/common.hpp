@@ -31,7 +31,7 @@ namespace move::vectormath
     // struct vec4f;
     struct quat;
     struct mat3;
-    struct mat4;
+    struct generic_mat4;
     struct irect;
     struct frect;
 

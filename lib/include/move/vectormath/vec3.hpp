@@ -459,8 +459,8 @@ namespace move::vectormath
         vector_type _value;
     };
 
-    using vec3f = generic_vec3<float, wrappers::v4fw>;
-    using vec3d = generic_vec3<double, wrappers::v4dw>;
+    using vec3f = generic_vec3<float, wrappers::v4f>;
+    using vec3d = generic_vec3<double, wrappers::v4d>;
 
 #if MOVE_VECTORMATH_USE_DOUBLE_PRECISION
     using vec3 = vec3d;

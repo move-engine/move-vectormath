@@ -13,6 +13,21 @@ CPMAddPackage(
 add_library(rtm INTERFACE)
 target_include_directories(rtm INTERFACE ${rtm_SOURCE_DIR}/includes)
 
+# Disabled until it's needed; at some point, we may implement vec2 math with this
+# CPMAddPackage(
+#   name simde
+#   GITHUB_REPOSITORY simd-everywhere/simde
+#   VERSION 0.7.6
+#   DOWNLOAD_ONLY YES
+# )
+
+# if (simde_ADDED)
+#   add_library(simde INTERFACE)
+#   target_include_directories(simde INTERFACE "${simde_SOURCE_DIR}")
+# else()
+#   message(FATAL_ERROR "Failed to acquire simde")
+# endif()
+
 CPMAddPackage(
   NAME njson
   GIT_REPOSITORY "https://github.com/nlohmann/json.git"

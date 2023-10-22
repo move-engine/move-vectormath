@@ -494,8 +494,8 @@ namespace move::vectormath
         vector_type _value;
     };
 
-    using vec4f = generic_vec4<float, wrappers::v4fw>;
-    using vec4d = generic_vec4<double, wrappers::v4dw>;
+    using vec4f = generic_vec4<float, wrappers::v4f>;
+    using vec4d = generic_vec4<double, wrappers::v4d>;
 
 #if MOVE_VECTORMATH_USE_DOUBLE_PRECISION
     using vec4 = vec4d;

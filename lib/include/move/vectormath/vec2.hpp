@@ -1,6 +1,7 @@
 #pragma once
 #include <ostream>
-#include "rtm/scalard.h"
+
+#include <rtm/scalard.h>
 
 namespace move::vectormath
 {
