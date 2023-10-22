@@ -148,6 +148,19 @@ namespace move::vectormath
         }
 
         static inline generic_mat4 create_translation(
+            const underlying_vector4_type& translation) noexcept
+        {
+            using rtm::vector_set;
+            return {vector_set(value_type(1), value_type(0), value_type(0),
+                        value_type(0)),
+                vector_set(
+                    value_type(0), value_type(1), value_type(0), value_type(0)),
+                vector_set(
+                    value_type(0), value_type(0), value_type(1), value_type(0)),
+                translation};
+        }
+
+        static inline generic_mat4 create_translation(
             value_type x, value_type y, value_type z) noexcept
         {
             using rtm::vector_set;
@@ -170,6 +183,21 @@ namespace move::vectormath
                 vector_set(x, value_type(0), value_type(0), value_type(0)),
                 vector_set(value_type(0), y, value_type(0), value_type(0)),
                 vector_set(value_type(0), value_type(0), z, value_type(0)),
+                vector_set(
+                    value_type(0), value_type(0), value_type(0), value_type(1)),
+            };
+        }
+
+        static inline generic_mat4 create_scale(const vec3_type& scale) noexcept
+        {
+            using rtm::vector_set;
+            return {
+                vector_set(
+                    scale.x(), value_type(0), value_type(0), value_type(0)),
+                vector_set(
+                    value_type(0), scale.y(), value_type(0), value_type(0)),
+                vector_set(
+                    value_type(0), value_type(0), scale.z(), value_type(0)),
                 vector_set(
                     value_type(0), value_type(0), value_type(0), value_type(1)),
             };

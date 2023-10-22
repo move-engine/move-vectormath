@@ -3,6 +3,7 @@
 
 #include <catch2/catch_all.hpp>
 #include <cereal/archives/binary.hpp>
+#include "DirectXMath.h"
 #include "catch2/catch_approx.hpp"
 #include "catch2/catch_message.hpp"
 #include "catch2/catch_test_macros.hpp"
@@ -205,8 +206,8 @@ SCENARIO("Test mat4f", "[move::vectormath::mat4f]")
             auto dxmscale =
                 DirectX::XMVectorSet(scale.x(), scale.y(), scale.z(), 0);
 
-            auto mat_dxm = DirectX::XMMatrixTransformation(
-                zero, dxmrot, dxmscale, zero, dxmrot, dxmtrans);
+            auto mat_dxm = DirectX::XMMatrixAffineTransformation(
+                dxmscale, zero, dxmrot, dxmtrans);
 
             auto point = vec4_type(1, 2, 3, 1);
             auto dxmpoint = vec4_to_dxm(point);
@@ -237,8 +238,8 @@ SCENARIO("Test mat4f", "[move::vectormath::mat4f]")
             auto dxmscale =
                 DirectX::XMVectorSet(scale.x(), scale.y(), scale.z(), 0);
 
-            auto mat_dxm = DirectX::XMMatrixTransformation(
-                zero, dxmrot, dxmscale, zero, dxmrot, dxmtrans);
+            auto mat_dxm = DirectX::XMMatrixAffineTransformation(
+                dxmscale, zero, dxmrot, dxmtrans);
 
             auto point = vec4_type(1, 2, 3, 1);
             auto dxmpoint = vec4_to_dxm(point);
@@ -269,8 +270,8 @@ SCENARIO("Test mat4f", "[move::vectormath::mat4f]")
             auto dxmscale =
                 DirectX::XMVectorSet(scale.x(), scale.y(), scale.z(), 0);
 
-            auto mat_dxm = DirectX::XMMatrixTransformation(
-                zero, dxmrot, dxmscale, zero, dxmrot, dxmtrans);
+            auto mat_dxm = DirectX::XMMatrixAffineTransformation(
+                dxmscale, zero, dxmrot, dxmtrans);
 
             auto point = vec4_type(1, 2, 3, 1);
             auto dxmpoint = vec4_to_dxm(point);
@@ -301,14 +302,15 @@ SCENARIO("Test mat4f", "[move::vectormath::mat4f]")
             auto dxmscale =
                 DirectX::XMVectorSet(scale.x(), scale.y(), scale.z(), 0);
 
-            auto mat_dxm = DirectX::XMMatrixTransformation(
-                zero, dxmrot, dxmscale, zero, dxmrot, dxmtrans);
+            auto mat_dxm = DirectX::XMMatrixAffineTransformation(
+                dxmscale, zero, dxmrot, dxmtrans);
 
             auto point = vec4_type(1, 2, 3, 1);
             auto dxmpoint = vec4_to_dxm(point);
 
             auto res = mat * point;
             auto dxmres = DirectX::XMVector4Transform(dxmpoint, mat_dxm);
+
             REQUIRE(equals(res, dxmres));
         }
     }
