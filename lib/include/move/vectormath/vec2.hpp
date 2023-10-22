@@ -1,552 +1,480 @@
 #pragma once
-
-#include "fastvec2.hpp"
+#include <ostream>
+#include "rtm/scalard.h"
 
 namespace move::vectormath
 {
-    struct vec2
+    template <typename value_type>
+    struct generic_vec2
     {
-        using XMFLOAT2 = internal::DirectX::XMFLOAT2;
-
     public:
+        using component_type = value_type;
         constexpr static uint32_t num_elements = 2;
 
-        inline vec2() noexcept : _value(0, 0)
+        inline generic_vec2() noexcept : _x(0), _y(0)
         {
         }
 
-        inline vec2(float x, float y = 0) noexcept : _value(x, y)
-        {
-        }
-
-        inline vec2(const XMFLOAT2& v) noexcept : _value(v)
-        {
-        }
-
-        inline vec2(const fastvec2& v) noexcept : _value(v)
+        inline generic_vec2(value_type x, value_type y = 0) noexcept
+            : _x(x), _y(y)
         {
         }
 
     public:
-        inline fastvec2 fast() const
+        template <typename Archive>
+        inline void serialize(Archive& ar)
         {
-            return _value;
+            for (uint32_t i = 0; i < num_elements; ++i)
+            {
+                /* If is reading */
+                if constexpr (Archive::is_loading::value)
+                {
+                    value_type val;
+                    ar(val);
+                    set_component(i, val);
+                }
+                else
+                {
+                    ar(get_component(i));
+                }
+            }
         }
 
     public:
-        inline bool operator==(const vec2& v) const noexcept
+        inline bool operator==(const generic_vec2& v) const noexcept
         {
-            return _value.x == v._value.x && _value.y == v._value.y;
+            return _x == v._x && _y == v._y;
         }
 
-        inline bool operator!=(const vec2& v) const noexcept
+        inline bool operator!=(const generic_vec2& v) const noexcept
         {
-            return _value.x != v._value.x || _value.y != v._value.y;
+            return _x != v._x || _y != v._y;
         }
 
-        inline vec2& operator=(const vec2& v) noexcept
-        {
-            _value = v._value;
-            return *this;
-        }
-
-        inline vec2& operator+=(const vec2& v) noexcept
-        {
-            _value.x += v._value.x;
-            _value.y += v._value.y;
-            return *this;
-        }
-
-        inline vec2& operator-=(const vec2& v) noexcept
-        {
-            _value.x -= v._value.x;
-            _value.y -= v._value.y;
-            return *this;
-        }
-
-        inline vec2& operator*=(const vec2& v) noexcept
-        {
-            _value.x *= v._value.x;
-            _value.y *= v._value.y;
-            return *this;
-        }
-
-        inline vec2& operator/=(const vec2& v) noexcept
-        {
-            _value.x /= v._value.x;
-            _value.y /= v._value.y;
-            return *this;
-        }
-
-        inline vec2 operator+(const vec2& v) const noexcept
-        {
-            return vec2(_value.x + v._value.x, _value.y + v._value.y);
-        }
-
-        inline vec2 operator-(const vec2& v) const noexcept
-        {
-            return vec2(_value.x - v._value.x, _value.y - v._value.y);
-        }
-
-        inline vec2 operator*(const vec2& v) const noexcept
-        {
-            return vec2(_value.x * v._value.x, _value.y * v._value.y);
-        }
-
-        inline vec2 operator/(const vec2& v) const noexcept
-        {
-            return vec2(_value.x / v._value.x, _value.y / v._value.y);
-        }
-
-        inline vec2 operator-() const noexcept
-        {
-            return vec2(-_value.x, -_value.y);
-        }
-
-        inline float operator[](int i) const noexcept
-        {
-            return (i & (0x1)) == 0 ? _value.x : _value.y;
-        }
-
-        inline float& operator[](int i) noexcept
-        {
-            return (i & (0x1)) == 0 ? _value.x : _value.y;
-        }
-
-    public:
-        inline float& x() noexcept
-        {
-            return _value.x;
-        }
-
-        inline float& y() noexcept
-        {
-            return _value.y;
-        }
-
-        inline float x() const noexcept
-        {
-            return _value.x;
-        }
-
-        inline float y() const noexcept
-        {
-            return _value.y;
-        }
-
-        inline vec2& set_x(float x) noexcept
-        {
-            _value.x = x;
-            return *this;
-        }
-
-        inline vec2& set_y(float y) noexcept
-        {
-            _value.y = y;
-            return *this;
-        }
-
-        inline float length() const noexcept
-        {
-            return fast().length();
-        }
-
-        inline float length_approximate() const noexcept
-        {
-            return fast().length_approximate();
-        }
-
-        inline float squared_length() const noexcept
-        {
-            return fast().squared_length();
-        }
-
-        inline vec2 normalized() const noexcept
-        {
-            return fast().normalized();
-        }
-
-        inline fastvec2 normalized_approximate() const noexcept
-        {
-            return fast().normalized_approximate();
-        }
-
-        inline float dot(const vec2& v) const noexcept
-        {
-            return fast().dot(v._value);
-        }
-
-        inline float distance_to_point(const vec2& v) const noexcept
-        {
-            return fast().distance_to_point(v.fast());
-        }
-
-        inline float distance_to_point_approximate(const vec2& v) const noexcept
-        {
-            return fast().distance_to_point_approximate(v.fast());
-        }
-
-        inline float distance_to_line(
-            const vec2& v0, const vec2& v1) const noexcept
-        {
-            return fast().distance_to_line(v0.fast(), v1.fast());
-        }
-
-        inline float squared_distance_to_point(const vec2& v) const noexcept
-        {
-            return fast().squared_distance_to_point(v.fast());
-        }
-
-        inline vec2 cross(const vec2& v) const noexcept
-        {
-            return fast().cross(v._value);
-        }
-
-        inline float angle_between_normals(const vec2& v) const noexcept
-        {
-            return fast().angle_between_normals(v.fast());
-        }
-
-        inline float angle_between_vectors(const vec2& v) const noexcept
-        {
-            return fast().angle_between_vectors(v.fast());
-        }
-
-        inline vec2 reflect(const vec2& v) const noexcept
-        {
-            return fast().reflect(v.fast());
-        }
-
-        inline vec2 refract(const vec2& v, float eta) const noexcept
-        {
-            return fast().refract(v.fast(), eta);
-        }
-
-        inline vec2 min(const vec2& v) const noexcept
-        {
-            return fast().min(v.fast());
-        }
-
-        inline vec2 max(const vec2& v) const noexcept
-        {
-            return fast().max(v.fast());
-        }
-
-    public:
-        inline void normalize() noexcept
-        {
-            fast().normalized().store(_value);
-        }
-
-        inline void normalize_approximate() noexcept
-        {
-            fast().normalized_approximate().store(_value);
-        }
-
-    public:
-        inline static vec2 intersect_line(const vec2& line1point1,
-            const vec2& line1point2, const vec2& line2point1,
-            const vec2& line2point2) noexcept
-        {
-            return fastvec2::intersect_line(line1point1.fast(),
-                line1point2.fast(), line2point1.fast(), line2point2.fast());
-        }
-
-        inline static vec2 zero() noexcept
-        {
-            return vec2(0.0f, 0.0f);
-        }
-
-        inline static vec2 one() noexcept
-        {
-            return vec2(1.0f, 1.0f);
-        }
-
-        inline static vec2 x_axis() noexcept
-        {
-            return vec2(1.0f, 0.0f);
-        }
-
-        inline static vec2 y_axis() noexcept
-        {
-            return vec2(0.0f, 1.0f);
-        }
-
-        inline static vec2 right() noexcept
-        {
-            return vec2(1.0f, 0.0f);
-        }
-
-        inline static vec2 left() noexcept
-        {
-            return vec2(-1.0f, 0.0f);
-        }
-
-        inline static vec2 up() noexcept
-        {
-            return vec2(0.0f, 1.0f);
-        }
-
-        inline static vec2 down() noexcept
-        {
-            return vec2(0.0f, -1.0f);
-        }
-
-    private:
-        XMFLOAT2 _value;
-    };
-
-    struct norm2 : public vec2
-    {
-        inline norm2(const vec2& v) noexcept : vec2(v.normalized())
-        {
-        }
-
-        inline norm2(float x, float y) noexcept
-            : vec2(internal::DirectX::XMVector2Normalize(
-                  internal::DirectX::XMVectorSet(x, y, 0.0f, 0.0f)))
-        {
-        }
-    };
-
-    struct ivec2
-    {
-    public:
-        constexpr static uint32_t num_elements = 2;
-
-        inline ivec2() noexcept : _x(0), _y(0)
-        {
-        }
-
-        inline ivec2(int x, int y = 0) noexcept : _x(x), _y(y)
-        {
-        }
-
-        inline ivec2(const ivec2& v) noexcept : _x(v._x), _y(v._y)
-        {
-        }
-
-        inline ivec2(const vec2& v) noexcept
-            : _x(static_cast<int>(v.x())), _y(static_cast<int>(v.y()))
-        {
-        }
-
-    public:
-        inline ivec2& operator=(const ivec2& v) noexcept
+        inline generic_vec2& operator=(const generic_vec2& v) noexcept
         {
             _x = v._x;
             _y = v._y;
             return *this;
         }
 
-        inline ivec2& operator+=(const ivec2& v) noexcept
+        inline generic_vec2& operator+=(const generic_vec2& v) noexcept
         {
             _x += v._x;
             _y += v._y;
             return *this;
         }
 
-        inline ivec2& operator-=(const ivec2& v) noexcept
+        inline generic_vec2& operator-=(const generic_vec2& v) noexcept
         {
             _x -= v._x;
             _y -= v._y;
             return *this;
         }
 
-        inline ivec2& operator*=(const ivec2& v) noexcept
-        {
-            _x *= v._x;
-            _y *= v._y;
-            return *this;
-        }
-
-        inline ivec2& operator/=(const ivec2& v) noexcept
-        {
-            _x /= v._x;
-            _y /= v._y;
-            return *this;
-        }
-
-        inline ivec2& operator%=(const ivec2& v) noexcept
-        {
-            _x %= v._x;
-            _y %= v._y;
-            return *this;
-        }
-
-        inline ivec2& operator*=(int v) noexcept
+        inline generic_vec2& operator*=(const value_type& v) noexcept
         {
             _x *= v;
             _y *= v;
             return *this;
         }
 
-        inline ivec2& operator/=(int v) noexcept
+        inline generic_vec2& operator*=(const generic_vec2& v) noexcept
+        {
+            _x *= v._x;
+            _y *= v._y;
+            return *this;
+        }
+
+        inline generic_vec2& operator/=(const value_type& v) noexcept
         {
             _x /= v;
             _y /= v;
             return *this;
         }
 
-        inline ivec2& operator%=(int v) noexcept
+        inline generic_vec2& operator/=(const generic_vec2& v) noexcept
         {
-            _x %= v;
-            _y %= v;
+            _x /= v._x;
+            _y /= v._y;
             return *this;
         }
 
-        inline ivec2 operator-() const noexcept
+        inline generic_vec2 operator+(const generic_vec2& v) const noexcept
         {
-            return ivec2(-_x, -_y);
+            return generic_vec2(_x + v._x, _y + v._y);
         }
 
-        inline ivec2 operator+(const ivec2& v) const noexcept
+        inline generic_vec2 operator-(const generic_vec2& v) const noexcept
         {
-            return ivec2(_x + v._x, _y + v._y);
+            return generic_vec2(_x - v._x, _y - v._y);
         }
 
-        inline ivec2 operator-(const ivec2& v) const noexcept
+        inline generic_vec2 operator*(const value_type& v) const noexcept
         {
-            return ivec2(_x - v._x, _y - v._y);
+            return generic_vec2(_x * v, _y * v);
         }
 
-        inline ivec2 operator*(const ivec2& v) const noexcept
+        inline generic_vec2 operator*(const generic_vec2& v) const noexcept
         {
-            return ivec2(_x * v._x, _y * v._y);
+            return generic_vec2(_x * v._x, _y * v._y);
         }
 
-        inline ivec2 operator/(const ivec2& v) const noexcept
+        inline generic_vec2 operator/(const value_type& v) const noexcept
         {
-            return ivec2(_x / v._x, _y / v._y);
+            return generic_vec2(_x / v, _y / v);
         }
 
-        inline ivec2 operator%(const ivec2& v) const noexcept
+        inline generic_vec2 operator/(const generic_vec2& v) const noexcept
         {
-            return ivec2(_x % v._x, _y % v._y);
+            return generic_vec2(_x / v._x, _y / v._y);
         }
 
-        inline ivec2 operator*(int v) const noexcept
+        inline generic_vec2 operator-() const noexcept
         {
-            return ivec2(_x * v, _y * v);
+            return generic_vec2(-_x, -_y);
         }
 
-        inline ivec2 operator/(int v) const noexcept
+        inline value_type get_component(int index) const noexcept
         {
-            return ivec2(_x / v, _y / v);
+            switch (index)
+            {
+                case 0:
+                    return _x;
+                default:
+                    return _y;
+            }
         }
 
-        inline ivec2 operator%(int v) const noexcept
+        inline void set_component(int index, value_type value)
         {
-            return ivec2(_x % v, _y % v);
+            switch (index)
+            {
+                case 0:
+                    set_x(value);
+                    break;
+                default:
+                    set_y(value);
+                    break;
+            }
         }
 
-        inline bool operator==(const ivec2& v) const noexcept
+        class component_accessor
         {
-            return _x == v._x && _y == v._y;
+        public:
+            inline component_accessor(generic_vec2& vec, int index) noexcept
+                : _vec(vec), _index(index)
+            {
+            }
+
+            inline operator value_type() const noexcept
+            {
+                return _vec.get_component(_index);
+            }
+
+            inline component_accessor& operator=(const value_type& v) noexcept
+            {
+                _vec.set_component(_index, v);
+                return *this;
+            }
+
+        private:
+            generic_vec2& _vec;
+            int _index;
+        };
+
+        inline value_type operator[](int i) const noexcept
+        {
+            return get_component(i);
         }
 
-        inline bool operator!=(const ivec2& v) const noexcept
+        inline component_accessor operator[](int i) noexcept
         {
-            return _x != v._x || _y != v._y;
-        }
-
-        inline int operator[](int i) const noexcept
-        {
-            return (i & (0x1)) == 0 ? _x : _y;
-        }
-
-        inline int& operator[](int i) noexcept
-        {
-            return (i & (0x1)) == 0 ? _x : _y;
+            return component_accessor(*this, i);
         }
 
     public:
-        inline int& x()
+        inline component_accessor x() noexcept
+        {
+            return component_accessor(*this, 0);
+        }
+
+        inline component_accessor y() noexcept
+        {
+            return component_accessor(*this, 1);
+        }
+
+        inline value_type x() const noexcept
         {
             return _x;
         }
 
-        inline int& y()
+        inline value_type y() const noexcept
         {
             return _y;
         }
 
-        inline int x() const
-        {
-            return _x;
-        }
-
-        inline int y() const
-        {
-            return _y;
-        }
-
-        inline ivec2& set_x(int x)
+        inline generic_vec2& set_x(value_type x) noexcept
         {
             _x = x;
             return *this;
         }
 
-        inline ivec2& set_y(int y)
+        inline generic_vec2& set_y(value_type y) noexcept
         {
             _y = y;
             return *this;
         }
 
+        inline value_type length() const noexcept
+        {
+            return rtm::scalar_sqrt(squared_length());
+        }
+
+        inline value_type length_approximate() const noexcept
+        {
+            // TODO: Implement approximate length
+            return length();
+        }
+
+        inline value_type squared_length() const noexcept
+        {
+            return _x * _x + _y * _y;
+        }
+
+        inline generic_vec2 normalized() const noexcept
+        {
+            return *this / length();
+        }
+
+        inline generic_vec2 normalized_approximate() const noexcept
+        {
+            return *this / length_approximate();
+        }
+
+        inline value_type dot(const generic_vec2& v) const noexcept
+        {
+            return _x * v._x + _y * v._y;
+        }
+
+        inline value_type distance_to_point(
+            const generic_vec2& v) const noexcept
+        {
+            return (v - *this).length();
+        }
+
+        inline value_type distance_to_point_approximate(
+            const generic_vec2& v) const noexcept
+        {
+            return (v - *this).length_approximate();
+        }
+
+        inline value_type squared_distance_to_point(
+            const generic_vec2& v) const noexcept
+        {
+            return (v - *this).squared_length();
+        }
+
+        inline value_type distance_to_line(
+            const generic_vec2& v0, const generic_vec2& v1) const noexcept
+        {
+            // Given a vector PointVector from LinePoint1 to Point and a vector
+            // LineVector from LinePoint1 to LinePoint2, the scaled distance
+            // PointProjectionScale from LinePoint1 to the perpendicular
+            // projection of PointVector onto the line is defined as:
+            //
+            //     PointProjectionScale = dot(PointVector, LineVector) /
+            //     LengthSq(LineVector)
+
+            // XMVECTOR PointVector = XMVectorSubtract(Point, LinePoint1);
+            // XMVECTOR LineVector = XMVectorSubtract(LinePoint2, LinePoint1);
+
+            // XMVECTOR LengthSq = XMVector2LengthSq(LineVector);
+
+            // XMVECTOR PointProjectionScale =
+            //     XMVector2Dot(PointVector, LineVector);
+            // PointProjectionScale =
+            //     XMVectorDivide(PointProjectionScale, LengthSq);
+
+            // XMVECTOR DistanceVector =
+            //     XMVectorMultiply(LineVector, PointProjectionScale);
+            // DistanceVector = XMVectorSubtract(PointVector, DistanceVector);
+
+            // return XMVector2Length(DistanceVector);
+
+            auto point_vector = *this - v0;
+            auto line_vector = v1 - v0;
+
+            auto length_sq = line_vector.squared_length();
+
+            auto point_projection_scale = point_vector.dot(line_vector);
+            point_projection_scale /= length_sq;
+
+            auto distance_vector = line_vector * point_projection_scale;
+            distance_vector = point_vector - distance_vector;
+
+            return distance_vector.length();
+        }
+
+        inline value_type cross(const generic_vec2& rhs) const noexcept
+        {
+            return _x * rhs._y - _y * rhs._x;
+        }
+
+        inline value_type angle_between_normalized_vectors(
+            const generic_vec2& v) const noexcept
+        {
+            // Compute with dot product
+            auto dot = this->dot(v);
+            return rtm::scalar_acos(dot);
+        }
+
+        inline value_type angle_between_vectors(
+            const generic_vec2& v) const noexcept
+        {
+            // Compute with dot product
+            auto norm = normalized();
+            auto vnorm = v.normalized();
+            return norm.angle_between_normalized_vectors(vnorm);
+        }
+
+        inline generic_vec2 reflect(const generic_vec2& normal) const noexcept
+        {
+            return *this - (normal * (2 * dot(normal)));
+        }
+
+        inline generic_vec2 refract(
+            const generic_vec2& normal, value_type ior) const noexcept
+        {
+            // Based on XMVector2RefractV
+            const auto& incident = *this;
+            auto idotn = incident.dot(normal);
+
+            auto ry = 1.0f - (idotn * idotn);
+            auto rx = 1.0f - (ry * ior * ior);
+            ry = 1.0f - (ry * ior * ior);
+
+            if (rx >= 0.0f)
+            {
+                rx = (ior * incident.x()) -
+                     (normal.x() * ((ior * idotn) + rtm::scalar_sqrt(rx)));
+            }
+            else
+            {
+                rx = 0.0f;
+            }
+
+            if (ry >= 0.0f)
+            {
+                ry = (ior * incident.y()) -
+                     (normal.y() * ((ior * idotn) + rtm::scalar_sqrt(ry)));
+            }
+            else
+            {
+                ry = 0.0f;
+            }
+
+            return generic_vec2(rx, ry);
+        }
+
+        inline generic_vec2 min(const generic_vec2& v) const noexcept
+        {
+            return generic_vec2(
+                rtm::scalar_min(_x, v._x), rtm::scalar_min(_y, v._y));
+        }
+
+        inline generic_vec2 max(const generic_vec2& v) const noexcept
+        {
+            return generic_vec2(
+                rtm::scalar_max(_x, v._x), rtm::scalar_max(_y, v._y));
+        }
+
     public:
-        static inline ivec2 zero() noexcept
+        inline void normalize() noexcept
         {
-            return ivec2(0, 0);
+            *this /= length();
         }
 
-        static inline ivec2 one() noexcept
+        inline void normalize_approximate() noexcept
         {
-            return ivec2(1, 1);
-        }
-
-        static inline ivec2 x_axis() noexcept
-        {
-            return ivec2(1, 0);
-        }
-
-        static inline ivec2 y_axis() noexcept
-        {
-            return ivec2(0, 1);
-        }
-
-        static inline ivec2 right() noexcept
-        {
-            return ivec2(1, 0);
-        }
-
-        static inline ivec2 left() noexcept
-        {
-            return ivec2(-1, 0);
-        }
-
-        static inline ivec2 up() noexcept
-        {
-            return ivec2(0, 1);
-        }
-
-        static inline ivec2 down() noexcept
-        {
-            return ivec2(0, -1);
+            *this /= length_approximate();
         }
 
     public:
-        int _x, _y;
+        inline static generic_vec2 zero() noexcept
+        {
+            return generic_vec2(0, 0);
+        }
+
+        inline static generic_vec2 one() noexcept
+        {
+            return generic_vec2(1, 1);
+        }
+
+        inline static generic_vec2 x_axis() noexcept
+        {
+            return generic_vec2(1, 0);
+        }
+
+        inline static generic_vec2 y_axis() noexcept
+        {
+            return generic_vec2(0, 1);
+        }
+
+        inline static generic_vec2 right() noexcept
+        {
+            return x_axis();
+        }
+
+        inline static generic_vec2 up() noexcept
+        {
+            return y_axis();
+        }
+
+    private:
+        float _x;
+        float _y;
     };
+
+    using vec2f = generic_vec2<float>;
+    using vec2d = generic_vec2<double>;
+
+#if MOVE_VECTORMATH_USE_DOUBLE_PRECISION
+    using vec2 = vec2d;
+#else
+    using vec2 = vec2f;
+#endif
+
+    template <typename value_type>
+    inline std::ostream& operator<<(
+        std::ostream& os, const move::vectormath::generic_vec2<value_type>& v)
+    {
+        return os << "(" << v.x() << ", " << v.y() << ")";
+    }
 }  // namespace move::vectormath
 
 #if !defined(MOVE_VECTORMATH_NO_SERIALIZATION)
 #include "vmathcereal.hpp"
 #include "vmathjson.hpp"
-
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2);
-MOVE_VECTORMATH_CEREAL_SERIALIZER(move::vectormath::vec2);
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::norm2);
-MOVE_VECTORMATH_CEREAL_SERIALIZER(move::vectormath::norm2);
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::ivec2);
-MOVE_VECTORMATH_CEREAL_SERIALIZER(move::vectormath::ivec2);
+MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2f);
+MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2d);
+// MOVE_VECTORMATH_CEREAL_SERIALIZER(move::vectormath::vec2f);
+// MOVE_VECTORMATH_CEREAL_SERIALIZER(move::vectormath::vec2d);
 #endif
+
+template <typename value_type>
+struct fmt::formatter<move::vectormath::generic_vec2<value_type>>
+{
+    template <typename ParseContext>
+    constexpr inline auto parse(ParseContext& ctx)
+    {
+        return ctx.begin();
+    }
+
+    template <typename FormatContext>
+    auto inline format(move::vectormath::generic_vec2<value_type> const& number,
+        FormatContext& ctx)
+    {
+        return format_to(ctx.out(), "({}, {})", number.x(), number.y());
+    }
+};

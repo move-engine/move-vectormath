@@ -93,9 +93,21 @@ namespace move::vectormath
             return *this;
         }
 
+        inline generic_vec4& operator*=(value_type v) noexcept
+        {
+            _value = rtm::vector_mul(_value, v);
+            return *this;
+        }
+
         inline generic_vec4& operator*=(const generic_vec4& v) noexcept
         {
             _value = rtm::vector_mul(_value, v._value);
+            return *this;
+        }
+
+        inline generic_vec4& operator/=(value_type v) noexcept
+        {
+            _value = rtm::vector_div(_value, v);
             return *this;
         }
 
@@ -115,9 +127,19 @@ namespace move::vectormath
             return generic_vec4(rtm::vector_sub(_value, v._value));
         }
 
+        inline generic_vec4 operator*(value_type v) const noexcept
+        {
+            return generic_vec4(rtm::vector_mul(_value, v));
+        }
+
         inline generic_vec4 operator*(const generic_vec4& v) const noexcept
         {
             return generic_vec4(rtm::vector_mul(_value, v._value));
+        }
+
+        inline generic_vec4 operator/(value_type v) const noexcept
+        {
+            return generic_vec4(rtm::vector_div(_value, v));
         }
 
         inline generic_vec4 operator/(const generic_vec4& v) const noexcept
