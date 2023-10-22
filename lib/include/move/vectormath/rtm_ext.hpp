@@ -1,12 +1,20 @@
 #pragma once
 #include <cassert>
+#include <limits>
 
 #include <rtm/macros.h>
 
+#include <rtm/impl/compiler_utils.h>
+#include <rtm/mask4d.h>
+#include <rtm/mask4f.h>
 #include <rtm/matrix4x4d.h>
 #include <rtm/matrix4x4f.h>
+#include <rtm/quatd.h>
+#include <rtm/quatf.h>
 #include <rtm/qvvd.h>
 #include <rtm/qvvf.h>
+#include <rtm/vector4d.h>
+#include <rtm/vector4f.h>
 
 namespace rtm
 {
@@ -417,5 +425,184 @@ namespace rtm
             return rtm::matrix_cast(
                 transform_3x4(translation, rotation, scale));
         }
+
+        RTM_DISABLE_SECURITY_COOKIE_CHECK
+        RTM_FORCE_INLINE quatf quat_inverse(const quatf& input)
+        {
+            using quat_t = quatf;
+            using vector_t = vector4f;
+            using value_t = float;
+            using mask_t = mask4f;
+
+            vector_t conj = quat_to_vector(quat_conjugate(input));
+            value_t lsq = quat_length_squared(input);
+            vector_t lsqv = vector_set(lsq);
+            if (lsq <= std::numeric_limits<value_t>::epsilon())
+            {
+                return quat_set(value_t(0), value_t(0), value_t(0), value_t(0));
+            }
+
+            return vector_to_quat(vector_div(conj, lsqv));
+        }
+
+        RTM_DISABLE_SECURITY_COOKIE_CHECK
+        RTM_FORCE_INLINE quatd quat_inverse(const quatd& input)
+        {
+            using quat_t = quatd;
+            using vector_t = vector4d;
+            using value_t = double;
+            using mask_t = mask4d;
+
+            vector_t conj = quat_to_vector(quat_conjugate(input));
+            value_t lsq = quat_length_squared(input);
+            vector_t lsqv = vector_set(lsq);
+            if (lsq <= std::numeric_limits<value_t>::epsilon())
+            {
+                return quat_set(value_t(0), value_t(0), value_t(0), value_t(0));
+            }
+
+            return vector_to_quat(vector_div(conj, lsqv));
+        }
+
+        RTM_DISABLE_SECURITY_COOKIE_CHECK
+        RTM_FORCE_INLINE mask4f vector_in_bounds(const vector4f& input,
+            const vector4f& bounds_min, const vector4f& bounds_max)
+        {
+            return vector_and(vector_less_equal(input, bounds_max),
+                vector_greater_equal(input, bounds_min));
+        }
+
+        RTM_DISABLE_SECURITY_COOKIE_CHECK
+        RTM_FORCE_INLINE mask4d vector_in_bounds(const vector4d& input,
+            const vector4d& bounds_min, const vector4d& bounds_max)
+        {
+            using vector_t = vector4d;
+            using mask_t = mask4d;
+
+            mask_t less_mask = vector_less_equal(input, bounds_max);
+            mask_t greater_mask = vector_greater_equal(input, bounds_min);
+
+            // TODO: Optimize this once it's properly implemented in RTM -
+            // vectorized implementation did not work for doubles
+            return mask_set(mask_get_x(less_mask) & mask_get_x(greater_mask),
+                mask_get_y(less_mask) & mask_get_y(greater_mask),
+                mask_get_z(less_mask) & mask_get_z(greater_mask),
+                mask_get_w(less_mask) & mask_get_w(greater_mask));
+        }
+
+        RTM_DISABLE_SECURITY_COOKIE_CHECK
+        RTM_FORCE_INLINE mask4f vector_in_bounds(
+            const vector4f& input, const vector4f& bounds)
+        {
+            return vector_in_bounds(input, vector_neg(bounds), bounds);
+        }
+
+        RTM_DISABLE_SECURITY_COOKIE_CHECK
+        RTM_FORCE_INLINE mask4d vector_in_bounds(
+            const vector4d& input, const vector4d& bounds)
+        {
+            return vector_in_bounds(input, vector_neg(bounds), bounds);
+        }
+
+        RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE vector4f
+        vector_splat_x(const vector4f& input)
+        {
+            return vector_set(float(vector_get_x(input)));
+        }
+
+        RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE vector4f
+        vector_splat_y(const vector4f& input)
+        {
+            return vector_set(float(vector_get_y(input)));
+        }
+
+        RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE vector4f
+        vector_splat_w(const vector4f& input)
+        {
+            return vector_set(float(vector_get_w(input)));
+        }
+
+        RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE vector4f
+        vector_splat_z(const vector4f& input)
+        {
+            return vector_set(float(vector_get_z(input)));
+        }
+
+        RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE vector4d
+        vector_splat_x(const vector4d& input)
+        {
+            return vector_set(double(vector_get_x(input)));
+        }
+
+        RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE vector4d
+        vector_splat_y(const vector4d& input)
+        {
+            return vector_set(double(vector_get_y(input)));
+        }
+
+        RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE vector4d
+        vector_splat_w(const vector4d& input)
+        {
+            return vector_set(double(vector_get_w(input)));
+        }
+
+        RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE vector4d
+        vector_splat_z(const vector4d& input)
+        {
+            return vector_set(double(vector_get_z(input)));
+        }
+
+        // TODO: This and exp
+        // RTM_DISABLE_SECURITY_COOKIE_CHECK
+        // RTM_FORCE_INLINE quatf quat_ln(const quatf& input)
+        // {
+        //     // static const XMVECTORF32 OneMinusEpsilon = {{{1.0f - 0.00001f,
+        //     //     1.0f - 0.00001f, 1.0f - 0.00001f, 1.0f - 0.00001f}}};
+
+        //     // XMVECTOR QW = XMVectorSplatW(Q);
+        //     // XMVECTOR Q0 = XMVectorSelect(g_XMSelect1110.v, Q,
+        //     // g_XMSelect1110.v);
+
+        //     // XMVECTOR ControlW = XMVectorInBounds(QW, OneMinusEpsilon.v);
+
+        //     // XMVECTOR Theta = XMVectorACos(QW);
+        //     // XMVECTOR SinTheta = XMVectorSin(Theta);
+
+        //     // XMVECTOR S = XMVectorDivide(Theta, SinTheta);
+
+        //     // XMVECTOR Result = XMVectorMultiply(Q0, S);
+        //     // Result = XMVectorSelect(Q0, Result, ControlW);
+
+        //     // return Result;
+
+        //     using quat_t = quatf;
+        //     using vector_t = vector4f;
+        //     using value_t = float;
+        //     using mask_t = mask4f;
+
+        //     static constexpr value_t epsilon =
+        //         std::numeric_limits<value_t>::epsilon();
+
+        //     static const vector_t one_minus_epsilon =
+        //         vector_set(value_t(1.0) - epsilon);
+
+        //     static const mask_t select1110 =
+        //         vector_set(value_t(1), value_t(1), value_t(1), value_t(0));
+
+        //     vector_t qw = vector_splat_w(quat_to_vector(input));
+        //     vector_t q0 = vector_select(select1110, select1110, qw);
+
+        //     mask_t control_w = vector_in_bounds(qw, one_minus_epsilon);
+
+        //     vector_t theta = vector_acos(qw);
+        //     vector_t sin_theta = vector_sin(theta);
+
+        //     vector_t s = vector_div(theta, sin_theta);
+
+        //     vector_t result = vector_mul(q0, s);
+        //     result = vector_select(control_w, q0, result);
+
+        //     return vector_to_quat(result);
+        // }
     }  // namespace ext
 }  // namespace rtm

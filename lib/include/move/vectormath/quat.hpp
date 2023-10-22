@@ -1,4 +1,5 @@
 #pragma once
+#include <ostream>
 
 #include "move/vectormath/mat4.hpp"
 #include "rtm/quatf.h"
@@ -17,12 +18,17 @@
 
 namespace move::vectormath
 {
-    using value_type = float;
-    using quat_type_raw = wrappers::qf;
-    using underlying_matrix3x4_type_raw = wrappers::m3x4f;
-    using underlying_matrix4x4_type_raw = wrappers::m4x4f;
-    using vec3_type = vec3f;
-    using mat4x4_type = mat4f;
+    // using value_type = float;
+    // using quat_type_raw = wrappers::qf;
+    // using underlying_matrix3x4_type_raw = wrappers::m3x4f;
+    // using underlying_matrix4x4_type_raw = wrappers::m4x4f;
+    // using vec3_type = vec3f;
+    // using mat4x4_type = mat4f;
+
+    template <typename value_type, typename quat_type_raw,
+        typename underlying_matrix3x4_type_raw,
+        typename underlying_matrix4x4_type_raw, typename vec3_type,
+        typename mat4x4_type>
     struct generic_quat
     {
         using component_type = value_type;
@@ -31,6 +37,8 @@ namespace move::vectormath
             typename underlying_matrix3x4_type_raw::type;
         using underlying_matrix4x4_type =
             typename underlying_matrix4x4_type_raw::type;
+
+        constexpr static uint32_t num_elements = 4;
 
     public:
         inline generic_quat() noexcept
@@ -50,12 +58,33 @@ namespace move::vectormath
         }
 
     public:
-        inline operator quat_type&()
+        inline quat_type get_internal() const noexcept
         {
             return _value;
         }
 
-        inline quat_type get_internal() const noexcept
+    public:
+        template <typename Archive>
+        inline void serialize(Archive& ar)
+        {
+            for (uint32_t i = 0; i < num_elements; ++i)
+            {
+                /* If is reading */
+                if constexpr (Archive::is_loading::value)
+                {
+                    value_type val;
+                    ar(val);
+                    set_component(i, val);
+                }
+                else
+                {
+                    ar(get_component(i));
+                }
+            }
+        }
+
+    public:
+        inline operator quat_type&()
         {
             return _value;
         }
@@ -89,6 +118,11 @@ namespace move::vectormath
         inline generic_quat operator*(const generic_quat& v) const noexcept
         {
             return generic_quat(rtm::quat_mul(_value, v._value));
+        }
+
+        inline vec3_type operator*(const vec3_type& rhs) const noexcept
+        {
+            return rtm::quat_mul_vector3(rhs.get_internal(), _value);
         }
 
         inline generic_quat operator-() const noexcept
@@ -283,15 +317,29 @@ namespace move::vectormath
 
         inline generic_quat inverse() const noexcept
         {
+            // XMVECTOR L = XMVector4LengthSq(Q);
+            // XMVECTOR Conjugate = XMQuaternionConjugate(Q);
+
+            // XMVECTOR Control = XMVectorLessOrEqual(L, g_XMEpsilon.v);
+
+            // XMVECTOR Result = XMVectorDivide(Conjugate, L);
+
+            // Result = XMVectorSelect(Result, g_XMZero, Control);
+
+            // return Result;
+            return generic_quat(rtm::ext::quat_inverse(_value));
         }
 
-        inline generic_quat ln() const noexcept
-        {
-        }
+        // TODO
+        // inline generic_quat ln() const noexcept
+        // {
+        //     return generic_quat(rtm::ext::quat_ln(_value));
+        // }
 
-        inline generic_quat exp() const noexcept
-        {
-        }
+        // inline generic_quat exp() const noexcept
+        // {
+        //     // return generic_quat(rtm::ext::quat_exp(_value));
+        // }
 
         inline generic_quat slerp(
             const generic_quat& v, value_type t) const noexcept
@@ -348,6 +396,13 @@ namespace move::vectormath
                 rtm::quat_from_euler(angles.x(), angles.y(), angles.z()));
         }
 
+        static inline generic_quat from_axis_angle(
+            const vec3_type& axis, value_type angle) noexcept
+        {
+            return generic_quat(
+                rtm::quat_from_axis_angle(axis.get_internal(), angle));
+        }
+
         static inline generic_quat from_rotation_normal(
             const vec3_type& normal_axis, value_type angle) noexcept
         {
@@ -374,12 +429,62 @@ namespace move::vectormath
         quat_type _value;
     };
 
-    using quat4f = generic_quat;
-    using quat4d = generic_quat;
+    using quat4f = generic_quat<float, wrappers::qf, wrappers::m3x4f,
+        wrappers::m4x4f, vec3f, mat4f>;
+    using quat4d = generic_quat<double, wrappers::qd, wrappers::m3x4d,
+        wrappers::m4x4d, vec3d, mat4d>;
 
 #if MOVE_VECTORMATH_USE_DOUBLE_PRECISION
     using quat = quat4d;
 #else
     using quat = quat4f;
 #endif
+
+    template <typename value_type, typename quat_type_raw,
+        typename underlying_matrix3x4_type_raw,
+        typename underlying_matrix4x4_type_raw, typename vec3_type,
+        typename mat4x4_type>
+    inline std::ostream& operator<<(std::ostream& os,
+        const move::vectormath::generic_quat<value_type, quat_type_raw,
+            underlying_matrix3x4_type_raw, underlying_matrix4x4_type_raw,
+            vec3_type, mat4x4_type>& v)
+    {
+        return os << "(" << v.x() << ", " << v.y() << ", " << v.z() << ", "
+                  << v.w() << ")";
+    }
 }  // namespace move::vectormath
+
+#if !defined(MOVE_VECTORMATH_NO_SERIALIZATION)
+#include "vmathcereal.hpp"
+#include "vmathjson.hpp"
+MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::quat4f);
+MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::quat4d);
+// MOVE_VECTORMATH_CEREAL_SERIALIZER(move::vectormath::vec4f);
+// MOVE_VECTORMATH_CEREAL_SERIALIZER(move::vectormath::vec4d);
+#endif
+
+template <typename value_type, typename quat_type_raw,
+    typename underlying_matrix3x4_type_raw,
+    typename underlying_matrix4x4_type_raw, typename vec3_type,
+    typename mat4x4_type>
+struct fmt::formatter<move::vectormath::generic_quat<value_type, quat_type_raw,
+    underlying_matrix3x4_type_raw, underlying_matrix4x4_type_raw, vec3_type,
+    mat4x4_type>>
+{
+    template <typename ParseContext>
+    constexpr inline auto parse(ParseContext& ctx)
+    {
+        return ctx.begin();
+    }
+
+    template <typename FormatContext>
+    auto inline format(
+        move::vectormath::generic_quat<value_type, quat_type_raw,
+            underlying_matrix3x4_type_raw, underlying_matrix4x4_type_raw,
+            vec3_type, mat4x4_type> const& number,
+        FormatContext& ctx)
+    {
+        return format_to(ctx.out(), "({}, {}, {}, {})", number.x(), number.y(),
+            number.z(), number.w());
+    }
+};

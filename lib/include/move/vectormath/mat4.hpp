@@ -29,12 +29,9 @@
 
 namespace move::vectormath
 {
-    using value_type = float;
-    using vector3_type_raw = wrappers::v4f;
-    using vector4_type_raw = wrappers::v4f;
-    using quat_type_raw = wrappers::qf;
-    using matrix_type_raw = wrappers::m4x4f;
-    using matrix3x4_type_raw = wrappers::m3x4f;
+    template <typename value_type, typename vector3_type_raw,
+        typename vector4_type_raw, typename quat_type_raw,
+        typename matrix3x4_type_raw, typename matrix4x4_type_raw>
     struct generic_mat4
     {
         using component_type = value_type;
@@ -42,7 +39,7 @@ namespace move::vectormath
         using underlying_vector4_type = typename vector4_type_raw::type;
         using underlying_quat_type = typename quat_type_raw::type;
         using underlying_matrix3x4_type = typename matrix3x4_type_raw::type;
-        using underlying_matrix4x4_type = typename matrix_type_raw::type;
+        using underlying_matrix4x4_type = typename matrix4x4_type_raw::type;
         using vec3_type = generic_vec3<value_type, vector3_type_raw>;
         using vec4_type = generic_vec4<value_type, vector4_type_raw>;
 
@@ -316,8 +313,10 @@ namespace move::vectormath
         underlying_matrix4x4_type _value;
     };
 
-    using mat4f = generic_mat4;
-    using mat4d = generic_mat4;
+    using mat4f = generic_mat4<float, wrappers::v4f, wrappers::v4f,
+        wrappers::qf, wrappers::m3x4f, wrappers::m4x4f>;
+    using mat4d = generic_mat4<double, wrappers::v4d, wrappers::v4d,
+        wrappers::qd, wrappers::m3x4d, wrappers::m4x4d>;
 
 #if MOVE_VECTORMATH_USE_DOUBLE_PRECISION
     using mat4 = mat4d;
