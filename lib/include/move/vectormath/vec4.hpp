@@ -23,31 +23,31 @@ namespace move::vectormath
         using underlying_type = vector_type;
         constexpr static uint32_t num_elements = 4;
 
-        inline generic_vec4() noexcept
+        RTM_FORCE_INLINE generic_vec4() noexcept
             : _value(rtm::vector_set(
                   value_type(0), value_type(0), value_type(0), value_type(0)))
         {
         }
 
-        inline generic_vec4(value_type x, value_type y = 0, value_type z = 0,
-            value_type w = 0) noexcept
+        RTM_FORCE_INLINE generic_vec4(value_type x, value_type y = 0,
+            value_type z = 0, value_type w = 0) noexcept
             : _value(rtm::vector_set(x, y, z, w))
         {
         }
 
-        inline generic_vec4(const vector_type& v) noexcept : _value(v)
+        RTM_FORCE_INLINE generic_vec4(const vector_type& v) noexcept : _value(v)
         {
         }
 
     public:
-        inline vector_type get_internal() const noexcept
+        RTM_FORCE_INLINE vector_type get_internal() const noexcept
         {
             return _value;
         }
 
     public:
         template <typename Archive>
-        inline void serialize(Archive& ar)
+        RTM_FORCE_INLINE void serialize(Archive& ar)
         {
             for (uint32_t i = 0; i < num_elements; ++i)
             {
@@ -66,100 +66,108 @@ namespace move::vectormath
         }
 
     public:
-        inline operator vector_type&()
+        RTM_FORCE_INLINE operator vector_type&()
         {
             return _value;
         }
 
-        inline bool operator==(const generic_vec4& v) const noexcept
+        RTM_FORCE_INLINE bool operator==(const generic_vec4& v) const noexcept
         {
             return rtm::mask_all_true(rtm::vector_equal(_value, v._value));
         }
 
-        inline bool operator!=(const generic_vec4& v) const noexcept
+        RTM_FORCE_INLINE bool operator!=(const generic_vec4& v) const noexcept
         {
             return !rtm::mask_all_true(rtm::vector_equal(_value, v._value));
         }
 
-        inline generic_vec4& operator=(const generic_vec4& v) noexcept
+        RTM_FORCE_INLINE generic_vec4& operator=(const generic_vec4& v) noexcept
         {
             _value = v._value;
             return *this;
         }
 
-        inline generic_vec4& operator+=(const generic_vec4& v) noexcept
+        RTM_FORCE_INLINE generic_vec4& operator+=(
+            const generic_vec4& v) noexcept
         {
             _value = rtm::vector_add(_value, v._value);
             return *this;
         }
 
-        inline generic_vec4& operator-=(const generic_vec4& v) noexcept
+        RTM_FORCE_INLINE generic_vec4& operator-=(
+            const generic_vec4& v) noexcept
         {
             _value = rtm::vector_sub(_value, v._value);
             return *this;
         }
 
-        inline generic_vec4& operator*=(value_type v) noexcept
+        RTM_FORCE_INLINE generic_vec4& operator*=(value_type v) noexcept
         {
             _value = rtm::vector_mul(_value, v);
             return *this;
         }
 
-        inline generic_vec4& operator*=(const generic_vec4& v) noexcept
+        RTM_FORCE_INLINE generic_vec4& operator*=(
+            const generic_vec4& v) noexcept
         {
             _value = rtm::vector_mul(_value, v._value);
             return *this;
         }
 
-        inline generic_vec4& operator/=(value_type v) noexcept
+        RTM_FORCE_INLINE generic_vec4& operator/=(value_type v) noexcept
         {
             _value = rtm::vector_div(_value, v);
             return *this;
         }
 
-        inline generic_vec4& operator/=(const generic_vec4& v) noexcept
+        RTM_FORCE_INLINE generic_vec4& operator/=(
+            const generic_vec4& v) noexcept
         {
             _value = rtm::vector_div(_value, v._value);
             return *this;
         }
 
-        inline generic_vec4 operator+(const generic_vec4& v) const noexcept
+        RTM_FORCE_INLINE generic_vec4 operator+(
+            const generic_vec4& v) const noexcept
         {
             return generic_vec4(rtm::vector_add(_value, v._value));
         }
 
-        inline generic_vec4 operator-(const generic_vec4& v) const noexcept
+        RTM_FORCE_INLINE generic_vec4 operator-(
+            const generic_vec4& v) const noexcept
         {
             return generic_vec4(rtm::vector_sub(_value, v._value));
         }
 
-        inline generic_vec4 operator*(value_type v) const noexcept
+        RTM_FORCE_INLINE generic_vec4 operator*(value_type v) const noexcept
         {
             return generic_vec4(rtm::vector_mul(_value, v));
         }
 
-        inline generic_vec4 operator*(const generic_vec4& v) const noexcept
+        RTM_FORCE_INLINE generic_vec4 operator*(
+            const generic_vec4& v) const noexcept
         {
             return generic_vec4(rtm::vector_mul(_value, v._value));
         }
 
-        inline generic_vec4 operator/(value_type v) const noexcept
+        RTM_FORCE_INLINE generic_vec4 operator/(value_type v) const noexcept
         {
             return generic_vec4(rtm::vector_div(_value, v));
         }
 
-        inline generic_vec4 operator/(const generic_vec4& v) const noexcept
+        RTM_FORCE_INLINE generic_vec4 operator/(
+            const generic_vec4& v) const noexcept
         {
             return generic_vec4(rtm::vector_div(_value, v._value));
         }
 
-        inline generic_vec4 operator-() const noexcept
+        RTM_FORCE_INLINE generic_vec4 operator-() const noexcept
         {
             return generic_vec4(rtm::vector_neg(_value));
         }
 
     public:
-        inline value_type get_component(int index) const noexcept
+        RTM_FORCE_INLINE value_type get_component(int index) const noexcept
         {
             switch (index)
             {
@@ -174,7 +182,7 @@ namespace move::vectormath
             }
         }
 
-        inline void set_component(int index, value_type value)
+        RTM_FORCE_INLINE void set_component(int index, value_type value)
         {
             switch (index)
             {
@@ -196,17 +204,19 @@ namespace move::vectormath
         class component_accessor
         {
         public:
-            inline component_accessor(generic_vec4& vec, int index) noexcept
+            RTM_FORCE_INLINE component_accessor(
+                generic_vec4& vec, int index) noexcept
                 : _vec(vec), _index(index)
             {
             }
 
-            inline operator value_type() const noexcept
+            RTM_FORCE_INLINE operator value_type() const noexcept
             {
                 return _vec.get_component(_index);
             }
 
-            inline component_accessor& operator=(const value_type& v) noexcept
+            RTM_FORCE_INLINE component_accessor& operator=(
+                const value_type& v) noexcept
             {
                 _vec.set_component(_index, v);
                 return *this;
@@ -217,32 +227,32 @@ namespace move::vectormath
             int _index;
         };
 
-        inline value_type operator[](int i) const noexcept
+        RTM_FORCE_INLINE value_type operator[](int i) const noexcept
         {
             return get_component(i);
         }
 
-        inline component_accessor operator[](int i) noexcept
+        RTM_FORCE_INLINE component_accessor operator[](int i) noexcept
         {
             return component_accessor(*this, i);
         }
 
-        inline component_accessor x() noexcept
+        RTM_FORCE_INLINE component_accessor x() noexcept
         {
             return component_accessor(*this, 0);
         }
 
-        inline component_accessor y() noexcept
+        RTM_FORCE_INLINE component_accessor y() noexcept
         {
             return component_accessor(*this, 1);
         }
 
-        inline component_accessor z() noexcept
+        RTM_FORCE_INLINE component_accessor z() noexcept
         {
             return component_accessor(*this, 2);
         }
 
-        inline component_accessor w() noexcept
+        RTM_FORCE_INLINE component_accessor w() noexcept
         {
             return component_accessor(*this, 3);
         }
@@ -253,7 +263,7 @@ namespace move::vectormath
          * @param x The new x component
          * @return generic_vec4& A reference to the vector
          */
-        inline generic_vec4& x(value_type value) noexcept
+        RTM_FORCE_INLINE generic_vec4& x(value_type value) noexcept
         {
             set_x(value);
             return *this;
@@ -265,7 +275,7 @@ namespace move::vectormath
          * @param y The new y component
          * @return generic_vec4& A reference to the vector
          */
-        inline generic_vec4& y(value_type value) noexcept
+        RTM_FORCE_INLINE generic_vec4& y(value_type value) noexcept
         {
             set_y(value);
             return *this;
@@ -277,7 +287,7 @@ namespace move::vectormath
          * @param z The new z component
          * @return generic_vec4& A reference to the vector
          */
-        inline generic_vec4& z(value_type value) noexcept
+        RTM_FORCE_INLINE generic_vec4& z(value_type value) noexcept
         {
             set_z(value);
             return *this;
@@ -289,7 +299,7 @@ namespace move::vectormath
          * @param w The new w component
          * @return generic_vec4& A reference to the vector
          */
-        inline generic_vec4& w(value_type value) noexcept
+        RTM_FORCE_INLINE generic_vec4& w(value_type value) noexcept
         {
             set_w(value);
             return *this;
@@ -301,7 +311,7 @@ namespace move::vectormath
          * @param value The new value for all components
          * @return generic_vec4& A reference to the vector
          */
-        inline generic_vec4& fill(component_type value) noexcept
+        RTM_FORCE_INLINE generic_vec4& fill(component_type value) noexcept
         {
             _value = rtm::vector_set(value);
             return *this;
@@ -316,7 +326,7 @@ namespace move::vectormath
          * @param w The new w component
          * @return generic_vec4& A reference to the vector
          */
-        inline generic_vec4& set(component_type x, component_type y,
+        RTM_FORCE_INLINE generic_vec4& set(component_type x, component_type y,
             component_type z, component_type w) noexcept
         {
             _value = rtm::vector_set(x, y, z, w);
@@ -329,108 +339,108 @@ namespace move::vectormath
          * @param v The new vector
          * @return generic_vec4& A reference to the vector
          */
-        inline generic_vec4& set(const generic_vec4& v) noexcept
+        RTM_FORCE_INLINE generic_vec4& set(const generic_vec4& v) noexcept
         {
             _value = v._value;
             return *this;
         }
 
-        inline value_type x() const noexcept
+        RTM_FORCE_INLINE value_type x() const noexcept
         {
             return rtm::vector_get_x(_value);
         }
 
-        inline value_type y() const noexcept
+        RTM_FORCE_INLINE value_type y() const noexcept
         {
             return rtm::vector_get_y(_value);
         }
 
-        inline value_type z() const noexcept
+        RTM_FORCE_INLINE value_type z() const noexcept
         {
             return rtm::vector_get_z(_value);
         }
 
-        inline value_type w() const noexcept
+        RTM_FORCE_INLINE value_type w() const noexcept
         {
             return rtm::vector_get_w(_value);
         }
 
-        inline generic_vec4& set_x(value_type x) noexcept
+        RTM_FORCE_INLINE generic_vec4& set_x(value_type x) noexcept
         {
             _value = rtm::vector_set_x(_value, x);
             return *this;
         }
 
-        inline generic_vec4& set_y(value_type y) noexcept
+        RTM_FORCE_INLINE generic_vec4& set_y(value_type y) noexcept
         {
             _value = rtm::vector_set_y(_value, y);
             return *this;
         }
 
-        inline generic_vec4& set_z(value_type z) noexcept
+        RTM_FORCE_INLINE generic_vec4& set_z(value_type z) noexcept
         {
             _value = rtm::vector_set_z(_value, z);
             return *this;
         }
 
-        inline generic_vec4& set_w(value_type w) noexcept
+        RTM_FORCE_INLINE generic_vec4& set_w(value_type w) noexcept
         {
             _value = rtm::vector_set_w(_value, w);
             return *this;
         }
 
     public:
-        inline value_type length() const noexcept
+        RTM_FORCE_INLINE value_type length() const noexcept
         {
             return rtm::vector_length(_value);
         }
 
-        inline value_type length_approximate() const noexcept
+        RTM_FORCE_INLINE value_type length_approximate() const noexcept
         {
             // TODO: Find a better approximation?
             return rtm::vector_length(_value);
         }
 
-        inline value_type squared_length() const noexcept
+        RTM_FORCE_INLINE value_type squared_length() const noexcept
         {
             return rtm::vector_length_squared(_value);
         }
 
-        inline generic_vec4 normalized() const noexcept
+        RTM_FORCE_INLINE generic_vec4 normalized() const noexcept
         {
             return rtm::vector_mul(_value, value_type(1) / length());
         }
 
-        inline generic_vec4 normalized_approximate() const noexcept
+        RTM_FORCE_INLINE generic_vec4 normalized_approximate() const noexcept
         {
             return rtm::vector_mul(
                 _value, value_type(1) / length_approximate());
         }
 
-        inline value_type dot(const generic_vec4& v) const noexcept
+        RTM_FORCE_INLINE value_type dot(const generic_vec4& v) const noexcept
         {
             return rtm::vector_dot(_value, v._value);
         }
 
-        inline value_type distance_to_point(
+        RTM_FORCE_INLINE value_type distance_to_point(
             const generic_vec4& v) const noexcept
         {
             return (v - *this).length();
         }
 
-        inline value_type distance_to_point_approximate(
+        RTM_FORCE_INLINE value_type distance_to_point_approximate(
             const generic_vec4& v) const noexcept
         {
             return (v - *this).length_approximate();
         }
 
-        inline value_type squared_distance_to_point(
+        RTM_FORCE_INLINE value_type squared_distance_to_point(
             const generic_vec4& v) const noexcept
         {
             return (v - *this).squared_length();
         }
 
-        inline generic_vec4 cross(
+        RTM_FORCE_INLINE generic_vec4 cross(
             const generic_vec4& v2, const generic_vec4& v3) const noexcept
         {
             // TODO: Write a faster implementation, because this is terrible
@@ -451,13 +461,13 @@ namespace move::vectormath
             };
         }
 
-        inline value_type angle_between_normalized_vectors(
+        RTM_FORCE_INLINE value_type angle_between_normalized_vectors(
             const generic_vec4& v) const noexcept
         {
             return std::acos(rtm::vector_dot(_value, v._value));
         }
 
-        inline value_type angle_between_vectors(
+        RTM_FORCE_INLINE value_type angle_between_vectors(
             const generic_vec4& v) const noexcept
         {
             // Compute with dot product
@@ -466,7 +476,8 @@ namespace move::vectormath
             return norm.angle_between_normalized_vectors(vnorm);
         }
 
-        inline generic_vec4 reflect(const generic_vec4& normal) const noexcept
+        RTM_FORCE_INLINE generic_vec4 reflect(
+            const generic_vec4& normal) const noexcept
         {
             using namespace rtm;
             const vector_type& incident = _value;
@@ -479,7 +490,7 @@ namespace move::vectormath
             return res;
         }
 
-        inline generic_vec4 refract(
+        RTM_FORCE_INLINE generic_vec4 refract(
             const generic_vec4& normal, value_type ior) const noexcept
         {
             using namespace rtm;
@@ -514,73 +525,73 @@ namespace move::vectormath
                 vector_mul(nrm, vector_add(roiPlusDotinorm, innerSqrt)));
         }
 
-        inline generic_vec4 min(const generic_vec4& v) const noexcept
+        RTM_FORCE_INLINE generic_vec4 min(const generic_vec4& v) const noexcept
         {
             using namespace rtm;
             return generic_vec4(vector_min(_value, v._value));
         }
 
-        inline generic_vec4 max(const generic_vec4& v) const noexcept
+        RTM_FORCE_INLINE generic_vec4 max(const generic_vec4& v) const noexcept
         {
             using namespace rtm;
             return generic_vec4(vector_max(_value, v._value));
         }
 
     public:
-        inline void normalize() noexcept
+        RTM_FORCE_INLINE void normalize() noexcept
         {
             // TODO: there's probably a faster way to do this?
             _value = normalized();
         }
 
-        inline void normalize_approximate() noexcept
+        RTM_FORCE_INLINE void normalize_approximate() noexcept
         {
             // TODO: there's probably a faster way to do this?
             _value = normalized_approximate();
         }
 
     public:
-        inline static generic_vec4 zero() noexcept
+        RTM_FORCE_INLINE static generic_vec4 zero() noexcept
         {
             return generic_vec4(0, 0, 0, 0);
         }
 
-        inline static generic_vec4 one() noexcept
+        RTM_FORCE_INLINE static generic_vec4 one() noexcept
         {
             return generic_vec4(1, 1, 1, 1);
         }
 
-        inline static generic_vec4 x_axis() noexcept
+        RTM_FORCE_INLINE static generic_vec4 x_axis() noexcept
         {
             return generic_vec4(1, 0, 0);
         }
 
-        inline static generic_vec4 y_axis() noexcept
+        RTM_FORCE_INLINE static generic_vec4 y_axis() noexcept
         {
             return generic_vec4(0, 1, 0);
         }
 
-        inline static generic_vec4 z_axis() noexcept
+        RTM_FORCE_INLINE static generic_vec4 z_axis() noexcept
         {
             return generic_vec4(0, 0, 1);
         }
 
-        inline static generic_vec4 w_axis() noexcept
+        RTM_FORCE_INLINE static generic_vec4 w_axis() noexcept
         {
             return generic_vec4(0, 0, 0, 1);
         }
 
-        inline static generic_vec4 right() noexcept
+        RTM_FORCE_INLINE static generic_vec4 right() noexcept
         {
             return x_axis();
         }
 
-        inline static generic_vec4 up() noexcept
+        RTM_FORCE_INLINE static generic_vec4 up() noexcept
         {
             return y_axis();
         }
 
-        inline static generic_vec4 forward() noexcept
+        RTM_FORCE_INLINE static generic_vec4 forward() noexcept
         {
             return z_axis();
         }
