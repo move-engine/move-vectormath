@@ -1,8 +1,5 @@
 
 # ---- Dependencies ----
-CPMAddPackage("gh:microsoft/DirectXMath#dec2022")
-
-# Migrating to RTM
 CPMAddPackage(
   NAME rtm
   GITHUB_REPOSITORY nfrechette/rtm
@@ -66,7 +63,7 @@ CPMAddPackage("gh:fmtlib/fmt#9.1.0@9.1.0")
 add_library(move-vectormath INTERFACE)
 add_library(move::vectormath ALIAS move-vectormath)
 
-target_link_libraries(move-vectormath INTERFACE DirectXMath rtm njson cereal fmt::fmt)
+target_link_libraries(move-vectormath INTERFACE rtm njson cereal fmt::fmt)
 
 set_property(
     TARGET move-vectormath PROPERTY

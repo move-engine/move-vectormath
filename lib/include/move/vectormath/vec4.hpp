@@ -608,12 +608,9 @@ namespace move::vectormath
 }  // namespace move::vectormath
 
 #if !defined(MOVE_VECTORMATH_NO_SERIALIZATION)
-#include "vmathcereal.hpp"
 #include "vmathjson.hpp"
 MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec4f);
 MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec4d);
-// MOVE_VECTORMATH_CEREAL_SERIALIZER(move::vectormath::vec4f);
-// MOVE_VECTORMATH_CEREAL_SERIALIZER(move::vectormath::vec4d);
 #endif
 
 template <typename value_type, typename vector_type>
