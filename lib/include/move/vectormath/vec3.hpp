@@ -587,14 +587,29 @@ namespace move::vectormath
             return x_axis();
         }
 
+        RTM_FORCE_INLINE static generic_vec3 left() noexcept
+        {
+            return -x_axis();
+        }
+
         RTM_FORCE_INLINE static generic_vec3 up() noexcept
         {
             return y_axis();
         }
 
+        RTM_FORCE_INLINE static generic_vec3 down() noexcept
+        {
+            return -y_axis();
+        }
+
         RTM_FORCE_INLINE static generic_vec3 forward() noexcept
         {
             return z_axis();
+        }
+
+        RTM_FORCE_INLINE static generic_vec3 backward() noexcept
+        {
+            return -z_axis();
         }
 
     private:
