@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>rtm::ext namespace | move-vectormath</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
+  <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
+  <link rel="icon" href="favicon-dark.png" type="image/png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#22272e" />
+</head>
+<body>
+<header><nav id="navigation">
+  <div class="m-container">
+    <div class="m-row">
+      <a href="index.html" id="m-navbar-brand" class="m-col-t-8 m-col-m-none m-left-m">move-vectormath</a>
+      <div class="m-col-t-4 m-hide-m m-text-right m-nopadr">
+        <a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+          <path id="m-doc-search-icon-path" d="m6 0c-3.31 0-6 2.69-6 6 0 3.31 2.69 6 6 6 1.49 0 2.85-0.541 3.89-1.44-0.0164 0.338 0.147 0.759 0.5 1.15l3.22 3.79c0.552 0.614 1.45 0.665 2 0.115 0.55-0.55 0.499-1.45-0.115-2l-3.79-3.22c-0.392-0.353-0.812-0.515-1.15-0.5 0.895-1.05 1.44-2.41 1.44-3.89 0-3.31-2.69-6-6-6zm0 1.56a4.44 4.44 0 0 1 4.44 4.44 4.44 4.44 0 0 1-4.44 4.44 4.44 4.44 0 0 1-4.44-4.44 4.44 4.44 0 0 1 4.44-4.44z"/>
+        </svg></a>
+        <a id="m-navbar-show" href="#navigation" title="Show navigation"></a>
+        <a id="m-navbar-hide" href="#" title="Hide navigation"></a>
+      </div>
+      <div id="m-navbar-collapse" class="m-col-t-12 m-show-m m-col-m-none m-right-m">
+        <div class="m-row">
+          <ol class="m-col-t-6 m-col-m-none">
+            <li>
+              <a href="pages.html">Pages</a>
+              <ol>
+                <li><a href="about.html">About</a></li>
+              </ol>
+            </li>
+            <li><a href="namespaces.html">Namespaces</a></li>
+          </ol>
+          <ol class="m-col-t-6 m-col-m-none" start="3">
+            <li><a href="annotated.html">Classes</a></li>
+            <li><a href="files.html">Files</a></li>
+            <li class="m-show-m"><a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+              <use href="#m-doc-search-icon-path" />
+            </svg></a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav></header>
+<main><article>
+  <div class="m-container m-container-inflatable">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <h1>
+          <span class="m-breadcrumb"><a href="namespacertm.html">rtm</a>::<wbr/></span>ext <span class="m-thin">namespace</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="rtm__ext_8hpp.html">&lt;lib/include/move/vectormath/rtm_ext.hpp&gt;</a></div>
+        </h1>
+        <p><span></span></p>
+        <div class="m-block m-default">
+          <h3>Contents</h3>
+          <ul>
+            <li>
+              Reference
+              <ul>
+                <li><a href="#func-members">Functions</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <section id="func-members">
+          <h2><a href="#func-members">Functions</a></h2>
+          <dl class="m-doc">
+            <dt id="ac1f002634ebc5e7cb62d664c8b2ade34">
+              <div class="m-doc-template">template&lt;typename mat_type, typename vec_type = vector4f&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a href="#ac1f002634ebc5e7cb62d664c8b2ade34" class="m-doc-self">look_at_rh</a>(</span><span class="m-doc-wrap">const vec_type&amp; eye,
+              const vec_type&amp; center,
+              const vec_type&amp; up) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK constexpr RTM_FORCE_INLINE mat_type</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a0d022660bc631fd9e676329cae6c174b">
+              <div class="m-doc-template">template&lt;typename mat_type = matrix4x4f, typename vec_type = vector4f&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a href="#a0d022660bc631fd9e676329cae6c174b" class="m-doc-self">look_at_lh</a>(</span><span class="m-doc-wrap">const vec_type&amp; eye,
+              const vec_type&amp; center,
+              const vec_type&amp; up) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK constexpr RTM_FORCE_INLINE mat_type</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="acd0dd69ad6ebc59fc02e52fb8fa9c762">
+              <span class="m-doc-wrap-bumper">auto <a href="#acd0dd69ad6ebc59fc02e52fb8fa9c762" class="m-doc-self">perspective_fov_lh</a>(</span><span class="m-doc-wrap">float fovY,
+              float aspectRatio,
+              float near,
+              float far) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE matrix4x4f</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="abaecc319b6c1741bee7ed61e7a8b8121">
+              <span class="m-doc-wrap-bumper">auto <a href="#abaecc319b6c1741bee7ed61e7a8b8121" class="m-doc-self">perspective_fov_lh</a>(</span><span class="m-doc-wrap">double fovY,
+              double aspectRatio,
+              double near,
+              double far) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE matrix4x4d</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ab3befc6d1577fb7dd703e9196949c1fc">
+              <span class="m-doc-wrap-bumper">auto <a href="#ab3befc6d1577fb7dd703e9196949c1fc" class="m-doc-self">perspective_fov_rh</a>(</span><span class="m-doc-wrap">float fovY,
+              float aspectRatio,
+              float near,
+              float far) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE matrix4x4f</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a829404f0270a982513f998049a8d6566">
+              <span class="m-doc-wrap-bumper">auto <a href="#a829404f0270a982513f998049a8d6566" class="m-doc-self">perspective_fov_rh</a>(</span><span class="m-doc-wrap">double fovY,
+              double aspectRatio,
+              double near,
+              double far) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE matrix4x4d</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a695dd12b4823af04a8db76b0882c1343">
+              <span class="m-doc-wrap-bumper">auto <a href="#a695dd12b4823af04a8db76b0882c1343" class="m-doc-self">ortho_lh</a>(</span><span class="m-doc-wrap">float width,
+              float height,
+              float near,
+              float far) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE matrix4x4f</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a0b45060bc07509c0c103ad2260fc38c9">
+              <span class="m-doc-wrap-bumper">auto <a href="#a0b45060bc07509c0c103ad2260fc38c9" class="m-doc-self">ortho_lh</a>(</span><span class="m-doc-wrap">double width,
+              double height,
+              double near,
+              double far) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE matrix4x4d</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="af8fd514d65fad17a556addc5a8237fc6">
+              <span class="m-doc-wrap-bumper">auto <a href="#af8fd514d65fad17a556addc5a8237fc6" class="m-doc-self">ortho_rh</a>(</span><span class="m-doc-wrap">float width,
+              float height,
+              float near,
+              float far) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE matrix4x4f</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a51c83b8756e2f1abdb9a0671acb0882d">
+              <span class="m-doc-wrap-bumper">auto <a href="#a51c83b8756e2f1abdb9a0671acb0882d" class="m-doc-self">ortho_rh</a>(</span><span class="m-doc-wrap">double width,
+              double height,
+              double near,
+              double far) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE matrix4x4d</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a241a05252a33ee72202274827d999350">
+              <span class="m-doc-wrap-bumper">auto <a href="#a241a05252a33ee72202274827d999350" class="m-doc-self">ortho_off_center_lh</a>(</span><span class="m-doc-wrap">float left,
+              float right,
+              float bottom,
+              float top,
+              float near,
+              float far) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE matrix4x4f</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a5edf7de463a5807dd38f5465fdb52a8d">
+              <span class="m-doc-wrap-bumper">auto <a href="#a5edf7de463a5807dd38f5465fdb52a8d" class="m-doc-self">ortho_off_center_rh</a>(</span><span class="m-doc-wrap">float left,
+              float right,
+              float bottom,
+              float top,
+              float near,
+              float far) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE matrix4x4f</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a58033025076add7b90d479374abd4f2e">
+              <span class="m-doc-wrap-bumper">auto <a href="#a58033025076add7b90d479374abd4f2e" class="m-doc-self">ortho_off_center_lh</a>(</span><span class="m-doc-wrap">double left,
+              double right,
+              double bottom,
+              double top,
+              double near,
+              double far) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE matrix4x4d</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a15d6364a0aa5130e57ada6a65d77e222">
+              <span class="m-doc-wrap-bumper">auto <a href="#a15d6364a0aa5130e57ada6a65d77e222" class="m-doc-self">ortho_off_center_rh</a>(</span><span class="m-doc-wrap">double left,
+              double right,
+              double bottom,
+              double top,
+              double near,
+              double far) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE matrix4x4d</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a1195cc30d46b222ef15a41e8dc4faced">
+              <span class="m-doc-wrap-bumper">auto <a href="#a1195cc30d46b222ef15a41e8dc4faced" class="m-doc-self">transform_3x4</a>(</span><span class="m-doc-wrap">const rtm::vector4f&amp; translation,
+              const rtm::quatf&amp; rotation,
+              const rtm::vector4f&amp; scale) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE matrix3x4f</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a715b6f7de54cb6c2249b91fcfac73810">
+              <span class="m-doc-wrap-bumper">auto <a href="#a715b6f7de54cb6c2249b91fcfac73810" class="m-doc-self">transform_3x4</a>(</span><span class="m-doc-wrap">const rtm::vector4d&amp; translation,
+              const rtm::quatd&amp; rotation,
+              const rtm::vector4d&amp; scale) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE matrix3x4d</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ad208bed8483282442ed6b135c2275ba9">
+              <span class="m-doc-wrap-bumper">auto <a href="#ad208bed8483282442ed6b135c2275ba9" class="m-doc-self">transform_4x4</a>(</span><span class="m-doc-wrap">const rtm::vector4f&amp; translation,
+              const rtm::quatf&amp; rotation,
+              const rtm::vector4f&amp; scale) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE matrix4x4f</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ae7c2fdfc45478947e71b500c7248cc66">
+              <span class="m-doc-wrap-bumper">auto <a href="#ae7c2fdfc45478947e71b500c7248cc66" class="m-doc-self">transform_4x4</a>(</span><span class="m-doc-wrap">const rtm::vector4d&amp; translation,
+              const rtm::quatd&amp; rotation,
+              const rtm::vector4d&amp; scale) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE matrix4x4d</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ae78b71d80ab4ee92470050c5f28ab6e2">
+              <span class="m-doc-wrap-bumper">auto <a href="#ae78b71d80ab4ee92470050c5f28ab6e2" class="m-doc-self">quat_inverse</a>(</span><span class="m-doc-wrap">const quatf&amp; input) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE quatf</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a2ecbcb30ae4478b225e51ee8ba619075">
+              <span class="m-doc-wrap-bumper">auto <a href="#a2ecbcb30ae4478b225e51ee8ba619075" class="m-doc-self">quat_inverse</a>(</span><span class="m-doc-wrap">const quatd&amp; input) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE quatd</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a941b20a9eadb93ae58ff0ca8c4066d45">
+              <span class="m-doc-wrap-bumper">auto <a href="#a941b20a9eadb93ae58ff0ca8c4066d45" class="m-doc-self">vector_in_bounds</a>(</span><span class="m-doc-wrap">const vector4f&amp; input,
+              const vector4f&amp; bounds_min,
+              const vector4f&amp; bounds_max) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE mask4f</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a29a598f6d2e41524771fe642851393fb">
+              <span class="m-doc-wrap-bumper">auto <a href="#a29a598f6d2e41524771fe642851393fb" class="m-doc-self">vector_in_bounds</a>(</span><span class="m-doc-wrap">const vector4d&amp; input,
+              const vector4d&amp; bounds_min,
+              const vector4d&amp; bounds_max) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE mask4d</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a0dd3dcd4b267ac8ed6fd836265b2f8c8">
+              <span class="m-doc-wrap-bumper">auto <a href="#a0dd3dcd4b267ac8ed6fd836265b2f8c8" class="m-doc-self">vector_in_bounds</a>(</span><span class="m-doc-wrap">const vector4f&amp; input,
+              const vector4f&amp; bounds) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE mask4f</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a4392bc860aa4d8e2e94df0487073aa9f">
+              <span class="m-doc-wrap-bumper">auto <a href="#a4392bc860aa4d8e2e94df0487073aa9f" class="m-doc-self">vector_in_bounds</a>(</span><span class="m-doc-wrap">const vector4d&amp; input,
+              const vector4d&amp; bounds) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE mask4d</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a5fe8bbd74608eb9c63e3c026ea880eb9">
+              <span class="m-doc-wrap-bumper">auto <a href="#a5fe8bbd74608eb9c63e3c026ea880eb9" class="m-doc-self">vector_splat_x</a>(</span><span class="m-doc-wrap">const vector4f&amp; input) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE vector4f</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ad6c5ca11effbe2e93704bbbdea9d2d5c">
+              <span class="m-doc-wrap-bumper">auto <a href="#ad6c5ca11effbe2e93704bbbdea9d2d5c" class="m-doc-self">vector_splat_y</a>(</span><span class="m-doc-wrap">const vector4f&amp; input) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE vector4f</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a9bdab2bffd339e5969882c2aaccd16d9">
+              <span class="m-doc-wrap-bumper">auto <a href="#a9bdab2bffd339e5969882c2aaccd16d9" class="m-doc-self">vector_splat_w</a>(</span><span class="m-doc-wrap">const vector4f&amp; input) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE vector4f</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a525655bd69ae31d7e9b566502d497964">
+              <span class="m-doc-wrap-bumper">auto <a href="#a525655bd69ae31d7e9b566502d497964" class="m-doc-self">vector_splat_z</a>(</span><span class="m-doc-wrap">const vector4f&amp; input) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE vector4f</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ae2cfba41857701361584dec2d959fcc3">
+              <span class="m-doc-wrap-bumper">auto <a href="#ae2cfba41857701361584dec2d959fcc3" class="m-doc-self">vector_splat_x</a>(</span><span class="m-doc-wrap">const vector4d&amp; input) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE vector4d</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a5a8cfc0cb8e55dfbe26a4436f4ea622b">
+              <span class="m-doc-wrap-bumper">auto <a href="#a5a8cfc0cb8e55dfbe26a4436f4ea622b" class="m-doc-self">vector_splat_y</a>(</span><span class="m-doc-wrap">const vector4d&amp; input) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE vector4d</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="acd56c5683826da1816507ca7d2aa05ce">
+              <span class="m-doc-wrap-bumper">auto <a href="#acd56c5683826da1816507ca7d2aa05ce" class="m-doc-self">vector_splat_w</a>(</span><span class="m-doc-wrap">const vector4d&amp; input) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE vector4d</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="aa6b33501054f47e858dda87235bc6e09">
+              <span class="m-doc-wrap-bumper">auto <a href="#aa6b33501054f47e858dda87235bc6e09" class="m-doc-self">vector_splat_z</a>(</span><span class="m-doc-wrap">const vector4d&amp; input) -&gt; RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE vector4d</span>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+      </div>
+    </div>
+  </div>
+</article></main>
+<div class="m-doc-search" id="search">
+  <a href="#!" onclick="return hideSearch()"></a>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-m-8 m-push-m-2">
+        <div class="m-doc-search-header m-text m-small">
+          <div><span class="m-label m-default">Tab</span> / <span class="m-label m-default">T</span> to search, <span class="m-label m-default">Esc</span> to close</div>
+          <div id="search-symbolcount">&hellip;</div>
+        </div>
+        <div class="m-doc-search-content">
+          <form>
+            <input type="search" name="q" id="search-input" placeholder="Loading &hellip;" disabled="disabled" autofocus="autofocus" autocomplete="off" spellcheck="false" />
+          </form>
+          <noscript class="m-text m-danger m-text-center">Unlike everything else in the docs, the search functionality <em>requires</em> JavaScript.</noscript>
+          <div id="search-help" class="m-text m-dim m-text-center">
+            <p class="m-noindent">Search for symbols, directories, files, pages or
+            modules. You can omit any prefix from the symbol or file path; adding a
+            <code>:</code> or <code>/</code> suffix lists all members of given symbol or
+            directory.</p>
+            <p class="m-noindent">Use <span class="m-label m-dim">&darr;</span>
+            / <span class="m-label m-dim">&uarr;</span> to navigate through the list,
+            <span class="m-label m-dim">Enter</span> to go.
+            <span class="m-label m-dim">Tab</span> autocompletes common prefix, you can
+            copy a link to the result using <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">L</span> while <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">M</span> produces a Markdown link.</p>
+          </div>
+          <div id="search-notfound" class="m-text m-warning m-text-center">Sorry, nothing was found.</div>
+          <ul id="search-results"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="search-v1.js"></script>
+<script src="searchdata-v1.js" async="async"></script>
+<footer><nav>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <p>move-vectormath. Created with <a href="https://doxygen.org/">Doxygen</a> 1.9.1 and <a href="https://mcss.mosra.cz/">m.css</a>.</p>
+      </div>
+    </div>
+  </div>
+</nav></footer>
+</body>
+</html>
