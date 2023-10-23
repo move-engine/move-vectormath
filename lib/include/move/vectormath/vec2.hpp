@@ -160,51 +160,12 @@ namespace move::vectormath
             }
         }
 
-        class component_accessor
-        {
-        public:
-            inline component_accessor(generic_vec2& vec, int index) noexcept
-                : _vec(vec), _index(index)
-            {
-            }
-
-            inline operator value_type() const noexcept
-            {
-                return _vec.get_component(_index);
-            }
-
-            inline component_accessor& operator=(const value_type& v) noexcept
-            {
-                _vec.set_component(_index, v);
-                return *this;
-            }
-
-        private:
-            generic_vec2& _vec;
-            int _index;
-        };
-
         inline value_type operator[](int i) const noexcept
         {
             return get_component(i);
         }
 
-        inline component_accessor operator[](int i) noexcept
-        {
-            return component_accessor(*this, i);
-        }
-
     public:
-        inline component_accessor x() noexcept
-        {
-            return component_accessor(*this, 0);
-        }
-
-        inline component_accessor y() noexcept
-        {
-            return component_accessor(*this, 1);
-        }
-
         inline value_type x() const noexcept
         {
             return _x;
@@ -213,6 +174,39 @@ namespace move::vectormath
         inline value_type y() const noexcept
         {
             return _y;
+        }
+
+        inline generic_vec2& x(value_type x) noexcept
+        {
+            _x = x;
+            return *this;
+        }
+
+        inline generic_vec2& y(value_type y) noexcept
+        {
+            _y = y;
+            return *this;
+        }
+
+        inline generic_vec2& fill(value_type v) noexcept
+        {
+            _x = v;
+            _y = v;
+            return *this;
+        }
+
+        inline generic_vec2& set(value_type x, value_type y) noexcept
+        {
+            _x = x;
+            _y = y;
+            return *this;
+        }
+
+        inline generic_vec2& set(const generic_vec2& rhs) noexcept
+        {
+            _x = rhs._x;
+            _y = rhs._y;
+            return *this;
         }
 
         inline generic_vec2& set_x(value_type x) noexcept

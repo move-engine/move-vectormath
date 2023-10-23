@@ -190,56 +190,12 @@ namespace move::vectormath
             }
         }
 
-        class component_accessor
-        {
-        public:
-            inline component_accessor(generic_vec3& vec, int index) noexcept
-                : _vec(vec), _index(index)
-            {
-            }
-
-            inline operator value_type() const noexcept
-            {
-                return _vec.get_component(_index);
-            }
-
-            inline component_accessor& operator=(const value_type& v) noexcept
-            {
-                _vec.set_component(_index, v);
-                return *this;
-            }
-
-        private:
-            generic_vec3& _vec;
-            int _index;
-        };
-
         inline value_type operator[](int i) const noexcept
         {
             return get_component(i);
         }
 
-        inline component_accessor operator[](int i) noexcept
-        {
-            return component_accessor(*this, i);
-        }
-
     public:
-        inline component_accessor x() noexcept
-        {
-            return component_accessor(*this, 0);
-        }
-
-        inline component_accessor y() noexcept
-        {
-            return component_accessor(*this, 1);
-        }
-
-        inline component_accessor z() noexcept
-        {
-            return component_accessor(*this, 2);
-        }
-
         inline value_type x() const noexcept
         {
             return rtm::vector_get_x(_value);
@@ -255,74 +211,238 @@ namespace move::vectormath
             return rtm::vector_get_z(_value);
         }
 
+        /**
+         * @brief Sets the x component of the vector
+         *
+         * @param x The new x component
+         * @return generic_vec3& A reference to the vector
+         */
+        inline generic_vec3& x(value_type x) noexcept
+        {
+            return set_x(x);
+        }
+
+        /**
+         * @brief Sets the y component of the vector
+         *
+         * @param y The new y component
+         * @return generic_vec3& A reference to the vector
+         */
+        inline generic_vec3& y(value_type y) noexcept
+        {
+            return set_y(y);
+        }
+
+        /**
+         * @brief Sets the z component of the vector
+         *
+         * @param z The new z component
+         * @return generic_vec3& A reference to the vector
+         */
+        inline generic_vec3& z(value_type z) noexcept
+        {
+            return set_z(z);
+        }
+
+        /**
+         * @brief Sets the x component of the vector
+         *
+         * @param x The new x component
+         * @return generic_vec3& A reference to the vector
+         */
         inline generic_vec3& set_x(value_type x) noexcept
         {
             _value = rtm::vector_set_x(_value, x);
             return *this;
         }
 
+        /**
+         * @brief Sets the y component of the vector
+         *
+         * @param y The new y component
+         * @return generic_vec3& A reference to the vector
+         */
         inline generic_vec3& set_y(value_type y) noexcept
         {
             _value = rtm::vector_set_y(_value, y);
             return *this;
         }
 
+        /**
+         * @brief Sets the z component of the vector
+         *
+         * @param z The new z component
+         * @return generic_vec3& A reference to the vector
+         */
         inline generic_vec3& set_z(value_type z) noexcept
         {
             _value = rtm::vector_set_z(_value, z);
             return *this;
         }
 
+        inline generic_vec3& fill(component_type value) noexcept
+        {
+            // TODO: Test to see if it's faster to do a single set(value, value,
+            // value, 0) vs the set(value) + set_w(0)
+            _value = rtm::vector_set(value);
+            _value = rtm::vector_set_w(_value, 0);
+            return *this;
+        }
+
+        /**
+         * @brief Sets the x, y and z components of the vector
+         *
+         * @param x The new x component
+         * @param y The new y component
+         * @param z The new z component
+         * @return generic_vec3& A reference to the vector
+         */
+        inline generic_vec3& set(
+            value_type x, value_type y, value_type z) noexcept
+        {
+            _value = rtm::vector_set(x, y, z, 0);
+            return *this;
+        }
+
+        /**
+         * @brief Sets the x, y and z components of the vector
+         *
+         * @param v The new x, y and z components
+         * @return generic_vec3& A reference to the vector
+         */
+        inline generic_vec3& set(const vector_type& v) noexcept
+        {
+            _value = v;
+            return *this;
+        }
+
+        /**
+         * @brief Returns the length of the vector
+         *
+         * @return value_type The length of the vector
+         */
         inline value_type length() const noexcept
         {
             return rtm::vector_length3(_value);
         }
 
+        /**
+         * @brief Returns the approximate length of the vector
+         * @note This currently uses the same implementation as length(), but
+         * the intention is to eventually have a faster approximation
+         *
+         * @return value_type The approximate length of the vector
+         */
         inline value_type length_approximate() const noexcept
         {
             // TODO: Find a better approximation?
             return rtm::vector_length3(_value);
         }
 
+        /**
+         * @brief Returns the squared length of the vector
+         *
+         * @return value_type The squared length of the vector
+         */
         inline value_type squared_length() const noexcept
         {
             return rtm::vector_length_squared3(_value);
         }
 
+        /**
+         * @brief Returns the reciprocal length of the vector
+         *
+         * @return value_type The reciprocal length of the vector
+         */
+        inline value_type reciprocal_length() const noexcept
+        {
+            return rtm::vector_length_reciprocal3(_value);
+        }
+
+        /**
+         * @brief Returns a normalized copy of the vector
+         *
+         * @return generic_vec3 The normalized vector
+         */
         inline generic_vec3 normalized() const noexcept
         {
             return rtm::vector_mul(_value, value_type(1) / length());
         }
 
+        /**
+         * @brief Returns an approximate normalized copy of the vector
+         * @note This currently uses the same implementation as normalized(),
+         * but the intention is to eventually have a faster approximation
+         *
+         * @return generic_vec3 The approximate normalized vector
+         */
         inline generic_vec3 normalized_approximate() const noexcept
         {
             return rtm::vector_mul(
                 _value, value_type(1) / length_approximate());
         }
 
+        /**
+         * @brief Returns the dot product of the vector and another vector
+         *
+         * @param v The other vector
+         * @return value_type The dot product of the two vectors
+         */
         inline value_type dot(const generic_vec3& v) const noexcept
         {
             return rtm::vector_dot3(_value, v._value);
         }
 
+        /**
+         * @brief Returns the euclidian distance between the vector and another
+         * vector, treating them as points in 3d space.
+         *
+         * @param v The other vector
+         * @return value_type The distance between the two vectors
+         */
         inline value_type distance_to_point(
             const generic_vec3& v) const noexcept
         {
             return (v - *this).length();
         }
 
+        /**
+         * @brief Returns the approximate euclidian distance between the vector
+         * and another vector, treating them as points in 3d space.
+         * @note This currently uses the same implementation as
+         * distance_to_point(), but the intention is to eventually have a faster
+         * approximation
+         *
+         * @param v The other vector
+         * @return value_type The approximate distance between the two vectors
+         */
         inline value_type distance_to_point_approximate(
             const generic_vec3& v) const noexcept
         {
             return (v - *this).length_approximate();
         }
 
+        /**
+         * @brief Returns the squared euclidian distance between the vector and
+         * another vector, treating them as points in 3d space.
+         *
+         * @param v The other vector
+         * @return value_type The squared distance between the two vectors
+         */
         inline value_type squared_distance_to_point(
             const generic_vec3& v) const noexcept
         {
             return (v - *this).squared_length();
         }
 
+        /**
+         * @brief Calculates the distance between a point and a line defined by
+         * two points.
+         *
+         * @param v0 The first point on the line
+         * @param v1 The second point on the line
+         * @return value_type The distance between the point and the line
+         */
         inline float distance_to_line(
             const generic_vec3& v0, const generic_vec3& v1) const noexcept
         {
@@ -342,6 +462,12 @@ namespace move::vectormath
             return vector_length3(distance_vector);
         }
 
+        /**
+         * @brief Calculates the cross product of the vector and another vector
+         *
+         * @param v2 The other vector
+         * @return generic_vec3 The cross product of the two vectors
+         */
         inline generic_vec3 cross(const generic_vec3& v2) const noexcept
         {
             return rtm::vector_cross3(_value, v2._value);

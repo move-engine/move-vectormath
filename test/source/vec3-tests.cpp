@@ -96,6 +96,61 @@ SCENARIO("Test vec3f", "[move::vectormath::vec3f]")
             }
         }
 
+        WHEN("The vector is filled")
+        {
+            v1.fill(2);
+
+            THEN("It should be filled with the correct value")
+            {
+                REQUIRE(v1.x() == Approx(2));
+                REQUIRE(v1.y() == Approx(2));
+                REQUIRE(v1.z() == Approx(2));
+            }
+        }
+
+        AND_GIVEN("Another non-normalized vec3")
+        {
+            vec_type v2(1, 2, -5);
+
+            THEN("They should not be equal")
+            {
+                REQUIRE(v1 != v2);
+                AND_WHEN("One of them is set to the other")
+                {
+                    v1 = v2;
+                    THEN("They should be equal")
+                    {
+                        REQUIRE(v1 == v2);
+                    }
+                }
+
+                AND_WHEN("One of them is set to the other memberwise")
+                {
+                    v1.x(v2.x());
+                    v1.y(v2.y());
+                    v1.z(v2.z());
+
+                    THEN("They should be equal")
+                    {
+                        REQUIRE(v1 == v2);
+                    }
+                }
+
+                AND_WHEN(
+                    "One of them is set to the other memberwise with set_*")
+                {
+                    v1.set_x(v2.x());
+                    v1.set_y(v2.y());
+                    v1.set_z(v2.z());
+
+                    THEN("They should be equal")
+                    {
+                        REQUIRE(v1 == v2);
+                    }
+                }
+            }
+        }
+
         AND_GIVEN("Another normalized vec3")
         {
             vec_type v2(1, 2, -5);

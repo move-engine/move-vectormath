@@ -247,6 +247,94 @@ namespace move::vectormath
             return component_accessor(*this, 3);
         }
 
+        /**
+         * @brief Sets the x component of the vector
+         *
+         * @param x The new x component
+         * @return generic_vec4& A reference to the vector
+         */
+        inline generic_vec4& x(value_type value) noexcept
+        {
+            set_x(value);
+            return *this;
+        }
+
+        /**
+         * @brief Sets the y component of the vector
+         *
+         * @param y The new y component
+         * @return generic_vec4& A reference to the vector
+         */
+        inline generic_vec4& y(value_type value) noexcept
+        {
+            set_y(value);
+            return *this;
+        }
+
+        /**
+         * @brief Sets the z component of the vector
+         *
+         * @param z The new z component
+         * @return generic_vec4& A reference to the vector
+         */
+        inline generic_vec4& z(value_type value) noexcept
+        {
+            set_z(value);
+            return *this;
+        }
+
+        /**
+         * @brief Sets the w component of the vector
+         *
+         * @param w The new w component
+         * @return generic_vec4& A reference to the vector
+         */
+        inline generic_vec4& w(value_type value) noexcept
+        {
+            set_w(value);
+            return *this;
+        }
+
+        /**
+         * @brief Sets all components of the vector to the same value
+         *
+         * @param value The new value for all components
+         * @return generic_vec4& A reference to the vector
+         */
+        inline generic_vec4& fill(component_type value) noexcept
+        {
+            _value = rtm::vector_set(value);
+            return *this;
+        }
+
+        /**
+         * @brief Sets the components of the vector
+         *
+         * @param x The new x component
+         * @param y The new y component
+         * @param z The new z component
+         * @param w The new w component
+         * @return generic_vec4& A reference to the vector
+         */
+        inline generic_vec4& set(component_type x, component_type y,
+            component_type z, component_type w) noexcept
+        {
+            _value = rtm::vector_set(x, y, z, w);
+            return *this;
+        }
+
+        /**
+         * @brief Sets the components of the vector
+         *
+         * @param v The new vector
+         * @return generic_vec4& A reference to the vector
+         */
+        inline generic_vec4& set(const generic_vec4& v) noexcept
+        {
+            _value = v._value;
+            return *this;
+        }
+
         inline value_type x() const noexcept
         {
             return rtm::vector_get_x(_value);

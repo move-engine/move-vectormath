@@ -277,7 +277,8 @@ namespace move::vectormath
             const underlying_vector3_type& target,
             const underlying_vector3_type& up) noexcept
         {
-            return rtm::ext::look_at_rh(eye, target, up);
+            return rtm::ext::look_at_rh<underlying_matrix4x4_type>(
+                eye, target, up);
         }
 
         inline static generic_mat4 create_look_at_lh(
@@ -285,7 +286,8 @@ namespace move::vectormath
             const underlying_vector3_type& target,
             const underlying_vector3_type& up) noexcept
         {
-            return rtm::ext::look_at_lh(eye, target, up);
+            return rtm::ext::look_at_lh<underlying_matrix4x4_type>(
+                eye, target, up);
         }
 
         inline static generic_mat4 create_look_at(

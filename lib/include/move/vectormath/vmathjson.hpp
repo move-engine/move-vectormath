@@ -27,7 +27,7 @@ namespace move::vectormath
             {
                 typename T::component_type val;
                 j.at(i).get_to(val);
-                data[i] = val;
+                data.set_component(i, val);
             }
         }
     };

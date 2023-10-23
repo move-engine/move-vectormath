@@ -136,13 +136,13 @@ namespace move::vectormath
             switch (index)
             {
                 case 0:
-                    return rtm::vector_get_x(_value);
+                    return value_type(rtm::quat_get_x(_value));
                 case 1:
-                    return rtm::vector_get_y(_value);
+                    return value_type(rtm::quat_get_y(_value));
                 case 2:
-                    return rtm::vector_get_z(_value);
+                    return value_type(rtm::quat_get_z(_value));
                 default:
-                    return rtm::vector_get_w(_value);
+                    return value_type(rtm::quat_get_w(_value));
             }
         }
 
@@ -221,22 +221,22 @@ namespace move::vectormath
 
         inline value_type x() const noexcept
         {
-            return rtm::vector_get_x(_value);
+            return rtm::quat_get_x(_value);
         }
 
         inline value_type y() const noexcept
         {
-            return rtm::vector_get_y(_value);
+            return rtm::quat_get_y(_value);
         }
 
         inline value_type z() const noexcept
         {
-            return rtm::vector_get_z(_value);
+            return rtm::quat_get_z(_value);
         }
 
         inline value_type w() const noexcept
         {
-            return rtm::vector_get_w(_value);
+            return rtm::quat_get_w(_value);
         }
 
         inline generic_quat& set_x(value_type x) noexcept
@@ -429,15 +429,15 @@ namespace move::vectormath
         quat_type _value;
     };
 
-    using quat4f = generic_quat<float, wrappers::qf, wrappers::m3x4f,
+    using quatf = generic_quat<float, wrappers::qf, wrappers::m3x4f,
         wrappers::m4x4f, vec3f, mat4f>;
-    using quat4d = generic_quat<double, wrappers::qd, wrappers::m3x4d,
+    using quatd = generic_quat<double, wrappers::qd, wrappers::m3x4d,
         wrappers::m4x4d, vec3d, mat4d>;
 
 #if MOVE_VECTORMATH_USE_DOUBLE_PRECISION
-    using quat = quat4d;
+    using quat = quatd;
 #else
-    using quat = quat4f;
+    using quat = quatf;
 #endif
 
     template <typename value_type, typename quat_type_raw,
@@ -457,8 +457,8 @@ namespace move::vectormath
 #if !defined(MOVE_VECTORMATH_NO_SERIALIZATION)
 #include "vmathcereal.hpp"
 #include "vmathjson.hpp"
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::quat4f);
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::quat4d);
+MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::quatf);
+MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::quatd);
 // MOVE_VECTORMATH_CEREAL_SERIALIZER(move::vectormath::vec4f);
 // MOVE_VECTORMATH_CEREAL_SERIALIZER(move::vectormath::vec4d);
 #endif
