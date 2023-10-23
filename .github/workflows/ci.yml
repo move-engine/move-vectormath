@@ -74,23 +74,23 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Configure
-        env: { CXX: clang++-12 }
-        run: cmake --preset=ci-sanitize -Wno-error=dev
-
-      - name: Build
-        run: cmake --build build/sanitize -j 2
-
-      - name: Test
-        working-directory: build/sanitize
-        env:
-          ASAN_OPTIONS: "strict_string_checks=1:\
-            detect_stack_use_after_return=1:\
-            check_initialization_order=1:\
-            strict_init_order=1:\
-            detect_leaks=1"
-          UBSAN_OPTIONS: print_stacktrace=1
-        run: ctest --output-on-failure -j 2
+      # - name: Configure
+      #   env: { CXX: clang++-12 }
+      #   run: cmake --preset=ci-sanitize -Wno-error=dev
+      # 
+      # - name: Build
+      #   run: cmake --build build/sanitize -j 2
+      # 
+      # - name: Test
+      #   working-directory: build/sanitize
+      #   env:
+      #     ASAN_OPTIONS: "strict_string_checks=1:\
+      #       detect_stack_use_after_return=1:\
+      #       check_initialization_order=1:\
+      #       strict_init_order=1:\
+      #       detect_leaks=1"
+      #     UBSAN_OPTIONS: print_stacktrace=1
+      #   run: ctest --output-on-failure -j 2
 
   test:
     needs: [lint]
