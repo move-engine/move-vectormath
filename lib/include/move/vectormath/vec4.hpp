@@ -116,7 +116,7 @@ namespace move::vectormath
 
         RTM_FORCE_INLINE generic_vec4& operator/=(value_type v) noexcept
         {
-            _value = rtm::vector_div(_value, v);
+            _value = rtm::vector_div(_value, rtm::vector_set(v));
             return *this;
         }
 
@@ -152,7 +152,7 @@ namespace move::vectormath
 
         RTM_FORCE_INLINE generic_vec4 operator/(value_type v) const noexcept
         {
-            return generic_vec4(rtm::vector_div(_value, v));
+            return generic_vec4(rtm::vector_div(_value, rtm::vector_set(v)));
         }
 
         RTM_FORCE_INLINE generic_vec4 operator/(

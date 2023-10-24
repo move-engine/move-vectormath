@@ -1,210 +1,222 @@
 #pragma once
+#include "normal.hpp"
 #include "vec3.hpp"
 
 namespace move::vectormath
 {
-    using vector3_type = vec3f;
     // template <typename vec3_type>
-    class point
+    using vector3_type = vec3f;
+    class generic_point
     {
     public:
         using vec3_type = vector3_type;
         using component_type = typename vec3_type::component_type;
 
     public:
-        inline point() noexcept = default;
-        inline point(const point&) noexcept = default;
-        inline point(point&&) noexcept = default;
-        inline point& operator=(const point&) noexcept = default;
-        inline point& operator=(point&&) noexcept = default;
-        inline ~point() noexcept = default;
+        RTM_FORCE_INLINE generic_point() noexcept = default;
+        RTM_FORCE_INLINE generic_point(const generic_point&) noexcept = default;
+        RTM_FORCE_INLINE generic_point(generic_point&&) noexcept = default;
+        RTM_FORCE_INLINE generic_point& operator=(
+            const generic_point&) noexcept = default;
+        RTM_FORCE_INLINE generic_point& operator=(
+            generic_point&&) noexcept = default;
+        RTM_FORCE_INLINE ~generic_point() noexcept = default;
 
-        inline point(const vec3_type& vec) noexcept : _vec(vec)
+        RTM_FORCE_INLINE generic_point(const vec3_type& vec) noexcept
+            : _vec(vec)
         {
         }
 
-        inline point(
-            component_type x, component_type y, component_type z) noexcept
+        RTM_FORCE_INLINE generic_point(component_type x, component_type y = 0,
+            component_type z = 0) noexcept
             : _vec(rtm::vector_set(x, y, z, 0))
         {
         }
 
     public:
-        inline component_type x() const noexcept
+        RTM_FORCE_INLINE component_type x() const noexcept
         {
             return _vec.x();
         }
 
-        inline component_type y() const noexcept
+        RTM_FORCE_INLINE component_type y() const noexcept
         {
             return _vec.y();
         }
 
-        inline component_type z() const noexcept
+        RTM_FORCE_INLINE component_type z() const noexcept
         {
             return _vec.z();
         }
 
-        inline point& x(component_type value) noexcept
+        RTM_FORCE_INLINE generic_point& x(component_type value) noexcept
         {
             _vec.x(value);
             return *this;
         }
 
-        inline point& y(component_type value) noexcept
+        RTM_FORCE_INLINE generic_point& y(component_type value) noexcept
         {
             _vec.y(value);
             return *this;
         }
 
-        inline point& z(component_type value) noexcept
+        RTM_FORCE_INLINE generic_point& z(component_type value) noexcept
         {
             _vec.z(value);
             return *this;
         }
 
-        inline point& set(
+        RTM_FORCE_INLINE generic_point& set(
             component_type x, component_type y, component_type z) noexcept
         {
             _vec.set(x, y, z);
             return *this;
         }
 
-        inline point& set(const vec3_type& vec) noexcept
+        RTM_FORCE_INLINE generic_point& set(const vec3_type& vec) noexcept
         {
             _vec = vec;
             return *this;
         }
 
-        inline point& fill(component_type value) noexcept
+        RTM_FORCE_INLINE generic_point& fill(component_type value) noexcept
         {
             _vec.fill(value);
             return *this;
         }
 
     public:
-        inline bool operator==(const point& other) const noexcept
+        RTM_FORCE_INLINE bool operator==(
+            const generic_point& other) const noexcept
         {
             return _vec == other._vec;
         }
 
-        inline bool operator!=(const point& other) const noexcept
+        RTM_FORCE_INLINE bool operator!=(
+            const generic_point& other) const noexcept
         {
             return _vec != other._vec;
         }
 
-        inline point operator-() const noexcept
+        RTM_FORCE_INLINE generic_point operator-() const noexcept
         {
-            return point(-_vec);
+            return generic_point(-_vec);
         }
 
-        inline point operator+(const point& other) const noexcept
+        RTM_FORCE_INLINE vec3_type operator+(
+            const generic_point& other) const noexcept
         {
-            return point(_vec + other._vec);
+            return _vec + other._vec;
         }
 
-        inline point operator-(const point& other) const noexcept
+        RTM_FORCE_INLINE vec3_type operator-(
+            const generic_point& other) const noexcept
         {
-            return point(_vec - other._vec);
+            return _vec - other._vec;
         }
 
-        inline point operator*(component_type scalar) const noexcept
+        RTM_FORCE_INLINE vec3_type operator*(
+            component_type scalar) const noexcept
         {
-            return point(_vec * scalar);
+            return _vec * scalar;
         }
 
-        inline point operator/(component_type scalar) const noexcept
+        RTM_FORCE_INLINE generic_point operator/(
+            component_type scalar) const noexcept
         {
-            return point(_vec / scalar);
+            return generic_point(_vec / scalar);
         }
 
-        inline point& operator+=(const point& other) noexcept
+        RTM_FORCE_INLINE generic_point& operator+=(
+            const generic_point& other) noexcept
         {
             _vec += other._vec;
             return *this;
         }
 
-        inline point& operator-=(const point& other) noexcept
+        RTM_FORCE_INLINE generic_point& operator-=(
+            const generic_point& other) noexcept
         {
             _vec -= other._vec;
             return *this;
         }
 
-        inline point& operator*=(component_type scalar) noexcept
+        RTM_FORCE_INLINE generic_point& operator*=(
+            component_type scalar) noexcept
         {
             _vec *= scalar;
             return *this;
         }
 
-        inline point& operator/=(component_type scalar) noexcept
+        RTM_FORCE_INLINE generic_point& operator/=(
+            component_type scalar) noexcept
         {
             _vec /= scalar;
             return *this;
         }
 
     public:
-        inline component_type get_component(int index) const noexcept
+        RTM_FORCE_INLINE component_type get_component(int index) const noexcept
         {
             return _vec.get_component(index);
         }
 
-        inline point& set_component(int index, component_type value) noexcept
+        RTM_FORCE_INLINE generic_point& set_component(
+            int index, component_type value) noexcept
         {
             _vec.set_component(index, value);
             return *this;
         }
 
     public:
-        inline component_type length() const noexcept
+        RTM_FORCE_INLINE component_type length() const noexcept
         {
             return _vec.length();
         }
 
-        inline component_type squared_length() const noexcept
+        RTM_FORCE_INLINE component_type squared_length() const noexcept
         {
             return _vec.squared_length();
         }
 
-        inline component_type reciprocal_length() const noexcept
+        RTM_FORCE_INLINE component_type reciprocal_length() const noexcept
         {
             return _vec.reciprocal_length();
         }
 
-        inline component_type distance(const point& other) const noexcept
+        RTM_FORCE_INLINE component_type distance(
+            const generic_point& other) const noexcept
         {
             return _vec.distance_to_point(other._vec);
         }
 
-        inline component_type squared_distance(
-            const point& other) const noexcept
+        RTM_FORCE_INLINE component_type squared_distance(
+            const generic_point& other) const noexcept
         {
             return _vec.squared_distance_to_point(other._vec);
         }
 
-        inline component_type distance_to_line(
-            const point& point1, const point& point2) const noexcept
+        RTM_FORCE_INLINE component_type distance_to_line(
+            const generic_point& generic_point1,
+            const generic_point& generic_point2) const noexcept
         {
-            return _vec.distance_to_line(point1._vec, point2._vec);
+            return _vec.distance_to_line(
+                generic_point1._vec, generic_point2._vec);
         }
 
-        inline point& normalize() noexcept
+        RTM_FORCE_INLINE normal normalized() const noexcept
         {
-            _vec.normalize();
-            return *this;
-        }
-
-        inline point normalized() const noexcept
-        {
-            return point(_vec.normalized());
+            return normal(_vec.normalized());
         }
 
     public:
-        inline vec3_type& vec() noexcept
+        RTM_FORCE_INLINE vec3_type& vec() noexcept
         {
             return _vec;
         }
 
-        inline const vec3_type& vec() const noexcept
+        RTM_FORCE_INLINE const vec3_type& vec() const noexcept
         {
             return _vec;
         }
@@ -213,4 +225,12 @@ namespace move::vectormath
     private:
         vec3_type _vec;
     };
+
+    using pointf = generic_point;
+    using pointd = generic_point;
+#if MOVE_VECTORMATH_USE_DOUBLE_PRECISION
+    using point = pointd;
+#else
+    using point = pointf;
+#endif
 }  // namespace move::vectormath

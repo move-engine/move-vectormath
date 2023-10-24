@@ -7,55 +7,63 @@ namespace move::vectormath
 {
     using vector3_type = vec3f;
     // template <typename vec3_type>
-    class normal
+    class generic_normal
     {
     public:
         using vec3_type = vector3_type;
         using component_type = typename vec3_type::component_type;
 
     public:
-        RTM_FORCE_INLINE normal() noexcept = default;
-        RTM_FORCE_INLINE normal(const normal&) noexcept = default;
-        RTM_FORCE_INLINE normal(normal&&) noexcept = default;
-        RTM_FORCE_INLINE normal& operator=(const normal&) noexcept = default;
-        RTM_FORCE_INLINE normal& operator=(normal&&) noexcept = default;
-        RTM_FORCE_INLINE ~normal() noexcept = default;
+        RTM_FORCE_INLINE generic_normal() noexcept = default;
+        RTM_FORCE_INLINE generic_normal(
+            const generic_normal&) noexcept = default;
+        RTM_FORCE_INLINE generic_normal(generic_normal&&) noexcept = default;
+        RTM_FORCE_INLINE generic_normal& operator=(
+            const generic_normal&) noexcept = default;
+        RTM_FORCE_INLINE generic_normal& operator=(
+            generic_normal&&) noexcept = default;
+        RTM_FORCE_INLINE ~generic_normal() noexcept = default;
 
-        RTM_FORCE_INLINE normal(const vec3_type& vec) noexcept : _vec(vec)
+        RTM_FORCE_INLINE generic_normal(const vec3_type& vec) noexcept
+            : _vec(vec)
         {
             normalize();
         }
 
-        RTM_FORCE_INLINE normal(
+        RTM_FORCE_INLINE generic_normal(
             component_type x, component_type y, component_type z) noexcept
             : _vec(rtm::vector_normalize3(rtm::vector_set(x, y, z, 0)))
         {
         }
 
     public:
-        RTM_FORCE_INLINE bool operator==(const normal& other) const noexcept
+        RTM_FORCE_INLINE bool operator==(
+            const generic_normal& other) const noexcept
         {
             return _vec == other._vec;
         }
 
-        RTM_FORCE_INLINE bool operator!=(const normal& other) const noexcept
+        RTM_FORCE_INLINE bool operator!=(
+            const generic_normal& other) const noexcept
         {
             return _vec != other._vec;
         }
 
-        RTM_FORCE_INLINE normal operator-() const noexcept
+        RTM_FORCE_INLINE generic_normal operator-() const noexcept
         {
-            return normal(-_vec);
+            return generic_normal(-_vec);
         }
 
-        RTM_FORCE_INLINE normal operator+(const normal& other) const noexcept
+        RTM_FORCE_INLINE generic_normal operator+(
+            const generic_normal& other) const noexcept
         {
-            return normal(_vec + other._vec);
+            return generic_normal(_vec + other._vec);
         }
 
-        RTM_FORCE_INLINE normal operator-(const normal& other) const noexcept
+        RTM_FORCE_INLINE generic_normal operator-(
+            const generic_normal& other) const noexcept
         {
-            return normal(_vec - other._vec);
+            return generic_normal(_vec - other._vec);
         }
 
     private:
@@ -70,7 +78,7 @@ namespace move::vectormath
             return _vec.get_component(index);
         }
 
-        RTM_FORCE_INLINE normal& set_component(
+        RTM_FORCE_INLINE generic_normal& set_component(
             int index, component_type value) noexcept
         {
             _vec.set_component(index, value);
@@ -92,7 +100,7 @@ namespace move::vectormath
             return _vec.z();
         }
 
-        RTM_FORCE_INLINE normal& set(
+        RTM_FORCE_INLINE generic_normal& set(
             component_type x, component_type y, component_type z) noexcept
         {
             _vec.set(x, y, z);
@@ -100,27 +108,28 @@ namespace move::vectormath
             return *this;
         }
 
-        RTM_FORCE_INLINE normal& set(const vec3_type& vec) noexcept
+        RTM_FORCE_INLINE generic_normal& set(const vec3_type& vec) noexcept
         {
             _vec = vec;
             normalize();
             return *this;
         }
 
-        RTM_FORCE_INLINE normal& set(const normal& vec) noexcept
+        RTM_FORCE_INLINE generic_normal& set(const generic_normal& vec) noexcept
         {
             _vec = vec._vec;
             return *this;
         }
 
     public:
-        RTM_FORCE_INLINE component_type dot(const normal& other) const noexcept
+        RTM_FORCE_INLINE component_type dot(
+            const generic_normal& other) const noexcept
         {
             return _vec.dot(other._vec);
         }
 
         RTM_FORCE_INLINE component_type angle_between(
-            const normal& other) const noexcept
+            const generic_normal& other) const noexcept
         {
             return _vec.angle_between_normalized_vectors(other._vec);
         }
@@ -141,36 +150,40 @@ namespace move::vectormath
         }
 
     public:
-        RTM_FORCE_INLINE normal cross(const normal& other) const noexcept
+        RTM_FORCE_INLINE generic_normal cross(
+            const generic_normal& other) const noexcept
         {
-            return normal(_vec.cross(other._vec));
+            return generic_normal(_vec.cross(other._vec));
         }
 
-        RTM_FORCE_INLINE normal cross(const vec3_type& other) const noexcept
+        RTM_FORCE_INLINE generic_normal cross(
+            const vec3_type& other) const noexcept
         {
-            return normal(_vec.cross(other));
+            return generic_normal(_vec.cross(other));
         }
 
-        RTM_FORCE_INLINE normal reflect(const normal& normalv) const noexcept
+        RTM_FORCE_INLINE generic_normal reflect(
+            const generic_normal& normalv) const noexcept
         {
-            return normal(_vec.reflect(normalv._vec));
+            return generic_normal(_vec.reflect(normalv._vec));
         }
 
-        RTM_FORCE_INLINE normal reflect(const vec3_type& normalv) const noexcept
+        RTM_FORCE_INLINE generic_normal reflect(
+            const vec3_type& normalv) const noexcept
         {
-            return normal(_vec.reflect(normalv));
+            return generic_normal(_vec.reflect(normalv));
         }
 
-        RTM_FORCE_INLINE normal refract(
-            const normal& normalv, component_type ior) const noexcept
+        RTM_FORCE_INLINE generic_normal refract(
+            const generic_normal& normalv, component_type ior) const noexcept
         {
-            return normal(_vec.refract(normalv._vec, ior));
+            return generic_normal(_vec.refract(normalv._vec, ior));
         }
 
-        RTM_FORCE_INLINE normal refract(
+        RTM_FORCE_INLINE generic_normal refract(
             const vec3_type& normalv, component_type ior) const noexcept
         {
-            return normal(_vec.refract(normalv, ior));
+            return generic_normal(_vec.refract(normalv, ior));
         }
 
     public:
@@ -180,52 +193,60 @@ namespace move::vectormath
         }
 
     public:
-        static RTM_FORCE_INLINE normal x_axis() noexcept
+        static RTM_FORCE_INLINE generic_normal x_axis() noexcept
         {
-            return normal(vec3_type::x_axis());
+            return generic_normal(vec3_type::x_axis());
         }
 
-        static RTM_FORCE_INLINE normal y_axis() noexcept
+        static RTM_FORCE_INLINE generic_normal y_axis() noexcept
         {
-            return normal(vec3_type::y_axis());
+            return generic_normal(vec3_type::y_axis());
         }
 
-        static RTM_FORCE_INLINE normal z_axis() noexcept
+        static RTM_FORCE_INLINE generic_normal z_axis() noexcept
         {
-            return normal(vec3_type::z_axis());
+            return generic_normal(vec3_type::z_axis());
         }
 
-        static RTM_FORCE_INLINE normal right() noexcept
+        static RTM_FORCE_INLINE generic_normal right() noexcept
         {
-            return normal(vec3_type::right());
+            return generic_normal(vec3_type::right());
         }
 
-        static RTM_FORCE_INLINE normal left() noexcept
+        static RTM_FORCE_INLINE generic_normal left() noexcept
         {
-            return normal(vec3_type::left());
+            return generic_normal(vec3_type::left());
         }
 
-        static RTM_FORCE_INLINE normal up() noexcept
+        static RTM_FORCE_INLINE generic_normal up() noexcept
         {
-            return normal(vec3_type::up());
+            return generic_normal(vec3_type::up());
         }
 
-        static RTM_FORCE_INLINE normal down() noexcept
+        static RTM_FORCE_INLINE generic_normal down() noexcept
         {
-            return normal(vec3_type::down());
+            return generic_normal(vec3_type::down());
         }
 
-        static RTM_FORCE_INLINE normal forward() noexcept
+        static RTM_FORCE_INLINE generic_normal forward() noexcept
         {
-            return normal(vec3_type::forward());
+            return generic_normal(vec3_type::forward());
         }
 
-        static RTM_FORCE_INLINE normal backward() noexcept
+        static RTM_FORCE_INLINE generic_normal backward() noexcept
         {
-            return normal(vec3_type::backward());
+            return generic_normal(vec3_type::backward());
         }
 
     private:
         vec3_type _vec;
     };
+
+    using normalf = generic_normal;
+    using normald = generic_normal;
+#if MOVE_VECTORMATH_USE_DOUBLE_PRECISION
+    using normal = normald;
+#else
+    using normal = generic_normal;
+#endif
 }  // namespace move::vectormath
