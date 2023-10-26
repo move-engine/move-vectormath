@@ -48,6 +48,11 @@ namespace move::vectormath
             return _value;
         }
 
+        RTM_FORCE_INLINE vector_type& get_internal() noexcept
+        {
+            return _value;
+        }
+
     public:
         template <typename Archive>
         RTM_FORCE_INLINE void serialize(Archive& ar)
@@ -70,6 +75,11 @@ namespace move::vectormath
 
     public:
         RTM_FORCE_INLINE operator vector_type&()
+        {
+            return _value;
+        }
+
+        RTM_FORCE_INLINE operator const vector_type&() const
         {
             return _value;
         }

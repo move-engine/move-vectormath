@@ -212,7 +212,7 @@ SCENARIO("Test mat4f", "[move::vectormath::mat4f]")
             auto point = vec4_type(1, 2, 3, 1);
             auto dxmpoint = vec4_to_dxm(point);
 
-            auto res = mat * point;
+            auto res = point * mat;
             auto dxmres = DirectX::XMVector4Transform(dxmpoint, mat_dxm);
             REQUIRE(equals(res, dxmres));
         }
@@ -244,7 +244,7 @@ SCENARIO("Test mat4f", "[move::vectormath::mat4f]")
             auto point = vec4_type(1, 2, 3, 1);
             auto dxmpoint = vec4_to_dxm(point);
 
-            auto res = mat * point;
+            auto res = point * mat;
             auto dxmres = DirectX::XMVector4Transform(dxmpoint, mat_dxm);
             REQUIRE(equals(res, dxmres));
         }
@@ -276,7 +276,7 @@ SCENARIO("Test mat4f", "[move::vectormath::mat4f]")
             auto point = vec4_type(1, 2, 3, 1);
             auto dxmpoint = vec4_to_dxm(point);
 
-            auto res = mat * point;
+            auto res = point * mat;
             auto dxmres = DirectX::XMVector4Transform(dxmpoint, mat_dxm);
             REQUIRE(equals(res, dxmres));
         }
@@ -308,7 +308,7 @@ SCENARIO("Test mat4f", "[move::vectormath::mat4f]")
             auto point = vec4_type(1, 2, 3, 1);
             auto dxmpoint = vec4_to_dxm(point);
 
-            auto res = mat * point;
+            auto res = point * mat;
             auto dxmres = DirectX::XMVector4Transform(dxmpoint, mat_dxm);
 
             REQUIRE(equals(res, dxmres));
@@ -344,7 +344,7 @@ SCENARIO("Test mat4f", "[move::vectormath::mat4f]")
 
         WHEN("They are multiplied")
         {
-            auto res = mat * vec;
+            auto res = vec * mat;
             THEN("They should match the DXM results")
             {
                 auto dxmmat = mat4_to_dxm(mat);
@@ -552,7 +552,7 @@ SCENARIO("Test mat4d", "[move::vectormath::mat4d]")
             auto point = vec4_type(1, 2, 3, 1);
             auto dxmpoint = vec4_to_dxm(point);
 
-            auto res = mat * point;
+            auto res = point * mat;
             auto dxmres = DirectX::XMVector4Transform(dxmpoint, mat_dxm);
             REQUIRE(equals(res, dxmres));
         }
@@ -584,7 +584,7 @@ SCENARIO("Test mat4d", "[move::vectormath::mat4d]")
             auto point = vec4_type(1, 2, 3, 1);
             auto dxmpoint = vec4_to_dxm(point);
 
-            auto res = mat * point;
+            auto res = point * mat;
             auto dxmres = DirectX::XMVector4Transform(dxmpoint, mat_dxm);
             REQUIRE(equals(res, dxmres));
         }
@@ -616,7 +616,7 @@ SCENARIO("Test mat4d", "[move::vectormath::mat4d]")
             auto point = vec4_type(1, 2, 3, 1);
             auto dxmpoint = vec4_to_dxm(point);
 
-            auto res = mat * point;
+            auto res = point * mat;
             auto dxmres = DirectX::XMVector4Transform(dxmpoint, mat_dxm);
             REQUIRE(equals(res, dxmres));
         }
@@ -648,7 +648,7 @@ SCENARIO("Test mat4d", "[move::vectormath::mat4d]")
             auto point = vec4_type(1, 2, 3, 1);
             auto dxmpoint = vec4_to_dxm(point);
 
-            auto res = mat * point;
+            auto res = point * mat;
             auto dxmres = DirectX::XMVector4Transform(dxmpoint, mat_dxm);
 
             REQUIRE(equals(res, dxmres));
@@ -684,7 +684,7 @@ SCENARIO("Test mat4d", "[move::vectormath::mat4d]")
 
         WHEN("They are multiplied")
         {
-            auto res = mat * vec;
+            auto res = vec * mat;
             THEN("They should match the DXM results")
             {
                 auto dxmmat = mat4_to_dxm(mat);

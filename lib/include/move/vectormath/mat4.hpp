@@ -73,7 +73,13 @@ namespace move::vectormath
         }
 
     public:
-        RTM_FORCE_INLINE underlying_matrix4x4_type get_internal() const noexcept
+        RTM_FORCE_INLINE const underlying_matrix4x4_type& get_internal()
+            const noexcept
+        {
+            return _value;
+        }
+
+        RTM_FORCE_INLINE underlying_matrix4x4_type& get_internal() noexcept
         {
             return _value;
         }
@@ -262,11 +268,6 @@ namespace move::vectormath
         }
 
     public:
-        RTM_FORCE_INLINE vec4_type operator*(const vec4_type& v) const noexcept
-        {
-            return rtm::matrix_mul_vector(v.get_internal(), _value);
-        }
-
         RTM_FORCE_INLINE value_type operator[](size_t index) const noexcept
         {
             return get(index / 4, index % 4);
@@ -323,6 +324,23 @@ namespace move::vectormath
     private:
         underlying_matrix4x4_type _value;
     };
+
+    template <typename matrix_type>
+    RTM_FORCE_INLINE static typename matrix_type::vec4_type operator*(
+        const typename matrix_type::vec4_type& v, const matrix_type& m) noexcept
+    {
+        using namespace rtm;
+        return matrix_mul_vector(v.get_internal(), m.get_internal());
+    }
+
+    template <typename matrix_type>
+    RTM_FORCE_INLINE static typename matrix_type::vec4_type operator*(
+        const matrix_type& m, const typename matrix_type::vec4_type& v) noexcept
+    {
+        (void)m;
+        (void)v;
+        static_assert(sizeof(matrix_type) == 0, "Vector must be on the left");
+    }
 
     using mat4f = generic_mat4<float, wrappers::v4f, wrappers::v4f,
         wrappers::qf, wrappers::m3x4f, wrappers::m4x4f>;
