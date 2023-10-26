@@ -7,6 +7,7 @@
 #include "nlohmann/json_fwd.hpp"
 
 // #include <move/vectormath.hpp>
+#include <limits>
 #include <move/vectormath/vec4.hpp>
 
 #include "mvm_test_utils.hpp"
@@ -20,9 +21,33 @@ SCENARIO("Test vec4f", "[move::vectormath::vec4f]")
     REQUIRE(vec_type::one() == vec_type(1, 1, 1, 1));
     REQUIRE(vec_type(1, 1, 1, 1) == vec_type(1, 1, 1, 1));
     REQUIRE(vec_type(0, 0, 0, 0) == vec_type(0, 0, 0, 0));
+    REQUIRE(vec_type::filled(1) == vec_type(1, 1, 1, 1));
 
+    REQUIRE(vec_type::infinity() ==
+            vec_type(std::numeric_limits<vec_type::component_type>::infinity(),
+                std::numeric_limits<vec_type::component_type>::infinity(),
+                std::numeric_limits<vec_type::component_type>::infinity(),
+                std::numeric_limits<vec_type::component_type>::infinity()));
+
+    REQUIRE(vec_type::negative_infinity() ==
+            vec_type(-std::numeric_limits<vec_type::component_type>::infinity(),
+                -std::numeric_limits<vec_type::component_type>::infinity(),
+                -std::numeric_limits<vec_type::component_type>::infinity(),
+                -std::numeric_limits<vec_type::component_type>::infinity()));
+
+    {
+        auto nan = vec_type::nan();
+        REQUIRE(std::isnan(nan.x()));
+        REQUIRE(std::isnan(nan.y()));
+        REQUIRE(std::isnan(nan.z()));
+        REQUIRE(std::isnan(nan.w()));
+    }
+
+    REQUIRE(vec_type::left() == vec_type(-1, 0, 0, 0));
     REQUIRE(vec_type::right() == vec_type(1, 0, 0, 0));
+    REQUIRE(vec_type::down() == vec_type(0, -1, 0, 0));
     REQUIRE(vec_type::up() == vec_type(0, 1, 0, 0));
+    REQUIRE(vec_type::back() == vec_type(0, 0, -1, 0));
     REQUIRE(vec_type::forward() == vec_type(0, 0, 1, 0));
 
     REQUIRE(vec_type::x_axis() == vec_type(1, 0, 0, 0));
@@ -43,12 +68,6 @@ SCENARIO("Test vec4f", "[move::vectormath::vec4f]")
             REQUIRE(len == Approx(2.0));
         }
 
-        THEN("Approximate vector length should work")
-        {
-            auto len = v1.length_approximate();
-            REQUIRE(len == Approx(2.0));
-        }
-
         THEN("Vector square length should work")
         {
             auto len = v1.squared_length();
@@ -60,20 +79,6 @@ SCENARIO("Test vec4f", "[move::vectormath::vec4f]")
             auto nrm = v1.normalized();
             THEN("The value should be correct")
             {
-                auto val = 1.0 / sqrt(4.0);
-                REQUIRE(nrm.x() == Approx(val));
-                REQUIRE(nrm.y() == Approx(val));
-                REQUIRE(nrm.z() == Approx(val));
-                REQUIRE(nrm.w() == Approx(val));
-            }
-        }
-
-        WHEN("The vector is approximately normalized")
-        {
-            auto nrm = v1.normalized_approximate();
-            THEN("The value should be correct")
-            {
-                using namespace Catch;
                 auto val = 1.0 / sqrt(4.0);
                 REQUIRE(nrm.x() == Approx(val));
                 REQUIRE(nrm.y() == Approx(val));
@@ -105,7 +110,7 @@ SCENARIO("Test vec4f", "[move::vectormath::vec4f]")
 
             THEN("The dot product should be correct")
             {
-                auto dot = v1.dot(v2);
+                auto dot = vec_type::dot(v1, v2);
                 auto dxm_dot = DirectX::XMVectorGetX(
                     DirectX::XMVector4Dot(dxm_v1, dxm_v2));
 
@@ -114,25 +119,15 @@ SCENARIO("Test vec4f", "[move::vectormath::vec4f]")
 
             THEN("The distance between the points should be correct")
             {
-                auto dist = v1.distance_to_point(v2);
+                auto dist = vec_type::distance_between_points(v1, v2);
                 auto dxm_dist = DirectX::XMVectorGetX(DirectX::XMVector4Length(
                     DirectX::XMVectorSubtract(dxm_v1, dxm_v2)));
                 REQUIRE(dist == Approx(dxm_dist));
             }
 
-            THEN(
-                "The approximate distance between the points should be correct")
-            {
-                auto dist = v1.distance_to_point_approximate(v2);
-                auto dxm_dist =
-                    DirectX::XMVectorGetX(DirectX::XMVector4LengthEst(
-                        DirectX::XMVectorSubtract(dxm_v1, dxm_v2)));
-                REQUIRE(dist == Approx(dxm_dist));
-            }
-
             THEN("The square distance between the points should be correct")
             {
-                auto dist = v1.squared_distance_to_point(v2);
+                auto dist = vec_type::squared_distance_between_points(v1, v2);
                 auto dxm_dist =
                     DirectX::XMVectorGetX(DirectX::XMVector4LengthSq(
                         DirectX::XMVectorSubtract(dxm_v1, dxm_v2)));
@@ -144,7 +139,7 @@ SCENARIO("Test vec4f", "[move::vectormath::vec4f]")
                 auto v3 = vec_type(1, -2, 3, -4);
                 auto dxm_v3 = vec4_to_dxm(v3);
 
-                auto cross = v1.cross(v2, v3);
+                auto cross = vec_type::cross(v1, v2, v3);
                 auto dxm_cross = vec4_from_dxm<vec_type>(
                     DirectX::XMVector4Cross(dxm_v1, dxm_v2, dxm_v3));
 
@@ -160,7 +155,8 @@ SCENARIO("Test vec4f", "[move::vectormath::vec4f]")
                 auto v2norm = v2.normalized();
                 auto dxm_v1norm = vec4_to_dxm(v1norm);
                 auto dxm_v2norm = vec4_to_dxm(v2norm);
-                auto angle = v1norm.angle_between_normalized_vectors(v2norm);
+                auto angle =
+                    vec_type::angle_between_normalized_vectors(v1norm, v2norm);
                 auto dxm_angle =
                     DirectX::XMVectorGetX(DirectX::XMVector4AngleBetweenNormals(
                         dxm_v1norm, dxm_v2norm));
@@ -170,7 +166,7 @@ SCENARIO("Test vec4f", "[move::vectormath::vec4f]")
 
             THEN("Angle between non-normalized vectors should work")
             {
-                auto angle = v1.angle_between_vectors(v2);
+                auto angle = vec_type::angle_between_vectors(v1, v2);
                 auto dxm_angle = DirectX::XMVectorGetX(
                     DirectX::XMVector4AngleBetweenVectors(dxm_v1, dxm_v2));
 
@@ -179,7 +175,7 @@ SCENARIO("Test vec4f", "[move::vectormath::vec4f]")
 
             THEN("Reflection should be correct")
             {
-                auto ref = v1.reflect(v2);
+                auto ref = vec_type::reflect(v1, v2);
                 auto dxm_ref = vec4_from_dxm<vec_type>(
                     DirectX::XMVector4Reflect(dxm_v1, dxm_v2));
 
@@ -191,7 +187,7 @@ SCENARIO("Test vec4f", "[move::vectormath::vec4f]")
 
             THEN("Refraction should be correct")
             {
-                auto ref = v1.refract(v2, 0.5f);
+                auto ref = vec_type::refract(v1, v2, 0.5f);
                 auto dxm_ref = vec4_from_dxm<vec_type>(
                     DirectX::XMVector4Refract(dxm_v1, dxm_v2, 0.5f));
 
@@ -203,7 +199,7 @@ SCENARIO("Test vec4f", "[move::vectormath::vec4f]")
 
             THEN("Min should be correct")
             {
-                auto min = v1.min(v2);
+                auto min = vec_type::min(v1, v2);
                 auto dxm_min = vec4_from_dxm<vec_type>(
                     DirectX::XMVectorMin(dxm_v1, dxm_v2));
 
@@ -215,7 +211,7 @@ SCENARIO("Test vec4f", "[move::vectormath::vec4f]")
 
             THEN("Max should be correct")
             {
-                auto max = v1.max(v2);
+                auto max = vec_type::max(v1, v2);
                 auto dxm_max = vec4_from_dxm<vec_type>(
                     DirectX::XMVectorMax(dxm_v1, dxm_v2));
 
@@ -263,9 +259,33 @@ SCENARIO("Test vec4d", "[move::vectormath::vec4d]")
     REQUIRE(vec_type::one() == vec_type(1, 1, 1, 1));
     REQUIRE(vec_type(1, 1, 1, 1) == vec_type(1, 1, 1, 1));
     REQUIRE(vec_type(0, 0, 0, 0) == vec_type(0, 0, 0, 0));
+    REQUIRE(vec_type::filled(1) == vec_type(1, 1, 1, 1));
 
+    REQUIRE(vec_type::infinity() ==
+            vec_type(std::numeric_limits<vec_type::component_type>::infinity(),
+                std::numeric_limits<vec_type::component_type>::infinity(),
+                std::numeric_limits<vec_type::component_type>::infinity(),
+                std::numeric_limits<vec_type::component_type>::infinity()));
+
+    REQUIRE(vec_type::negative_infinity() ==
+            vec_type(-std::numeric_limits<vec_type::component_type>::infinity(),
+                -std::numeric_limits<vec_type::component_type>::infinity(),
+                -std::numeric_limits<vec_type::component_type>::infinity(),
+                -std::numeric_limits<vec_type::component_type>::infinity()));
+
+    {
+        auto nan = vec_type::nan();
+        REQUIRE(std::isnan(nan.x()));
+        REQUIRE(std::isnan(nan.y()));
+        REQUIRE(std::isnan(nan.z()));
+        REQUIRE(std::isnan(nan.w()));
+    }
+
+    REQUIRE(vec_type::left() == vec_type(-1, 0, 0, 0));
     REQUIRE(vec_type::right() == vec_type(1, 0, 0, 0));
+    REQUIRE(vec_type::down() == vec_type(0, -1, 0, 0));
     REQUIRE(vec_type::up() == vec_type(0, 1, 0, 0));
+    REQUIRE(vec_type::back() == vec_type(0, 0, -1, 0));
     REQUIRE(vec_type::forward() == vec_type(0, 0, 1, 0));
 
     REQUIRE(vec_type::x_axis() == vec_type(1, 0, 0, 0));
@@ -286,12 +306,6 @@ SCENARIO("Test vec4d", "[move::vectormath::vec4d]")
             REQUIRE(len == Approx(2.0));
         }
 
-        THEN("Approximate vector length should work")
-        {
-            auto len = v1.length_approximate();
-            REQUIRE(len == Approx(2.0));
-        }
-
         THEN("Vector square length should work")
         {
             auto len = v1.squared_length();
@@ -303,20 +317,6 @@ SCENARIO("Test vec4d", "[move::vectormath::vec4d]")
             auto nrm = v1.normalized();
             THEN("The value should be correct")
             {
-                auto val = 1.0 / sqrt(4.0);
-                REQUIRE(nrm.x() == Approx(val));
-                REQUIRE(nrm.y() == Approx(val));
-                REQUIRE(nrm.z() == Approx(val));
-                REQUIRE(nrm.w() == Approx(val));
-            }
-        }
-
-        WHEN("The vector is approximately normalized")
-        {
-            auto nrm = v1.normalized_approximate();
-            THEN("The value should be correct")
-            {
-                using namespace Catch;
                 auto val = 1.0 / sqrt(4.0);
                 REQUIRE(nrm.x() == Approx(val));
                 REQUIRE(nrm.y() == Approx(val));
@@ -348,7 +348,7 @@ SCENARIO("Test vec4d", "[move::vectormath::vec4d]")
 
             THEN("The dot product should be correct")
             {
-                auto dot = v1.dot(v2);
+                auto dot = vec_type::dot(v1, v2);
                 auto dxm_dot = DirectX::XMVectorGetX(
                     DirectX::XMVector4Dot(dxm_v1, dxm_v2));
 
@@ -357,25 +357,15 @@ SCENARIO("Test vec4d", "[move::vectormath::vec4d]")
 
             THEN("The distance between the points should be correct")
             {
-                auto dist = v1.distance_to_point(v2);
+                auto dist = vec_type::distance_between_points(v1, v2);
                 auto dxm_dist = DirectX::XMVectorGetX(DirectX::XMVector4Length(
                     DirectX::XMVectorSubtract(dxm_v1, dxm_v2)));
                 REQUIRE(dist == Approx(dxm_dist));
             }
 
-            THEN(
-                "The approximate distance between the points should be correct")
-            {
-                auto dist = v1.distance_to_point_approximate(v2);
-                auto dxm_dist =
-                    DirectX::XMVectorGetX(DirectX::XMVector4LengthEst(
-                        DirectX::XMVectorSubtract(dxm_v1, dxm_v2)));
-                REQUIRE(dist == Approx(dxm_dist));
-            }
-
             THEN("The square distance between the points should be correct")
             {
-                auto dist = v1.squared_distance_to_point(v2);
+                auto dist = vec_type::squared_distance_between_points(v1, v2);
                 auto dxm_dist =
                     DirectX::XMVectorGetX(DirectX::XMVector4LengthSq(
                         DirectX::XMVectorSubtract(dxm_v1, dxm_v2)));
@@ -387,7 +377,7 @@ SCENARIO("Test vec4d", "[move::vectormath::vec4d]")
                 auto v3 = vec_type(1, -2, 3, -4);
                 auto dxm_v3 = vec4_to_dxm(v3);
 
-                auto cross = v1.cross(v2, v3);
+                auto cross = vec_type::cross(v1, v2, v3);
                 auto dxm_cross = vec4_from_dxm<vec_type>(
                     DirectX::XMVector4Cross(dxm_v1, dxm_v2, dxm_v3));
 
@@ -403,7 +393,8 @@ SCENARIO("Test vec4d", "[move::vectormath::vec4d]")
                 auto v2norm = v2.normalized();
                 auto dxm_v1norm = vec4_to_dxm(v1norm);
                 auto dxm_v2norm = vec4_to_dxm(v2norm);
-                auto angle = v1norm.angle_between_normalized_vectors(v2norm);
+                auto angle =
+                    vec_type::angle_between_normalized_vectors(v1norm, v2norm);
                 auto dxm_angle =
                     DirectX::XMVectorGetX(DirectX::XMVector4AngleBetweenNormals(
                         dxm_v1norm, dxm_v2norm));
@@ -413,7 +404,7 @@ SCENARIO("Test vec4d", "[move::vectormath::vec4d]")
 
             THEN("Angle between non-normalized vectors should work")
             {
-                auto angle = v1.angle_between_vectors(v2);
+                auto angle = vec_type::angle_between_vectors(v1, v2);
                 auto dxm_angle = DirectX::XMVectorGetX(
                     DirectX::XMVector4AngleBetweenVectors(dxm_v1, dxm_v2));
 

@@ -82,6 +82,11 @@ namespace move::vectormath
             return _value;
         }
 
+        /** @brief Returns the internal RTM vector.  Useful for tight loops,
+         * where RTM may outperform the higher level API.
+         *
+         * @return vector_type& A reference to the internal RTM vector.
+         */
         RTM_FORCE_INLINE vector_type& get_internal() noexcept
         {
             return _value;
@@ -664,7 +669,7 @@ namespace move::vectormath
          * @param v2 The second vector
          * @return value_type The squared distance between the two vectors
          */
-        RTM_FORCE_INLINE static value_type squared_distance_to_point(
+        RTM_FORCE_INLINE static value_type squared_distance_between_points(
             const generic_vec4& v1, const generic_vec4& v2) noexcept
         {
             return (v2 - v1).squared_length();
@@ -1007,6 +1012,17 @@ namespace move::vectormath
         }
 
         /**
+         * @brief Returns a vector with the x component set to negative one and
+         * all other components set to zero.
+         *
+         * @return generic_vec4 The left vector
+         */
+        RTM_FORCE_INLINE static generic_vec4 left() noexcept
+        {
+            return -x_axis();
+        }
+
+        /**
          * @brief Returns a vector with the x component set to one and all
          * other components set to zero.
          *
@@ -1018,6 +1034,17 @@ namespace move::vectormath
         }
 
         /**
+         * @brief Returns a vector with the y component set to negative one and
+         * all other components set to zero.
+         *
+         * @return generic_vec4 The down vector
+         */
+        RTM_FORCE_INLINE static generic_vec4 down() noexcept
+        {
+            return -y_axis();
+        }
+
+        /**
          * @brief Returns a vector with the y component set to one and all
          * other components set to zero.
          *
@@ -1026,6 +1053,17 @@ namespace move::vectormath
         RTM_FORCE_INLINE static generic_vec4 up() noexcept
         {
             return y_axis();
+        }
+
+        /**
+         * @brief Returns a vector with the z component set to negative one and
+         * all other components set to zero.
+         *
+         * @return generic_vec4 The back vector
+         */
+        RTM_FORCE_INLINE static generic_vec4 back() noexcept
+        {
+            return -z_axis();
         }
 
         /**
