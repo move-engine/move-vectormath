@@ -18,9 +18,19 @@ namespace move::vectormath
     struct generic_vec4
     {
     public:
+        /**
+         * @brief The type of the components of the vector
+         */
         using component_type = value_type;
+
+        /*
+         * @brief The type of the underlying RTM vector
+         */
         using vector_type = typename vector_type_raw::type;
-        using underlying_type = vector_type;
+
+        /**
+         * @brief The type of the mask
+         */
         constexpr static uint32_t num_elements = 4;
 
     public:
@@ -879,7 +889,9 @@ namespace move::vectormath
 
     public:
         /**
-         * @brief Returns a vector containing the absolute value of each
+         * @brief Normalizes the vector
+         * @note The behavior is undefined if the length of the vector is zero
+         * @return generic_vec4& A reference to the vector
          */
         RTM_FORCE_INLINE void normalize() noexcept
         {
@@ -888,72 +900,145 @@ namespace move::vectormath
         }
 
     public:
+        /**
+         * @brief Returns a vector with all components set to the provided
+         * value.
+         *
+         * @return generic_vec4 The filled vector
+         */
         RTM_FORCE_INLINE static generic_vec4 filled(value_type value) noexcept
         {
             return generic_vec4(rtm::vector_set(value));
         }
 
+        /**
+         * @brief Returns a vector with all components set to infinity.
+         *
+         * @return generic_vec4 The infinity vector
+         */
         RTM_FORCE_INLINE static generic_vec4 infinity() noexcept
         {
             return filled(std::numeric_limits<value_type>::infinity());
         }
 
+        /**
+         * @brief Returns a vector with all components set to negative
+         * infinity.
+         *
+         * @return generic_vec4 The negative infinity vector
+         */
         RTM_FORCE_INLINE static generic_vec4 negative_infinity() noexcept
         {
             return filled(-std::numeric_limits<value_type>::infinity());
         }
 
+        /**
+         * @brief Returns a vector with all components set to NaN.
+         *
+         * @return generic_vec4 The NaN vector
+         */
         RTM_FORCE_INLINE static generic_vec4 nan() noexcept
         {
             return filled(std::numeric_limits<value_type>::quiet_NaN());
         }
 
+        /**
+         * @brief Returns a vector with all components set to zero.
+         *
+         * @return generic_vec4 The zero vector
+         */
         RTM_FORCE_INLINE static generic_vec4 zero() noexcept
         {
             return filled(0);
         }
 
+        /**
+         * @brief Returns a vector with all components set to one.
+         *
+         * @return generic_vec4 The one vector
+         */
         RTM_FORCE_INLINE static generic_vec4 one() noexcept
         {
             return filled(1);
         }
 
+        /**
+         * @brief Returns a vector with the x component set to one and all
+         * other components set to zero.
+         *
+         * @return generic_vec4 The x axis vector
+         */
         RTM_FORCE_INLINE static generic_vec4 x_axis() noexcept
         {
             return generic_vec4(1, 0, 0);
         }
 
+        /**
+         * @brief Returns a vector with the y component set to one and all
+         * other components set to zero.
+         *
+         * @return generic_vec4 The y axis vector
+         */
         RTM_FORCE_INLINE static generic_vec4 y_axis() noexcept
         {
             return generic_vec4(0, 1, 0);
         }
 
+        /**
+         * @brief Returns a vector with the z component set to one and all
+         * other components set to zero.
+         *
+         * @return generic_vec4 The z axis vector
+         */
         RTM_FORCE_INLINE static generic_vec4 z_axis() noexcept
         {
             return generic_vec4(0, 0, 1);
         }
 
+        /**
+         * @brief Returns a vector with the w component set to one and all
+         * other components set to zero.
+         *
+         * @return generic_vec4 The w axis vector
+         */
         RTM_FORCE_INLINE static generic_vec4 w_axis() noexcept
         {
             return generic_vec4(0, 0, 0, 1);
         }
 
+        /**
+         * @brief Returns a vector with the x component set to one and all
+         * other components set to zero.
+         *
+         * @return generic_vec4 The right vector
+         */
         RTM_FORCE_INLINE static generic_vec4 right() noexcept
         {
             return x_axis();
         }
 
+        /**
+         * @brief Returns a vector with the y component set to one and all
+         * other components set to zero.
+         *
+         * @return generic_vec4 The up vector
+         */
         RTM_FORCE_INLINE static generic_vec4 up() noexcept
         {
             return y_axis();
         }
 
+        /**
+         * @brief Returns a vector with the z component set to one and all
+         * other components set to zero.
+         *
+         * @return generic_vec4 The forward vector
+         */
         RTM_FORCE_INLINE static generic_vec4 forward() noexcept
         {
             return z_axis();
         }
 
-    public:
     private:
         vector_type _value;
     };

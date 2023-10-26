@@ -422,7 +422,7 @@ SCENARIO("Test vec4d", "[move::vectormath::vec4d]")
 
             THEN("Reflection should be correct")
             {
-                auto ref = v1.reflect(v2);
+                auto ref = vec_type::reflect(v1, v2);
                 auto dxm_ref = vec4_from_dxm<vec_type>(
                     DirectX::XMVector4Reflect(dxm_v1, dxm_v2));
 
@@ -434,7 +434,7 @@ SCENARIO("Test vec4d", "[move::vectormath::vec4d]")
 
             THEN("Refraction should be correct")
             {
-                auto ref = v1.refract(v2, 0.5f);
+                auto ref = vec_type::refract(v1, v2, 0.5f);
                 auto dxm_ref = vec4_from_dxm<vec_type>(
                     DirectX::XMVector4Refract(dxm_v1, dxm_v2, 0.5f));
 
@@ -446,7 +446,7 @@ SCENARIO("Test vec4d", "[move::vectormath::vec4d]")
 
             THEN("Min should be correct")
             {
-                auto min = v1.min(v2);
+                auto min = vec_type::min(v1, v2);
                 auto dxm_min = vec4_from_dxm<vec_type>(
                     DirectX::XMVectorMin(dxm_v1, dxm_v2));
 
@@ -458,7 +458,7 @@ SCENARIO("Test vec4d", "[move::vectormath::vec4d]")
 
             THEN("Max should be correct")
             {
-                auto max = v1.max(v2);
+                auto max = vec_type::max(v1, v2);
                 auto dxm_max = vec4_from_dxm<vec_type>(
                     DirectX::XMVectorMax(dxm_v1, dxm_v2));
 
