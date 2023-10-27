@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>move::vectormath::generic_vec2_scalar struct | move-vectormath</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
+  <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
+  <link rel="icon" href="favicon-dark.png" type="image/png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#22272e" />
+</head>
+<body>
+<header><nav id="navigation">
+  <div class="m-container">
+    <div class="m-row">
+      <a href="index.html" id="m-navbar-brand" class="m-col-t-8 m-col-m-none m-left-m">move-vectormath</a>
+      <div class="m-col-t-4 m-hide-m m-text-right m-nopadr">
+        <a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+          <path id="m-doc-search-icon-path" d="m6 0c-3.31 0-6 2.69-6 6 0 3.31 2.69 6 6 6 1.49 0 2.85-0.541 3.89-1.44-0.0164 0.338 0.147 0.759 0.5 1.15l3.22 3.79c0.552 0.614 1.45 0.665 2 0.115 0.55-0.55 0.499-1.45-0.115-2l-3.79-3.22c-0.392-0.353-0.812-0.515-1.15-0.5 0.895-1.05 1.44-2.41 1.44-3.89 0-3.31-2.69-6-6-6zm0 1.56a4.44 4.44 0 0 1 4.44 4.44 4.44 4.44 0 0 1-4.44 4.44 4.44 4.44 0 0 1-4.44-4.44 4.44 4.44 0 0 1 4.44-4.44z"/>
+        </svg></a>
+        <a id="m-navbar-show" href="#navigation" title="Show navigation"></a>
+        <a id="m-navbar-hide" href="#" title="Hide navigation"></a>
+      </div>
+      <div id="m-navbar-collapse" class="m-col-t-12 m-show-m m-col-m-none m-right-m">
+        <div class="m-row">
+          <ol class="m-col-t-6 m-col-m-none">
+            <li>
+              <a href="pages.html">Pages</a>
+              <ol>
+                <li><a href="about.html">About</a></li>
+              </ol>
+            </li>
+            <li><a href="namespaces.html">Namespaces</a></li>
+          </ol>
+          <ol class="m-col-t-6 m-col-m-none" start="3">
+            <li><a href="annotated.html">Classes</a></li>
+            <li><a href="files.html">Files</a></li>
+            <li class="m-show-m"><a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+              <use href="#m-doc-search-icon-path" />
+            </svg></a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav></header>
+<main><article>
+  <div class="m-container m-container-inflatable">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <h1>
+          <div class="m-doc-include m-code m-inverted m-right-m m-text-right"><span class="cp">#include</span> <a class="cpf" href="vec2_8hpp.html">&lt;vec2.hpp&gt;</a></div>
+          <div class="m-doc-template">template&lt;typename value_type&gt;</div>
+          <span class="m-breadcrumb"><a href="namespacemove.html">move</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespacemove_1_1vectormath.html">vectormath</a>::<wbr/></span>generic_vec2_scalar <span class="m-thin">struct</span>
+        </h1>
+        <p>A two component vector that can store either floats or doubles. The underlying implementation is scalar.</p>
+        <table class="m-table m-fullwidth m-flat">
+          <thead>
+            <tr><th colspan="2">Template parameters</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="width: 1%">value_type</td>
+              <td>The type of the components of the vector</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="m-block m-default">
+          <h3>Contents</h3>
+          <ul>
+            <li>
+              Reference
+              <ul>
+                <li><a href="#pub-types">Public types</a></li>
+                <li><a href="#pub-static-attribs">Public static variables</a></li>
+                <li><a href="#pub-static-methods">Public static functions</a></li>
+                <li><a href="#pub-methods">Public functions</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+<aside class="m-note m-info"><h4>Note</h4><p>This type has no alignment requirements.</p></aside>
+        <section id="pub-types">
+          <h2><a href="#pub-types">Public types</a></h2>
+          <dl class="m-doc">
+            <dt id="a3f9a5d26bfe03342f35bd2e716b9ba16">
+              using <a href="#a3f9a5d26bfe03342f35bd2e716b9ba16" class="m-doc-self">component_type</a> = value_type
+            </dt>
+            <dd>The type of the components of the vector.</dd>
+          </dl>
+        </section>
+        <section id="pub-static-attribs">
+          <h2><a href="#pub-static-attribs">Public static variables</a></h2>
+          <dl class="m-doc">
+            <dt id="a9d2613b3df5aeb5065921e84c3c3736b">
+              static static uint32_t <a href="#a9d2613b3df5aeb5065921e84c3c3736b" class="m-doc-self">num_components</a> <span class="m-label m-flat m-primary">constexpr</span>
+            </dt>
+            <dd>The number of components in the vector.</dd>
+          </dl>
+        </section>
+        <section id="pub-static-methods">
+          <h2><a href="#pub-static-methods">Public static functions</a></h2>
+          <dl class="m-doc">
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#ab1dd4462b239707cbd7d95a5f625aa21" class="m-doc">dot</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v1,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v2) -&gt; RTM_FORCE_INLINE value_type <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the dot product of two vectors.</dd>
+            <dt id="af0b54189004c39f24a212d77c3945abe">
+              <span class="m-doc-wrap-bumper">static auto <a href="#af0b54189004c39f24a212d77c3945abe" class="m-doc-self">distance_between_points</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; point1,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; point2) -&gt; RTM_FORCE_INLINE value_type <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the euclidean distance between two vectors as if they were points in four dimensional space.</dd>
+            <dt id="a313131071af9497f6790d01b90d359bb">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a313131071af9497f6790d01b90d359bb" class="m-doc-self">squared_distance_between_points</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; point1,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; point2) -&gt; RTM_FORCE_INLINE value_type <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the squared euclidean distance between two vectors as if they were points in four dimensional space.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a9fefe0d2e081e8d523c05d272d84dbb3" class="m-doc">distance_to_line</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; point,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v0,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v1) -&gt; RTM_FORCE_INLINE value_type <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Calculates the distance between a point and a line defined by two points.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#afad740cc6449b7605a7215ec3bdc83ab" class="m-doc">cross</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; lhs,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; rhs) -&gt; RTM_FORCE_INLINE value_type <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Calculates the cross product of two vectors.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#aeca40c976ad40ac154b563b745f6f838" class="m-doc">angle_between_normalized_vectors</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v1,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v2) -&gt; RTM_FORCE_INLINE value_type <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the angle between two normalized vectors.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a48b2f4c3ba47a0a7bd1c9c8db0c8858c" class="m-doc">angle_between_vectors</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v1,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v2) -&gt; RTM_FORCE_INLINE value_type <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the angle between two unnormalized vectors.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#ab9aa4bdf9bd50b51b1ea6704f6f8512c" class="m-doc">reflect</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; incident,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; normal) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Reflects incident across normal and returns the result.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a03dcb897c516d4288d5d3a3c0e589f1b" class="m-doc">refract</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; incident,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; normal,
+              value_type ior) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Refracts incident across normal and returns the result.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a69547f64eaea6933a986ae0b05c78cc2" class="m-doc">min</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v1,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v2) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a vector containing the minimum x, y, z, and w components of the two vectors.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#afeeacbe6658eef08c8597e26c9dd02b8" class="m-doc">max</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v1,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v2) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a vector containing the maximum x, y, z, and w components of the two vectors.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a5b0a5b0c467353e505eed90bad6f72ab" class="m-doc">filled</a>(</span><span class="m-doc-wrap">value_type value) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a vector with all components set to the provided value.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#ab5f8716bda1ecbd1db7f0fedd5374965" class="m-doc">infinity</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a vector with all components set to infinity.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a08123a4f08f95f0023182bae5e0a02ae" class="m-doc">negative_infinity</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a vector with all components set to negative infinity.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a0a13b9671d62bcea70761dc56696299d" class="m-doc">nan</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a vector with all components set to NaN.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a4afe5090626717999dcf0f0799929fb2" class="m-doc">zero</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a vector with all components set to zero.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a36f05f46d017761af6f5cadbcfeea144" class="m-doc">negative_one</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a vector with all components set to negative one.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a067f811ca566a85a5da16e3776fcb450" class="m-doc">one</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a vector with all components set to one.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a23d07d8b7eb99156ff6a9e2e8f7c6d82" class="m-doc">x_axis</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a vector with the x component set to one and all other components set to zero.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#ab051cab04949a19a1d33267f82d3d568" class="m-doc">y_axis</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a vector with the y component set to one and all other components set to zero.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#ac7ccb1fc72071a9cd43b561e516f84c1" class="m-doc">left</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a vector with the x component set to negative one and all other components set to zero.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a930a71483edb42e694a2a4275e29d63f" class="m-doc">right</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a vector with the x component set to one and all other components set to zero.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a86f1ca470a08290201423bca22e363f8" class="m-doc">down</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a vector with the y component set to negative one and all other components set to zero.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a6a15615292afce3ca8ff37f184c095e5" class="m-doc">up</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a vector with the y component set to one and all other components set to zero.</dd>
+          </dl>
+        </section>
+        <section id="pub-methods">
+          <h2><a href="#pub-methods">Public functions</a></h2>
+          <dl class="m-doc">
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#afef03992bc24571d54ddd605fe514867" class="m-doc">generic_vec2_scalar</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Construct a new <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> object.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a0ea1f70679a9cde4e4681bc26fa8b27a" class="m-doc">generic_vec2_scalar</a>(</span><span class="m-doc-wrap">value_type x,
+              value_type y = 0) -&gt; RTM_FORCE_INLINE <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Construct a new <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> object.</dd>
+            <dt>
+              <div class="m-doc-template">template&lt;typename Archive&gt;</div>
+              <span class="m-doc-wrap-bumper">auto <a href="#a59160b8a1465b12eba06d487b6a0f13c" class="m-doc">serialize</a>(</span><span class="m-doc-wrap">Archive&amp; ar) -&gt; RTM_FORCE_INLINE void</span>
+            </dt>
+            <dd>Serializes the vector to/from an archive. Intended for use with Cereal and Cereal-like APIs.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a54c945712c2daa64313776c5bbc3db8c" class="m-doc">operator==</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) const -&gt; RTM_FORCE_INLINE bool <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Determines if the vector is equal to another vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a06b136cf8b054924a7dd5dd844f44a74" class="m-doc">operator!=</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) const -&gt; RTM_FORCE_INLINE bool <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Determines if the vector is not equal to another vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#ab3cd2d2629fd066f6fac19f9a28fb705" class="m-doc">operator=</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Assigns the contents of another vector to this vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a3e4182f8e86314fe62bdbaf82019eb00" class="m-doc">operator+=</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Adds another vector to this vector and stores the result in this vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a76aae64abb1d667c5f9c85d609544be7" class="m-doc">operator-=</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Subtracts another vector from this vector and stores the result in this vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a324a85eaf51a7949822d707d90dc180a" class="m-doc">operator*=</a>(</span><span class="m-doc-wrap">const value_type&amp; v) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Multiplies this vector by a scalar and stores the result in this vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a8373773016a77a58e0fcc7152c70a47e" class="m-doc">operator*=</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Multiplies this vector by another vector component-wise and stores the result in this vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a3ccfee5d1a32aa78508ff7210fc8b9bb" class="m-doc">operator/=</a>(</span><span class="m-doc-wrap">const value_type&amp; v) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Divides this vector by a scalar and stores the result in this vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a44141fc4fbee5fe54dedd512b6e4c05b" class="m-doc">operator/=</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Divides this vector by another vector component-wise and stores the result in this vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a073ebe174d308e71946b4a35d04767b0" class="m-doc">operator+</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) const -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Adds the other vector to this vector and returns the result. Does not modify this vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#abf174d454515c3e54d26813a0c678b9c" class="m-doc">operator-</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) const -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Subtracts a vector from this vector and returns the result. Does not modify this vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a8b1b8236129db0a8775ed0ad633c9b8a" class="m-doc">operator*</a>(</span><span class="m-doc-wrap">const value_type&amp; v) const -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Multiplies this vector by a scalar and returns the result. Does not modify this vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#aad7d6d44d781ddee1f93013b0735771e" class="m-doc">operator*</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) const -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Multiplies this vector by another vector component-wise and returns the result. Does not modify this vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a27b0fd938140df2f86a7161d6f02ba54" class="m-doc">operator/</a>(</span><span class="m-doc-wrap">const value_type&amp; v) const -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Divides this vector by a scalar and returns the result. Does not modify this vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a921757739450b84c0ed0642f6775dfcc" class="m-doc">operator/</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) const -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Divides this vector by another vector component-wise and returns the result. Does not modify this vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a841deb9941af308dd00b9ff83de48c92" class="m-doc">operator-</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Negates the vector and returns the result. Does not modify this vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a14bfee6295efe5b9a6968bf21d56f684" class="m-doc">get_component</a>(</span><span class="m-doc-wrap">int index) const -&gt; RTM_FORCE_INLINE value_type <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the component at the specified index. If the index is out of range, the result is undefined.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a79d110783eacc996625f0c4259175ea7" class="m-doc">set_component</a>(</span><span class="m-doc-wrap">int index,
+              value_type value) -&gt; RTM_FORCE_INLINE void</span>
+            </dt>
+            <dd>Sets the component at the specified index. If the index is out of range, the result is undefined.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#aa6e6e9883aea7c49c23f266ac7d608b2" class="m-doc">operator[]</a>(</span><span class="m-doc-wrap">int i) const -&gt; RTM_FORCE_INLINE value_type <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the component at the specified index. If the index is out of range, the result is undefined. Currently the w component is returned.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a5074ea884361f8d32e8b22521027a198" class="m-doc">x</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE value_type <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the x component of the vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#aaaea9101f70c711313fe5d0bd368f0d7" class="m-doc">y</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE value_type <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the y component of the vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a283d5b56e3155fdc93fe2df268b60c1f" class="m-doc">x</a>(</span><span class="m-doc-wrap">value_type x) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Sets the x component of the vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a7a61227e0542b6a2b438e4aabd99a9b6" class="m-doc">y</a>(</span><span class="m-doc-wrap">value_type y) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Sets the y component of the vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#ad3854fe7ecdf349af967f079d9620260" class="m-doc">set_x</a>(</span><span class="m-doc-wrap">value_type x) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Sets the x component of the vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#ae903c35f3404abd8ed652d92bf615aed" class="m-doc">set_y</a>(</span><span class="m-doc-wrap">value_type y) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Sets the y component of the vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a5913071f0a31254b05f76ad9f78793ca" class="m-doc">fill</a>(</span><span class="m-doc-wrap">value_type v) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Sets all components of the vector to the same value.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a7294ee18235d1bf55789bc3d27ef4070" class="m-doc">set</a>(</span><span class="m-doc-wrap">value_type x,
+              value_type y) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Sets the x and y components of the vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a441d8b1ffef0ea290d95b1f4f61117c8" class="m-doc">set</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; rhs) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Sets the x and y components of the vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#af17e504ee6b22e17531e715bfad11a73" class="m-doc">length</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE value_type <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the length of the vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#ab1d407b709f68eeb7bcae8780d38fddb" class="m-doc">squared_length</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE value_type <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the squared length of the vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#ad7f8a6d06a1f9889d1096d951432627c" class="m-doc">reciprocal_length</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE value_type <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns the reciprocal length of the vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a65132da436e31f493d106ad9a260ffe9" class="m-doc">normalized</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a normalized copy of the vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a4d768674bf97c73a751446687c204d98" class="m-doc">normalize</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE void <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Normalizes the vector.</dd>
+          </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="ab1dd4462b239707cbd7d95a5f625aa21"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static RTM_FORCE_INLINE value_type move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ab1dd4462b239707cbd7d95a5f625aa21" class="m-doc-self">dot</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v1,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v2) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns the dot product of two vectors.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v1</td>
+                  <td>The first vector</td>
+                </tr>
+                <tr>
+                  <td>v2</td>
+                  <td>The second vector</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a9fefe0d2e081e8d523c05d272d84dbb3"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static RTM_FORCE_INLINE value_type move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a9fefe0d2e081e8d523c05d272d84dbb3" class="m-doc-self">distance_to_line</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; point,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v0,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v1) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Calculates the distance between a point and a line defined by two points.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">point</td>
+                  <td>The point</td>
+                </tr>
+                <tr>
+                  <td>v0</td>
+                  <td>The first point on the line</td>
+                </tr>
+                <tr>
+                  <td>v1</td>
+                  <td>The second point on the line</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>value_type The distance between the point and the line</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="afad740cc6449b7605a7215ec3bdc83ab"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static RTM_FORCE_INLINE value_type move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#afad740cc6449b7605a7215ec3bdc83ab" class="m-doc-self">cross</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; lhs,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; rhs) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Calculates the cross product of two vectors.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>value_type The cross product of the two vectors</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="aeca40c976ad40ac154b563b745f6f838"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static RTM_FORCE_INLINE value_type move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#aeca40c976ad40ac154b563b745f6f838" class="m-doc-self">angle_between_normalized_vectors</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v1,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v2) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns the angle between two normalized vectors.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v1</td>
+                  <td>The first vector</td>
+                </tr>
+                <tr>
+                  <td>v2</td>
+                  <td>The second vector</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>value_type The angle between the two vectors</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a48b2f4c3ba47a0a7bd1c9c8db0c8858c"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static RTM_FORCE_INLINE value_type move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a48b2f4c3ba47a0a7bd1c9c8db0c8858c" class="m-doc-self">angle_between_vectors</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v1,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v2) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns the angle between two unnormalized vectors.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v1</td>
+                  <td>The first vector</td>
+                </tr>
+                <tr>
+                  <td>v2</td>
+                  <td>The second vector</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>value_type The angle between the two vectors</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="ab9aa4bdf9bd50b51b1ea6704f6f8512c"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ab9aa4bdf9bd50b51b1ea6704f6f8512c" class="m-doc-self">reflect</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; incident,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; normal) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Reflects incident across normal and returns the result.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">incident</td>
+                  <td>The incident vector</td>
+                </tr>
+                <tr>
+                  <td>normal</td>
+                  <td>The normal vector</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a03dcb897c516d4288d5d3a3c0e589f1b"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a03dcb897c516d4288d5d3a3c0e589f1b" class="m-doc-self">refract</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; incident,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; normal,
+              value_type ior) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Refracts incident across normal and returns the result.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">incident</td>
+                  <td>The incident vector</td>
+                </tr>
+                <tr>
+                  <td>normal</td>
+                  <td>The normal vector</td>
+                </tr>
+                <tr>
+                  <td>ior</td>
+                  <td>The index of refraction</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a69547f64eaea6933a986ae0b05c78cc2"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a69547f64eaea6933a986ae0b05c78cc2" class="m-doc-self">min</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v1,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v2) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns a vector containing the minimum x, y, z, and w components of the two vectors.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v1</td>
+                  <td>The first vector</td>
+                </tr>
+                <tr>
+                  <td>v2</td>
+                  <td>The second vector</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> The minimum vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="afeeacbe6658eef08c8597e26c9dd02b8"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#afeeacbe6658eef08c8597e26c9dd02b8" class="m-doc-self">max</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v1,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v2) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns a vector containing the maximum x, y, z, and w components of the two vectors.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v1</td>
+                  <td>The first vector</td>
+                </tr>
+                <tr>
+                  <td>v2</td>
+                  <td>The second vector</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> The maximum vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a5b0a5b0c467353e505eed90bad6f72ab"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a5b0a5b0c467353e505eed90bad6f72ab" class="m-doc-self">filled</a>(</span><span class="m-doc-wrap">value_type value) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns a vector with all components set to the provided value.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">value</td>
+                  <td>The value to set all components to</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> The filled vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="ab5f8716bda1ecbd1db7f0fedd5374965"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ab5f8716bda1ecbd1db7f0fedd5374965" class="m-doc-self">infinity</a>(</span><span class="m-doc-wrap">) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns a vector with all components set to infinity.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> The infinity vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a08123a4f08f95f0023182bae5e0a02ae"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a08123a4f08f95f0023182bae5e0a02ae" class="m-doc-self">negative_infinity</a>(</span><span class="m-doc-wrap">) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns a vector with all components set to negative infinity.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> The infinity vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a0a13b9671d62bcea70761dc56696299d"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a0a13b9671d62bcea70761dc56696299d" class="m-doc-self">nan</a>(</span><span class="m-doc-wrap">) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns a vector with all components set to NaN.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> The NaN vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a4afe5090626717999dcf0f0799929fb2"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a4afe5090626717999dcf0f0799929fb2" class="m-doc-self">zero</a>(</span><span class="m-doc-wrap">) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns a vector with all components set to zero.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> The zero vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a36f05f46d017761af6f5cadbcfeea144"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a36f05f46d017761af6f5cadbcfeea144" class="m-doc-self">negative_one</a>(</span><span class="m-doc-wrap">) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns a vector with all components set to negative one.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> The negative one vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a067f811ca566a85a5da16e3776fcb450"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a067f811ca566a85a5da16e3776fcb450" class="m-doc-self">one</a>(</span><span class="m-doc-wrap">) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns a vector with all components set to one.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> The one vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a23d07d8b7eb99156ff6a9e2e8f7c6d82"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a23d07d8b7eb99156ff6a9e2e8f7c6d82" class="m-doc-self">x_axis</a>(</span><span class="m-doc-wrap">) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns a vector with the x component set to one and all other components set to zero.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> The x axis vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="ab051cab04949a19a1d33267f82d3d568"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ab051cab04949a19a1d33267f82d3d568" class="m-doc-self">y_axis</a>(</span><span class="m-doc-wrap">) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns a vector with the y component set to one and all other components set to zero.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> The y axis vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="ac7ccb1fc72071a9cd43b561e516f84c1"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ac7ccb1fc72071a9cd43b561e516f84c1" class="m-doc-self">left</a>(</span><span class="m-doc-wrap">) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns a vector with the x component set to negative one and all other components set to zero.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> The left vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a930a71483edb42e694a2a4275e29d63f"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a930a71483edb42e694a2a4275e29d63f" class="m-doc-self">right</a>(</span><span class="m-doc-wrap">) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns a vector with the x component set to one and all other components set to zero.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> The right vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a86f1ca470a08290201423bca22e363f8"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a86f1ca470a08290201423bca22e363f8" class="m-doc-self">down</a>(</span><span class="m-doc-wrap">) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns a vector with the y component set to negative one and all other components set to zero.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> The down vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a6a15615292afce3ca8ff37f184c095e5"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a6a15615292afce3ca8ff37f184c095e5" class="m-doc-self">up</a>(</span><span class="m-doc-wrap">) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns a vector with the y component set to one and all other components set to zero.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> The up vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="afef03992bc24571d54ddd605fe514867"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#afef03992bc24571d54ddd605fe514867" class="m-doc-self">generic_vec2_scalar</a>(</span><span class="m-doc-wrap">) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Construct a new <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> object.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> A new vector initialized to (0, 0)</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a0ea1f70679a9cde4e4681bc26fa8b27a"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a0ea1f70679a9cde4e4681bc26fa8b27a" class="m-doc-self">generic_vec2_scalar</a>(</span><span class="m-doc-wrap">value_type x,
+              value_type y = 0) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Construct a new <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> object.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> A new vector initialized to (x, y)</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a59160b8a1465b12eba06d487b6a0f13c"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+                template&lt;typename Archive&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE void move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a59160b8a1465b12eba06d487b6a0f13c" class="m-doc-self">serialize</a>(</span><span class="m-doc-wrap">Archive&amp; ar)</span></span>
+            </h3>
+            <p>Serializes the vector to/from an archive. Intended for use with Cereal and Cereal-like APIs.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Template parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">Archive</td>
+                  <td>The archive type</td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>ar</td>
+                  <td>The archive</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a54c945712c2daa64313776c5bbc3db8c"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE bool move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a54c945712c2daa64313776c5bbc3db8c" class="m-doc-self">operator==</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) const <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Determines if the vector is equal to another vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v</td>
+                  <td>The other vector</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>true The vectors are equal</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a06b136cf8b054924a7dd5dd844f44a74"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE bool move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a06b136cf8b054924a7dd5dd844f44a74" class="m-doc-self">operator!=</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) const <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Determines if the vector is not equal to another vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v</td>
+                  <td>The other vector</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>true The vectors are not equal</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="ab3cd2d2629fd066f6fac19f9a28fb705"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ab3cd2d2629fd066f6fac19f9a28fb705" class="m-doc-self">operator=</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Assigns the contents of another vector to this vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v</td>
+                  <td>The other vector</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; A reference to the vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a3e4182f8e86314fe62bdbaf82019eb00"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a3e4182f8e86314fe62bdbaf82019eb00" class="m-doc-self">operator+=</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Adds another vector to this vector and stores the result in this vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v</td>
+                  <td>The other vector</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; A reference to the vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a76aae64abb1d667c5f9c85d609544be7"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a76aae64abb1d667c5f9c85d609544be7" class="m-doc-self">operator-=</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Subtracts another vector from this vector and stores the result in this vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v</td>
+                  <td>The other vector</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; A reference to the vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a324a85eaf51a7949822d707d90dc180a"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a324a85eaf51a7949822d707d90dc180a" class="m-doc-self">operator*=</a>(</span><span class="m-doc-wrap">const value_type&amp; v) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Multiplies this vector by a scalar and stores the result in this vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v</td>
+                  <td>The scalar</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; A reference to the vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a8373773016a77a58e0fcc7152c70a47e"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a8373773016a77a58e0fcc7152c70a47e" class="m-doc-self">operator*=</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Multiplies this vector by another vector component-wise and stores the result in this vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v</td>
+                  <td>The other vector</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; A reference to the vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a3ccfee5d1a32aa78508ff7210fc8b9bb"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a3ccfee5d1a32aa78508ff7210fc8b9bb" class="m-doc-self">operator/=</a>(</span><span class="m-doc-wrap">const value_type&amp; v) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Divides this vector by a scalar and stores the result in this vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v</td>
+                  <td>The scalar</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; A reference to the vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a44141fc4fbee5fe54dedd512b6e4c05b"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a44141fc4fbee5fe54dedd512b6e4c05b" class="m-doc-self">operator/=</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Divides this vector by another vector component-wise and stores the result in this vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v</td>
+                  <td>The other vector</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; A reference to the vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a073ebe174d308e71946b4a35d04767b0"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a073ebe174d308e71946b4a35d04767b0" class="m-doc-self">operator+</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) const <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Adds the other vector to this vector and returns the result. Does not modify this vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v</td>
+                  <td>The other vector</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> The result of the addition</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="abf174d454515c3e54d26813a0c678b9c"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#abf174d454515c3e54d26813a0c678b9c" class="m-doc-self">operator-</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) const <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Subtracts a vector from this vector and returns the result. Does not modify this vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v</td>
+                  <td>The other vector</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> The result of the subtraction</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a8b1b8236129db0a8775ed0ad633c9b8a"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a8b1b8236129db0a8775ed0ad633c9b8a" class="m-doc-self">operator*</a>(</span><span class="m-doc-wrap">const value_type&amp; v) const <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Multiplies this vector by a scalar and returns the result. Does not modify this vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v</td>
+                  <td>The scalar</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> The result of the multiplication</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="aad7d6d44d781ddee1f93013b0735771e"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#aad7d6d44d781ddee1f93013b0735771e" class="m-doc-self">operator*</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) const <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Multiplies this vector by another vector component-wise and returns the result. Does not modify this vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v</td>
+                  <td>The other vector</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> The result of the multiplication</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a27b0fd938140df2f86a7161d6f02ba54"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a27b0fd938140df2f86a7161d6f02ba54" class="m-doc-self">operator/</a>(</span><span class="m-doc-wrap">const value_type&amp; v) const <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Divides this vector by a scalar and returns the result. Does not modify this vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v</td>
+                  <td>The scalar</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> The result of the division</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a921757739450b84c0ed0642f6775dfcc"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a921757739450b84c0ed0642f6775dfcc" class="m-doc-self">operator/</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) const <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Divides this vector by another vector component-wise and returns the result. Does not modify this vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v</td>
+                  <td>The other vector</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> The result of the division</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a841deb9941af308dd00b9ff83de48c92"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a841deb9941af308dd00b9ff83de48c92" class="m-doc-self">operator-</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Negates the vector and returns the result. Does not modify this vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> The negated vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a14bfee6295efe5b9a6968bf21d56f684"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE value_type move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a14bfee6295efe5b9a6968bf21d56f684" class="m-doc-self">get_component</a>(</span><span class="m-doc-wrap">int index) const <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns the component at the specified index. If the index is out of range, the result is undefined.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">index</td>
+                  <td>The index of the component to return</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>value_type The component at the specified index</td>
+                </tr>
+              </tfoot>
+            </table>
+<aside class="m-note m-info"><h4>Note</h4><p>Currently the y component is returned if the index is out of range.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="a79d110783eacc996625f0c4259175ea7"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE void move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a79d110783eacc996625f0c4259175ea7" class="m-doc-self">set_component</a>(</span><span class="m-doc-wrap">int index,
+              value_type value)</span></span>
+            </h3>
+            <p>Sets the component at the specified index. If the index is out of range, the result is undefined.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">index</td>
+                  <td>The index of the component to set</td>
+                </tr>
+                <tr>
+                  <td>value</td>
+                  <td>The new value for the component</td>
+                </tr>
+              </tbody>
+            </table>
+<aside class="m-note m-info"><h4>Note</h4><p>Currently the y component is set if the index is out of range.</p></aside>
+          </div></section>
+          <section class="m-doc-details" id="aa6e6e9883aea7c49c23f266ac7d608b2"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE value_type move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#aa6e6e9883aea7c49c23f266ac7d608b2" class="m-doc-self">operator[]</a>(</span><span class="m-doc-wrap">int i) const <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns the component at the specified index. If the index is out of range, the result is undefined. Currently the w component is returned.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>value_type The component at the specified index</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a5074ea884361f8d32e8b22521027a198"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE value_type move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a5074ea884361f8d32e8b22521027a198" class="m-doc-self">x</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns the x component of the vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>value_type The x component</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="aaaea9101f70c711313fe5d0bd368f0d7"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE value_type move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#aaaea9101f70c711313fe5d0bd368f0d7" class="m-doc-self">y</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns the y component of the vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>value_type The y component</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a283d5b56e3155fdc93fe2df268b60c1f"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a283d5b56e3155fdc93fe2df268b60c1f" class="m-doc-self">x</a>(</span><span class="m-doc-wrap">value_type x) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Sets the x component of the vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">x</td>
+                  <td>The new x component</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; A reference to the vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a7a61227e0542b6a2b438e4aabd99a9b6"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a7a61227e0542b6a2b438e4aabd99a9b6" class="m-doc-self">y</a>(</span><span class="m-doc-wrap">value_type y) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Sets the y component of the vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">y</td>
+                  <td>The new y component</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; A reference to the vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="ad3854fe7ecdf349af967f079d9620260"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ad3854fe7ecdf349af967f079d9620260" class="m-doc-self">set_x</a>(</span><span class="m-doc-wrap">value_type x) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Sets the x component of the vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">x</td>
+                  <td>The new x component</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; A reference to the vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="ae903c35f3404abd8ed652d92bf615aed"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ae903c35f3404abd8ed652d92bf615aed" class="m-doc-self">set_y</a>(</span><span class="m-doc-wrap">value_type y) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Sets the y component of the vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">y</td>
+                  <td>The new y component</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; A reference to the vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a5913071f0a31254b05f76ad9f78793ca"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a5913071f0a31254b05f76ad9f78793ca" class="m-doc-self">fill</a>(</span><span class="m-doc-wrap">value_type v) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Sets all components of the vector to the same value.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; A reference to the vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a7294ee18235d1bf55789bc3d27ef4070"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a7294ee18235d1bf55789bc3d27ef4070" class="m-doc-self">set</a>(</span><span class="m-doc-wrap">value_type x,
+              value_type y) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Sets the x and y components of the vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">x</td>
+                  <td>The new x component</td>
+                </tr>
+                <tr>
+                  <td>y</td>
+                  <td>The new y component</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; A reference to the vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a441d8b1ffef0ea290d95b1f4f61117c8"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a441d8b1ffef0ea290d95b1f4f61117c8" class="m-doc-self">set</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; rhs) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Sets the x and y components of the vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; A reference to the vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="af17e504ee6b22e17531e715bfad11a73"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE value_type move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#af17e504ee6b22e17531e715bfad11a73" class="m-doc-self">length</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns the length of the vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>value_type The length of the vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="ab1d407b709f68eeb7bcae8780d38fddb"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE value_type move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ab1d407b709f68eeb7bcae8780d38fddb" class="m-doc-self">squared_length</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns the squared length of the vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>value_type The squared length of the vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="ad7f8a6d06a1f9889d1096d951432627c"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE value_type move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ad7f8a6d06a1f9889d1096d951432627c" class="m-doc-self">reciprocal_length</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns the reciprocal length of the vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>value_type The reciprocal length of the vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a65132da436e31f493d106ad9a260ffe9"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a65132da436e31f493d106ad9a260ffe9" class="m-doc-self">normalized</a>(</span><span class="m-doc-wrap">) const <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns a normalized copy of the vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> The normalized vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a4d768674bf97c73a751446687c204d98"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">RTM_FORCE_INLINE void move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a4d768674bf97c73a751446687c204d98" class="m-doc-self">normalize</a>(</span><span class="m-doc-wrap">) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Normalizes the vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec4__rtm.html" class="m-doc">generic_<wbr />vec4_<wbr />rtm</a>&amp; A reference to the vector</td>
+                </tr>
+              </tfoot>
+            </table>
+<aside class="m-note m-info"><h4>Note</h4><p>The behavior is undefined if the length of the vector is zero</p></aside>
+          </div></section>
+        </section>
+      </div>
+    </div>
+  </div>
+</article></main>
+<div class="m-doc-search" id="search">
+  <a href="#!" onclick="return hideSearch()"></a>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-m-8 m-push-m-2">
+        <div class="m-doc-search-header m-text m-small">
+          <div><span class="m-label m-default">Tab</span> / <span class="m-label m-default">T</span> to search, <span class="m-label m-default">Esc</span> to close</div>
+          <div id="search-symbolcount">&hellip;</div>
+        </div>
+        <div class="m-doc-search-content">
+          <form>
+            <input type="search" name="q" id="search-input" placeholder="Loading &hellip;" disabled="disabled" autofocus="autofocus" autocomplete="off" spellcheck="false" />
+          </form>
+          <noscript class="m-text m-danger m-text-center">Unlike everything else in the docs, the search functionality <em>requires</em> JavaScript.</noscript>
+          <div id="search-help" class="m-text m-dim m-text-center">
+            <p class="m-noindent">Search for symbols, directories, files, pages or
+            modules. You can omit any prefix from the symbol or file path; adding a
+            <code>:</code> or <code>/</code> suffix lists all members of given symbol or
+            directory.</p>
+            <p class="m-noindent">Use <span class="m-label m-dim">&darr;</span>
+            / <span class="m-label m-dim">&uarr;</span> to navigate through the list,
+            <span class="m-label m-dim">Enter</span> to go.
+            <span class="m-label m-dim">Tab</span> autocompletes common prefix, you can
+            copy a link to the result using <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">L</span> while <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">M</span> produces a Markdown link.</p>
+          </div>
+          <div id="search-notfound" class="m-text m-warning m-text-center">Sorry, nothing was found.</div>
+          <ul id="search-results"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="search-v1.js"></script>
+<script src="searchdata-v1.js" async="async"></script>
+<footer><nav>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <p>move-vectormath. Created with <a href="https://doxygen.org/">Doxygen</a> 1.9.1 and <a href="https://mcss.mosra.cz/">m.css</a>.</p>
+      </div>
+    </div>
+  </div>
+</nav></footer>
+</body>
+</html>

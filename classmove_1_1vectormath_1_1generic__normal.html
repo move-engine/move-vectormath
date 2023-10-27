@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>move::vectormath::generic_normal class | move-vectormath</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
+  <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
+  <link rel="icon" href="favicon-dark.png" type="image/png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#22272e" />
+</head>
+<body>
+<header><nav id="navigation">
+  <div class="m-container">
+    <div class="m-row">
+      <a href="index.html" id="m-navbar-brand" class="m-col-t-8 m-col-m-none m-left-m">move-vectormath</a>
+      <div class="m-col-t-4 m-hide-m m-text-right m-nopadr">
+        <a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+          <path id="m-doc-search-icon-path" d="m6 0c-3.31 0-6 2.69-6 6 0 3.31 2.69 6 6 6 1.49 0 2.85-0.541 3.89-1.44-0.0164 0.338 0.147 0.759 0.5 1.15l3.22 3.79c0.552 0.614 1.45 0.665 2 0.115 0.55-0.55 0.499-1.45-0.115-2l-3.79-3.22c-0.392-0.353-0.812-0.515-1.15-0.5 0.895-1.05 1.44-2.41 1.44-3.89 0-3.31-2.69-6-6-6zm0 1.56a4.44 4.44 0 0 1 4.44 4.44 4.44 4.44 0 0 1-4.44 4.44 4.44 4.44 0 0 1-4.44-4.44 4.44 4.44 0 0 1 4.44-4.44z"/>
+        </svg></a>
+        <a id="m-navbar-show" href="#navigation" title="Show navigation"></a>
+        <a id="m-navbar-hide" href="#" title="Hide navigation"></a>
+      </div>
+      <div id="m-navbar-collapse" class="m-col-t-12 m-show-m m-col-m-none m-right-m">
+        <div class="m-row">
+          <ol class="m-col-t-6 m-col-m-none">
+            <li>
+              <a href="pages.html">Pages</a>
+              <ol>
+                <li><a href="about.html">About</a></li>
+              </ol>
+            </li>
+            <li><a href="namespaces.html">Namespaces</a></li>
+          </ol>
+          <ol class="m-col-t-6 m-col-m-none" start="3">
+            <li><a href="annotated.html">Classes</a></li>
+            <li><a href="files.html">Files</a></li>
+            <li class="m-show-m"><a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+              <use href="#m-doc-search-icon-path" />
+            </svg></a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav></header>
+<main><article>
+  <div class="m-container m-container-inflatable">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <h1>
+          <span class="m-breadcrumb"><a href="namespacemove.html">move</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespacemove_1_1vectormath.html">vectormath</a>::<wbr/></span>generic_normal <span class="m-thin">class</span>
+          <div class="m-doc-include m-code m-inverted m-text-right"><span class="cp">#include</span> <a class="cpf" href="normal_8hpp.html">&lt;normal.hpp&gt;</a></div>
+        </h1>
+        <p><span></span></p>
+        <div class="m-block m-default">
+          <h3>Contents</h3>
+          <ul>
+            <li>
+              Reference
+              <ul>
+                <li><a href="#pub-types">Public types</a></li>
+                <li><a href="#pub-static-methods">Public static functions</a></li>
+                <li><a href="#pub-methods">Public functions</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <section id="pub-types">
+          <h2><a href="#pub-types">Public types</a></h2>
+          <dl class="m-doc">
+            <dt id="afc7a7d16c3386d91b26a257f405170db">
+              using <a href="#afc7a7d16c3386d91b26a257f405170db" class="m-doc-self">vec3_type</a> = <a href="namespacemove_1_1vectormath.html#a40dd487f721f60e9eebe434fb8db0ae9" class="m-doc">vector3_<wbr />type</a>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a39f0d63ef8d541a6ec0cf01f3e53bc44">
+              using <a href="#a39f0d63ef8d541a6ec0cf01f3e53bc44" class="m-doc-self">component_type</a> = typename <a href="structmove_1_1vectormath_1_1generic__vec3__rtm.html#adce17ca57ecea97d2c721cfb74e87d6a" class="m-doc">vec3_type::<wbr />component_type</a>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="pub-static-methods">
+          <h2><a href="#pub-static-methods">Public static functions</a></h2>
+          <dl class="m-doc">
+            <dt id="a1e60c786f6e8df229acec3456c4f02dd">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a1e60c786f6e8df229acec3456c4f02dd" class="m-doc-self">cross</a>(</span><span class="m-doc-wrap">const <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp; n1,
+              const <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp; other) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="aa7bd16bac793f74f1a140e3eed1c2bac">
+              <span class="m-doc-wrap-bumper">static auto <a href="#aa7bd16bac793f74f1a140e3eed1c2bac" class="m-doc-self">cross</a>(</span><span class="m-doc-wrap">const <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp; n1,
+              const <a href="classmove_1_1vectormath_1_1generic__normal.html#afc7a7d16c3386d91b26a257f405170db" class="m-doc">vec3_<wbr />type</a>&amp; other) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ae9790e03ede614b9f1eb3ea19c491ddb">
+              <span class="m-doc-wrap-bumper">static auto <a href="#ae9790e03ede614b9f1eb3ea19c491ddb" class="m-doc-self">reflect</a>(</span><span class="m-doc-wrap">const <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp; n1,
+              const <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp; normalv) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a822bc35e26eb06742a32f13ab9713037">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a822bc35e26eb06742a32f13ab9713037" class="m-doc-self">reflect</a>(</span><span class="m-doc-wrap">const <a href="classmove_1_1vectormath_1_1generic__normal.html#afc7a7d16c3386d91b26a257f405170db" class="m-doc">vec3_<wbr />type</a>&amp; incident,
+              const <a href="classmove_1_1vectormath_1_1generic__normal.html#afc7a7d16c3386d91b26a257f405170db" class="m-doc">vec3_<wbr />type</a>&amp; normalv) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a39cc24c015621bfe8ead08bc546f422a">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a39cc24c015621bfe8ead08bc546f422a" class="m-doc-self">refract</a>(</span><span class="m-doc-wrap">const <a href="classmove_1_1vectormath_1_1generic__normal.html#afc7a7d16c3386d91b26a257f405170db" class="m-doc">vec3_<wbr />type</a>&amp; incident,
+              const <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp; normalv,
+              <a href="classmove_1_1vectormath_1_1generic__normal.html#a39f0d63ef8d541a6ec0cf01f3e53bc44" class="m-doc">component_<wbr />type</a> ior) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a9cc1b53197f64481990b3a27cd14ac79">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a9cc1b53197f64481990b3a27cd14ac79" class="m-doc-self">refract</a>(</span><span class="m-doc-wrap">const <a href="classmove_1_1vectormath_1_1generic__normal.html#afc7a7d16c3386d91b26a257f405170db" class="m-doc">vec3_<wbr />type</a>&amp; incident,
+              const <a href="classmove_1_1vectormath_1_1generic__normal.html#afc7a7d16c3386d91b26a257f405170db" class="m-doc">vec3_<wbr />type</a>&amp; normalv,
+              <a href="classmove_1_1vectormath_1_1generic__normal.html#a39f0d63ef8d541a6ec0cf01f3e53bc44" class="m-doc">component_<wbr />type</a> ior) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="abf154519a07531b1ff37865cc309fe27">
+              <span class="m-doc-wrap-bumper">static auto <a href="#abf154519a07531b1ff37865cc309fe27" class="m-doc-self">x_axis</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ac73a5a7a57957b4e5e97ecb146487bc3">
+              <span class="m-doc-wrap-bumper">static auto <a href="#ac73a5a7a57957b4e5e97ecb146487bc3" class="m-doc-self">y_axis</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a1aa1e4d82a23f7998c2e6ae87ac984ce">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a1aa1e4d82a23f7998c2e6ae87ac984ce" class="m-doc-self">z_axis</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a60dce6446c866f04c44ac6e398a806ac">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a60dce6446c866f04c44ac6e398a806ac" class="m-doc-self">right</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ad2b1d92a35a5302c6aae280ba7a38dd6">
+              <span class="m-doc-wrap-bumper">static auto <a href="#ad2b1d92a35a5302c6aae280ba7a38dd6" class="m-doc-self">left</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a4157307d26984380bb41bcb86a1e108e">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a4157307d26984380bb41bcb86a1e108e" class="m-doc-self">up</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ae1dcf35da0eaf909608e9fa6efebc76b">
+              <span class="m-doc-wrap-bumper">static auto <a href="#ae1dcf35da0eaf909608e9fa6efebc76b" class="m-doc-self">down</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a8f27b2fd7ad5cd293291503553adbae4">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a8f27b2fd7ad5cd293291503553adbae4" class="m-doc-self">forward</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="adf6c6bf3395b92a175f2f9d204f0ee5d">
+              <span class="m-doc-wrap-bumper">static auto <a href="#adf6c6bf3395b92a175f2f9d204f0ee5d" class="m-doc-self">backward</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="pub-methods">
+          <h2><a href="#pub-methods">Public functions</a></h2>
+          <dl class="m-doc">
+            <dt id="a4e7a7a5c04f942e65dbd125415ff385d">
+              <span class="m-doc-wrap-bumper">auto <a href="#a4e7a7a5c04f942e65dbd125415ff385d" class="m-doc-self">generic_normal</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <span class="m-label m-flat m-info">defaulted</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a085a00304698d677f469f0652a98e376">
+              <span class="m-doc-wrap-bumper">auto <a href="#a085a00304698d677f469f0652a98e376" class="m-doc-self">generic_normal</a>(</span><span class="m-doc-wrap">const <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp;) -&gt; RTM_FORCE_INLINE <span class="m-label m-flat m-info">defaulted</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a198ed71c3ac34668ebad91ad3c2f2ebb">
+              <span class="m-doc-wrap-bumper">auto <a href="#a198ed71c3ac34668ebad91ad3c2f2ebb" class="m-doc-self">generic_normal</a>(</span><span class="m-doc-wrap"><a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp;&amp;) -&gt; RTM_FORCE_INLINE <span class="m-label m-flat m-info">defaulted</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a09ecd1c7a91d4e87c74e123de2411607">
+              <span class="m-doc-wrap-bumper">auto <a href="#a09ecd1c7a91d4e87c74e123de2411607" class="m-doc-self">operator=</a>(</span><span class="m-doc-wrap">const <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp;) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp; <span class="m-label m-flat m-info">defaulted</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a18b17917a2cad59601e7952b712fb1f9">
+              <span class="m-doc-wrap-bumper">auto <a href="#a18b17917a2cad59601e7952b712fb1f9" class="m-doc-self">operator=</a>(</span><span class="m-doc-wrap"><a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp;&amp;) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp; <span class="m-label m-flat m-info">defaulted</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ae7efd7df33288c35fb53ca7dc5862fd0">
+              <span class="m-doc-wrap-bumper">auto <a href="#ae7efd7df33288c35fb53ca7dc5862fd0" class="m-doc-self">~generic_normal</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <span class="m-label m-flat m-info">defaulted</span> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="acf2155ddaf5767abd6685231d58a171b">
+              <span class="m-doc-wrap-bumper">auto <a href="#acf2155ddaf5767abd6685231d58a171b" class="m-doc-self">generic_normal</a>(</span><span class="m-doc-wrap">const <a href="classmove_1_1vectormath_1_1generic__normal.html#afc7a7d16c3386d91b26a257f405170db" class="m-doc">vec3_<wbr />type</a>&amp; vec) -&gt; RTM_FORCE_INLINE <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ab76ceb335eb08cee56485bcad8585af9">
+              <span class="m-doc-wrap-bumper">auto <a href="#ab76ceb335eb08cee56485bcad8585af9" class="m-doc-self">generic_normal</a>(</span><span class="m-doc-wrap"><a href="classmove_1_1vectormath_1_1generic__normal.html#a39f0d63ef8d541a6ec0cf01f3e53bc44" class="m-doc">component_<wbr />type</a> x,
+              <a href="classmove_1_1vectormath_1_1generic__normal.html#a39f0d63ef8d541a6ec0cf01f3e53bc44" class="m-doc">component_<wbr />type</a> y,
+              <a href="classmove_1_1vectormath_1_1generic__normal.html#a39f0d63ef8d541a6ec0cf01f3e53bc44" class="m-doc">component_<wbr />type</a> z) -&gt; RTM_FORCE_INLINE <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a95dee5f3746f241aae7985703f445829">
+              <span class="m-doc-wrap-bumper">auto <a href="#a95dee5f3746f241aae7985703f445829" class="m-doc-self">operator==</a>(</span><span class="m-doc-wrap">const <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp; other) const -&gt; RTM_FORCE_INLINE bool <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="aebe444a55c6fb9c3daf3dc2e43bb4512">
+              <span class="m-doc-wrap-bumper">auto <a href="#aebe444a55c6fb9c3daf3dc2e43bb4512" class="m-doc-self">operator!=</a>(</span><span class="m-doc-wrap">const <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp; other) const -&gt; RTM_FORCE_INLINE bool <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a6cad9b133291456048f0abfe37cd8067">
+              <span class="m-doc-wrap-bumper">auto <a href="#a6cad9b133291456048f0abfe37cd8067" class="m-doc-self">operator-</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ab473787778d5dc74c224ed0736d86979">
+              <span class="m-doc-wrap-bumper">auto <a href="#ab473787778d5dc74c224ed0736d86979" class="m-doc-self">operator+</a>(</span><span class="m-doc-wrap">const <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp; other) const -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ae9c9e0729f8a28a1d454e4118d7f20c6">
+              <span class="m-doc-wrap-bumper">auto <a href="#ae9c9e0729f8a28a1d454e4118d7f20c6" class="m-doc-self">operator-</a>(</span><span class="m-doc-wrap">const <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp; other) const -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a785ce87c0ac1b9a7689b172b9ca6748b">
+              <span class="m-doc-wrap-bumper">auto <a href="#a785ce87c0ac1b9a7689b172b9ca6748b" class="m-doc-self">get_component</a>(</span><span class="m-doc-wrap">int index) const -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html#a39f0d63ef8d541a6ec0cf01f3e53bc44" class="m-doc">component_<wbr />type</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a89fc163890a06be88d986846ee71fae7">
+              <span class="m-doc-wrap-bumper">auto <a href="#a89fc163890a06be88d986846ee71fae7" class="m-doc-self">set_component</a>(</span><span class="m-doc-wrap">int index,
+              <a href="classmove_1_1vectormath_1_1generic__normal.html#a39f0d63ef8d541a6ec0cf01f3e53bc44" class="m-doc">component_<wbr />type</a> value) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a065a57b14d21e65d59de8acc4c563001">
+              <span class="m-doc-wrap-bumper">auto <a href="#a065a57b14d21e65d59de8acc4c563001" class="m-doc-self">x</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html#a39f0d63ef8d541a6ec0cf01f3e53bc44" class="m-doc">component_<wbr />type</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="abf3575a42588766a37b66219802c457c">
+              <span class="m-doc-wrap-bumper">auto <a href="#abf3575a42588766a37b66219802c457c" class="m-doc-self">y</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html#a39f0d63ef8d541a6ec0cf01f3e53bc44" class="m-doc">component_<wbr />type</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="acfe90aa2b8624612d6503b8009a2f545">
+              <span class="m-doc-wrap-bumper">auto <a href="#acfe90aa2b8624612d6503b8009a2f545" class="m-doc-self">z</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html#a39f0d63ef8d541a6ec0cf01f3e53bc44" class="m-doc">component_<wbr />type</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a03445ecfbc905ec876685e639e9f08fb">
+              <span class="m-doc-wrap-bumper">auto <a href="#a03445ecfbc905ec876685e639e9f08fb" class="m-doc-self">set</a>(</span><span class="m-doc-wrap"><a href="classmove_1_1vectormath_1_1generic__normal.html#a39f0d63ef8d541a6ec0cf01f3e53bc44" class="m-doc">component_<wbr />type</a> x,
+              <a href="classmove_1_1vectormath_1_1generic__normal.html#a39f0d63ef8d541a6ec0cf01f3e53bc44" class="m-doc">component_<wbr />type</a> y,
+              <a href="classmove_1_1vectormath_1_1generic__normal.html#a39f0d63ef8d541a6ec0cf01f3e53bc44" class="m-doc">component_<wbr />type</a> z) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ab6617c41230f9630304e4500da5022ba">
+              <span class="m-doc-wrap-bumper">auto <a href="#ab6617c41230f9630304e4500da5022ba" class="m-doc-self">set</a>(</span><span class="m-doc-wrap">const <a href="classmove_1_1vectormath_1_1generic__normal.html#afc7a7d16c3386d91b26a257f405170db" class="m-doc">vec3_<wbr />type</a>&amp; vec) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a89ec52d3bd92c4d6d558be13d7f56683">
+              <span class="m-doc-wrap-bumper">auto <a href="#a89ec52d3bd92c4d6d558be13d7f56683" class="m-doc-self">set</a>(</span><span class="m-doc-wrap">const <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp; vec) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="afecec202449e3219f1efae3e658e9ceb">
+              <span class="m-doc-wrap-bumper">auto <a href="#afecec202449e3219f1efae3e658e9ceb" class="m-doc-self">dot</a>(</span><span class="m-doc-wrap">const <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp; n1,
+              const <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp; n2) const -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html#a39f0d63ef8d541a6ec0cf01f3e53bc44" class="m-doc">component_<wbr />type</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a03d88aac85626e33b16c3b6625cc4e1c">
+              <span class="m-doc-wrap-bumper">auto <a href="#a03d88aac85626e33b16c3b6625cc4e1c" class="m-doc-self">angle_between</a>(</span><span class="m-doc-wrap">const <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp; n1,
+              const <a href="classmove_1_1vectormath_1_1generic__normal.html" class="m-doc">generic_<wbr />normal</a>&amp; n2) const -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html#a39f0d63ef8d541a6ec0cf01f3e53bc44" class="m-doc">component_<wbr />type</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a215fdc9428ba6601b439f5d4184ecf90">
+              <span class="m-doc-wrap-bumper">auto <a href="#a215fdc9428ba6601b439f5d4184ecf90" class="m-doc-self">length</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html#a39f0d63ef8d541a6ec0cf01f3e53bc44" class="m-doc">component_<wbr />type</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a60b54a3692705f58f085a0ef52ea0ba3">
+              <span class="m-doc-wrap-bumper">auto <a href="#a60b54a3692705f58f085a0ef52ea0ba3" class="m-doc-self">squared_length</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html#a39f0d63ef8d541a6ec0cf01f3e53bc44" class="m-doc">component_<wbr />type</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a22c66d5851900e870f46bf4f2de1770a">
+              <span class="m-doc-wrap-bumper">auto <a href="#a22c66d5851900e870f46bf4f2de1770a" class="m-doc-self">reciprocal_length</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__normal.html#a39f0d63ef8d541a6ec0cf01f3e53bc44" class="m-doc">component_<wbr />type</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a21193d0484c3e70a7fa76d7739d2bb57">
+              <span class="m-doc-wrap-bumper">auto <a href="#a21193d0484c3e70a7fa76d7739d2bb57" class="m-doc-self">vec</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE const <a href="classmove_1_1vectormath_1_1generic__normal.html#afc7a7d16c3386d91b26a257f405170db" class="m-doc">vec3_<wbr />type</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+      </div>
+    </div>
+  </div>
+</article></main>
+<div class="m-doc-search" id="search">
+  <a href="#!" onclick="return hideSearch()"></a>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-m-8 m-push-m-2">
+        <div class="m-doc-search-header m-text m-small">
+          <div><span class="m-label m-default">Tab</span> / <span class="m-label m-default">T</span> to search, <span class="m-label m-default">Esc</span> to close</div>
+          <div id="search-symbolcount">&hellip;</div>
+        </div>
+        <div class="m-doc-search-content">
+          <form>
+            <input type="search" name="q" id="search-input" placeholder="Loading &hellip;" disabled="disabled" autofocus="autofocus" autocomplete="off" spellcheck="false" />
+          </form>
+          <noscript class="m-text m-danger m-text-center">Unlike everything else in the docs, the search functionality <em>requires</em> JavaScript.</noscript>
+          <div id="search-help" class="m-text m-dim m-text-center">
+            <p class="m-noindent">Search for symbols, directories, files, pages or
+            modules. You can omit any prefix from the symbol or file path; adding a
+            <code>:</code> or <code>/</code> suffix lists all members of given symbol or
+            directory.</p>
+            <p class="m-noindent">Use <span class="m-label m-dim">&darr;</span>
+            / <span class="m-label m-dim">&uarr;</span> to navigate through the list,
+            <span class="m-label m-dim">Enter</span> to go.
+            <span class="m-label m-dim">Tab</span> autocompletes common prefix, you can
+            copy a link to the result using <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">L</span> while <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">M</span> produces a Markdown link.</p>
+          </div>
+          <div id="search-notfound" class="m-text m-warning m-text-center">Sorry, nothing was found.</div>
+          <ul id="search-results"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="search-v1.js"></script>
+<script src="searchdata-v1.js" async="async"></script>
+<footer><nav>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <p>move-vectormath. Created with <a href="https://doxygen.org/">Doxygen</a> 1.9.1 and <a href="https://mcss.mosra.cz/">m.css</a>.</p>
+      </div>
+    </div>
+  </div>
+</nav></footer>
+</body>
+</html>
