@@ -38,7 +38,7 @@ namespace move::vectormath
         using underlying_matrix4x4_type =
             typename underlying_matrix4x4_type_raw::type;
 
-        constexpr static uint32_t num_elements = 4;
+        constexpr static uint32_t num_components = 4;
 
     public:
         RTM_FORCE_INLINE generic_quat() noexcept
@@ -67,7 +67,7 @@ namespace move::vectormath
         template <typename Archive>
         RTM_FORCE_INLINE void serialize(Archive& ar)
         {
-            for (uint32_t i = 0; i < num_elements; ++i)
+            for (uint32_t i = 0; i < num_components; ++i)
             {
                 /* If is reading */
                 if constexpr (Archive::is_loading::value)

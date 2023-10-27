@@ -10,7 +10,7 @@ namespace move::vectormath
     {
     public:
         using component_type = value_type;
-        constexpr static uint32_t num_elements = 2;
+        constexpr static uint32_t num_components = 2;
 
         RTM_FORCE_INLINE generic_vec2() noexcept : _x(0), _y(0)
         {
@@ -25,7 +25,7 @@ namespace move::vectormath
         template <typename Archive>
         RTM_FORCE_INLINE void serialize(Archive& ar)
         {
-            for (uint32_t i = 0; i < num_elements; ++i)
+            for (uint32_t i = 0; i < num_components; ++i)
             {
                 /* If is reading */
                 if constexpr (Archive::is_loading::value)

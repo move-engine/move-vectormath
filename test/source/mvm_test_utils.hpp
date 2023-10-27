@@ -111,7 +111,7 @@ template <typename vec_type>
 inline bool equals(const vec_type& mvm, const DirectX::XMVECTOR& dxm)
 {
     using Catch::Approx;
-    for (int i = 0; i < vec_type::num_elements; ++i)
+    for (int i = 0; i < vec_type::num_components; ++i)
     {
         auto mvm_val = mvm.get_component(i);
         auto dxm_val = DirectX::XMVectorGetByIndex(dxm, i);

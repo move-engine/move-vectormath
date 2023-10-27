@@ -14,6 +14,14 @@
 
 namespace move::vectormath
 {
+    /**
+     * @brief A four component vector that can store either floats or doubles.
+     * The underlying implementation is RTM's vector4f or vector4d.
+     * @note Instances of this class must be aligned to 16 bytes.
+     *
+     * @tparam value_type The type of the components of the vector
+     * @tparam vector_type_raw The underlying RTM vector type
+     */
     template <typename value_type, typename vector_type_raw>
     struct generic_vec4
     {
@@ -24,14 +32,15 @@ namespace move::vectormath
         using component_type = value_type;
 
         /*
-         * @brief The type of the underlying RTM vector
+         * @brief The type of the underlying RTM vector.  Should be either
+         * rtm::vector4f or rtm::vector4d.
          */
         using vector_type = typename vector_type_raw::type;
 
         /**
-         * @brief The type of the mask
+         * @brief The number of components in the vector
          */
-        constexpr static uint32_t num_elements = 4;
+        constexpr static uint32_t num_components = 4;
 
     public:
         /**
@@ -103,7 +112,7 @@ namespace move::vectormath
         template <typename Archive>
         RTM_FORCE_INLINE void serialize(Archive& ar)
         {
-            for (uint32_t i = 0; i < num_elements; ++i)
+            for (uint32_t i = 0; i < num_components; ++i)
             {
                 /* If is reading */
                 if constexpr (Archive::is_loading::value)
@@ -1081,7 +1090,14 @@ namespace move::vectormath
         vector_type _value;
     };
 
+    /**
+     * @brief A vector with four 32 bit floating point components
+     */
     using vec4f = generic_vec4<float, wrappers::v4f>;
+
+    /**
+     * @brief A vector with four 64 bit floating point components
+     */
     using vec4d = generic_vec4<double, wrappers::v4d>;
 
 #if MOVE_VECTORMATH_USE_DOUBLE_PRECISION

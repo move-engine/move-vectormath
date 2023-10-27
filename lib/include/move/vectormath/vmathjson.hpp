@@ -39,7 +39,7 @@ namespace move::vectormath
         template <>                                                \
         struct adl_serializer<T>                                   \
             : public move::vectormath::json_serializer_template<T, \
-                  T::num_elements>                                 \
+                  T::num_components>                               \
         {                                                          \
         };                                                         \
     }

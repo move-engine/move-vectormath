@@ -14,18 +14,31 @@
 
 namespace move::vectormath
 {
-    // using value_type = float;
-    // using vector_type = rtm::vector4f;
-
+    /**
+     * @brief A three component vector that can store either floats or doubles.
+     * The underlying implementation is RTM's vector4f or vector4d.
+     * @note Instances of this class must be aligned to 16 bytes.
+     *
+     * @tparam value_type The type of the components of the vector
+     * @tparam vector_type_raw The underlying RTM vector type
+     */
     template <typename value_type, typename vector_type_raw>
     struct generic_vec3
     {
     public:
+        /**
+         * @brief The type of the components of the vector
+         */
         using component_type = value_type;
-        using vector_type = typename vector_type_raw::type;
-        using underlying_type = vector_type;
-        constexpr static uint32_t num_elements = 3;
 
+        /*
+         * @brief The type of the underlying RTM vector.  Should be either
+         * rtm::vector4f or rtm::vector4d.
+         */
+        using vector_type = typename vector_type_raw::type;
+        constexpr static uint32_t num_components = 3;
+
+    public:
         RTM_FORCE_INLINE generic_vec3() noexcept
             : _value(rtm::vector_set(
                   value_type(0), value_type(0), value_type(0), value_type(0)))
@@ -57,7 +70,7 @@ namespace move::vectormath
         template <typename Archive>
         RTM_FORCE_INLINE void serialize(Archive& ar)
         {
-            for (uint32_t i = 0; i < num_elements; ++i)
+            for (uint32_t i = 0; i < num_components; ++i)
             {
                 /* If is reading */
                 if constexpr (Archive::is_loading::value)
