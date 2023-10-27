@@ -19,22 +19,12 @@ namespace move::vectormath
         inline gpuvec2& operator=(const gpuvec2&) = default;
         inline gpuvec2& operator=(gpuvec2&&) = default;
 
-        inline gpuvec2(const vec2& v) : x(v.x()), y(v.y())
+        inline gpuvec2(const vec2f& v) : x(v.x()), y(v.y())
         {
         }
 
-        inline gpuvec2(const move::vectormath::fastvec2& v) : x(v.x()), y(v.y())
+        inline gpuvec2(const vec2d& v) : x(v.x()), y(v.y())
         {
-        }
-
-        inline operator vec2() const
-        {
-            return vec2(x, y);
-        }
-
-        inline operator fastvec2() const
-        {
-            return fastvec2(x, y);
         }
 
         /**
@@ -45,6 +35,16 @@ namespace move::vectormath
          */
         inline gpuvec2(float x, float y) : x(x), y(y)
         {
+        }
+
+        inline operator vec2f() const
+        {
+            return vec2(x, y);
+        }
+
+        inline operator vec2d() const
+        {
+            return vec2d(x, y);
         }
 
         inline float* as_array()

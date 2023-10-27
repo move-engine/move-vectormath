@@ -43,10 +43,11 @@ namespace move::vectormath
         {
         }
 
-        RTM_FORCE_INLINE generic_mat4_rtm(float x00, float x01, float x02,
-            float x03, float x10, float x11, float x12, float x13, float x20,
-            float x21, float x22, float x23, float x30, float x31, float x32,
-            float x33) noexcept
+        RTM_FORCE_INLINE generic_mat4_rtm(value_type x00, value_type x01,
+            value_type x02, value_type x03, value_type x10, value_type x11,
+            value_type x12, value_type x13, value_type x20, value_type x21,
+            value_type x22, value_type x23, value_type x30, value_type x31,
+            value_type x32, float x33) noexcept
             : _value(rtm::matrix_set(rtm::vector_set(x00, x01, x02, x03),
                   rtm::vector_set(x10, x11, x12, x13),
                   rtm::vector_set(x20, x21, x22, x23),
@@ -115,6 +116,74 @@ namespace move::vectormath
             return vector_get_component(axis, mix4(col));
         }
 
+        RTM_FORCE_INLINE vec4_type get_axis(size_t row) noexcept
+        {
+            return vec4_type(get_axis_internal(row));
+        }
+
+        RTM_FORCE_INLINE underlying_vector4_type get_axis_internal(
+            size_t row) noexcept
+        {
+            using namespace rtm;
+            return rtm::matrix_get_axis(_value, rtm::axis4(row));
+        }
+
+        RTM_FORCE_INLINE generic_mat4_rtm& set_axis(
+            size_t row, const vec4_type& vec) noexcept
+        {
+            return set_axis(row, vec.get_internal());
+        }
+
+        RTM_FORCE_INLINE generic_mat4_rtm& set_axis(
+            size_t row, const underlying_vector4_type& axis) noexcept
+        {
+            // TODO: Make this faster?  Seems like there should just be a
+            // matrix_set_axis call, but maybe I'm missing some performance
+            // implication there.
+            using namespace rtm;
+            underlying_vector4_type axes[] = {
+                rtm::matrix_get_axis(_value, rtm::axis4(0)),
+                rtm::matrix_get_axis(_value, rtm::axis4(1)),
+                rtm::matrix_get_axis(_value, rtm::axis4(2)),
+                rtm::matrix_get_axis(_value, rtm::axis4(3)),
+            };
+            axes[row] = axis;
+            _value = matrix_set(axes[0], axes[1], axes[2], axes[3]);
+            return *this;
+        }
+
+        RTM_FORCE_INLINE generic_mat4_rtm& set_component(
+            size_t row, size_t col, value_type value) noexcept
+        {
+            using namespace rtm;
+            return set_axis(row,
+                vector_set_component(get_axis_internal(row), mix4(col), value));
+        }
+
+        RTM_FORCE_INLINE generic_mat4_rtm& set(value_type x00, value_type x01,
+            value_type x02, value_type x03, value_type x10, value_type x11,
+            value_type x12, value_type x13, value_type x20, value_type x21,
+            value_type x22, value_type x23, value_type x30, value_type x31,
+            value_type x32, value_type x33) noexcept
+        {
+            using namespace rtm;
+            _value = matrix_set(vector_set(x00, x01, x02, x03),
+                vector_set(x10, x11, x12, x13), vector_set(x20, x21, x22, x23),
+                vector_set(x30, x31, x32, x33));
+            return *this;
+        }
+
+        RTM_FORCE_INLINE generic_mat4_rtm& set(const value_type values[16])
+        {
+            using namespace rtm;
+            _value = matrix_set(
+                vector_set(values[0], values[1], values[2], values[3]),
+                vector_set(values[4], values[5], values[6], values[7]),
+                vector_set(values[8], values[9], values[10], values[11]),
+                vector_set(values[12], values[13], values[14], values[15]));
+            return *this;
+        }
+
     public:
         RTM_FORCE_INLINE generic_mat4_rtm inverse()
         {
@@ -122,6 +191,19 @@ namespace move::vectormath
         }
 
     public:
+        static RTM_FORCE_INLINE generic_mat4_rtm create_from_array(
+            const value_type values[16])
+        {
+            return generic_mat4_rtm(rtm::matrix_set(
+                rtm::vector_set(values[0], values[1], values[2], values[3]),
+                rtm::vector_set(values[4], values[5], values[6], values[7]),
+                rtm::vector_set(values[8], values[9], values[10], values[11]),
+                rtm::vector_set(
+                    values[12], values[13], values[14], values[15])));
+            {
+            }
+        }
+
         static RTM_FORCE_INLINE generic_mat4_rtm create_identity() noexcept
         {
             return generic_mat4_rtm(rtm::matrix_identity());

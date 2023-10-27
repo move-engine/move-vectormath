@@ -9,7 +9,7 @@ namespace move::vectormath
      * usage.
      *
      * This is a 3D vector that is guaranteed to be correctly laid out for GPU
-     * usage. It should be used whenever a 3D vector is needed on the GPU.
+     * usage. It should be used whenever a 3D vector is needed for GPU usage.
      */
     struct gpuvec3
     {
@@ -19,23 +19,12 @@ namespace move::vectormath
         inline gpuvec3& operator=(const gpuvec3&) = default;
         inline gpuvec3& operator=(gpuvec3&&) = default;
 
-        inline gpuvec3(const vec3& v) : x(v.x()), y(v.y()), z(v.z())
+        inline gpuvec3(const vec3f& v) : x(v.x()), y(v.y()), z(v.z())
         {
         }
 
-        inline gpuvec3(const move::vectormath::fastvec3& v)
-            : x(v.x()), y(v.y()), z(v.z())
+        inline gpuvec3(const vec3d& v) : x(v.x()), y(v.y()), z(v.z())
         {
-        }
-
-        inline operator vec3() const
-        {
-            return vec3(x, y, z);
-        }
-
-        inline operator fastvec3() const
-        {
-            return fastvec3(x, y, z);
         }
 
         /**
@@ -46,6 +35,16 @@ namespace move::vectormath
          */
         inline gpuvec3(float x, float y, float z) : x(x), y(y), z(z)
         {
+        }
+
+        inline operator vec3f() const
+        {
+            return vec3f(x, y, z);
+        }
+
+        inline operator vec3d() const
+        {
+            return vec3d(x, y, z);
         }
 
         inline float* as_array()

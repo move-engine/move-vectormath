@@ -19,7 +19,7 @@ namespace move::vectormath
         inline gpumat4& operator=(const gpumat4&) = default;
         inline gpumat4& operator=(gpumat4&&) = default;
 
-        inline gpumat4(const move::vectormath::generic_mat4& v)
+        inline gpumat4(const move::vectormath::mat4f& v)
         {
             for (int i = 0; i < 16; i++)
             {
@@ -27,18 +27,12 @@ namespace move::vectormath
             }
         }
 
-        inline gpumat4(const move::vectormath::fastmat4& v)
+        inline gpumat4(const move::vectormath::mat4d& v)
         {
-        }
-
-        inline generic_mat4 as_mat4() const
-        {
-            generic_mat4 res;
             for (int i = 0; i < 16; i++)
             {
-                res[i] = data[i];
+                data[i] = v[i];
             }
-            return res;
         }
 
         inline float* as_array()
@@ -46,14 +40,9 @@ namespace move::vectormath
             return data;
         }
 
-        inline operator generic_mat4() const
+        inline operator mat4f() const
         {
-            return as_mat4();
-        }
-
-        inline operator fastmat4() const
-        {
-            return as_mat4().fast();
+            return mat4f::create_from_array(data);
         }
 
         float data[16];

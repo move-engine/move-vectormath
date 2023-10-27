@@ -23,19 +23,8 @@ namespace move::vectormath
         {
         }
 
-        inline gpuvec4(const move::vectormath::fastvec4& v)
-            : x(v.x()), y(v.y()), z(v.z()), w(v.w())
+        inline gpuvec4(const vec4d& v) : x(v.x()), y(v.y()), z(v.z()), w(v.w())
         {
-        }
-
-        inline operator vec4f() const
-        {
-            return vec4f(x, y, z, w);
-        }
-
-        inline operator fastvec4() const
-        {
-            return fastvec4(x, y, z, w);
         }
 
         /**
@@ -47,6 +36,16 @@ namespace move::vectormath
         inline gpuvec4(float x, float y, float z, float w)
             : x(x), y(y), z(z), w(w)
         {
+        }
+
+        inline operator vec4f() const
+        {
+            return vec4f(x, y, z, w);
+        }
+
+        inline operator vec4d() const
+        {
+            return vec4d(x, y, z, w);
         }
 
         inline float* as_array()
