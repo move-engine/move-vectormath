@@ -65,18 +65,22 @@ inline DirectX::XMMATRIX mat4_to_dxm(const mat_type& mat)
     using namespace DirectX;
     using value_type = typename mat_type::component_type;
 
-    auto row0 =
-        XMVectorSet(value_type(mat.get(0, 0)), value_type(mat.get(0, 1)),
-            value_type(mat.get(0, 2)), value_type(mat.get(0, 3)));
-    auto row1 =
-        XMVectorSet(value_type(mat.get(1, 0)), value_type(mat.get(1, 1)),
-            value_type(mat.get(1, 2)), value_type(mat.get(1, 3)));
-    auto row2 =
-        XMVectorSet(value_type(mat.get(2, 0)), value_type(mat.get(2, 1)),
-            value_type(mat.get(2, 2)), value_type(mat.get(2, 3)));
-    auto row3 =
-        XMVectorSet(value_type(mat.get(3, 0)), value_type(mat.get(3, 1)),
-            value_type(mat.get(3, 2)), value_type(mat.get(3, 3)));
+    auto row0 = XMVectorSet(value_type(mat.get_component(0, 0)),
+        value_type(mat.get_component(0, 1)),
+        value_type(mat.get_component(0, 2)),
+        value_type(mat.get_component(0, 3)));
+    auto row1 = XMVectorSet(value_type(mat.get_component(1, 0)),
+        value_type(mat.get_component(1, 1)),
+        value_type(mat.get_component(1, 2)),
+        value_type(mat.get_component(1, 3)));
+    auto row2 = XMVectorSet(value_type(mat.get_component(2, 0)),
+        value_type(mat.get_component(2, 1)),
+        value_type(mat.get_component(2, 2)),
+        value_type(mat.get_component(2, 3)));
+    auto row3 = XMVectorSet(value_type(mat.get_component(3, 0)),
+        value_type(mat.get_component(3, 1)),
+        value_type(mat.get_component(3, 2)),
+        value_type(mat.get_component(3, 3)));
 
     return XMMATRIX(row0, row1, row2, row3);
 }
@@ -89,7 +93,7 @@ inline bool equals(const mat_type& mvm, const DirectX::XMMATRIX& dxm)
     {
         for (int j = 0; j < 4; ++j)
         {
-            auto mvm_val = mvm.get(i, j);
+            auto mvm_val = mvm.get_component(i, j);
             auto dxm_val = DirectX::XMVectorGetByIndex(dxm.r[i], j);
             if (mvm_val != Approx(dxm_val))
             {

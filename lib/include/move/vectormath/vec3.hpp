@@ -46,7 +46,7 @@ namespace move::vectormath
         /**
          * @brief Construct a new generic_vec3_rtm object
          *
-         * @return generic_vec3_rtm A new vector initialized to (0, 0, 0, 0)
+         * @return generic_vec3_rtm A new vector initialized to (0, 0, 0)
          */
         RTM_FORCE_INLINE generic_vec3_rtm() noexcept
             : _value(rtm::vector_set(
@@ -405,10 +405,11 @@ namespace move::vectormath
                     return rtm::vector_get_z(_value);
             }
         }
+
         /**
          * @brief Sets the component at the specified index.  If the index is
-         * out of range, the result is undefined.  Currently the w component is
-         * set.
+         * out of range, the result is undefined.
+         * @note Currently the w component is set if the index is out of range.
          *
          * @param index The index of the component to set
          * @param value The new value for the component
@@ -575,7 +576,7 @@ namespace move::vectormath
         /**
          * @brief Sets the x, y and z components of the vector
          *
-         * @param v The new x, y and z components
+         * @param v A vector containing the new x, y and z components
          * @return generic_vec3_rtm& A reference to the vector
          */
         RTM_FORCE_INLINE generic_vec3_rtm& set(const vector_type& v) noexcept
@@ -584,6 +585,7 @@ namespace move::vectormath
             return *this;
         }
 
+    public:
         /**
          * @brief Returns the length of the vector
          *
@@ -883,6 +885,11 @@ namespace move::vectormath
         }
 
     public:
+        /**
+         * @brief Normalizes the vector
+         * @note The behavior is undefined if the length of the vector is zero
+         * @return generic_vec4_rtm& A reference to the vector
+         */
         RTM_FORCE_INLINE void normalize() noexcept
         {
             // TODO: there's probably a faster way to do this?
@@ -894,6 +901,7 @@ namespace move::vectormath
          * @brief Returns a vector with all components set to the provided
          * value.
          *
+         * @param value The value to set all components to
          * @return generic_vec3_rtm The filled vector
          */
         RTM_FORCE_INLINE static generic_vec3_rtm filled(

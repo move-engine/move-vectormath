@@ -926,6 +926,7 @@ namespace move::vectormath
          * @brief Returns a vector with all components set to the provided
          * value.
          *
+         * @param value The value to fill the vector with
          * @return generic_vec4_rtm The filled vector
          */
         RTM_FORCE_INLINE static generic_vec4_rtm filled(

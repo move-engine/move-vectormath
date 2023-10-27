@@ -101,6 +101,20 @@ namespace move::vectormath
             return *this;
         }
 
+        RTM_FORCE_INLINE value_type operator[](size_t index) const noexcept
+        {
+            return get_component(index / 4, index % 4);
+        }
+
+        RTM_FORCE_INLINE value_type get_component(
+            size_t row, size_t col) const noexcept
+        {
+            using namespace rtm;
+            underlying_vector4_type axis =
+                rtm::matrix_get_axis(_value, rtm::axis4(row));
+            return vector_get_component(axis, mix4(col));
+        }
+
     public:
         RTM_FORCE_INLINE generic_mat4_rtm inverse()
         {
@@ -264,20 +278,6 @@ namespace move::vectormath
         {
             return rtm::ext::ortho_off_center_lh(
                 left, right, bottom, top, near, far);
-        }
-
-    public:
-        RTM_FORCE_INLINE value_type operator[](size_t index) const noexcept
-        {
-            return get(index / 4, index % 4);
-        }
-
-        RTM_FORCE_INLINE value_type get(size_t row, size_t col) const noexcept
-        {
-            using namespace rtm;
-            underlying_vector4_type axis =
-                rtm::matrix_get_axis(_value, rtm::axis4(row));
-            return vector_get_component(axis, mix4(col));
         }
 
     public:
