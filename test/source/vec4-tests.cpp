@@ -47,7 +47,7 @@ SCENARIO("Test vec4f", "[move::vectormath::vec4f]")
     REQUIRE(vec_type::right() == vec_type(1, 0, 0, 0));
     REQUIRE(vec_type::down() == vec_type(0, -1, 0, 0));
     REQUIRE(vec_type::up() == vec_type(0, 1, 0, 0));
-    REQUIRE(vec_type::back() == vec_type(0, 0, -1, 0));
+    REQUIRE(vec_type::backward() == vec_type(0, 0, -1, 0));
     REQUIRE(vec_type::forward() == vec_type(0, 0, 1, 0));
 
     REQUIRE(vec_type::x_axis() == vec_type(1, 0, 0, 0));
@@ -285,7 +285,7 @@ SCENARIO("Test vec4d", "[move::vectormath::vec4d]")
     REQUIRE(vec_type::right() == vec_type(1, 0, 0, 0));
     REQUIRE(vec_type::down() == vec_type(0, -1, 0, 0));
     REQUIRE(vec_type::up() == vec_type(0, 1, 0, 0));
-    REQUIRE(vec_type::back() == vec_type(0, 0, -1, 0));
+    REQUIRE(vec_type::backward() == vec_type(0, 0, -1, 0));
     REQUIRE(vec_type::forward() == vec_type(0, 0, 1, 0));
 
     REQUIRE(vec_type::x_axis() == vec_type(1, 0, 0, 0));

@@ -188,21 +188,21 @@ namespace move::vectormath
         RTM_FORCE_INLINE component_type distance(
             const generic_point& other) const noexcept
         {
-            return _vec.distance_to_point(other._vec);
+            return vec3_type::distance_between_points(_vec, other._vec);
         }
 
         RTM_FORCE_INLINE component_type squared_distance(
             const generic_point& other) const noexcept
         {
-            return _vec.squared_distance_to_point(other._vec);
+            return vec3_type::squared_distance_between_points(_vec, other._vec);
         }
 
         RTM_FORCE_INLINE component_type distance_to_line(
             const generic_point& generic_point1,
             const generic_point& generic_point2) const noexcept
         {
-            return _vec.distance_to_line(
-                generic_point1._vec, generic_point2._vec);
+            return vec3_type::distance_to_line(
+                _vec, generic_point1._vec, generic_point2._vec);
         }
 
         RTM_FORCE_INLINE normal normalized() const noexcept

@@ -123,15 +123,15 @@ namespace move::vectormath
 
     public:
         RTM_FORCE_INLINE component_type dot(
-            const generic_normal& other) const noexcept
+            const generic_normal& n1, const generic_normal& n2) const noexcept
         {
-            return _vec.dot(other._vec);
+            return _vec.dot(n1._vec, n2._vec);
         }
 
         RTM_FORCE_INLINE component_type angle_between(
-            const generic_normal& other) const noexcept
+            const generic_normal& n1, const generic_normal& n2) const noexcept
         {
-            return _vec.angle_between_normalized_vectors(other._vec);
+            return _vec.angle_between_normalized_vectors(n1._vec, n2._vec);
         }
 
         RTM_FORCE_INLINE component_type length() const noexcept
@@ -150,44 +150,47 @@ namespace move::vectormath
         }
 
     public:
-        RTM_FORCE_INLINE generic_normal cross(
-            const generic_normal& other) const noexcept
+        RTM_FORCE_INLINE static generic_normal cross(
+            const generic_normal& n1, const generic_normal& other) noexcept
         {
-            return generic_normal(_vec.cross(other._vec));
+            return generic_normal(vec3_type::cross(n1._vec, other._vec));
         }
 
-        RTM_FORCE_INLINE generic_normal cross(
-            const vec3_type& other) const noexcept
+        RTM_FORCE_INLINE static generic_normal cross(
+            const generic_normal& n1, const vec3_type& other) noexcept
         {
-            return generic_normal(_vec.cross(other));
+            return generic_normal(vec3_type::cross(n1._vec, other));
         }
 
-        RTM_FORCE_INLINE generic_normal reflect(
-            const generic_normal& normalv) const noexcept
+        RTM_FORCE_INLINE static generic_normal reflect(
+            const generic_normal& n1, const generic_normal& normalv) noexcept
         {
-            return generic_normal(_vec.reflect(normalv._vec));
+            return generic_normal(vec3_type::reflect(n1._vec, normalv._vec));
         }
 
-        RTM_FORCE_INLINE generic_normal reflect(
-            const vec3_type& normalv) const noexcept
+        RTM_FORCE_INLINE static generic_normal reflect(
+            const vec3_type& incident, const vec3_type& normalv) noexcept
         {
-            return generic_normal(_vec.reflect(normalv));
+            return generic_normal(vec3_type::reflect(incident, normalv));
         }
 
-        RTM_FORCE_INLINE generic_normal refract(
-            const generic_normal& normalv, component_type ior) const noexcept
+        RTM_FORCE_INLINE static generic_normal refract(
+            const vec3_type& incident, const generic_normal& normalv,
+            component_type ior) noexcept
         {
-            return generic_normal(_vec.refract(normalv._vec, ior));
+            return generic_normal(
+                vec3_type::refract(incident, normalv._vec, ior));
         }
 
-        RTM_FORCE_INLINE generic_normal refract(
-            const vec3_type& normalv, component_type ior) const noexcept
+        RTM_FORCE_INLINE static generic_normal refract(
+            const vec3_type& incident, const vec3_type& normalv,
+            component_type ior) noexcept
         {
-            return generic_normal(_vec.refract(normalv, ior));
+            return generic_normal(vec3_type::refract(incident, normalv, ior));
         }
 
     public:
-        RTM_FORCE_INLINE const vec3_type& vec() const noexcept
+        RTM_FORCE_INLINE const vec3_type& vec() noexcept
         {
             return _vec;
         }

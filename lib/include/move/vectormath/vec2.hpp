@@ -6,17 +6,26 @@
 namespace move::vectormath
 {
     template <typename value_type>
-    struct generic_vec2
+    struct generic_vec2_scalar
     {
     public:
+        /**
+         * @brief The type of the components of the vector
+         */
         using component_type = value_type;
+
+        /**
+         * @brief The number of components in the vector
+         */
         constexpr static uint32_t num_components = 2;
 
-        RTM_FORCE_INLINE generic_vec2() noexcept : _x(0), _y(0)
+    public:
+        RTM_FORCE_INLINE generic_vec2_scalar() noexcept : _x(0), _y(0)
         {
         }
 
-        RTM_FORCE_INLINE generic_vec2(value_type x, value_type y = 0) noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar(
+            value_type x, value_type y = 0) noexcept
             : _x(x), _y(y)
         {
         }
@@ -42,108 +51,113 @@ namespace move::vectormath
         }
 
     public:
-        RTM_FORCE_INLINE bool operator==(const generic_vec2& v) const noexcept
+        RTM_FORCE_INLINE bool operator==(
+            const generic_vec2_scalar& v) const noexcept
         {
             return _x == v._x && _y == v._y;
         }
 
-        RTM_FORCE_INLINE bool operator!=(const generic_vec2& v) const noexcept
+        RTM_FORCE_INLINE bool operator!=(
+            const generic_vec2_scalar& v) const noexcept
         {
             return _x != v._x || _y != v._y;
         }
 
-        RTM_FORCE_INLINE generic_vec2& operator=(const generic_vec2& v) noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar& operator=(
+            const generic_vec2_scalar& v) noexcept
         {
             _x = v._x;
             _y = v._y;
             return *this;
         }
 
-        RTM_FORCE_INLINE generic_vec2& operator+=(
-            const generic_vec2& v) noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar& operator+=(
+            const generic_vec2_scalar& v) noexcept
         {
             _x += v._x;
             _y += v._y;
             return *this;
         }
 
-        RTM_FORCE_INLINE generic_vec2& operator-=(
-            const generic_vec2& v) noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar& operator-=(
+            const generic_vec2_scalar& v) noexcept
         {
             _x -= v._x;
             _y -= v._y;
             return *this;
         }
 
-        RTM_FORCE_INLINE generic_vec2& operator*=(const value_type& v) noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar& operator*=(
+            const value_type& v) noexcept
         {
             _x *= v;
             _y *= v;
             return *this;
         }
 
-        RTM_FORCE_INLINE generic_vec2& operator*=(
-            const generic_vec2& v) noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar& operator*=(
+            const generic_vec2_scalar& v) noexcept
         {
             _x *= v._x;
             _y *= v._y;
             return *this;
         }
 
-        RTM_FORCE_INLINE generic_vec2& operator/=(const value_type& v) noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar& operator/=(
+            const value_type& v) noexcept
         {
             _x /= v;
             _y /= v;
             return *this;
         }
 
-        RTM_FORCE_INLINE generic_vec2& operator/=(
-            const generic_vec2& v) noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar& operator/=(
+            const generic_vec2_scalar& v) noexcept
         {
             _x /= v._x;
             _y /= v._y;
             return *this;
         }
 
-        RTM_FORCE_INLINE generic_vec2 operator+(
-            const generic_vec2& v) const noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar operator+(
+            const generic_vec2_scalar& v) const noexcept
         {
-            return generic_vec2(_x + v._x, _y + v._y);
+            return generic_vec2_scalar(_x + v._x, _y + v._y);
         }
 
-        RTM_FORCE_INLINE generic_vec2 operator-(
-            const generic_vec2& v) const noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar operator-(
+            const generic_vec2_scalar& v) const noexcept
         {
-            return generic_vec2(_x - v._x, _y - v._y);
+            return generic_vec2_scalar(_x - v._x, _y - v._y);
         }
 
-        RTM_FORCE_INLINE generic_vec2 operator*(
+        RTM_FORCE_INLINE generic_vec2_scalar operator*(
             const value_type& v) const noexcept
         {
-            return generic_vec2(_x * v, _y * v);
+            return generic_vec2_scalar(_x * v, _y * v);
         }
 
-        RTM_FORCE_INLINE generic_vec2 operator*(
-            const generic_vec2& v) const noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar operator*(
+            const generic_vec2_scalar& v) const noexcept
         {
-            return generic_vec2(_x * v._x, _y * v._y);
+            return generic_vec2_scalar(_x * v._x, _y * v._y);
         }
 
-        RTM_FORCE_INLINE generic_vec2 operator/(
+        RTM_FORCE_INLINE generic_vec2_scalar operator/(
             const value_type& v) const noexcept
         {
-            return generic_vec2(_x / v, _y / v);
+            return generic_vec2_scalar(_x / v, _y / v);
         }
 
-        RTM_FORCE_INLINE generic_vec2 operator/(
-            const generic_vec2& v) const noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar operator/(
+            const generic_vec2_scalar& v) const noexcept
         {
-            return generic_vec2(_x / v._x, _y / v._y);
+            return generic_vec2_scalar(_x / v._x, _y / v._y);
         }
 
-        RTM_FORCE_INLINE generic_vec2 operator-() const noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar operator-() const noexcept
         {
-            return generic_vec2(-_x, -_y);
+            return generic_vec2_scalar(-_x, -_y);
         }
 
         RTM_FORCE_INLINE value_type get_component(int index) const noexcept
@@ -186,46 +200,48 @@ namespace move::vectormath
             return _y;
         }
 
-        RTM_FORCE_INLINE generic_vec2& x(value_type x) noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar& x(value_type x) noexcept
         {
             _x = x;
             return *this;
         }
 
-        RTM_FORCE_INLINE generic_vec2& y(value_type y) noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar& y(value_type y) noexcept
         {
             _y = y;
             return *this;
         }
 
-        RTM_FORCE_INLINE generic_vec2& fill(value_type v) noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar& fill(value_type v) noexcept
         {
             _x = v;
             _y = v;
             return *this;
         }
 
-        RTM_FORCE_INLINE generic_vec2& set(value_type x, value_type y) noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar& set(
+            value_type x, value_type y) noexcept
         {
             _x = x;
             _y = y;
             return *this;
         }
 
-        RTM_FORCE_INLINE generic_vec2& set(const generic_vec2& rhs) noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar& set(
+            const generic_vec2_scalar& rhs) noexcept
         {
             _x = rhs._x;
             _y = rhs._y;
             return *this;
         }
 
-        RTM_FORCE_INLINE generic_vec2& set_x(value_type x) noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar& set_x(value_type x) noexcept
         {
             _x = x;
             return *this;
         }
 
-        RTM_FORCE_INLINE generic_vec2& set_y(value_type y) noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar& set_y(value_type y) noexcept
         {
             _y = y;
             return *this;
@@ -247,41 +263,44 @@ namespace move::vectormath
             return _x * _x + _y * _y;
         }
 
-        RTM_FORCE_INLINE generic_vec2 normalized() const noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar normalized() const noexcept
         {
             return *this / length();
         }
 
-        RTM_FORCE_INLINE generic_vec2 normalized_approximate() const noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar
+        normalized_approximate() const noexcept
         {
             return *this / length_approximate();
         }
 
-        RTM_FORCE_INLINE value_type dot(const generic_vec2& v) const noexcept
+        RTM_FORCE_INLINE value_type dot(
+            const generic_vec2_scalar& v) const noexcept
         {
             return _x * v._x + _y * v._y;
         }
 
         RTM_FORCE_INLINE value_type distance_to_point(
-            const generic_vec2& v) const noexcept
+            const generic_vec2_scalar& v) const noexcept
         {
             return (v - *this).length();
         }
 
         RTM_FORCE_INLINE value_type distance_to_point_approximate(
-            const generic_vec2& v) const noexcept
+            const generic_vec2_scalar& v) const noexcept
         {
             return (v - *this).length_approximate();
         }
 
         RTM_FORCE_INLINE value_type squared_distance_to_point(
-            const generic_vec2& v) const noexcept
+            const generic_vec2_scalar& v) const noexcept
         {
             return (v - *this).squared_length();
         }
 
         RTM_FORCE_INLINE value_type distance_to_line(
-            const generic_vec2& v0, const generic_vec2& v1) const noexcept
+            const generic_vec2_scalar& v0,
+            const generic_vec2_scalar& v1) const noexcept
         {
             // Given a vector PointVector from LinePoint1 to Point and a vector
             // LineVector from LinePoint1 to LinePoint2, the scaled distance
@@ -322,13 +341,13 @@ namespace move::vectormath
         }
 
         RTM_FORCE_INLINE value_type cross(
-            const generic_vec2& rhs) const noexcept
+            const generic_vec2_scalar& rhs) const noexcept
         {
             return _x * rhs._y - _y * rhs._x;
         }
 
         RTM_FORCE_INLINE value_type angle_between_normalized_vectors(
-            const generic_vec2& v) const noexcept
+            const generic_vec2_scalar& v) const noexcept
         {
             // Compute with dot product
             auto dot = this->dot(v);
@@ -336,7 +355,7 @@ namespace move::vectormath
         }
 
         RTM_FORCE_INLINE value_type angle_between_vectors(
-            const generic_vec2& v) const noexcept
+            const generic_vec2_scalar& v) const noexcept
         {
             // Compute with dot product
             auto norm = normalized();
@@ -344,14 +363,14 @@ namespace move::vectormath
             return norm.angle_between_normalized_vectors(vnorm);
         }
 
-        RTM_FORCE_INLINE generic_vec2 reflect(
-            const generic_vec2& normal) const noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar reflect(
+            const generic_vec2_scalar& normal) const noexcept
         {
             return *this - (normal * (2 * dot(normal)));
         }
 
-        RTM_FORCE_INLINE generic_vec2 refract(
-            const generic_vec2& normal, value_type ior) const noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar refract(
+            const generic_vec2_scalar& normal, value_type ior) const noexcept
         {
             // Based on XMVector2RefractV
             const auto& incident = *this;
@@ -381,18 +400,20 @@ namespace move::vectormath
                 ry = 0.0f;
             }
 
-            return generic_vec2(rx, ry);
+            return generic_vec2_scalar(rx, ry);
         }
 
-        RTM_FORCE_INLINE generic_vec2 min(const generic_vec2& v) const noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar min(
+            const generic_vec2_scalar& v) const noexcept
         {
-            return generic_vec2(
+            return generic_vec2_scalar(
                 rtm::scalar_min(_x, v._x), rtm::scalar_min(_y, v._y));
         }
 
-        RTM_FORCE_INLINE generic_vec2 max(const generic_vec2& v) const noexcept
+        RTM_FORCE_INLINE generic_vec2_scalar max(
+            const generic_vec2_scalar& v) const noexcept
         {
-            return generic_vec2(
+            return generic_vec2_scalar(
                 rtm::scalar_max(_x, v._x), rtm::scalar_max(_y, v._y));
         }
 
@@ -408,32 +429,32 @@ namespace move::vectormath
         }
 
     public:
-        RTM_FORCE_INLINE static generic_vec2 zero() noexcept
+        RTM_FORCE_INLINE static generic_vec2_scalar zero() noexcept
         {
-            return generic_vec2(0, 0);
+            return generic_vec2_scalar(0, 0);
         }
 
-        RTM_FORCE_INLINE static generic_vec2 one() noexcept
+        RTM_FORCE_INLINE static generic_vec2_scalar one() noexcept
         {
-            return generic_vec2(1, 1);
+            return generic_vec2_scalar(1, 1);
         }
 
-        RTM_FORCE_INLINE static generic_vec2 x_axis() noexcept
+        RTM_FORCE_INLINE static generic_vec2_scalar x_axis() noexcept
         {
-            return generic_vec2(1, 0);
+            return generic_vec2_scalar(1, 0);
         }
 
-        RTM_FORCE_INLINE static generic_vec2 y_axis() noexcept
+        RTM_FORCE_INLINE static generic_vec2_scalar y_axis() noexcept
         {
-            return generic_vec2(0, 1);
+            return generic_vec2_scalar(0, 1);
         }
 
-        RTM_FORCE_INLINE static generic_vec2 right() noexcept
+        RTM_FORCE_INLINE static generic_vec2_scalar right() noexcept
         {
             return x_axis();
         }
 
-        RTM_FORCE_INLINE static generic_vec2 up() noexcept
+        RTM_FORCE_INLINE static generic_vec2_scalar up() noexcept
         {
             return y_axis();
         }
@@ -443,8 +464,8 @@ namespace move::vectormath
         float _y;
     };
 
-    using vec2f = generic_vec2<float>;
-    using vec2d = generic_vec2<double>;
+    using vec2f = generic_vec2_scalar<float>;
+    using vec2d = generic_vec2_scalar<double>;
 
 #if MOVE_VECTORMATH_USE_DOUBLE_PRECISION
     using vec2 = vec2d;
@@ -453,8 +474,8 @@ namespace move::vectormath
 #endif
 
     template <typename value_type>
-    inline std::ostream& operator<<(
-        std::ostream& os, const move::vectormath::generic_vec2<value_type>& v)
+    inline std::ostream& operator<<(std::ostream& os,
+        const move::vectormath::generic_vec2_scalar<value_type>& v)
     {
         return os << "(" << v.x() << ", " << v.y() << ")";
     }
@@ -467,7 +488,7 @@ MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2d);
 #endif
 
 template <typename value_type>
-struct fmt::formatter<move::vectormath::generic_vec2<value_type>>
+struct fmt::formatter<move::vectormath::generic_vec2_scalar<value_type>>
 {
     template <typename ParseContext>
     constexpr inline auto parse(ParseContext& ctx)
@@ -476,7 +497,8 @@ struct fmt::formatter<move::vectormath::generic_vec2<value_type>>
     }
 
     template <typename FormatContext>
-    auto inline format(move::vectormath::generic_vec2<value_type> const& number,
+    auto inline format(
+        move::vectormath::generic_vec2_scalar<value_type> const& number,
         FormatContext& ctx)
     {
         return format_to(ctx.out(), "({}, {})", number.x(), number.y());
