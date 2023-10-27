@@ -252,12 +252,6 @@ namespace move::vectormath
             return rtm::scalar_sqrt(squared_length());
         }
 
-        RTM_FORCE_INLINE value_type length_approximate() const noexcept
-        {
-            // TODO: Implement approximate length
-            return length();
-        }
-
         RTM_FORCE_INLINE value_type squared_length() const noexcept
         {
             return _x * _x + _y * _y;
@@ -268,39 +262,30 @@ namespace move::vectormath
             return *this / length();
         }
 
-        RTM_FORCE_INLINE generic_vec2_scalar
-        normalized_approximate() const noexcept
+    public:
+        RTM_FORCE_INLINE static value_type dot(const generic_vec2_scalar& v1,
+            const generic_vec2_scalar& v2) noexcept
         {
-            return *this / length_approximate();
+            return v1._x * v2._x + v1._y * v2._y;
         }
 
-        RTM_FORCE_INLINE value_type dot(
-            const generic_vec2_scalar& v) const noexcept
+        RTM_FORCE_INLINE static value_type distance_between_points(
+            const generic_vec2_scalar& point1,
+            const generic_vec2_scalar& point2) noexcept
         {
-            return _x * v._x + _y * v._y;
+            return (point2 - point1).length();
         }
 
-        RTM_FORCE_INLINE value_type distance_to_point(
-            const generic_vec2_scalar& v) const noexcept
+        RTM_FORCE_INLINE static value_type squared_distance_between_points(
+            const generic_vec2_scalar& point1,
+            const generic_vec2_scalar& point2) noexcept
         {
-            return (v - *this).length();
+            return (point2 - point1).squared_length();
         }
 
-        RTM_FORCE_INLINE value_type distance_to_point_approximate(
-            const generic_vec2_scalar& v) const noexcept
-        {
-            return (v - *this).length_approximate();
-        }
-
-        RTM_FORCE_INLINE value_type squared_distance_to_point(
-            const generic_vec2_scalar& v) const noexcept
-        {
-            return (v - *this).squared_length();
-        }
-
-        RTM_FORCE_INLINE value_type distance_to_line(
-            const generic_vec2_scalar& v0,
-            const generic_vec2_scalar& v1) const noexcept
+        RTM_FORCE_INLINE static value_type distance_to_line(
+            const generic_vec2_scalar& point, const generic_vec2_scalar& v0,
+            const generic_vec2_scalar& v1) noexcept
         {
             // Given a vector PointVector from LinePoint1 to Point and a vector
             // LineVector from LinePoint1 to LinePoint2, the scaled distance
@@ -326,12 +311,12 @@ namespace move::vectormath
 
             // return XMVector2Length(DistanceVector);
 
-            auto point_vector = *this - v0;
+            auto point_vector = point - v0;
             auto line_vector = v1 - v0;
 
             auto length_sq = line_vector.squared_length();
 
-            auto point_projection_scale = point_vector.dot(line_vector);
+            auto point_projection_scale = dot(point_vector, line_vector);
             point_projection_scale /= length_sq;
 
             auto distance_vector = line_vector * point_projection_scale;
@@ -340,41 +325,44 @@ namespace move::vectormath
             return distance_vector.length();
         }
 
-        RTM_FORCE_INLINE value_type cross(
-            const generic_vec2_scalar& rhs) const noexcept
+        RTM_FORCE_INLINE static value_type cross(const generic_vec2_scalar& lhs,
+            const generic_vec2_scalar& rhs) noexcept
         {
-            return _x * rhs._y - _y * rhs._x;
+            return lhs._x * rhs._y - lhs._y * rhs._x;
         }
 
-        RTM_FORCE_INLINE value_type angle_between_normalized_vectors(
-            const generic_vec2_scalar& v) const noexcept
-        {
-            // Compute with dot product
-            auto dot = this->dot(v);
-            return rtm::scalar_acos(dot);
-        }
-
-        RTM_FORCE_INLINE value_type angle_between_vectors(
-            const generic_vec2_scalar& v) const noexcept
+        RTM_FORCE_INLINE static value_type angle_between_normalized_vectors(
+            const generic_vec2_scalar& v1,
+            const generic_vec2_scalar& v2) noexcept
         {
             // Compute with dot product
-            auto norm = normalized();
-            auto vnorm = v.normalized();
-            return norm.angle_between_normalized_vectors(vnorm);
+            auto res = dot(v1, v2);
+            return rtm::scalar_acos(res);
         }
 
-        RTM_FORCE_INLINE generic_vec2_scalar reflect(
-            const generic_vec2_scalar& normal) const noexcept
+        RTM_FORCE_INLINE static value_type angle_between_vectors(
+            const generic_vec2_scalar& v1,
+            const generic_vec2_scalar& v2) noexcept
         {
-            return *this - (normal * (2 * dot(normal)));
+            // Compute with dot product
+            auto norm = v1.normalized();
+            auto vnorm = v2.normalized();
+            return angle_between_normalized_vectors(norm, vnorm);
         }
 
-        RTM_FORCE_INLINE generic_vec2_scalar refract(
-            const generic_vec2_scalar& normal, value_type ior) const noexcept
+        RTM_FORCE_INLINE static generic_vec2_scalar reflect(
+            const generic_vec2_scalar& incident,
+            const generic_vec2_scalar& normal) noexcept
+        {
+            return incident - (normal * (2 * dot(incident, normal)));
+        }
+
+        RTM_FORCE_INLINE static generic_vec2_scalar refract(
+            const generic_vec2_scalar& incident,
+            const generic_vec2_scalar& normal, value_type ior) noexcept
         {
             // Based on XMVector2RefractV
-            const auto& incident = *this;
-            auto idotn = incident.dot(normal);
+            auto idotn = dot(incident, normal);
 
             auto ry = 1.0f - (idotn * idotn);
             auto rx = 1.0f - (ry * ior * ior);
@@ -403,29 +391,26 @@ namespace move::vectormath
             return generic_vec2_scalar(rx, ry);
         }
 
-        RTM_FORCE_INLINE generic_vec2_scalar min(
-            const generic_vec2_scalar& v) const noexcept
+        RTM_FORCE_INLINE static generic_vec2_scalar min(
+            const generic_vec2_scalar& v1,
+            const generic_vec2_scalar& v2) noexcept
         {
             return generic_vec2_scalar(
-                rtm::scalar_min(_x, v._x), rtm::scalar_min(_y, v._y));
+                rtm::scalar_min(v1._x, v2._x), rtm::scalar_min(v1._y, v2._y));
         }
 
-        RTM_FORCE_INLINE generic_vec2_scalar max(
-            const generic_vec2_scalar& v) const noexcept
+        RTM_FORCE_INLINE static generic_vec2_scalar max(
+            const generic_vec2_scalar& v1,
+            const generic_vec2_scalar& v2) noexcept
         {
             return generic_vec2_scalar(
-                rtm::scalar_max(_x, v._x), rtm::scalar_max(_y, v._y));
+                rtm::scalar_max(v1._x, v2._x), rtm::scalar_max(v1._y, v2._y));
         }
 
     public:
         RTM_FORCE_INLINE void normalize() noexcept
         {
             *this /= length();
-        }
-
-        RTM_FORCE_INLINE void normalize_approximate() noexcept
-        {
-            *this /= length_approximate();
         }
 
     public:
@@ -449,9 +434,19 @@ namespace move::vectormath
             return generic_vec2_scalar(0, 1);
         }
 
+        RTM_FORCE_INLINE static generic_vec2_scalar left() noexcept
+        {
+            return -x_axis();
+        }
+
         RTM_FORCE_INLINE static generic_vec2_scalar right() noexcept
         {
             return x_axis();
+        }
+
+        RTM_FORCE_INLINE static generic_vec2_scalar down() noexcept
+        {
+            return -y_axis();
         }
 
         RTM_FORCE_INLINE static generic_vec2_scalar up() noexcept
@@ -460,8 +455,8 @@ namespace move::vectormath
         }
 
     private:
-        float _x;
-        float _y;
+        value_type _x;
+        value_type _y;
     };
 
     using vec2f = generic_vec2_scalar<float>;
