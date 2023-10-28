@@ -83,6 +83,7 @@ namespace move::vectormath
         {
             _vec.set_component(index, value);
             normalize();
+            return *this;
         }
 
         RTM_FORCE_INLINE component_type x() const noexcept
