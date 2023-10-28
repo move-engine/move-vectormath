@@ -1,9 +1,6 @@
 # Contributing
 
-<!--
-    Short overview, rules, general guidelines, notes about pull requests and
-    style should go here.
--->
+TODO: Write up contributer rules.
 
 ## Code of Conduct
 
