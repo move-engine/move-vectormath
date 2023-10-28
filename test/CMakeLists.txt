@@ -13,7 +13,6 @@ CPMAddPackage("gh:catchorg/Catch2@3.2.0")
 CPMAddPackage("gh:microsoft/DirectXMath#dec2022")
 if(PROJECT_IS_TOP_LEVEL)
   find_package(move-vectormath REQUIRED)
-  enable_testing()
 endif()
 
 # ---- Tests ----
