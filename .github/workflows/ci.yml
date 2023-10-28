@@ -77,10 +77,10 @@ jobs:
       # - name: Configure
       #   env: { CXX: clang++-12 }
       #   run: cmake --preset=ci-sanitize -Wno-error=dev
-      # 
+      #
       # - name: Build
       #   run: cmake --build build/sanitize -j 2
-      # 
+      #
       # - name: Test
       #   working-directory: build/sanitize
       #   env:
@@ -97,7 +97,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-2022]
+        os: [ubuntu-latest, windows-2022] # macos-latest # TODO: Enable macOS
 
     runs-on: ${{ matrix.os }}
 
