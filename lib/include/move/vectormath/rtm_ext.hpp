@@ -94,6 +94,7 @@ namespace rtm::ext
     RTM_FORCE_INLINE matrix4x4f perspective_fov_lh(
         float fovY, float aspectRatio, float near, float far)
     {
+        // Based on DXM's implementation
         using mat_type = matrix4x4f;
         using value_type = float;
 
@@ -122,17 +123,18 @@ namespace rtm::ext
     RTM_FORCE_INLINE matrix4x4d perspective_fov_lh(
         double fovY, double aspectRatio, double near, double far)
     {
+        // Based on DXM's implementation
         using mat_type = matrix4x4d;
         using value_type = double;
 
-        assert(near > 0.f && far > 0.f);
-        assert(!scalar_near_equal(fovY, 0.0f, 0.00001f * 2.0f));
-        assert(!scalar_near_equal(aspectRatio, 0.0f, 0.00001f));
-        assert(!scalar_near_equal(far, near, 0.00001f));
+        assert(near > 0.f && far > 0.);
+        assert(!scalar_near_equal(fovY, 0.0, 0.00001 * 2.0));
+        assert(!scalar_near_equal(aspectRatio, 0.0, 0.00001));
+        assert(!scalar_near_equal(far, near, 0.00001));
 
         value_type sin_fov;
         value_type cos_fov;
-        scalar_sincos(0.5f * fovY, sin_fov, cos_fov);
+        scalar_sincos(0.5 * fovY, sin_fov, cos_fov);
 
         value_type height = cos_fov / sin_fov;
         value_type width = height / aspectRatio;
@@ -150,6 +152,7 @@ namespace rtm::ext
     RTM_FORCE_INLINE matrix4x4f perspective_fov_rh(
         float fovY, float aspectRatio, float near, float far)
     {
+        // Based on DXM's implementation
         using mat_type = matrix4x4f;
         using value_type = float;
 
@@ -178,6 +181,7 @@ namespace rtm::ext
     RTM_FORCE_INLINE matrix4x4d perspective_fov_rh(
         double fovY, double aspectRatio, double near, double far)
     {
+        // Based on DXM's implementation
         using mat_type = matrix4x4d;
         using value_type = double;
 
@@ -206,6 +210,7 @@ namespace rtm::ext
     RTM_FORCE_INLINE matrix4x4f ortho_lh(
         float width, float height, float near, float far)
     {
+        // Based on DXM's implementation
         using mat_type = matrix4x4f;
         using value_type = float;
 
@@ -226,6 +231,7 @@ namespace rtm::ext
     RTM_FORCE_INLINE matrix4x4d ortho_lh(
         double width, double height, double near, double far)
     {
+        // Based on DXM's implementation
         using mat_type = matrix4x4d;
         using value_type = double;
 
@@ -246,6 +252,7 @@ namespace rtm::ext
     RTM_FORCE_INLINE matrix4x4f ortho_rh(
         float width, float height, float near, float far)
     {
+        // Based on DXM's implementation
         using mat_type = matrix4x4f;
         using value_type = float;
 
@@ -266,6 +273,7 @@ namespace rtm::ext
     RTM_FORCE_INLINE matrix4x4d ortho_rh(
         double width, double height, double near, double far)
     {
+        // Based on DXM's implementation
         using mat_type = matrix4x4d;
         using value_type = double;
 
@@ -286,6 +294,7 @@ namespace rtm::ext
     RTM_FORCE_INLINE matrix4x4f ortho_off_center_lh(
         float left, float right, float bottom, float top, float near, float far)
     {
+        // Based on DXM's implementation
         using mat_type = matrix4x4f;
         using value_type = float;
 
@@ -312,6 +321,7 @@ namespace rtm::ext
     RTM_FORCE_INLINE matrix4x4f ortho_off_center_rh(
         float left, float right, float bottom, float top, float near, float far)
     {
+        // Based on DXM's implementation
         using mat_type = matrix4x4f;
         using value_type = float;
 
@@ -338,6 +348,7 @@ namespace rtm::ext
     RTM_FORCE_INLINE matrix4x4d ortho_off_center_lh(double left, double right,
         double bottom, double top, double near, double far)
     {
+        // Based on DXM's implementation
         using mat_type = matrix4x4d;
         using value_type = double;
 
@@ -364,6 +375,7 @@ namespace rtm::ext
     RTM_FORCE_INLINE matrix4x4d ortho_off_center_rh(double left, double right,
         double bottom, double top, double near, double far)
     {
+        // Based on DXM's implementation
         using mat_type = matrix4x4d;
         using value_type = double;
 
@@ -419,6 +431,7 @@ namespace rtm::ext
     RTM_DISABLE_SECURITY_COOKIE_CHECK
     RTM_FORCE_INLINE quatf quat_inverse(const quatf& input)
     {
+        // Based on DXM's implementation
         using quat_t = quatf;
         using vector_t = vector4f;
         using value_t = float;
@@ -438,6 +451,7 @@ namespace rtm::ext
     RTM_DISABLE_SECURITY_COOKIE_CHECK
     RTM_FORCE_INLINE quatd quat_inverse(const quatd& input)
     {
+        // Based on DXM's implementation
         using quat_t = quatd;
         using vector_t = vector4d;
         using value_t = double;

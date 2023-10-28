@@ -623,7 +623,7 @@ namespace move::vectormath
          */
         RTM_FORCE_INLINE generic_vec3_rtm normalized() const noexcept
         {
-            return rtm::vector_mul(_value, value_type(1) / length());
+            return rtm::vector_normalize3(_value);
         }
 
     public:
