@@ -71,10 +71,6 @@
         <section id="pub-types">
           <h2><a href="#pub-types">Public types</a></h2>
           <dl class="m-doc">
-            <dt>
-              class <a href="classmove_1_1vectormath_1_1generic__quat_1_1component__accessor.html" class="m-doc">component_accessor</a>
-            </dt>
-            <dd><span></span></dd>
             <dt id="adc94652d72dc6623267d6498e18925e8">
               using <a href="#adc94652d72dc6623267d6498e18925e8" class="m-doc-self">component_type</a> = value_type
             </dt>
@@ -105,43 +101,43 @@
         <section id="pub-static-methods">
           <h2><a href="#pub-static-methods">Public static functions</a></h2>
           <dl class="m-doc">
-            <dt id="af5c316c22459f85481bf4973acae7de5">
-              <span class="m-doc-wrap-bumper">static auto <a href="#af5c316c22459f85481bf4973acae7de5" class="m-doc-self">slerp</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; v1,
+            <dt id="a1205b8cd5e9918e3ed2de3b5650dfefa">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a1205b8cd5e9918e3ed2de3b5650dfefa" class="m-doc-self">slerp</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; v1,
               const <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; v2,
-              value_type t) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
+              value_type t) -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a531be447967828617bb444fd0b1efbc0">
-              <span class="m-doc-wrap-bumper">static auto <a href="#a531be447967828617bb444fd0b1efbc0" class="m-doc-self">identity</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a0d821d304262a52adcda56dea2575e48">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a0d821d304262a52adcda56dea2575e48" class="m-doc-self">identity</a>(</span><span class="m-doc-wrap">) -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="ad0fe6cc042f717574cea4650cd233c9b">
-              <span class="m-doc-wrap-bumper">static auto <a href="#ad0fe6cc042f717574cea4650cd233c9b" class="m-doc-self">from_pitch_yaw_roll</a>(</span><span class="m-doc-wrap">value_type pitch,
+            <dt id="ae9b62b08a0f1006183909dd7464a2af8">
+              <span class="m-doc-wrap-bumper">static auto <a href="#ae9b62b08a0f1006183909dd7464a2af8" class="m-doc-self">from_pitch_yaw_roll</a>(</span><span class="m-doc-wrap">value_type pitch,
               value_type yaw,
-              value_type roll) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
+              value_type roll) -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="ab50d4d5a0f6035f6638ff8825ad8ee0a">
-              <span class="m-doc-wrap-bumper">static auto <a href="#ab50d4d5a0f6035f6638ff8825ad8ee0a" class="m-doc-self">from_pitch_yaw_roll</a>(</span><span class="m-doc-wrap">const vec3_type&amp; angles) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a06fee750a73ff8304a5669c0d384bbc8">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a06fee750a73ff8304a5669c0d384bbc8" class="m-doc-self">from_pitch_yaw_roll</a>(</span><span class="m-doc-wrap">const vec3_type&amp; angles) -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="ad25bdddc780085ecde25ebb0dede3db3">
-              <span class="m-doc-wrap-bumper">static auto <a href="#ad25bdddc780085ecde25ebb0dede3db3" class="m-doc-self">from_axis_angle</a>(</span><span class="m-doc-wrap">const vec3_type&amp; axis,
-              value_type angle) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="aa5cd270a3295bb27937e18df0dcaebc3">
+              <span class="m-doc-wrap-bumper">static auto <a href="#aa5cd270a3295bb27937e18df0dcaebc3" class="m-doc-self">from_axis_angle</a>(</span><span class="m-doc-wrap">const vec3_type&amp; axis,
+              value_type angle) -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a889de438b3965d0c3453d5109e73f1cb">
-              <span class="m-doc-wrap-bumper">static auto <a href="#a889de438b3965d0c3453d5109e73f1cb" class="m-doc-self">from_rotation_normal</a>(</span><span class="m-doc-wrap">const vec3_type&amp; normal_axis,
-              value_type angle) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a2a29c305a6ebc2b8690ef4789f026703">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a2a29c305a6ebc2b8690ef4789f026703" class="m-doc-self">from_rotation_normal</a>(</span><span class="m-doc-wrap">const vec3_type&amp; normal_axis,
+              value_type angle) -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a4ba9a498f871dc72e2d667ecf01526d4">
-              <span class="m-doc-wrap-bumper">static auto <a href="#a4ba9a498f871dc72e2d667ecf01526d4" class="m-doc-self">from_rotation_axis</a>(</span><span class="m-doc-wrap">const vec3_type&amp; axis,
-              value_type angle) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a9a043c8cd8fa8bcf673e7c3131c1149a">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a9a043c8cd8fa8bcf673e7c3131c1149a" class="m-doc-self">from_rotation_axis</a>(</span><span class="m-doc-wrap">const vec3_type&amp; axis,
+              value_type angle) -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="ab9035ecb7baa17dc68916d6c1ddb8f8c">
-              <span class="m-doc-wrap-bumper">static auto <a href="#ab9035ecb7baa17dc68916d6c1ddb8f8c" class="m-doc-self">rotation_matrix_to_quaternion</a>(</span><span class="m-doc-wrap">const mat4x4_type&amp; matrix) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a840fa6f885944ee3dd8091c48869d341">
+              <span class="m-doc-wrap-bumper">static auto <a href="#a840fa6f885944ee3dd8091c48869d341" class="m-doc-self">rotation_matrix_to_quaternion</a>(</span><span class="m-doc-wrap">const mat4x4_type&amp; matrix) -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
           </dl>
@@ -149,182 +145,174 @@
         <section id="pub-methods">
           <h2><a href="#pub-methods">Public functions</a></h2>
           <dl class="m-doc">
-            <dt id="a9afe8ca4835191e87739c04f795e98dd">
-              <span class="m-doc-wrap-bumper">auto <a href="#a9afe8ca4835191e87739c04f795e98dd" class="m-doc-self">generic_quat</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="ad6842b2531b720bcadb7a222cdf5269d">
+              <span class="m-doc-wrap-bumper">auto <a href="#ad6842b2531b720bcadb7a222cdf5269d" class="m-doc-self">generic_quat</a>(</span><span class="m-doc-wrap">) -&gt; MVM_INLINE_NODISCARD <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="aeee1d0194778be04db7ce3e91feb5aa8">
-              <span class="m-doc-wrap-bumper">auto <a href="#aeee1d0194778be04db7ce3e91feb5aa8" class="m-doc-self">generic_quat</a>(</span><span class="m-doc-wrap">value_type x,
+            <dt id="aa2a5e8b4f3be89c835af7e051d1fc84a">
+              <span class="m-doc-wrap-bumper">auto <a href="#aa2a5e8b4f3be89c835af7e051d1fc84a" class="m-doc-self">generic_quat</a>(</span><span class="m-doc-wrap">value_type x,
               value_type y = 0,
               value_type z = 0,
-              value_type w = 0) -&gt; RTM_FORCE_INLINE <span class="m-label m-flat m-success">noexcept</span></span>
+              value_type w = 0) -&gt; MVM_INLINE_NODISCARD <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a736a6844b929a2746e189d44e2d30f4e">
-              <span class="m-doc-wrap-bumper">auto <a href="#a736a6844b929a2746e189d44e2d30f4e" class="m-doc-self">generic_quat</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__quat.html#a3edbacb699c3651b5020705b410e92cc" class="m-doc">quat_<wbr />type</a>&amp; v) -&gt; RTM_FORCE_INLINE <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a72c35ae5b62e91ced5237765ee924da4">
+              <span class="m-doc-wrap-bumper">auto <a href="#a72c35ae5b62e91ced5237765ee924da4" class="m-doc-self">generic_quat</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__quat.html#a3edbacb699c3651b5020705b410e92cc" class="m-doc">quat_<wbr />type</a>&amp; v) -&gt; MVM_INLINE_NODISCARD <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a9f4bcf4d01fa4ba9dda2d4255207145f">
-              <span class="m-doc-wrap-bumper">auto <a href="#a9f4bcf4d01fa4ba9dda2d4255207145f" class="m-doc-self">get_internal</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__quat.html#a3edbacb699c3651b5020705b410e92cc" class="m-doc">quat_<wbr />type</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a576e7ce2bfd1e1ef703b30db8d310e8d">
+              <span class="m-doc-wrap-bumper">auto <a href="#a576e7ce2bfd1e1ef703b30db8d310e8d" class="m-doc-self">get_internal</a>(</span><span class="m-doc-wrap">) const -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html#a3edbacb699c3651b5020705b410e92cc" class="m-doc">quat_<wbr />type</a> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a096be05e333028c65a2f9ccc21e20767">
+            <dt id="a04b3e2f95b88feac28ca51138189b519">
               <div class="m-doc-template">template&lt;typename Archive&gt;</div>
-              <span class="m-doc-wrap-bumper">auto <a href="#a096be05e333028c65a2f9ccc21e20767" class="m-doc-self">serialize</a>(</span><span class="m-doc-wrap">Archive&amp; ar) -&gt; RTM_FORCE_INLINE void</span>
+              <span class="m-doc-wrap-bumper">auto <a href="#a04b3e2f95b88feac28ca51138189b519" class="m-doc-self">serialize</a>(</span><span class="m-doc-wrap">Archive&amp; ar) -&gt; <a href="macros_8hpp.html#a658b1762f9739671bc6d1c51deebc97d" class="m-doc">MVM_<wbr />INLINE</a> void</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="af204770d7c22cf2528d65edad452f6e1">
-              <span class="m-doc-wrap-bumper">auto <a href="#af204770d7c22cf2528d65edad452f6e1" class="m-doc-self">operator quat_type&amp;</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE</span>
+            <dt id="a0d9d44d9d524cf9250e61f5e3d20d397">
+              <span class="m-doc-wrap-bumper">auto <a href="#a0d9d44d9d524cf9250e61f5e3d20d397" class="m-doc-self">operator quat_type&amp;</a>(</span><span class="m-doc-wrap">) -&gt; MVM_INLINE_NODISCARD</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a7437e692150783eb11961d91c8f69f9d">
-              <span class="m-doc-wrap-bumper">auto <a href="#a7437e692150783eb11961d91c8f69f9d" class="m-doc-self">operator==</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; v) const -&gt; RTM_FORCE_INLINE bool <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="ae779c1fbea3059065d2b8a2638a4112a">
+              <span class="m-doc-wrap-bumper">auto <a href="#ae779c1fbea3059065d2b8a2638a4112a" class="m-doc-self">operator==</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; v) const -&gt; MVM_INLINE_NODISCARD bool <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a54dfbec0d3ce38764b86689378e75969">
-              <span class="m-doc-wrap-bumper">auto <a href="#a54dfbec0d3ce38764b86689378e75969" class="m-doc-self">operator!=</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; v) const -&gt; RTM_FORCE_INLINE bool <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a5278d5d20da173dca2bbc5f35de11640">
+              <span class="m-doc-wrap-bumper">auto <a href="#a5278d5d20da173dca2bbc5f35de11640" class="m-doc-self">operator!=</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; v) const -&gt; MVM_INLINE_NODISCARD bool <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a92209694d677b410cbf6f4f3160fc8d1">
-              <span class="m-doc-wrap-bumper">auto <a href="#a92209694d677b410cbf6f4f3160fc8d1" class="m-doc-self">operator=</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; v) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a4f6555fe4f34c66cfe19cc7f4461af14">
+              <span class="m-doc-wrap-bumper">auto <a href="#a4f6555fe4f34c66cfe19cc7f4461af14" class="m-doc-self">operator=</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; v) -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a4a3ba54c1291b79a1ded50ae05e834fd">
-              <span class="m-doc-wrap-bumper">auto <a href="#a4a3ba54c1291b79a1ded50ae05e834fd" class="m-doc-self">operator*=</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; v) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="aeaaefc1399528e9dee51671291736abe">
+              <span class="m-doc-wrap-bumper">auto <a href="#aeaaefc1399528e9dee51671291736abe" class="m-doc-self">operator*=</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; v) -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="ad3de22fccb1c0b6461e9b8bb2a2ee763">
-              <span class="m-doc-wrap-bumper">auto <a href="#ad3de22fccb1c0b6461e9b8bb2a2ee763" class="m-doc-self">operator*</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; v) const -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="adc3c2d69a325b301ca9033d46f401397">
+              <span class="m-doc-wrap-bumper">auto <a href="#adc3c2d69a325b301ca9033d46f401397" class="m-doc-self">operator*</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; v) const -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a7ba700e3334d797f649a3ac93d339262">
-              <span class="m-doc-wrap-bumper">auto <a href="#a7ba700e3334d797f649a3ac93d339262" class="m-doc-self">operator*</a>(</span><span class="m-doc-wrap">const vec3_type&amp; rhs) const -&gt; RTM_FORCE_INLINE vec3_type <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="adaf374bc506206fd7695c6706fc1aa9e">
+              <span class="m-doc-wrap-bumper">auto <a href="#adaf374bc506206fd7695c6706fc1aa9e" class="m-doc-self">operator*</a>(</span><span class="m-doc-wrap">const vec3_type&amp; rhs) const -&gt; MVM_INLINE_NODISCARD vec3_type <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="ac6d842b7f8abd82ca9ce17685ac769f6">
-              <span class="m-doc-wrap-bumper">auto <a href="#ac6d842b7f8abd82ca9ce17685ac769f6" class="m-doc-self">operator-</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a6a5922009fbdd7030201210db5b89bda">
+              <span class="m-doc-wrap-bumper">auto <a href="#a6a5922009fbdd7030201210db5b89bda" class="m-doc-self">operator-</a>(</span><span class="m-doc-wrap">) const -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="afe019db262c4e7e572b51bdf3db3cd72">
-              <span class="m-doc-wrap-bumper">auto <a href="#afe019db262c4e7e572b51bdf3db3cd72" class="m-doc-self">get_component</a>(</span><span class="m-doc-wrap">int index) const -&gt; RTM_FORCE_INLINE value_type <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="ae67fcd85cfde4ae31dc904d715a351d1">
+              <span class="m-doc-wrap-bumper">auto <a href="#ae67fcd85cfde4ae31dc904d715a351d1" class="m-doc-self">get_component</a>(</span><span class="m-doc-wrap">int index) const -&gt; MVM_INLINE_NODISCARD value_type <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="af6e00b23372e6aee409855a59bb54804">
-              <span class="m-doc-wrap-bumper">auto <a href="#af6e00b23372e6aee409855a59bb54804" class="m-doc-self">set_component</a>(</span><span class="m-doc-wrap">int index,
-              value_type value) -&gt; RTM_FORCE_INLINE void</span>
+            <dt id="a2ea4dd529f7640ab4c2231733ecbba91">
+              <span class="m-doc-wrap-bumper">auto <a href="#a2ea4dd529f7640ab4c2231733ecbba91" class="m-doc-self">set_component</a>(</span><span class="m-doc-wrap">int index,
+              value_type value) -&gt; <a href="macros_8hpp.html#a658b1762f9739671bc6d1c51deebc97d" class="m-doc">MVM_<wbr />INLINE</a> void</span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a99d4b72294ff566e2627f75c0a864590">
-              <span class="m-doc-wrap-bumper">auto <a href="#a99d4b72294ff566e2627f75c0a864590" class="m-doc-self">operator[]</a>(</span><span class="m-doc-wrap">int i) const -&gt; RTM_FORCE_INLINE value_type <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="ad264aff3ba9609d933c7c654ec7f3da4">
+              <span class="m-doc-wrap-bumper">auto <a href="#ad264aff3ba9609d933c7c654ec7f3da4" class="m-doc-self">operator[]</a>(</span><span class="m-doc-wrap">int i) const -&gt; MVM_INLINE_NODISCARD value_type <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a3e04b5d14ff1a678f9aa9a987a8af98d">
-              <span class="m-doc-wrap-bumper">auto <a href="#a3e04b5d14ff1a678f9aa9a987a8af98d" class="m-doc-self">operator[]</a>(</span><span class="m-doc-wrap">int i) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__quat_1_1component__accessor.html" class="m-doc">component_<wbr />accessor</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="af665833bcef18aafde369ef349433d90">
+              <span class="m-doc-wrap-bumper">auto <a href="#af665833bcef18aafde369ef349433d90" class="m-doc-self">x</a>(</span><span class="m-doc-wrap">) const -&gt; MVM_INLINE_NODISCARD value_type <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="aed171c6bf4036a1d5fabe314e588dd45">
-              <span class="m-doc-wrap-bumper">auto <a href="#aed171c6bf4036a1d5fabe314e588dd45" class="m-doc-self">x</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__quat_1_1component__accessor.html" class="m-doc">component_<wbr />accessor</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a57d416aca47f70b4de1638b110fe3609">
+              <span class="m-doc-wrap-bumper">auto <a href="#a57d416aca47f70b4de1638b110fe3609" class="m-doc-self">y</a>(</span><span class="m-doc-wrap">) const -&gt; MVM_INLINE_NODISCARD value_type <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a0063e125578d9ecc1e5b814f06a4e7e7">
-              <span class="m-doc-wrap-bumper">auto <a href="#a0063e125578d9ecc1e5b814f06a4e7e7" class="m-doc-self">y</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__quat_1_1component__accessor.html" class="m-doc">component_<wbr />accessor</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a55eb03ae32b9d09a4596ee6fddf03c03">
+              <span class="m-doc-wrap-bumper">auto <a href="#a55eb03ae32b9d09a4596ee6fddf03c03" class="m-doc-self">z</a>(</span><span class="m-doc-wrap">) const -&gt; MVM_INLINE_NODISCARD value_type <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a055a96945f3a36d8b679b87b58209ed1">
-              <span class="m-doc-wrap-bumper">auto <a href="#a055a96945f3a36d8b679b87b58209ed1" class="m-doc-self">z</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__quat_1_1component__accessor.html" class="m-doc">component_<wbr />accessor</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="acf453b2e4e6f023d874d7e584588848c">
+              <span class="m-doc-wrap-bumper">auto <a href="#acf453b2e4e6f023d874d7e584588848c" class="m-doc-self">w</a>(</span><span class="m-doc-wrap">) const -&gt; MVM_INLINE_NODISCARD value_type <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a42e30231ce57b1c4722308a5a875b9d6">
-              <span class="m-doc-wrap-bumper">auto <a href="#a42e30231ce57b1c4722308a5a875b9d6" class="m-doc-self">w</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE <a href="classmove_1_1vectormath_1_1generic__quat_1_1component__accessor.html" class="m-doc">component_<wbr />accessor</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a53bb7774772e252c424a25ca707549e5">
+              <span class="m-doc-wrap-bumper">auto <a href="#a53bb7774772e252c424a25ca707549e5" class="m-doc-self">x</a>(</span><span class="m-doc-wrap">value_type value) const -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="aae97061f0be527e0a23d4560a78a3115">
-              <span class="m-doc-wrap-bumper">auto <a href="#aae97061f0be527e0a23d4560a78a3115" class="m-doc-self">x</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE value_type <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a57f365874d3e1cf3c5a68b2de93015bf">
+              <span class="m-doc-wrap-bumper">auto <a href="#a57f365874d3e1cf3c5a68b2de93015bf" class="m-doc-self">y</a>(</span><span class="m-doc-wrap">value_type value) const -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a78334daf411080ab9f9ad03ebc338124">
-              <span class="m-doc-wrap-bumper">auto <a href="#a78334daf411080ab9f9ad03ebc338124" class="m-doc-self">y</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE value_type <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a3d1e86dc3109068cfba9f1f576e8a7ad">
+              <span class="m-doc-wrap-bumper">auto <a href="#a3d1e86dc3109068cfba9f1f576e8a7ad" class="m-doc-self">z</a>(</span><span class="m-doc-wrap">value_type value) const -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="ab7420410a70867b82bc54ded97779d5e">
-              <span class="m-doc-wrap-bumper">auto <a href="#ab7420410a70867b82bc54ded97779d5e" class="m-doc-self">z</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE value_type <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="af4e1c2e27fb16521b5199715986aa8f7">
+              <span class="m-doc-wrap-bumper">auto <a href="#af4e1c2e27fb16521b5199715986aa8f7" class="m-doc-self">w</a>(</span><span class="m-doc-wrap">value_type value) const -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a1d955a5eefaf48d19562d7ad6c76619d">
-              <span class="m-doc-wrap-bumper">auto <a href="#a1d955a5eefaf48d19562d7ad6c76619d" class="m-doc-self">w</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE value_type <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="aee933397a5c1baefda9c89cf4556a313">
+              <span class="m-doc-wrap-bumper">auto <a href="#aee933397a5c1baefda9c89cf4556a313" class="m-doc-self">set_x</a>(</span><span class="m-doc-wrap">value_type x) -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="afde634fbf85ae1b49119e06bc8b3f408">
-              <span class="m-doc-wrap-bumper">auto <a href="#afde634fbf85ae1b49119e06bc8b3f408" class="m-doc-self">set_x</a>(</span><span class="m-doc-wrap">value_type x) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="ae33b2b272933e66218bd50b24ecb87e4">
+              <span class="m-doc-wrap-bumper">auto <a href="#ae33b2b272933e66218bd50b24ecb87e4" class="m-doc-self">set_y</a>(</span><span class="m-doc-wrap">value_type y) -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a5a905df48515b4249a526aa454986685">
-              <span class="m-doc-wrap-bumper">auto <a href="#a5a905df48515b4249a526aa454986685" class="m-doc-self">set_y</a>(</span><span class="m-doc-wrap">value_type y) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a2adb020690d496173d749497763074d7">
+              <span class="m-doc-wrap-bumper">auto <a href="#a2adb020690d496173d749497763074d7" class="m-doc-self">set_z</a>(</span><span class="m-doc-wrap">value_type z) -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a6caca5e0a3601bb4431f0cbba7d4f0c2">
-              <span class="m-doc-wrap-bumper">auto <a href="#a6caca5e0a3601bb4431f0cbba7d4f0c2" class="m-doc-self">set_z</a>(</span><span class="m-doc-wrap">value_type z) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="ae32c8f218814a7ca439f6d85d50613f3">
+              <span class="m-doc-wrap-bumper">auto <a href="#ae32c8f218814a7ca439f6d85d50613f3" class="m-doc-self">set_w</a>(</span><span class="m-doc-wrap">value_type w) -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a3918248ccdb0146488daf07a34a1e59d">
-              <span class="m-doc-wrap-bumper">auto <a href="#a3918248ccdb0146488daf07a34a1e59d" class="m-doc-self">set_w</a>(</span><span class="m-doc-wrap">value_type w) -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a34b43d3d4708d7272e86db048ab4fb4e">
+              <span class="m-doc-wrap-bumper">auto <a href="#a34b43d3d4708d7272e86db048ab4fb4e" class="m-doc-self">is_nan</a>(</span><span class="m-doc-wrap">) const -&gt; MVM_INLINE_NODISCARD bool <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a43465f55a08375d7f8aac3cf42e4ef4e">
-              <span class="m-doc-wrap-bumper">auto <a href="#a43465f55a08375d7f8aac3cf42e4ef4e" class="m-doc-self">is_nan</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE bool <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a5c070f4c219a37482481a4c5425629d5">
+              <span class="m-doc-wrap-bumper">auto <a href="#a5c070f4c219a37482481a4c5425629d5" class="m-doc-self">is_infinite</a>(</span><span class="m-doc-wrap">) const -&gt; MVM_INLINE_NODISCARD bool <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a5d305a0bab34cf5b993a2648a5893f09">
-              <span class="m-doc-wrap-bumper">auto <a href="#a5d305a0bab34cf5b993a2648a5893f09" class="m-doc-self">is_infinite</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE bool <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="ab3ae275d7696c6fb5487202f96327228">
+              <span class="m-doc-wrap-bumper">auto <a href="#ab3ae275d7696c6fb5487202f96327228" class="m-doc-self">is_identity</a>(</span><span class="m-doc-wrap">) const -&gt; MVM_INLINE_NODISCARD bool <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a61e8dc4c7d60b3f29d80d54d3a3f6664">
-              <span class="m-doc-wrap-bumper">auto <a href="#a61e8dc4c7d60b3f29d80d54d3a3f6664" class="m-doc-self">is_identity</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE bool <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a213eac0e2e2cf6cf0942bec2effe1079">
+              <span class="m-doc-wrap-bumper">auto <a href="#a213eac0e2e2cf6cf0942bec2effe1079" class="m-doc-self">length</a>(</span><span class="m-doc-wrap">) const -&gt; MVM_INLINE_NODISCARD value_type <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="af125947dc2f861af6bcd3b924488b817">
-              <span class="m-doc-wrap-bumper">auto <a href="#af125947dc2f861af6bcd3b924488b817" class="m-doc-self">length</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE value_type <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a0926f8115a2dc8d88d85077666411a04">
+              <span class="m-doc-wrap-bumper">auto <a href="#a0926f8115a2dc8d88d85077666411a04" class="m-doc-self">squared_length</a>(</span><span class="m-doc-wrap">) const -&gt; MVM_INLINE_NODISCARD value_type <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a99863c378014a96d2531a863f38c9e46">
-              <span class="m-doc-wrap-bumper">auto <a href="#a99863c378014a96d2531a863f38c9e46" class="m-doc-self">squared_length</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE value_type <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="ab2cb0fc6841ae5f2f114a5e788330220">
+              <span class="m-doc-wrap-bumper">auto <a href="#ab2cb0fc6841ae5f2f114a5e788330220" class="m-doc-self">reciprocal_length</a>(</span><span class="m-doc-wrap">) const -&gt; MVM_INLINE_NODISCARD value_type <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a089b19bc6c20ff5df7e435d8adf62e94">
-              <span class="m-doc-wrap-bumper">auto <a href="#a089b19bc6c20ff5df7e435d8adf62e94" class="m-doc-self">reciprocal_length</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE value_type <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a43d8a7300fac740dae5809fb82c036f5">
+              <span class="m-doc-wrap-bumper">auto <a href="#a43d8a7300fac740dae5809fb82c036f5" class="m-doc-self">normalized</a>(</span><span class="m-doc-wrap">) const -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="ac2c5cf46b6af459f2f36df41b88887d0">
-              <span class="m-doc-wrap-bumper">auto <a href="#ac2c5cf46b6af459f2f36df41b88887d0" class="m-doc-self">normalized</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a61ff0227df2e3cd6fe13a035c466d46e">
+              <span class="m-doc-wrap-bumper">auto <a href="#a61ff0227df2e3cd6fe13a035c466d46e" class="m-doc-self">normalized_approximate</a>(</span><span class="m-doc-wrap">) const -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a1a844e28c0401c642422e85877331e7b">
-              <span class="m-doc-wrap-bumper">auto <a href="#a1a844e28c0401c642422e85877331e7b" class="m-doc-self">normalized_approximate</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="acfe8910979eb32cf2b579794cc745c3f">
+              <span class="m-doc-wrap-bumper">auto <a href="#acfe8910979eb32cf2b579794cc745c3f" class="m-doc-self">dot</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; v) const -&gt; MVM_INLINE_NODISCARD value_type <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a0a82fb98eb3e8b0a5c648b4afefe2b84">
-              <span class="m-doc-wrap-bumper">auto <a href="#a0a82fb98eb3e8b0a5c648b4afefe2b84" class="m-doc-self">dot</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; v) const -&gt; RTM_FORCE_INLINE value_type <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a5efe25e2dd1b2df88a78683faf346591">
+              <span class="m-doc-wrap-bumper">auto <a href="#a5efe25e2dd1b2df88a78683faf346591" class="m-doc-self">conjugate</a>(</span><span class="m-doc-wrap">) const -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a0b6b03b15069b461f71253fa8337d648">
-              <span class="m-doc-wrap-bumper">auto <a href="#a0b6b03b15069b461f71253fa8337d648" class="m-doc-self">conjugate</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a71dc80b5540a7aad81bdb001d444b21f">
+              <span class="m-doc-wrap-bumper">auto <a href="#a71dc80b5540a7aad81bdb001d444b21f" class="m-doc-self">inverse</a>(</span><span class="m-doc-wrap">) const -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a72be00e6d93d2aeb6951bd96d347502a">
-              <span class="m-doc-wrap-bumper">auto <a href="#a72be00e6d93d2aeb6951bd96d347502a" class="m-doc-self">inverse</a>(</span><span class="m-doc-wrap">) const -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a93327c65bd8169cb72c253bcb023e11e">
+              <span class="m-doc-wrap-bumper">auto <a href="#a93327c65bd8169cb72c253bcb023e11e" class="m-doc-self">slerp</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; v,
+              value_type t) const -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
-            <dt id="a43409d993a1cfaf7607963bd60e60e19">
-              <span class="m-doc-wrap-bumper">auto <a href="#a43409d993a1cfaf7607963bd60e60e19" class="m-doc-self">slerp</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a>&amp; v,
-              value_type t) const -&gt; RTM_FORCE_INLINE <a href="structmove_1_1vectormath_1_1generic__quat.html" class="m-doc">generic_<wbr />quat</a> <span class="m-label m-flat m-success">noexcept</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a2b40d34ca271a377b12ffde10215bfbd">
-              <span class="m-doc-wrap-bumper">auto <a href="#a2b40d34ca271a377b12ffde10215bfbd" class="m-doc-self">normalize</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE void <span class="m-label m-flat m-success">noexcept</span></span>
-            </dt>
-            <dd><span></span></dd>
-            <dt id="a795ba8badeeb6b1740ae9cb5967c4f6a">
-              <span class="m-doc-wrap-bumper">auto <a href="#a795ba8badeeb6b1740ae9cb5967c4f6a" class="m-doc-self">normalize_approximate</a>(</span><span class="m-doc-wrap">) -&gt; RTM_FORCE_INLINE void <span class="m-label m-flat m-success">noexcept</span></span>
+            <dt id="a1d78822ac050e583a8f6f4c9f2339a5d">
+              <span class="m-doc-wrap-bumper">auto <a href="#a1d78822ac050e583a8f6f4c9f2339a5d" class="m-doc-self">normalize</a>(</span><span class="m-doc-wrap">) -&gt; <a href="macros_8hpp.html#a658b1762f9739671bc6d1c51deebc97d" class="m-doc">MVM_<wbr />INLINE</a> void <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd><span></span></dd>
           </dl>
