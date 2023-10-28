@@ -19,7 +19,7 @@
 namespace rtm::ext
 {
     template <typename mat_type, typename vec_type = vector4f>
-    RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE constexpr mat_type
+    RTM_DISABLE_SECURITY_COOKIE_CHECK MVM_INLINE_NODISCARD constexpr mat_type
     look_at_rh(const vec_type& eye, const vec_type& center, const vec_type& up)
     {
         // Largely taken from GLM's implementation
@@ -55,7 +55,7 @@ namespace rtm::ext
     }
 
     template <typename mat_type = matrix4x4f, typename vec_type = vector4f>
-    RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE constexpr mat_type
+    RTM_DISABLE_SECURITY_COOKIE_CHECK MVM_INLINE_NODISCARD constexpr mat_type
     look_at_lh(const vec_type& eye, const vec_type& center, const vec_type& up)
     {
         // Largely taken from GLM's implementation
@@ -91,7 +91,7 @@ namespace rtm::ext
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
-    RTM_FORCE_INLINE matrix4x4f perspective_fov_lh(
+    MVM_INLINE_NODISCARD matrix4x4f perspective_fov_lh(
         float fovY, float aspectRatio, float near, float far)
     {
         // Based on DXM's implementation
@@ -120,7 +120,7 @@ namespace rtm::ext
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
-    RTM_FORCE_INLINE matrix4x4d perspective_fov_lh(
+    MVM_INLINE_NODISCARD matrix4x4d perspective_fov_lh(
         double fovY, double aspectRatio, double near, double far)
     {
         // Based on DXM's implementation
@@ -149,7 +149,7 @@ namespace rtm::ext
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
-    RTM_FORCE_INLINE matrix4x4f perspective_fov_rh(
+    MVM_INLINE_NODISCARD matrix4x4f perspective_fov_rh(
         float fovY, float aspectRatio, float near, float far)
     {
         // Based on DXM's implementation
@@ -178,7 +178,7 @@ namespace rtm::ext
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
-    RTM_FORCE_INLINE matrix4x4d perspective_fov_rh(
+    MVM_INLINE_NODISCARD matrix4x4d perspective_fov_rh(
         double fovY, double aspectRatio, double near, double far)
     {
         // Based on DXM's implementation
@@ -207,7 +207,7 @@ namespace rtm::ext
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
-    RTM_FORCE_INLINE matrix4x4f ortho_lh(
+    MVM_INLINE_NODISCARD matrix4x4f ortho_lh(
         float width, float height, float near, float far)
     {
         // Based on DXM's implementation
@@ -228,7 +228,7 @@ namespace rtm::ext
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
-    RTM_FORCE_INLINE matrix4x4d ortho_lh(
+    MVM_INLINE_NODISCARD matrix4x4d ortho_lh(
         double width, double height, double near, double far)
     {
         // Based on DXM's implementation
@@ -249,7 +249,7 @@ namespace rtm::ext
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
-    RTM_FORCE_INLINE matrix4x4f ortho_rh(
+    MVM_INLINE_NODISCARD matrix4x4f ortho_rh(
         float width, float height, float near, float far)
     {
         // Based on DXM's implementation
@@ -270,7 +270,7 @@ namespace rtm::ext
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
-    RTM_FORCE_INLINE matrix4x4d ortho_rh(
+    MVM_INLINE_NODISCARD matrix4x4d ortho_rh(
         double width, double height, double near, double far)
     {
         // Based on DXM's implementation
@@ -291,7 +291,7 @@ namespace rtm::ext
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
-    RTM_FORCE_INLINE matrix4x4f ortho_off_center_lh(
+    MVM_INLINE_NODISCARD matrix4x4f ortho_off_center_lh(
         float left, float right, float bottom, float top, float near, float far)
     {
         // Based on DXM's implementation
@@ -318,7 +318,7 @@ namespace rtm::ext
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
-    RTM_FORCE_INLINE matrix4x4f ortho_off_center_rh(
+    MVM_INLINE_NODISCARD matrix4x4f ortho_off_center_rh(
         float left, float right, float bottom, float top, float near, float far)
     {
         // Based on DXM's implementation
@@ -345,8 +345,8 @@ namespace rtm::ext
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
-    RTM_FORCE_INLINE matrix4x4d ortho_off_center_lh(double left, double right,
-        double bottom, double top, double near, double far)
+    MVM_INLINE_NODISCARD matrix4x4d ortho_off_center_lh(double left,
+        double right, double bottom, double top, double near, double far)
     {
         // Based on DXM's implementation
         using mat_type = matrix4x4d;
@@ -372,8 +372,8 @@ namespace rtm::ext
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
-    RTM_FORCE_INLINE matrix4x4d ortho_off_center_rh(double left, double right,
-        double bottom, double top, double near, double far)
+    MVM_INLINE_NODISCARD matrix4x4d ortho_off_center_rh(double left,
+        double right, double bottom, double top, double near, double far)
     {
         // Based on DXM's implementation
         using mat_type = matrix4x4d;
@@ -399,37 +399,41 @@ namespace rtm::ext
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
-    RTM_FORCE_INLINE matrix3x4f transform_3x4(const rtm::vector4f& translation,
-        const rtm::quatf& rotation, const rtm::vector4f& scale)
+    MVM_INLINE_NODISCARD matrix3x4f transform_3x4(
+        const rtm::vector4f& translation, const rtm::quatf& rotation,
+        const rtm::vector4f& scale)
     {
         auto qvv = rtm::qvv_set(rotation, translation, scale);
         return rtm::matrix_from_qvv(qvv);
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
-    RTM_FORCE_INLINE matrix3x4d transform_3x4(const rtm::vector4d& translation,
-        const rtm::quatd& rotation, const rtm::vector4d& scale)
+    MVM_INLINE_NODISCARD matrix3x4d transform_3x4(
+        const rtm::vector4d& translation, const rtm::quatd& rotation,
+        const rtm::vector4d& scale)
     {
         auto qvv = rtm::qvv_set(rotation, translation, scale);
         return rtm::matrix_from_qvv(qvv);
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
-    RTM_FORCE_INLINE matrix4x4f transform_4x4(const rtm::vector4f& translation,
-        const rtm::quatf& rotation, const rtm::vector4f& scale)
+    MVM_INLINE_NODISCARD matrix4x4f transform_4x4(
+        const rtm::vector4f& translation, const rtm::quatf& rotation,
+        const rtm::vector4f& scale)
     {
         return rtm::matrix_cast(transform_3x4(translation, rotation, scale));
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
-    RTM_FORCE_INLINE matrix4x4d transform_4x4(const rtm::vector4d& translation,
-        const rtm::quatd& rotation, const rtm::vector4d& scale)
+    MVM_INLINE_NODISCARD matrix4x4d transform_4x4(
+        const rtm::vector4d& translation, const rtm::quatd& rotation,
+        const rtm::vector4d& scale)
     {
         return rtm::matrix_cast(transform_3x4(translation, rotation, scale));
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
-    RTM_FORCE_INLINE quatf quat_inverse(const quatf& input)
+    MVM_INLINE_NODISCARD quatf quat_inverse(const quatf& input)
     {
         // Based on DXM's implementation
         using quat_t = quatf;
@@ -449,7 +453,7 @@ namespace rtm::ext
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
-    RTM_FORCE_INLINE quatd quat_inverse(const quatd& input)
+    MVM_INLINE_NODISCARD quatd quat_inverse(const quatd& input)
     {
         // Based on DXM's implementation
         using quat_t = quatd;
@@ -469,7 +473,7 @@ namespace rtm::ext
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
-    RTM_FORCE_INLINE mask4f vector_in_bounds(const vector4f& input,
+    MVM_INLINE_NODISCARD mask4f vector_in_bounds(const vector4f& input,
         const vector4f& bounds_min, const vector4f& bounds_max)
     {
         return vector_and(vector_less_equal(input, bounds_max),
@@ -477,7 +481,7 @@ namespace rtm::ext
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
-    RTM_FORCE_INLINE mask4d vector_in_bounds(const vector4d& input,
+    MVM_INLINE_NODISCARD mask4d vector_in_bounds(const vector4d& input,
         const vector4d& bounds_min, const vector4d& bounds_max)
     {
         using vector_t = vector4d;
@@ -495,70 +499,70 @@ namespace rtm::ext
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
-    RTM_FORCE_INLINE mask4f vector_in_bounds(
+    MVM_INLINE_NODISCARD mask4f vector_in_bounds(
         const vector4f& input, const vector4f& bounds)
     {
         return vector_in_bounds(input, vector_neg(bounds), bounds);
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
-    RTM_FORCE_INLINE mask4d vector_in_bounds(
+    MVM_INLINE_NODISCARD mask4d vector_in_bounds(
         const vector4d& input, const vector4d& bounds)
     {
         return vector_in_bounds(input, vector_neg(bounds), bounds);
     }
 
-    RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE vector4f vector_splat_x(
-        const vector4f& input)
+    RTM_DISABLE_SECURITY_COOKIE_CHECK MVM_INLINE_NODISCARD vector4f
+    vector_splat_x(const vector4f& input)
     {
         return vector_set(float(vector_get_x(input)));
     }
 
-    RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE vector4f vector_splat_y(
-        const vector4f& input)
+    RTM_DISABLE_SECURITY_COOKIE_CHECK MVM_INLINE_NODISCARD vector4f
+    vector_splat_y(const vector4f& input)
     {
         return vector_set(float(vector_get_y(input)));
     }
 
-    RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE vector4f vector_splat_w(
-        const vector4f& input)
+    RTM_DISABLE_SECURITY_COOKIE_CHECK MVM_INLINE_NODISCARD vector4f
+    vector_splat_w(const vector4f& input)
     {
         return vector_set(float(vector_get_w(input)));
     }
 
-    RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE vector4f vector_splat_z(
-        const vector4f& input)
+    RTM_DISABLE_SECURITY_COOKIE_CHECK MVM_INLINE_NODISCARD vector4f
+    vector_splat_z(const vector4f& input)
     {
         return vector_set(float(vector_get_z(input)));
     }
 
-    RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE vector4d vector_splat_x(
-        const vector4d& input)
+    RTM_DISABLE_SECURITY_COOKIE_CHECK MVM_INLINE_NODISCARD vector4d
+    vector_splat_x(const vector4d& input)
     {
         return vector_set(double(vector_get_x(input)));
     }
 
-    RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE vector4d vector_splat_y(
-        const vector4d& input)
+    RTM_DISABLE_SECURITY_COOKIE_CHECK MVM_INLINE_NODISCARD vector4d
+    vector_splat_y(const vector4d& input)
     {
         return vector_set(double(vector_get_y(input)));
     }
 
-    RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE vector4d vector_splat_w(
-        const vector4d& input)
+    RTM_DISABLE_SECURITY_COOKIE_CHECK MVM_INLINE_NODISCARD vector4d
+    vector_splat_w(const vector4d& input)
     {
         return vector_set(double(vector_get_w(input)));
     }
 
-    RTM_DISABLE_SECURITY_COOKIE_CHECK RTM_FORCE_INLINE vector4d vector_splat_z(
-        const vector4d& input)
+    RTM_DISABLE_SECURITY_COOKIE_CHECK MVM_INLINE_NODISCARD vector4d
+    vector_splat_z(const vector4d& input)
     {
         return vector_set(double(vector_get_z(input)));
     }
 
     // TODO: This and exp
     // RTM_DISABLE_SECURITY_COOKIE_CHECK
-    // RTM_FORCE_INLINE quatf quat_ln(const quatf& input)
+    // MVM_INLINE_NODISCARD quatf quat_ln(const quatf& input)
     // {
     //     // static const XMVECTORF32 OneMinusEpsilon = {{{1.0f - 0.00001f,
     //     //     1.0f - 0.00001f, 1.0f - 0.00001f, 1.0f - 0.00001f}}};

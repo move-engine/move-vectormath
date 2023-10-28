@@ -2,6 +2,7 @@
 #include <ostream>
 
 #include <rtm/scalard.h>
+#include "macros.hpp"
 
 namespace move::vectormath
 {
@@ -32,7 +33,7 @@ namespace move::vectormath
          *
          * @return generic_vec2_scalar A new vector initialized to (0, 0)
          */
-        RTM_FORCE_INLINE generic_vec2_scalar() noexcept : _x(0), _y(0)
+        MVM_INLINE_NODISCARD generic_vec2_scalar() noexcept : _x(0), _y(0)
         {
         }
 
@@ -41,7 +42,7 @@ namespace move::vectormath
          *
          * @return generic_vec2_scalar A new vector initialized to (x, y)
          */
-        RTM_FORCE_INLINE generic_vec2_scalar(
+        MVM_INLINE_NODISCARD generic_vec2_scalar(
             value_type x, value_type y = 0) noexcept
             : _x(x), _y(y)
         {
@@ -56,7 +57,7 @@ namespace move::vectormath
          * @param ar The archive
          */
         template <typename Archive>
-        RTM_FORCE_INLINE void serialize(Archive& ar)
+        MVM_INLINE void serialize(Archive& ar)
         {
             for (uint32_t i = 0; i < num_components; ++i)
             {
@@ -82,7 +83,7 @@ namespace move::vectormath
          * @return true The vectors are equal
          * @return false The vectors are not equal
          */
-        RTM_FORCE_INLINE bool operator==(
+        MVM_INLINE_NODISCARD bool operator==(
             const generic_vec2_scalar& v) const noexcept
         {
             return _x == v._x && _y == v._y;
@@ -95,7 +96,7 @@ namespace move::vectormath
          * @return true The vectors are not equal
          * @return false The vectors are equal
          */
-        RTM_FORCE_INLINE bool operator!=(
+        MVM_INLINE_NODISCARD bool operator!=(
             const generic_vec2_scalar& v) const noexcept
         {
             return _x != v._x || _y != v._y;
@@ -107,7 +108,7 @@ namespace move::vectormath
          * @param v The other vector
          * @return generic_vec2_scalar& A reference to the vector
          */
-        RTM_FORCE_INLINE generic_vec2_scalar& operator=(
+        MVM_INLINE generic_vec2_scalar& operator=(
             const generic_vec2_scalar& v) noexcept
         {
             _x = v._x;
@@ -122,7 +123,7 @@ namespace move::vectormath
          * @param v The other vector
          * @return generic_vec2_scalar& A reference to the vector
          */
-        RTM_FORCE_INLINE generic_vec2_scalar& operator+=(
+        MVM_INLINE generic_vec2_scalar& operator+=(
             const generic_vec2_scalar& v) noexcept
         {
             _x += v._x;
@@ -137,7 +138,7 @@ namespace move::vectormath
          * @param v The other vector
          * @return generic_vec2_scalar& A reference to the vector
          */
-        RTM_FORCE_INLINE generic_vec2_scalar& operator-=(
+        MVM_INLINE generic_vec2_scalar& operator-=(
             const generic_vec2_scalar& v) noexcept
         {
             _x -= v._x;
@@ -152,8 +153,7 @@ namespace move::vectormath
          * @param v The scalar
          * @return generic_vec2_scalar& A reference to the vector
          */
-        RTM_FORCE_INLINE generic_vec2_scalar& operator*=(
-            const value_type& v) noexcept
+        MVM_INLINE generic_vec2_scalar& operator*=(const value_type& v) noexcept
         {
             _x *= v;
             _y *= v;
@@ -167,7 +167,7 @@ namespace move::vectormath
          * @param v The other vector
          * @return generic_vec2_scalar& A reference to the vector
          */
-        RTM_FORCE_INLINE generic_vec2_scalar& operator*=(
+        MVM_INLINE generic_vec2_scalar& operator*=(
             const generic_vec2_scalar& v) noexcept
         {
             _x *= v._x;
@@ -182,8 +182,7 @@ namespace move::vectormath
          * @param v The scalar
          * @return generic_vec2_scalar& A reference to the vector
          */
-        RTM_FORCE_INLINE generic_vec2_scalar& operator/=(
-            const value_type& v) noexcept
+        MVM_INLINE generic_vec2_scalar& operator/=(const value_type& v) noexcept
         {
             _x /= v;
             _y /= v;
@@ -197,7 +196,7 @@ namespace move::vectormath
          * @param v The other vector
          * @return generic_vec2_scalar& A reference to the vector
          */
-        RTM_FORCE_INLINE generic_vec2_scalar& operator/=(
+        MVM_INLINE generic_vec2_scalar& operator/=(
             const generic_vec2_scalar& v) noexcept
         {
             _x /= v._x;
@@ -212,7 +211,7 @@ namespace move::vectormath
          * @param v The other vector
          * @return generic_vec2_scalar The result of the addition
          */
-        RTM_FORCE_INLINE generic_vec2_scalar operator+(
+        MVM_INLINE_NODISCARD generic_vec2_scalar operator+(
             const generic_vec2_scalar& v) const noexcept
         {
             return generic_vec2_scalar(_x + v._x, _y + v._y);
@@ -225,7 +224,7 @@ namespace move::vectormath
          * @param v The other vector
          * @return generic_vec2_scalar The result of the subtraction
          */
-        RTM_FORCE_INLINE generic_vec2_scalar operator-(
+        MVM_INLINE_NODISCARD generic_vec2_scalar operator-(
             const generic_vec2_scalar& v) const noexcept
         {
             return generic_vec2_scalar(_x - v._x, _y - v._y);
@@ -238,7 +237,7 @@ namespace move::vectormath
          * @param v The scalar
          * @return generic_vec2_scalar The result of the multiplication
          */
-        RTM_FORCE_INLINE generic_vec2_scalar operator*(
+        MVM_INLINE_NODISCARD generic_vec2_scalar operator*(
             const value_type& v) const noexcept
         {
             return generic_vec2_scalar(_x * v, _y * v);
@@ -251,7 +250,7 @@ namespace move::vectormath
          * @param v The other vector
          * @return generic_vec2_scalar The result of the multiplication
          */
-        RTM_FORCE_INLINE generic_vec2_scalar operator*(
+        MVM_INLINE_NODISCARD generic_vec2_scalar operator*(
             const generic_vec2_scalar& v) const noexcept
         {
             return generic_vec2_scalar(_x * v._x, _y * v._y);
@@ -264,7 +263,7 @@ namespace move::vectormath
          * @param v The scalar
          * @return generic_vec2_scalar The result of the division
          */
-        RTM_FORCE_INLINE generic_vec2_scalar operator/(
+        MVM_INLINE_NODISCARD generic_vec2_scalar operator/(
             const value_type& v) const noexcept
         {
             return generic_vec2_scalar(_x / v, _y / v);
@@ -277,7 +276,7 @@ namespace move::vectormath
          * @param v The other vector
          * @return generic_vec2_scalar The result of the division
          */
-        RTM_FORCE_INLINE generic_vec2_scalar operator/(
+        MVM_INLINE_NODISCARD generic_vec2_scalar operator/(
             const generic_vec2_scalar& v) const noexcept
         {
             return generic_vec2_scalar(_x / v._x, _y / v._y);
@@ -289,7 +288,7 @@ namespace move::vectormath
          *
          * @return generic_vec2_scalar The negated vector
          */
-        RTM_FORCE_INLINE generic_vec2_scalar operator-() const noexcept
+        MVM_INLINE_NODISCARD generic_vec2_scalar operator-() const noexcept
         {
             return generic_vec2_scalar(-_x, -_y);
         }
@@ -304,7 +303,7 @@ namespace move::vectormath
          * @param index The index of the component to return
          * @return value_type The component at the specified index
          */
-        RTM_FORCE_INLINE value_type get_component(int index) const noexcept
+        MVM_INLINE_NODISCARD value_type get_component(int index) const noexcept
         {
             switch (index)
             {
@@ -323,7 +322,7 @@ namespace move::vectormath
          * @param index The index of the component to set
          * @param value The new value for the component
          */
-        RTM_FORCE_INLINE void set_component(int index, value_type value)
+        MVM_INLINE void set_component(int index, value_type value)
         {
             switch (index)
             {
@@ -344,7 +343,7 @@ namespace move::vectormath
          * @param index The index of the component to return
          * @return value_type The component at the specified index
          */
-        RTM_FORCE_INLINE value_type operator[](int i) const noexcept
+        MVM_INLINE_NODISCARD value_type operator[](int i) const noexcept
         {
             return get_component(i);
         }
@@ -355,7 +354,7 @@ namespace move::vectormath
          *
          * @return value_type The x component
          */
-        RTM_FORCE_INLINE value_type x() const noexcept
+        MVM_INLINE_NODISCARD value_type x() const noexcept
         {
             return _x;
         }
@@ -365,7 +364,7 @@ namespace move::vectormath
          *
          * @return value_type The y component
          */
-        RTM_FORCE_INLINE value_type y() const noexcept
+        MVM_INLINE_NODISCARD value_type y() const noexcept
         {
             return _y;
         }
@@ -376,7 +375,7 @@ namespace move::vectormath
          * @param x The new x component
          * @return generic_vec2_scalar& A reference to the vector
          */
-        RTM_FORCE_INLINE generic_vec2_scalar& x(value_type x) noexcept
+        MVM_INLINE_NODISCARD generic_vec2_scalar& x(value_type x) noexcept
         {
             _x = x;
             return *this;
@@ -388,7 +387,7 @@ namespace move::vectormath
          * @param y The new y component
          * @return generic_vec2_scalar& A reference to the vector
          */
-        RTM_FORCE_INLINE generic_vec2_scalar& y(value_type y) noexcept
+        MVM_INLINE_NODISCARD generic_vec2_scalar& y(value_type y) noexcept
         {
             _y = y;
             return *this;
@@ -400,7 +399,7 @@ namespace move::vectormath
          * @param x The new x component
          * @return generic_vec2_scalar& A reference to the vector
          */
-        RTM_FORCE_INLINE generic_vec2_scalar& set_x(value_type x) noexcept
+        MVM_INLINE generic_vec2_scalar& set_x(value_type x) noexcept
         {
             _x = x;
             return *this;
@@ -412,7 +411,7 @@ namespace move::vectormath
          * @param y The new y component
          * @return generic_vec2_scalar& A reference to the vector
          */
-        RTM_FORCE_INLINE generic_vec2_scalar& set_y(value_type y) noexcept
+        MVM_INLINE generic_vec2_scalar& set_y(value_type y) noexcept
         {
             _y = y;
             return *this;
@@ -425,7 +424,7 @@ namespace move::vectormath
          * @return generic_vec2_scalar& A reference to the vector
          */
 
-        RTM_FORCE_INLINE generic_vec2_scalar& fill(value_type v) noexcept
+        MVM_INLINE_NODISCARD generic_vec2_scalar& fill(value_type v) noexcept
         {
             _x = v;
             _y = v;
@@ -439,7 +438,7 @@ namespace move::vectormath
          * @param y The new y component
          * @return generic_vec2_scalar& A reference to the vector
          */
-        RTM_FORCE_INLINE generic_vec2_scalar& set(
+        MVM_INLINE_NODISCARD generic_vec2_scalar& set(
             value_type x, value_type y) noexcept
         {
             _x = x;
@@ -453,7 +452,7 @@ namespace move::vectormath
          * @param v A vector containing the new x and y components
          * @return generic_vec2_scalar& A reference to the vector
          */
-        RTM_FORCE_INLINE generic_vec2_scalar& set(
+        MVM_INLINE_NODISCARD generic_vec2_scalar& set(
             const generic_vec2_scalar& rhs) noexcept
         {
             _x = rhs._x;
@@ -467,7 +466,7 @@ namespace move::vectormath
          *
          * @return value_type The length of the vector
          */
-        RTM_FORCE_INLINE value_type length() const noexcept
+        MVM_INLINE_NODISCARD value_type length() const noexcept
         {
             return rtm::scalar_sqrt(squared_length());
         }
@@ -477,7 +476,7 @@ namespace move::vectormath
          *
          * @return value_type The squared length of the vector
          */
-        RTM_FORCE_INLINE value_type squared_length() const noexcept
+        MVM_INLINE_NODISCARD value_type squared_length() const noexcept
         {
             return _x * _x + _y * _y;
         }
@@ -487,7 +486,7 @@ namespace move::vectormath
          *
          * @return value_type The reciprocal length of the vector
          */
-        RTM_FORCE_INLINE value_type reciprocal_length() const noexcept
+        MVM_INLINE_NODISCARD value_type reciprocal_length() const noexcept
         {
             return rtm::scalar_sqrt_reciprocal(squared_length());
         }
@@ -497,7 +496,7 @@ namespace move::vectormath
          *
          * @return generic_vec2_scalar The normalized vector
          */
-        RTM_FORCE_INLINE generic_vec2_scalar normalized() const noexcept
+        MVM_INLINE_NODISCARD generic_vec2_scalar normalized() const noexcept
         {
             return *this / length();
         }
@@ -509,7 +508,8 @@ namespace move::vectormath
          * @param v1 The first vector
          * @param v2 The second vector
          */
-        RTM_FORCE_INLINE static value_type dot(const generic_vec2_scalar& v1,
+        MVM_INLINE_NODISCARD static value_type dot(
+            const generic_vec2_scalar& v1,
             const generic_vec2_scalar& v2) noexcept
         {
             return v1._x * v2._x + v1._y * v2._y;
@@ -522,7 +522,7 @@ namespace move::vectormath
          * @param v1 The first vector
          * @param v2 The second vector
          */
-        RTM_FORCE_INLINE static value_type distance_between_points(
+        MVM_INLINE_NODISCARD static value_type distance_between_points(
             const generic_vec2_scalar& point1,
             const generic_vec2_scalar& point2) noexcept
         {
@@ -536,7 +536,7 @@ namespace move::vectormath
          * @param v1 The first vector
          * @param v2 The second vector
          */
-        RTM_FORCE_INLINE static value_type squared_distance_between_points(
+        MVM_INLINE_NODISCARD static value_type squared_distance_between_points(
             const generic_vec2_scalar& point1,
             const generic_vec2_scalar& point2) noexcept
         {
@@ -552,7 +552,7 @@ namespace move::vectormath
          * @param v1 The second point on the line
          * @return value_type The distance between the point and the line
          */
-        RTM_FORCE_INLINE static value_type distance_to_line(
+        MVM_INLINE_NODISCARD static value_type distance_to_line(
             const generic_vec2_scalar& point, const generic_vec2_scalar& v0,
             const generic_vec2_scalar& v1) noexcept
         {
@@ -586,7 +586,8 @@ namespace move::vectormath
          * @param v2 The second vector
          * @return value_type The cross product of the two vectors
          */
-        RTM_FORCE_INLINE static value_type cross(const generic_vec2_scalar& lhs,
+        MVM_INLINE_NODISCARD static value_type cross(
+            const generic_vec2_scalar& lhs,
             const generic_vec2_scalar& rhs) noexcept
         {
             return lhs._x * rhs._y - lhs._y * rhs._x;
@@ -599,7 +600,7 @@ namespace move::vectormath
          * @param v2 The second vector
          * @return value_type The angle between the two vectors
          */
-        RTM_FORCE_INLINE static value_type angle_between_normalized_vectors(
+        MVM_INLINE_NODISCARD static value_type angle_between_normalized_vectors(
             const generic_vec2_scalar& v1,
             const generic_vec2_scalar& v2) noexcept
         {
@@ -615,7 +616,7 @@ namespace move::vectormath
          * @param v2 The second vector
          * @return value_type The angle between the two vectors
          */
-        RTM_FORCE_INLINE static value_type angle_between_vectors(
+        MVM_INLINE_NODISCARD static value_type angle_between_vectors(
             const generic_vec2_scalar& v1,
             const generic_vec2_scalar& v2) noexcept
         {
@@ -631,7 +632,7 @@ namespace move::vectormath
          * @param incident The incident vector
          * @param normal The normal vector
          */
-        RTM_FORCE_INLINE static generic_vec2_scalar reflect(
+        MVM_INLINE_NODISCARD static generic_vec2_scalar reflect(
             const generic_vec2_scalar& incident,
             const generic_vec2_scalar& normal) noexcept
         {
@@ -645,7 +646,7 @@ namespace move::vectormath
          * @param normal The normal vector
          * @param ior The index of refraction
          */
-        RTM_FORCE_INLINE static generic_vec2_scalar refract(
+        MVM_INLINE_NODISCARD static generic_vec2_scalar refract(
             const generic_vec2_scalar& incident,
             const generic_vec2_scalar& normal, value_type ior) noexcept
         {
@@ -687,7 +688,7 @@ namespace move::vectormath
          * @param v2 The second vector
          * @return generic_vec2_scalar The minimum vector
          */
-        RTM_FORCE_INLINE static generic_vec2_scalar min(
+        MVM_INLINE_NODISCARD static generic_vec2_scalar min(
             const generic_vec2_scalar& v1,
             const generic_vec2_scalar& v2) noexcept
         {
@@ -703,7 +704,7 @@ namespace move::vectormath
          * @param v2 The second vector
          * @return generic_vec2_scalar The maximum vector
          */
-        RTM_FORCE_INLINE static generic_vec2_scalar max(
+        MVM_INLINE_NODISCARD static generic_vec2_scalar max(
             const generic_vec2_scalar& v1,
             const generic_vec2_scalar& v2) noexcept
         {
@@ -717,7 +718,7 @@ namespace move::vectormath
          * @note The behavior is undefined if the length of the vector is zero
          * @return generic_vec4_rtm& A reference to the vector
          */
-        RTM_FORCE_INLINE void normalize() noexcept
+        MVM_INLINE void normalize() noexcept
         {
             *this /= length();
         }
@@ -730,7 +731,7 @@ namespace move::vectormath
          * @param value The value to set all components to
          * @return generic_vec2_scalar The filled vector
          */
-        RTM_FORCE_INLINE static generic_vec2_scalar filled(
+        MVM_INLINE_NODISCARD static generic_vec2_scalar filled(
             value_type value) noexcept
         {
             return generic_vec2_scalar(value, value);
@@ -741,7 +742,7 @@ namespace move::vectormath
          *
          * @return generic_vec2_scalar The infinity vector
          */
-        RTM_FORCE_INLINE static generic_vec2_scalar infinity() noexcept
+        MVM_INLINE_NODISCARD static generic_vec2_scalar infinity() noexcept
         {
             return filled(std::numeric_limits<value_type>::infinity());
         }
@@ -751,7 +752,8 @@ namespace move::vectormath
          *
          * @return generic_vec2_scalar The infinity vector
          */
-        RTM_FORCE_INLINE static generic_vec2_scalar negative_infinity() noexcept
+        MVM_INLINE_NODISCARD static generic_vec2_scalar
+        negative_infinity() noexcept
         {
             return filled(std::numeric_limits<value_type>::infinity());
         }
@@ -761,7 +763,7 @@ namespace move::vectormath
          *
          * @return generic_vec2_scalar The NaN vector
          */
-        RTM_FORCE_INLINE static generic_vec2_scalar nan() noexcept
+        MVM_INLINE_NODISCARD static generic_vec2_scalar nan() noexcept
         {
             return filled(std::numeric_limits<value_type>::quiet_NaN());
         }
@@ -771,7 +773,7 @@ namespace move::vectormath
          *
          * @return generic_vec2_scalar The zero vector
          */
-        RTM_FORCE_INLINE static generic_vec2_scalar zero() noexcept
+        MVM_INLINE_NODISCARD static generic_vec2_scalar zero() noexcept
         {
             return filled(0);
         }
@@ -781,7 +783,7 @@ namespace move::vectormath
          *
          * @return generic_vec2_scalar The negative one vector
          */
-        RTM_FORCE_INLINE static generic_vec2_scalar negative_one() noexcept
+        MVM_INLINE_NODISCARD static generic_vec2_scalar negative_one() noexcept
         {
             return filled(-1);
         }
@@ -791,7 +793,7 @@ namespace move::vectormath
          *
          * @return generic_vec2_scalar The one vector
          */
-        RTM_FORCE_INLINE static generic_vec2_scalar one() noexcept
+        MVM_INLINE_NODISCARD static generic_vec2_scalar one() noexcept
         {
             return filled(1);
         }
@@ -802,7 +804,7 @@ namespace move::vectormath
          *
          * @return generic_vec2_scalar The x axis vector
          */
-        RTM_FORCE_INLINE static generic_vec2_scalar x_axis() noexcept
+        MVM_INLINE_NODISCARD static generic_vec2_scalar x_axis() noexcept
         {
             return generic_vec2_scalar(1, 0);
         }
@@ -813,7 +815,7 @@ namespace move::vectormath
          *
          * @return generic_vec2_scalar The y axis vector
          */
-        RTM_FORCE_INLINE static generic_vec2_scalar y_axis() noexcept
+        MVM_INLINE_NODISCARD static generic_vec2_scalar y_axis() noexcept
         {
             return generic_vec2_scalar(0, 1);
         }
@@ -824,7 +826,7 @@ namespace move::vectormath
          *
          * @return generic_vec2_scalar The left vector
          */
-        RTM_FORCE_INLINE static generic_vec2_scalar left() noexcept
+        MVM_INLINE_NODISCARD static generic_vec2_scalar left() noexcept
         {
             return -x_axis();
         }
@@ -835,7 +837,7 @@ namespace move::vectormath
          *
          * @return generic_vec2_scalar The right vector
          */
-        RTM_FORCE_INLINE static generic_vec2_scalar right() noexcept
+        MVM_INLINE_NODISCARD static generic_vec2_scalar right() noexcept
         {
             return x_axis();
         }
@@ -846,7 +848,7 @@ namespace move::vectormath
          *
          * @return generic_vec2_scalar The down vector
          */
-        RTM_FORCE_INLINE static generic_vec2_scalar down() noexcept
+        MVM_INLINE_NODISCARD static generic_vec2_scalar down() noexcept
         {
             return -y_axis();
         }
@@ -857,7 +859,7 @@ namespace move::vectormath
          *
          * @return generic_vec2_scalar The up vector
          */
-        RTM_FORCE_INLINE static generic_vec2_scalar up() noexcept
+        MVM_INLINE_NODISCARD static generic_vec2_scalar up() noexcept
         {
             return y_axis();
         }

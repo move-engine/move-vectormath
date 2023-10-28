@@ -1,6 +1,7 @@
 #pragma once
 #include <ostream>
 
+#include "macros.hpp"
 #include "rtm/impl/matrix_affine_common.h"
 #include "rtm/impl/matrix_cast.h"
 #include "rtm/impl/matrix_common.h"
@@ -39,11 +40,11 @@ namespace move::vectormath
         using vec3_type = generic_vec3_rtm<value_type, vector3_type_raw>;
         using vec4_type = generic_vec4_rtm<value_type, vector4_type_raw>;
 
-        RTM_FORCE_INLINE generic_mat4_rtm() noexcept : _value()
+        MVM_INLINE generic_mat4_rtm() noexcept : _value()
         {
         }
 
-        RTM_FORCE_INLINE generic_mat4_rtm(value_type x00, value_type x01,
+        MVM_INLINE generic_mat4_rtm(value_type x00, value_type x01,
             value_type x02, value_type x03, value_type x10, value_type x11,
             value_type x12, value_type x13, value_type x20, value_type x21,
             value_type x22, value_type x23, value_type x30, value_type x31,
@@ -55,7 +56,7 @@ namespace move::vectormath
         {
         }
 
-        RTM_FORCE_INLINE generic_mat4_rtm(const underlying_vector4_type& row0,
+        MVM_INLINE generic_mat4_rtm(const underlying_vector4_type& row0,
             const underlying_vector4_type& row1,
             const underlying_vector4_type& row2,
             const underlying_vector4_type& row3) noexcept
@@ -63,38 +64,38 @@ namespace move::vectormath
         {
         }
 
-        RTM_FORCE_INLINE generic_mat4_rtm(
+        MVM_INLINE generic_mat4_rtm(
             const underlying_matrix4x4_type& rhs) noexcept
             : _value(rhs)
         {
         }
 
     public:
-        RTM_FORCE_INLINE const underlying_matrix4x4_type& get_internal()
+        MVM_INLINE_NODISCARD const underlying_matrix4x4_type& get_internal()
             const noexcept
         {
             return _value;
         }
 
-        RTM_FORCE_INLINE underlying_matrix4x4_type& get_internal() noexcept
+        MVM_INLINE_NODISCARD underlying_matrix4x4_type& get_internal() noexcept
         {
             return _value;
         }
 
     public:
-        RTM_FORCE_INLINE operator underlying_matrix4x4_type&() noexcept
+        MVM_INLINE_NODISCARD operator underlying_matrix4x4_type&() noexcept
         {
             return _value;
         }
 
-        RTM_FORCE_INLINE generic_mat4_rtm operator*(
+        MVM_INLINE_NODISCARD generic_mat4_rtm operator*(
             const generic_mat4_rtm& m) const noexcept
         {
             using namespace ::rtm;
             return generic_mat4_rtm(matrix_mul(_value, m._value));
         }
 
-        RTM_FORCE_INLINE generic_mat4_rtm& operator*=(
+        MVM_INLINE_NODISCARD generic_mat4_rtm& operator*=(
             const generic_mat4_rtm& m) noexcept
         {
             using namespace ::rtm;
@@ -102,12 +103,12 @@ namespace move::vectormath
             return *this;
         }
 
-        RTM_FORCE_INLINE value_type operator[](size_t index) const noexcept
+        MVM_INLINE_NODISCARD value_type operator[](size_t index) const noexcept
         {
             return get_component(index / 4, index % 4);
         }
 
-        RTM_FORCE_INLINE value_type get_component(
+        MVM_INLINE_NODISCARD value_type get_component(
             size_t row, size_t col) const noexcept
         {
             using namespace rtm;
@@ -116,25 +117,25 @@ namespace move::vectormath
             return vector_get_component(axis, mix4(col));
         }
 
-        RTM_FORCE_INLINE vec4_type get_axis(size_t row) noexcept
+        MVM_INLINE_NODISCARD vec4_type get_axis(size_t row) noexcept
         {
             return vec4_type(get_axis_internal(row));
         }
 
-        RTM_FORCE_INLINE underlying_vector4_type get_axis_internal(
+        MVM_INLINE_NODISCARD underlying_vector4_type get_axis_internal(
             size_t row) noexcept
         {
             using namespace rtm;
             return rtm::matrix_get_axis(_value, rtm::axis4(row));
         }
 
-        RTM_FORCE_INLINE generic_mat4_rtm& set_axis(
+        MVM_INLINE_NODISCARD generic_mat4_rtm& set_axis(
             size_t row, const vec4_type& vec) noexcept
         {
             return set_axis(row, vec.get_internal());
         }
 
-        RTM_FORCE_INLINE generic_mat4_rtm& set_axis(
+        MVM_INLINE_NODISCARD generic_mat4_rtm& set_axis(
             size_t row, const underlying_vector4_type& axis) noexcept
         {
             // TODO: Make this faster?  Seems like there should just be a
@@ -152,7 +153,7 @@ namespace move::vectormath
             return *this;
         }
 
-        RTM_FORCE_INLINE generic_mat4_rtm& set_component(
+        MVM_INLINE_NODISCARD generic_mat4_rtm& set_component(
             size_t row, size_t col, value_type value) noexcept
         {
             using namespace rtm;
@@ -160,11 +161,11 @@ namespace move::vectormath
                 vector_set_component(get_axis_internal(row), mix4(col), value));
         }
 
-        RTM_FORCE_INLINE generic_mat4_rtm& set(value_type x00, value_type x01,
-            value_type x02, value_type x03, value_type x10, value_type x11,
-            value_type x12, value_type x13, value_type x20, value_type x21,
-            value_type x22, value_type x23, value_type x30, value_type x31,
-            value_type x32, value_type x33) noexcept
+        MVM_INLINE_NODISCARD generic_mat4_rtm& set(value_type x00,
+            value_type x01, value_type x02, value_type x03, value_type x10,
+            value_type x11, value_type x12, value_type x13, value_type x20,
+            value_type x21, value_type x22, value_type x23, value_type x30,
+            value_type x31, value_type x32, value_type x33) noexcept
         {
             using namespace rtm;
             _value = matrix_set(vector_set(x00, x01, x02, x03),
@@ -173,7 +174,7 @@ namespace move::vectormath
             return *this;
         }
 
-        RTM_FORCE_INLINE generic_mat4_rtm& set(const value_type values[16])
+        MVM_INLINE_NODISCARD generic_mat4_rtm& set(const value_type values[16])
         {
             using namespace rtm;
             _value = matrix_set(
@@ -185,13 +186,13 @@ namespace move::vectormath
         }
 
     public:
-        RTM_FORCE_INLINE generic_mat4_rtm inverse()
+        MVM_INLINE_NODISCARD generic_mat4_rtm inverse()
         {
             return generic_mat4_rtm(rtm::matrix_inverse(_value));
         }
 
     public:
-        static RTM_FORCE_INLINE generic_mat4_rtm create_from_array(
+        MVM_INLINE_NODISCARD static generic_mat4_rtm create_from_array(
             const value_type values[16])
         {
             return generic_mat4_rtm(rtm::matrix_set(
@@ -204,12 +205,12 @@ namespace move::vectormath
             }
         }
 
-        static RTM_FORCE_INLINE generic_mat4_rtm create_identity() noexcept
+        MVM_INLINE_NODISCARD static generic_mat4_rtm create_identity() noexcept
         {
             return generic_mat4_rtm(rtm::matrix_identity());
         }
 
-        static RTM_FORCE_INLINE generic_mat4_rtm create_rotation_x(
+        MVM_INLINE_NODISCARD static generic_mat4_rtm create_rotation_x(
             value_type angle) noexcept
         {
             using namespace rtm;
@@ -222,7 +223,7 @@ namespace move::vectormath
                 matrix_cast<underlying_matrix3x4_type>(matrix_from_quat(quat)));
         }
 
-        static RTM_FORCE_INLINE generic_mat4_rtm create_rotation_y(
+        MVM_INLINE_NODISCARD static generic_mat4_rtm create_rotation_y(
             value_type angle) noexcept
         {
             using namespace rtm;
@@ -235,7 +236,7 @@ namespace move::vectormath
                 matrix_cast<underlying_matrix3x4_type>(matrix_from_quat(quat)));
         }
 
-        static RTM_FORCE_INLINE generic_mat4_rtm create_rotation_z(
+        MVM_INLINE_NODISCARD static generic_mat4_rtm create_rotation_z(
             value_type angle) noexcept
         {
             using namespace rtm;
@@ -248,7 +249,7 @@ namespace move::vectormath
                 matrix_cast<underlying_matrix3x4_type>(matrix_from_quat(quat)));
         }
 
-        static RTM_FORCE_INLINE generic_mat4_rtm create_translation(
+        MVM_INLINE_NODISCARD static generic_mat4_rtm create_translation(
             const underlying_vector4_type& translation) noexcept
         {
             using rtm::vector_set;
@@ -261,7 +262,7 @@ namespace move::vectormath
                 translation};
         }
 
-        static RTM_FORCE_INLINE generic_mat4_rtm create_translation(
+        MVM_INLINE_NODISCARD static generic_mat4_rtm create_translation(
             value_type x, value_type y, value_type z) noexcept
         {
             using rtm::vector_set;
@@ -276,7 +277,7 @@ namespace move::vectormath
             };
         }
 
-        static RTM_FORCE_INLINE generic_mat4_rtm create_scale(
+        MVM_INLINE_NODISCARD static generic_mat4_rtm create_scale(
             value_type x, value_type y, value_type z) noexcept
         {
             using rtm::vector_set;
@@ -289,7 +290,7 @@ namespace move::vectormath
             };
         }
 
-        static RTM_FORCE_INLINE generic_mat4_rtm create_scale(
+        MVM_INLINE_NODISCARD static generic_mat4_rtm create_scale(
             const vec3_type& scale) noexcept
         {
             using rtm::vector_set;
@@ -305,48 +306,49 @@ namespace move::vectormath
             };
         }
 
-        static RTM_FORCE_INLINE generic_mat4_rtm create_perspective_rh(
+        MVM_INLINE_NODISCARD static generic_mat4_rtm create_perspective_rh(
             value_type fov, value_type aspect, value_type near,
             value_type far) noexcept
         {
             return rtm::ext::perspective_fov_rh(fov, aspect, near, far);
         }
 
-        static RTM_FORCE_INLINE generic_mat4_rtm create_perspective_lh(
+        MVM_INLINE_NODISCARD static generic_mat4_rtm create_perspective_lh(
             value_type fov, value_type aspect, value_type near,
             value_type far) noexcept
         {
             return rtm::ext::perspective_fov_lh(fov, aspect, near, far);
         }
 
-        static RTM_FORCE_INLINE generic_mat4_rtm create_perspective(
+        MVM_INLINE_NODISCARD static generic_mat4_rtm create_perspective(
             value_type fov, value_type aspect, value_type near,
             value_type far) noexcept
         {
             return create_perspective_rh(fov, aspect, near, far);
         }
 
-        static RTM_FORCE_INLINE generic_mat4_rtm create_ortho_rh(
+        MVM_INLINE_NODISCARD static generic_mat4_rtm create_ortho_rh(
             value_type width, value_type height, value_type near,
             value_type far) noexcept
         {
             return rtm::ext::ortho_rh(width, height, near, far);
         }
 
-        static RTM_FORCE_INLINE generic_mat4_rtm create_ortho_lh(
+        MVM_INLINE_NODISCARD static generic_mat4_rtm create_ortho_lh(
             value_type width, value_type height, value_type near,
             value_type far) noexcept
         {
             return rtm::ext::ortho_lh(width, height, near, far);
         }
 
-        static RTM_FORCE_INLINE generic_mat4_rtm create_ortho(value_type width,
-            value_type height, value_type near, value_type far) noexcept
+        MVM_INLINE_NODISCARD static generic_mat4_rtm create_ortho(
+            value_type width, value_type height, value_type near,
+            value_type far) noexcept
         {
             return create_ortho_rh(width, height, near, far);
         }
 
-        static RTM_FORCE_INLINE generic_mat4_rtm create_ortho_off_center_rh(
+        MVM_INLINE_NODISCARD static generic_mat4_rtm create_ortho_off_center_rh(
             value_type left, value_type right, value_type bottom,
             value_type top, value_type near, value_type far) noexcept
         {
@@ -354,7 +356,7 @@ namespace move::vectormath
                 left, right, bottom, top, near, far);
         }
 
-        static RTM_FORCE_INLINE generic_mat4_rtm create_ortho_off_center_lh(
+        MVM_INLINE_NODISCARD static generic_mat4_rtm create_ortho_off_center_lh(
             value_type left, value_type right, value_type bottom,
             value_type top, value_type near, value_type far) noexcept
         {
@@ -363,7 +365,7 @@ namespace move::vectormath
         }
 
     public:
-        RTM_FORCE_INLINE static generic_mat4_rtm create_look_at_rh(
+        MVM_INLINE_NODISCARD static generic_mat4_rtm create_look_at_rh(
             const underlying_vector3_type& eye,
             const underlying_vector3_type& target,
             const underlying_vector3_type& up) noexcept
@@ -372,7 +374,7 @@ namespace move::vectormath
                 eye, target, up);
         }
 
-        RTM_FORCE_INLINE static generic_mat4_rtm create_look_at_lh(
+        MVM_INLINE_NODISCARD static generic_mat4_rtm create_look_at_lh(
             const underlying_vector3_type& eye,
             const underlying_vector3_type& target,
             const underlying_vector3_type& up) noexcept
@@ -381,7 +383,7 @@ namespace move::vectormath
                 eye, target, up);
         }
 
-        RTM_FORCE_INLINE static generic_mat4_rtm create_look_at(
+        MVM_INLINE_NODISCARD static generic_mat4_rtm create_look_at(
             const underlying_vector3_type& eye,
             const underlying_vector3_type& target,
             const underlying_vector3_type& up) noexcept
@@ -390,7 +392,7 @@ namespace move::vectormath
         }
 
     public:
-        RTM_FORCE_INLINE static generic_mat4_rtm create_transformation(
+        MVM_INLINE_NODISCARD static generic_mat4_rtm create_transformation(
             const underlying_vector3_type& translation,
             const underlying_quat_type& rotation,
             const underlying_vector3_type& scale) noexcept
@@ -407,7 +409,7 @@ namespace move::vectormath
     };
 
     template <typename matrix_type>
-    RTM_FORCE_INLINE static typename matrix_type::vec4_type operator*(
+    MVM_INLINE_NODISCARD static typename matrix_type::vec4_type operator*(
         const typename matrix_type::vec4_type& v, const matrix_type& m) noexcept
     {
         using namespace rtm;
@@ -415,7 +417,7 @@ namespace move::vectormath
     }
 
     template <typename matrix_type>
-    RTM_FORCE_INLINE static typename matrix_type::vec4_type operator*(
+    MVM_INLINE_NODISCARD static typename matrix_type::vec4_type operator*(
         const matrix_type& m, const typename matrix_type::vec4_type& v) noexcept
     {
         (void)m;
