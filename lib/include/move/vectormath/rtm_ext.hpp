@@ -476,7 +476,7 @@ namespace rtm::ext
     MVM_INLINE_NODISCARD mask4f vector_in_bounds(const vector4f& input,
         const vector4f& bounds_min, const vector4f& bounds_max)
     {
-        return vector_and(vector_less_equal(input, bounds_max),
+        return mask_and(vector_less_equal(input, bounds_max),
             vector_greater_equal(input, bounds_min));
     }
 
@@ -484,18 +484,8 @@ namespace rtm::ext
     MVM_INLINE_NODISCARD mask4d vector_in_bounds(const vector4d& input,
         const vector4d& bounds_min, const vector4d& bounds_max)
     {
-        using vector_t = vector4d;
-        using mask_t = mask4d;
-
-        mask_t less_mask = vector_less_equal(input, bounds_max);
-        mask_t greater_mask = vector_greater_equal(input, bounds_min);
-
-        // TODO: Optimize this once it's properly implemented in RTM -
-        // vectorized implementation did not work for doubles
-        return mask_set(mask_get_x(less_mask) & mask_get_x(greater_mask),
-            mask_get_y(less_mask) & mask_get_y(greater_mask),
-            mask_get_z(less_mask) & mask_get_z(greater_mask),
-            mask_get_w(less_mask) & mask_get_w(greater_mask));
+        return mask_and(vector_less_equal(input, bounds_max),
+            vector_greater_equal(input, bounds_min));
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK

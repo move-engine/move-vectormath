@@ -380,17 +380,7 @@ namespace move::vectormath
          */
         MVM_INLINE_NODISCARD value_type get_component(int index) const noexcept
         {
-            switch (index)
-            {
-                case 0:
-                    return rtm::vector_get_x(_value);
-                case 1:
-                    return rtm::vector_get_y(_value);
-                case 2:
-                    return rtm::vector_get_z(_value);
-                default:
-                    return rtm::vector_get_w(_value);
-            }
+            return rtm::vector_get_component(_value, rtm::mix4(index));
         }
 
         /**
