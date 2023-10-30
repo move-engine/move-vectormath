@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>move::vectormath::generic_bounds struct | move-vectormath</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
+  <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
+  <link rel="icon" href="favicon-dark.png" type="image/png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#22272e" />
+</head>
+<body>
+<header><nav id="navigation">
+  <div class="m-container">
+    <div class="m-row">
+      <a href="index.html" id="m-navbar-brand" class="m-col-t-8 m-col-m-none m-left-m">move-vectormath</a>
+      <div class="m-col-t-4 m-hide-m m-text-right m-nopadr">
+        <a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+          <path id="m-doc-search-icon-path" d="m6 0c-3.31 0-6 2.69-6 6 0 3.31 2.69 6 6 6 1.49 0 2.85-0.541 3.89-1.44-0.0164 0.338 0.147 0.759 0.5 1.15l3.22 3.79c0.552 0.614 1.45 0.665 2 0.115 0.55-0.55 0.499-1.45-0.115-2l-3.79-3.22c-0.392-0.353-0.812-0.515-1.15-0.5 0.895-1.05 1.44-2.41 1.44-3.89 0-3.31-2.69-6-6-6zm0 1.56a4.44 4.44 0 0 1 4.44 4.44 4.44 4.44 0 0 1-4.44 4.44 4.44 4.44 0 0 1-4.44-4.44 4.44 4.44 0 0 1 4.44-4.44z"/>
+        </svg></a>
+        <a id="m-navbar-show" href="#navigation" title="Show navigation"></a>
+        <a id="m-navbar-hide" href="#" title="Hide navigation"></a>
+      </div>
+      <div id="m-navbar-collapse" class="m-col-t-12 m-show-m m-col-m-none m-right-m">
+        <div class="m-row">
+          <ol class="m-col-t-6 m-col-m-none">
+            <li>
+              <a href="pages.html">Pages</a>
+              <ol>
+                <li><a href="about.html">About</a></li>
+              </ol>
+            </li>
+            <li><a href="namespaces.html">Namespaces</a></li>
+          </ol>
+          <ol class="m-col-t-6 m-col-m-none" start="3">
+            <li><a href="annotated.html">Classes</a></li>
+            <li><a href="files.html">Files</a></li>
+            <li class="m-show-m"><a href="#search" class="m-doc-search-icon" title="Search" onclick="return showSearch()"><svg style="height: 0.9rem;" viewBox="0 0 16 16">
+              <use href="#m-doc-search-icon-path" />
+            </svg></a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav></header>
+<main><article>
+  <div class="m-container m-container-inflatable">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <h1>
+          <div class="m-doc-include m-code m-inverted m-right-m m-text-right"><span class="cp">#include</span> <a class="cpf" href="bounds_8hpp.html">&lt;bounds.hpp&gt;</a></div>
+          <div class="m-doc-template">template&lt;typename vector_type&gt;</div>
+          <span class="m-breadcrumb"><a href="namespacemove.html">move</a>::<wbr/></span><span class="m-breadcrumb"><a href="namespacemove_1_1vectormath.html">vectormath</a>::<wbr/></span>generic_bounds <span class="m-thin">struct</span>
+        </h1>
+        <p><span></span></p>
+        <div class="m-block m-default">
+          <h3>Contents</h3>
+          <ul>
+            <li>
+              Reference
+              <ul>
+                <li><a href="#pub-types">Public types</a></li>
+                <li><a href="#typeless-methods">Constructors, destructors, conversion operators</a></li>
+                <li><a href="#pub-methods">Public functions</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <section id="pub-types">
+          <h2><a href="#pub-types">Public types</a></h2>
+          <dl class="m-doc">
+            <dt id="a9d7076eb9015056094b672df7411f0d2">
+              using <a href="#a9d7076eb9015056094b672df7411f0d2" class="m-doc-self">component_type</a> = typename vector_type::component_type
+            </dt>
+            <dd><span></span></dd>
+            <dt id="abc777fbc5adbf1dec7a6a07b1ca9dfe1">
+              using <a href="#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc-self">vec_type</a> = vector_type
+            </dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="typeless-methods">
+          <h2><a href="#typeless-methods">Constructors, destructors, conversion operators</a></h2>
+          <dl class="m-doc">
+            <dt id="a7e340f0c64c8c49450dd6b717810de8b">
+              <span class="m-doc-wrap-bumper"><a href="#a7e340f0c64c8c49450dd6b717810de8b" class="m-doc-self">generic_bounds</a>(</span><span class="m-doc-wrap">) <span class="m-label m-flat m-info">defaulted</span></span>
+            </dt>
+            <dd>Creates a new bounding box with the minimum and maximum set to zero.</dd>
+          </dl>
+        </section>
+        <section id="pub-methods">
+          <h2><a href="#pub-methods">Public functions</a></h2>
+          <dl class="m-doc">
+            <dt id="a479c97661e49ada581b1ea89bf43b91d">
+              <span class="m-doc-wrap-bumper">auto <a href="#a479c97661e49ada581b1ea89bf43b91d" class="m-doc-self">generic_bounds</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a>&amp; min,
+              const <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a>&amp; max) -&gt; <a href="macros_8hpp.html#a658b1762f9739671bc6d1c51deebc97d" class="m-doc">MVM_<wbr />INLINE</a></span>
+            </dt>
+            <dd>Creates a new bounding box with the given minimum and maximum values.</dd>
+            <dt id="a60559ca6d67c2ea6af81d574798a7c84">
+              <span class="m-doc-wrap-bumper">auto <a href="#a60559ca6d67c2ea6af81d574798a7c84" class="m-doc-self">generic_bounds</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a>&amp; point) -&gt; <a href="macros_8hpp.html#a658b1762f9739671bc6d1c51deebc97d" class="m-doc">MVM_<wbr />INLINE</a></span>
+            </dt>
+            <dd>Creates a new bounding box with the minimum and maximum bounded exactly to a single point.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a082b5e57b06b2f7d870e781bc31895b8" class="m-doc">min</a>(</span><span class="m-doc-wrap">) const -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a></span>
+            </dt>
+            <dd>Returns the minimum value of the bounding box.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a5cf6f1d55180f074f3f26c97b6123205" class="m-doc">max</a>(</span><span class="m-doc-wrap">) const -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a></span>
+            </dt>
+            <dd>Returns the maximum value of the bounding box.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#ade241c872797352594fbc894e6e37f67" class="m-doc">min</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a>&amp; min) -&gt; <a href="macros_8hpp.html#a658b1762f9739671bc6d1c51deebc97d" class="m-doc">MVM_<wbr />INLINE</a> <a href="structmove_1_1vectormath_1_1generic__bounds.html" class="m-doc">generic_<wbr />bounds</a>&amp;</span>
+            </dt>
+            <dd>Sets the minimum value of the bounding box.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#ae407978d27b08b7dec4c6a66db8999b9" class="m-doc">max</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a>&amp; max) -&gt; <a href="macros_8hpp.html#a658b1762f9739671bc6d1c51deebc97d" class="m-doc">MVM_<wbr />INLINE</a> <a href="structmove_1_1vectormath_1_1generic__bounds.html" class="m-doc">generic_<wbr />bounds</a>&amp;</span>
+            </dt>
+            <dd>Sets the maximum value of the bounding box.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#ac170d81682311503b40fc660c701e959" class="m-doc">center</a>(</span><span class="m-doc-wrap">) const -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a></span>
+            </dt>
+            <dd>Returns the center of the bounding box.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#adeb4623ec1fc782af2d83b37ec09e116" class="m-doc">size</a>(</span><span class="m-doc-wrap">) const -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a></span>
+            </dt>
+            <dd>Returns the size of the bounding box.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a5d963cd35c45eb9cca8264633a6c51ee" class="m-doc">extents</a>(</span><span class="m-doc-wrap">) const -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a></span>
+            </dt>
+            <dd>Returns the extents of the bounding box.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#af84bf3fd0fd2f3f4d9e7f7ee41c4bad8" class="m-doc">contains</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a>&amp; point) const -&gt; MVM_INLINE_NODISCARD bool</span>
+            </dt>
+            <dd>Checks if the bounding box contains the given point.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a03ec283f1b4ba336e1a73a51bb49221f" class="m-doc">closest_point</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a>&amp; point) const -&gt; <a href="macros_8hpp.html#a658b1762f9739671bc6d1c51deebc97d" class="m-doc">MVM_<wbr />INLINE</a> <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a></span>
+            </dt>
+            <dd>Returns the closest point on the bounding box to the given point.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#ad032ddfbd32554c1102f039b9c98c36a" class="m-doc">intersects</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__bounds.html" class="m-doc">generic_<wbr />bounds</a>&amp; bounds) const -&gt; MVM_INLINE_NODISCARD bool</span>
+            </dt>
+            <dd>Checks if the bounding box intersects with the given bounding box.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a501818c2d092a174fbdc8304e7d7062f" class="m-doc">intersects</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a>&amp; origin,
+              const <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a>&amp; direction,
+              const <a href="structmove_1_1vectormath_1_1generic__bounds.html#a9d7076eb9015056094b672df7411f0d2" class="m-doc">component_<wbr />type</a> tmin,
+              const <a href="structmove_1_1vectormath_1_1generic__bounds.html#a9d7076eb9015056094b672df7411f0d2" class="m-doc">component_<wbr />type</a> tmax) const -&gt; MVM_INLINE_NODISCARD bool</span>
+            </dt>
+            <dd>Checks if the bounding box intersects with a ray.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a0ac01e216b92cbc5b35aa35ea2f4ff06" class="m-doc">encapsulate</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a>&amp; point) -&gt; <a href="macros_8hpp.html#a658b1762f9739671bc6d1c51deebc97d" class="m-doc">MVM_<wbr />INLINE</a> <a href="structmove_1_1vectormath_1_1generic__bounds.html" class="m-doc">generic_<wbr />bounds</a>&amp;</span>
+            </dt>
+            <dd>Grows the bounding box to include the given point.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#aa738951d07fa34fc6690995fb09ab401" class="m-doc">encapsulate</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__bounds.html" class="m-doc">generic_<wbr />bounds</a>&amp; bounds) -&gt; <a href="macros_8hpp.html#a658b1762f9739671bc6d1c51deebc97d" class="m-doc">MVM_<wbr />INLINE</a> <a href="structmove_1_1vectormath_1_1generic__bounds.html" class="m-doc">generic_<wbr />bounds</a>&amp;</span>
+            </dt>
+            <dd>Grows the bounding box to include the given bounding box.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a2d3c7f1018d081317b6f7c72e90bd89b" class="m-doc">expand</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a>&amp; amount) -&gt; <a href="macros_8hpp.html#a658b1762f9739671bc6d1c51deebc97d" class="m-doc">MVM_<wbr />INLINE</a> <a href="structmove_1_1vectormath_1_1generic__bounds.html" class="m-doc">generic_<wbr />bounds</a>&amp;</span>
+            </dt>
+            <dd>Grows the bounding box by the given amount.</dd>
+          </dl>
+        </section>
+        <section>
+          <h2>Function documentation</h2>
+          <section class="m-doc-details" id="a082b5e57b06b2f7d870e781bc31895b8"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename vector_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a> move::<wbr />vectormath::<wbr />generic_bounds&lt;vector_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a082b5e57b06b2f7d870e781bc31895b8" class="m-doc-self">min</a>(</span><span class="m-doc-wrap">) const</span></span>
+            </h3>
+            <p>Returns the minimum value of the bounding box.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The minimum value of the bounding box.</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a5cf6f1d55180f074f3f26c97b6123205"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename vector_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a> move::<wbr />vectormath::<wbr />generic_bounds&lt;vector_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a5cf6f1d55180f074f3f26c97b6123205" class="m-doc-self">max</a>(</span><span class="m-doc-wrap">) const</span></span>
+            </h3>
+            <p>Returns the maximum value of the bounding box.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The maximum value of the bounding box.</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="ade241c872797352594fbc894e6e37f67"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename vector_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a href="macros_8hpp.html#a658b1762f9739671bc6d1c51deebc97d" class="m-doc">MVM_<wbr />INLINE</a> <a href="structmove_1_1vectormath_1_1generic__bounds.html" class="m-doc">generic_<wbr />bounds</a>&amp; move::<wbr />vectormath::<wbr />generic_bounds&lt;vector_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ade241c872797352594fbc894e6e37f67" class="m-doc-self">min</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a>&amp; min)</span></span>
+            </h3>
+            <p>Sets the minimum value of the bounding box.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">min</td>
+                  <td>The new minimum value of the bounding box.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>A reference to the bounding box.</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="ae407978d27b08b7dec4c6a66db8999b9"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename vector_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a href="macros_8hpp.html#a658b1762f9739671bc6d1c51deebc97d" class="m-doc">MVM_<wbr />INLINE</a> <a href="structmove_1_1vectormath_1_1generic__bounds.html" class="m-doc">generic_<wbr />bounds</a>&amp; move::<wbr />vectormath::<wbr />generic_bounds&lt;vector_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ae407978d27b08b7dec4c6a66db8999b9" class="m-doc-self">max</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a>&amp; max)</span></span>
+            </h3>
+            <p>Sets the maximum value of the bounding box.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">max</td>
+                  <td>The new maximum value of the bounding box.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>A reference to the bounding box.</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="ac170d81682311503b40fc660c701e959"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename vector_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a> move::<wbr />vectormath::<wbr />generic_bounds&lt;vector_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ac170d81682311503b40fc660c701e959" class="m-doc-self">center</a>(</span><span class="m-doc-wrap">) const</span></span>
+            </h3>
+            <p>Returns the center of the bounding box.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The center of the bounding box.</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="adeb4623ec1fc782af2d83b37ec09e116"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename vector_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a> move::<wbr />vectormath::<wbr />generic_bounds&lt;vector_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#adeb4623ec1fc782af2d83b37ec09e116" class="m-doc-self">size</a>(</span><span class="m-doc-wrap">) const</span></span>
+            </h3>
+            <p>Returns the size of the bounding box.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The size of the bounding box.</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a5d963cd35c45eb9cca8264633a6c51ee"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename vector_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a> move::<wbr />vectormath::<wbr />generic_bounds&lt;vector_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a5d963cd35c45eb9cca8264633a6c51ee" class="m-doc-self">extents</a>(</span><span class="m-doc-wrap">) const</span></span>
+            </h3>
+            <p>Returns the extents of the bounding box.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <tfoot>
+                <tr>
+                  <th style="width: 1%">Returns</th>
+                  <td>The extents of the bounding box.</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="af84bf3fd0fd2f3f4d9e7f7ee41c4bad8"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename vector_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">MVM_INLINE_NODISCARD bool move::<wbr />vectormath::<wbr />generic_bounds&lt;vector_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#af84bf3fd0fd2f3f4d9e7f7ee41c4bad8" class="m-doc-self">contains</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a>&amp; point) const</span></span>
+            </h3>
+            <p>Checks if the bounding box contains the given point.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">point</td>
+                  <td>The point to check.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>True if the bounding box contains the point, false otherwise.</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a03ec283f1b4ba336e1a73a51bb49221f"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename vector_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a href="macros_8hpp.html#a658b1762f9739671bc6d1c51deebc97d" class="m-doc">MVM_<wbr />INLINE</a> <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a> move::<wbr />vectormath::<wbr />generic_bounds&lt;vector_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a03ec283f1b4ba336e1a73a51bb49221f" class="m-doc-self">closest_point</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a>&amp; point) const</span></span>
+            </h3>
+            <p>Returns the closest point on the bounding box to the given point.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">point</td>
+                  <td>The point to check.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>The closest point on the bounding box to the given point.</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="ad032ddfbd32554c1102f039b9c98c36a"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename vector_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">MVM_INLINE_NODISCARD bool move::<wbr />vectormath::<wbr />generic_bounds&lt;vector_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ad032ddfbd32554c1102f039b9c98c36a" class="m-doc-self">intersects</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__bounds.html" class="m-doc">generic_<wbr />bounds</a>&amp; bounds) const</span></span>
+            </h3>
+            <p>Checks if the bounding box intersects with the given bounding box.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">bounds</td>
+                  <td>The bounding box to check.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>true if the bounding box intersects with the given bounding box</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a501818c2d092a174fbdc8304e7d7062f"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename vector_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">MVM_INLINE_NODISCARD bool move::<wbr />vectormath::<wbr />generic_bounds&lt;vector_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a501818c2d092a174fbdc8304e7d7062f" class="m-doc-self">intersects</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a>&amp; origin,
+              const <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a>&amp; direction,
+              const <a href="structmove_1_1vectormath_1_1generic__bounds.html#a9d7076eb9015056094b672df7411f0d2" class="m-doc">component_<wbr />type</a> tmin,
+              const <a href="structmove_1_1vectormath_1_1generic__bounds.html#a9d7076eb9015056094b672df7411f0d2" class="m-doc">component_<wbr />type</a> tmax) const</span></span>
+            </h3>
+            <p>Checks if the bounding box intersects with a ray.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">origin</td>
+                  <td>The origin of the ray.</td>
+                </tr>
+                <tr>
+                  <td>direction</td>
+                  <td>The direction of the ray.</td>
+                </tr>
+                <tr>
+                  <td>tmin</td>
+                  <td>The minimum distance of the ray.</td>
+                </tr>
+                <tr>
+                  <td>tmax</td>
+                  <td>The maximum distance of the ray.</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>true if the bounding box intersects with the ray.</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a0ac01e216b92cbc5b35aa35ea2f4ff06"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename vector_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a href="macros_8hpp.html#a658b1762f9739671bc6d1c51deebc97d" class="m-doc">MVM_<wbr />INLINE</a> <a href="structmove_1_1vectormath_1_1generic__bounds.html" class="m-doc">generic_<wbr />bounds</a>&amp; move::<wbr />vectormath::<wbr />generic_bounds&lt;vector_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a0ac01e216b92cbc5b35aa35ea2f4ff06" class="m-doc-self">encapsulate</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a>&amp; point)</span></span>
+            </h3>
+            <p>Grows the bounding box to include the given point.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">point</td>
+                  <td>The point to include.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="aa738951d07fa34fc6690995fb09ab401"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename vector_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a href="macros_8hpp.html#a658b1762f9739671bc6d1c51deebc97d" class="m-doc">MVM_<wbr />INLINE</a> <a href="structmove_1_1vectormath_1_1generic__bounds.html" class="m-doc">generic_<wbr />bounds</a>&amp; move::<wbr />vectormath::<wbr />generic_bounds&lt;vector_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#aa738951d07fa34fc6690995fb09ab401" class="m-doc-self">encapsulate</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__bounds.html" class="m-doc">generic_<wbr />bounds</a>&amp; bounds)</span></span>
+            </h3>
+            <p>Grows the bounding box to include the given bounding box.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">bounds</td>
+                  <td>The bounding box to include.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a2d3c7f1018d081317b6f7c72e90bd89b"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename vector_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper"><a href="macros_8hpp.html#a658b1762f9739671bc6d1c51deebc97d" class="m-doc">MVM_<wbr />INLINE</a> <a href="structmove_1_1vectormath_1_1generic__bounds.html" class="m-doc">generic_<wbr />bounds</a>&amp; move::<wbr />vectormath::<wbr />generic_bounds&lt;vector_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a2d3c7f1018d081317b6f7c72e90bd89b" class="m-doc-self">expand</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__bounds.html#abc777fbc5adbf1dec7a6a07b1ca9dfe1" class="m-doc">vec_<wbr />type</a>&amp; amount)</span></span>
+            </h3>
+            <p>Grows the bounding box by the given amount.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">amount</td>
+                  <td>The amount to grow the bounding box by.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div></section>
+        </section>
+      </div>
+    </div>
+  </div>
+</article></main>
+<div class="m-doc-search" id="search">
+  <a href="#!" onclick="return hideSearch()"></a>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-m-8 m-push-m-2">
+        <div class="m-doc-search-header m-text m-small">
+          <div><span class="m-label m-default">Tab</span> / <span class="m-label m-default">T</span> to search, <span class="m-label m-default">Esc</span> to close</div>
+          <div id="search-symbolcount">&hellip;</div>
+        </div>
+        <div class="m-doc-search-content">
+          <form>
+            <input type="search" name="q" id="search-input" placeholder="Loading &hellip;" disabled="disabled" autofocus="autofocus" autocomplete="off" spellcheck="false" />
+          </form>
+          <noscript class="m-text m-danger m-text-center">Unlike everything else in the docs, the search functionality <em>requires</em> JavaScript.</noscript>
+          <div id="search-help" class="m-text m-dim m-text-center">
+            <p class="m-noindent">Search for symbols, directories, files, pages or
+            modules. You can omit any prefix from the symbol or file path; adding a
+            <code>:</code> or <code>/</code> suffix lists all members of given symbol or
+            directory.</p>
+            <p class="m-noindent">Use <span class="m-label m-dim">&darr;</span>
+            / <span class="m-label m-dim">&uarr;</span> to navigate through the list,
+            <span class="m-label m-dim">Enter</span> to go.
+            <span class="m-label m-dim">Tab</span> autocompletes common prefix, you can
+            copy a link to the result using <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">L</span> while <span class="m-label m-dim">⌘</span>
+            <span class="m-label m-dim">M</span> produces a Markdown link.</p>
+          </div>
+          <div id="search-notfound" class="m-text m-warning m-text-center">Sorry, nothing was found.</div>
+          <ul id="search-results"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="search-v1.js"></script>
+<script src="searchdata-v1.js" async="async"></script>
+<footer><nav>
+  <div class="m-container">
+    <div class="m-row">
+      <div class="m-col-l-10 m-push-l-1">
+        <p>move-vectormath. Created with <a href="https://doxygen.org/">Doxygen</a> 1.9.1 and <a href="https://mcss.mosra.cz/">m.css</a>.</p>
+      </div>
+    </div>
+  </div>
+</nav></footer>
+</body>
+</html>

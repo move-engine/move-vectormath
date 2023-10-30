@@ -159,6 +159,12 @@
             </dt>
             <dd>Returns a vector containing the maximum x, y, z, and w components of the two vectors.</dd>
             <dt>
+              <span class="m-doc-wrap-bumper">static auto <a href="#a59afa33535260014a4581a87d7605f47" class="m-doc">clamp</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; min,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; max) -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Returns a vector the provided value clamped between the provided minimum and maximum vectors.</dd>
+            <dt>
               <span class="m-doc-wrap-bumper">static auto <a href="#a01b87a8b616f349e27019c6e83b56aa7" class="m-doc">filled</a>(</span><span class="m-doc-wrap">value_type value) -&gt; MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Returns a vector with all components set to the provided value.</dd>
@@ -237,6 +243,22 @@
               <span class="m-doc-wrap-bumper">auto <a href="#a474b4b5a86e2325f4176dc743365e469" class="m-doc">operator!=</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) const -&gt; MVM_INLINE_NODISCARD bool <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
             <dd>Determines if the vector is not equal to another vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a3906f498485a7975b32cd2a2e8e6b792" class="m-doc">operator&lt;</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) const -&gt; MVM_INLINE_NODISCARD bool <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Determines if all components of the vector are less than the corresponding components of another vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#ae9f462e7224d0443b6f34459e660f86d" class="m-doc">operator&lt;=</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) const -&gt; MVM_INLINE_NODISCARD bool <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Determines if all components of the vector are less than or equal to the corresponding components of another vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a56eb93f87d190a90dd625ec8986b70b9" class="m-doc">operator&gt;</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) const -&gt; MVM_INLINE_NODISCARD bool <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Determines if all components of the vector are greater than the corresponding components of another vector.</dd>
+            <dt>
+              <span class="m-doc-wrap-bumper">auto <a href="#a404c9081498caea21bcb74a1e9716231" class="m-doc">operator&gt;=</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) const -&gt; MVM_INLINE_NODISCARD bool <span class="m-label m-flat m-success">noexcept</span></span>
+            </dt>
+            <dd>Determines if all components of the vector are greater than or equal to the corresponding components of another vector.</dd>
             <dt>
               <span class="m-doc-wrap-bumper">auto <a href="#a6193a847942b1d8500148d2b3c0a9dc5" class="m-doc">operator=</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) -&gt; <a href="macros_8hpp.html#a658b1762f9739671bc6d1c51deebc97d" class="m-doc">MVM_<wbr />INLINE</a> <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; <span class="m-label m-flat m-success">noexcept</span></span>
             </dt>
@@ -625,6 +647,42 @@
               </tfoot>
             </table>
           </div></section>
+          <section class="m-doc-details" id="a59afa33535260014a4581a87d7605f47"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">static MVM_INLINE_NODISCARD <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a59afa33535260014a4581a87d7605f47" class="m-doc-self">clamp</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; min,
+              const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; max) <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Returns a vector the provided value clamped between the provided minimum and maximum vectors.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v</td>
+                  <td>The vector to clamp</td>
+                </tr>
+                <tr>
+                  <td>min</td>
+                  <td>The minimum vector</td>
+                </tr>
+                <tr>
+                  <td>max</td>
+                  <td>The maximum vector</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td><a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a> The clamped vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
           <section class="m-doc-details" id="a01b87a8b616f349e27019c6e83b56aa7"><div>
             <h3>
               <div class="m-doc-template">
@@ -968,6 +1026,110 @@
                 <tr>
                   <th>Returns</th>
                   <td>true The vectors are not equal</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a3906f498485a7975b32cd2a2e8e6b792"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">MVM_INLINE_NODISCARD bool move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a3906f498485a7975b32cd2a2e8e6b792" class="m-doc-self">operator&lt;</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) const <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Determines if all components of the vector are less than the corresponding components of another vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v</td>
+                  <td>The other vector</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>true All components of the vector are less than the corresponding components of the other vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="ae9f462e7224d0443b6f34459e660f86d"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">MVM_INLINE_NODISCARD bool move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#ae9f462e7224d0443b6f34459e660f86d" class="m-doc-self">operator&lt;=</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) const <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Determines if all components of the vector are less than or equal to the corresponding components of another vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v</td>
+                  <td>The other vector</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>true All components of the vector are less than or equal to the corresponding components of the other vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a56eb93f87d190a90dd625ec8986b70b9"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">MVM_INLINE_NODISCARD bool move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a56eb93f87d190a90dd625ec8986b70b9" class="m-doc-self">operator&gt;</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) const <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Determines if all components of the vector are greater than the corresponding components of another vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v</td>
+                  <td>The other vector</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>true All components of the vector are greater than the corresponding components of the other vector</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div></section>
+          <section class="m-doc-details" id="a404c9081498caea21bcb74a1e9716231"><div>
+            <h3>
+              <div class="m-doc-template">
+                template&lt;typename value_type&gt;
+              </div>
+              <span class="m-doc-wrap-bumper">MVM_INLINE_NODISCARD bool move::<wbr />vectormath::<wbr />generic_vec2_scalar&lt;value_type&gt;::<wbr /></span><span class="m-doc-wrap"><span class="m-doc-wrap-bumper"><a href="#a404c9081498caea21bcb74a1e9716231" class="m-doc-self">operator&gt;=</a>(</span><span class="m-doc-wrap">const <a href="structmove_1_1vectormath_1_1generic__vec2__scalar.html" class="m-doc">generic_<wbr />vec2_<wbr />scalar</a>&amp; v) const <span class="m-label m-success">noexcept</span></span></span>
+            </h3>
+            <p>Determines if all components of the vector are greater than or equal to the corresponding components of another vector.</p>
+            <table class="m-table m-fullwidth m-flat">
+              <thead>
+                <tr><th colspan="2">Parameters</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="width: 1%">v</td>
+                  <td>The other vector</td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Returns</th>
+                  <td>true All components of the vector are greater than or equal to the corresponding components of the other vector</td>
                 </tr>
               </tfoot>
             </table>
