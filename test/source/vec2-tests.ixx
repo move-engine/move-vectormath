@@ -185,26 +185,26 @@ SCENARIO(MVM_TEST_NAME(MVM_VEC2_TEST_VEC_TYPE),
 
                     REQUIRE(angle == Approx(dxm_angle));
                 }
-            }
 
-            THEN("Reflection should be correct")
-            {
-                auto ref = vec_type::reflect(v1, v2);
-                auto dxm_ref = vec2_from_dxm<vec_type>(
-                    DirectX::XMVector2Reflect(dxm_v1, dxm_v2));
+                THEN("Reflection should be correct")
+                {
+                    auto ref = vec_type::reflect(v1, v2);
+                    auto dxm_ref = vec2_from_dxm<vec_type>(
+                        DirectX::XMVector2Reflect(dxm_v1, dxm_v2));
 
-                REQUIRE(ref.x() == Approx(dxm_ref.x()));
-                REQUIRE(ref.y() == Approx(dxm_ref.y()));
-            }
+                    REQUIRE(ref.x() == Approx(dxm_ref.x()));
+                    REQUIRE(ref.y() == Approx(dxm_ref.y()));
+                }
 
-            THEN("Refraction should be correct")
-            {
-                auto ref = vec_type::refract(v1, v2, 0.5f);
-                auto dxm_ref = vec2_from_dxm<vec_type>(
-                    DirectX::XMVector2Refract(dxm_v1, dxm_v2, 0.5f));
+                THEN("Refraction should be correct")
+                {
+                    auto ref = vec_type::refract(v1, v2, 0.5f);
+                    auto dxm_ref = vec2_from_dxm<vec_type>(
+                        DirectX::XMVector2Refract(dxm_v1, dxm_v2, 0.5f));
 
-                REQUIRE(ref.x() == Approx(dxm_ref.x()));
-                REQUIRE(ref.y() == Approx(dxm_ref.y()));
+                    REQUIRE(ref.x() == Approx(dxm_ref.x()));
+                    REQUIRE(ref.y() == Approx(dxm_ref.y()));
+                }
             }
 
             THEN("Min should be correct")
