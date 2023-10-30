@@ -14,7 +14,35 @@
 
 #include <move/vectormath/bounds.hpp>
 
+#include <DirectXCollision.h>
+#include <DirectXMath.h>
 #include "mvm_test_utils.hpp"
+
+SCENARIO("AABBf tests against DXM", "[move::vectormath::aabbf]")
+{
+    using Catch::Approx;
+    using namespace move::vectormath;
+    using namespace DirectX;
+
+    using bounds_type = aabbf;
+    using vec_type = bounds_type::vec_type;
+
+    GIVEN(
+        "A bounding box from (10, 10, 10) to (20, 20, 20), another from (15, "
+        "15, 15) to (25, 25, 25), and another from (0, 0, 0) to (1, 1, 1)")
+    {
+        bounds_type bounds1(vec_type(10, 10, 10), vec_type(20, 20, 20));
+        BoundingBox dxm_bounds1(XMFLOAT3(10, 10, 10), XMFLOAT3(20, 20, 20));
+
+        bounds_type bounds2(vec_type(15, 15, 15), vec_type(25, 25, 25));
+        BoundingBox dxm_bounds2(XMFLOAT3(15, 15, 15), XMFLOAT3(25, 25, 25));
+
+        bounds_type bounds3(vec_type(0, 0, 0), vec_type(1, 1, 1));
+        BoundingBox dxm_bounds3(XMFLOAT3(0, 0, 0), XMFLOAT3(1, 1, 1));
+
+        // TODO: Verify ray/bounds intersection against DXM
+    }
+}
 
 #define MVM_IS_BOUNDS_TEST_CPP
 #define MVM_BOUNDS_TEST_BOUNDS_TYPE bounds2f32
