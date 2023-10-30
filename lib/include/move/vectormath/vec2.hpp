@@ -1019,10 +1019,12 @@ namespace move::vectormath
 
     using vec2f32 = generic_vec2_scalar<float>;
     using vec2f64 = generic_vec2_scalar<double>;
+
     using vec2i8 = generic_vec2_scalar<int8_t>;
     using vec2i16 = generic_vec2_scalar<int16_t>;
     using vec2i32 = generic_vec2_scalar<int32_t>;
     using vec2i64 = generic_vec2_scalar<int64_t>;
+
     using vec2u8 = generic_vec2_scalar<uint8_t>;
     using vec2u16 = generic_vec2_scalar<uint16_t>;
     using vec2u32 = generic_vec2_scalar<uint32_t>;
