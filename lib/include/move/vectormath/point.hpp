@@ -230,7 +230,7 @@ namespace move::vectormath
 
     using pointf = generic_point;
     using pointd = generic_point;
-#if MOVE_VECTORMATH_USE_DOUBLE_PRECISION
+#if defined(MOVE_VECTORMATH_USE_DOUBLE_PRECISION)
     using point = pointd;
 #else
     using point = pointf;

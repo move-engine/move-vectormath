@@ -430,7 +430,7 @@ namespace move::vectormath
     using mat4d = generic_mat4_rtm<double, wrappers::v4d, wrappers::v4d,
         wrappers::qd, wrappers::m3x4d, wrappers::m4x4d>;
 
-#if MOVE_VECTORMATH_USE_DOUBLE_PRECISION
+#if defined(MOVE_VECTORMATH_USE_DOUBLE_PRECISION)
     using mat4 = mat4d;
 #else
     using mat4 = mat4f;

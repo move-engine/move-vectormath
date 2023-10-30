@@ -1,5 +1,7 @@
 #pragma once
+#include <cmath>
 #include <ostream>
+#include <type_traits>
 
 #include <rtm/scalard.h>
 #include "macros.hpp"
@@ -100,6 +102,70 @@ namespace move::vectormath
             const generic_vec2_scalar& v) const noexcept
         {
             return _x != v._x || _y != v._y;
+        }
+
+        /**
+         * @brief Determines if all components of the vector are less than the
+         * corresponding components of another vector
+         *
+         * @param v The other vector
+         * @return true All components of the vector are less than the
+         * corresponding components of the other vector
+         * @return false Any component of the vector is greater than or equal
+         * to the corresponding component of the other vector
+         */
+        MVM_INLINE_NODISCARD bool operator<(
+            const generic_vec2_scalar& v) const noexcept
+        {
+            return _x < v._x && _y < v._y;
+        }
+
+        /**
+         * @brief Determines if all components of the vector are less than or
+         * equal to the corresponding components of another vector
+         *
+         * @param v The other vector
+         * @return true All components of the vector are less than or equal to
+         * the corresponding components of the other vector
+         * @return false Any component of the vector is greater than the
+         * corresponding component of the other vector
+         */
+        MVM_INLINE_NODISCARD bool operator<=(
+            const generic_vec2_scalar& v) const noexcept
+        {
+            return _x <= v._x && _y <= v._y;
+        }
+
+        /**
+         * @brief Determines if all components of the vector are greater than
+         * the corresponding components of another vector
+         *
+         * @param v The other vector
+         * @return true All components of the vector are greater than the
+         * corresponding components of the other vector
+         * @return false Any component of the vector is less than or equal to
+         * the corresponding component of the other vector
+         */
+        MVM_INLINE_NODISCARD bool operator>(
+            const generic_vec2_scalar& v) const noexcept
+        {
+            return _x > v._x && _y > v._y;
+        }
+
+        /**
+         * @brief Determines if all components of the vector are greater than or
+         * equal to the corresponding components of another vector
+         *
+         * @param v The other vector
+         * @return true All components of the vector are greater than or equal
+         * to the corresponding components of the other vector
+         * @return false Any component of the vector is less than the
+         * corresponding component of the other vector
+         */
+        MVM_INLINE_NODISCARD bool operator>=(
+            const generic_vec2_scalar& v) const noexcept
+        {
+            return _x >= v._x && _y >= v._y;
         }
 
         /**
@@ -468,7 +534,14 @@ namespace move::vectormath
          */
         MVM_INLINE_NODISCARD value_type length() const noexcept
         {
-            return rtm::scalar_sqrt(squared_length());
+            if constexpr (std::is_floating_point_v<value_type>)
+            {
+                return rtm::scalar_sqrt(squared_length());
+            }
+            else
+            {
+                return std::sqrt(squared_length());
+            }
         }
 
         /**
@@ -488,7 +561,14 @@ namespace move::vectormath
          */
         MVM_INLINE_NODISCARD value_type reciprocal_length() const noexcept
         {
-            return rtm::scalar_sqrt_reciprocal(squared_length());
+            if constexpr (std::is_floating_point_v<value_type>)
+            {
+                return rtm::scalar_sqrt_reciprocal(squared_length());
+            }
+            else
+            {
+                return value_type(1.0) / std::sqrt(squared_length());
+            }
         }
 
         /**
@@ -590,6 +670,9 @@ namespace move::vectormath
             const generic_vec2_scalar& lhs,
             const generic_vec2_scalar& rhs) noexcept
         {
+            static_assert(!std::is_unsigned_v<value_type>,
+                "Cross product is not defined for unsigned types");
+
             return lhs._x * rhs._y - lhs._y * rhs._x;
         }
 
@@ -606,7 +689,14 @@ namespace move::vectormath
         {
             // Compute with dot product
             auto res = dot(v1, v2);
-            return rtm::scalar_acos(res);
+            if constexpr (std::is_floating_point_v<value_type>)
+            {
+                return rtm::scalar_acos(res);
+            }
+            else
+            {
+                return std::acos(res);
+            }
         }
 
         /**
@@ -653,28 +743,44 @@ namespace move::vectormath
             // Based on XMVector2RefractV
             auto idotn = dot(incident, normal);
 
-            auto ry = 1.0f - (idotn * idotn);
-            auto rx = 1.0f - (ry * ior * ior);
-            ry = 1.0f - (ry * ior * ior);
+            auto ry = value_type(1) - (idotn * idotn);
+            auto rx = value_type(1) - (ry * ior * ior);
+            ry = value_type(1) - (ry * ior * ior);
 
-            if (rx >= 0.0f)
+            if (rx >= value_type(0))
             {
-                rx = (ior * incident.x()) -
-                     (normal.x() * ((ior * idotn) + rtm::scalar_sqrt(rx)));
+                if constexpr (std::is_floating_point_v<value_type>)
+                {
+                    rx = (ior * incident.x()) -
+                         (normal.x() * ((ior * idotn) + rtm::scalar_sqrt(rx)));
+                }
+                else
+                {
+                    rx = (ior * incident.x()) -
+                         (normal.x() * ((ior * idotn) + std::sqrt(rx)));
+                }
             }
             else
             {
-                rx = 0.0f;
+                rx = value_type(0);
             }
 
-            if (ry >= 0.0f)
+            if (ry >= value_type(0))
             {
-                ry = (ior * incident.y()) -
-                     (normal.y() * ((ior * idotn) + rtm::scalar_sqrt(ry)));
+                if constexpr (std::is_floating_point_v<value_type>)
+                {
+                    ry = (ior * incident.y()) -
+                         (normal.y() * ((ior * idotn) + rtm::scalar_sqrt(ry)));
+                }
+                else
+                {
+                    ry = (ior * incident.y()) -
+                         (normal.y() * ((ior * idotn) + std::sqrt(ry)));
+                }
             }
             else
             {
-                ry = 0.0f;
+                ry = value_type(0);
             }
 
             return generic_vec2_scalar(rx, ry);
@@ -692,8 +798,16 @@ namespace move::vectormath
             const generic_vec2_scalar& v1,
             const generic_vec2_scalar& v2) noexcept
         {
-            return generic_vec2_scalar(
-                rtm::scalar_min(v1._x, v2._x), rtm::scalar_min(v1._y, v2._y));
+            if constexpr (std::is_floating_point_v<value_type>)
+            {
+                return generic_vec2_scalar(rtm::scalar_min(v1._x, v2._x),
+                    rtm::scalar_min(v1._y, v2._y));
+            }
+            else
+            {
+                return generic_vec2_scalar(
+                    std::min(v1._x, v2._x), std::min(v1._y, v2._y));
+            }
         }
 
         /**
@@ -708,8 +822,42 @@ namespace move::vectormath
             const generic_vec2_scalar& v1,
             const generic_vec2_scalar& v2) noexcept
         {
-            return generic_vec2_scalar(
-                rtm::scalar_max(v1._x, v2._x), rtm::scalar_max(v1._y, v2._y));
+            if constexpr (std::is_floating_point_v<value_type>)
+            {
+                return generic_vec2_scalar(rtm::scalar_max(v1._x, v2._x),
+                    rtm::scalar_max(v1._y, v2._y));
+            }
+            else
+            {
+                return generic_vec2_scalar(
+                    std::max(v1._x, v2._x), std::max(v1._y, v2._y));
+            }
+        }
+
+        /**
+         * @brief Returns a vector the provided value clamped between the
+         * provided minimum and maximum vectors.
+         *
+         * @param v The vector to clamp
+         * @param min The minimum vector
+         * @param max The maximum vector
+         * @return generic_vec2_scalar The clamped vector
+         */
+        MVM_INLINE_NODISCARD static generic_vec2_scalar clamp(
+            const generic_vec2_scalar& v, const generic_vec2_scalar& min,
+            const generic_vec2_scalar& max) noexcept
+        {
+            if constexpr (std::is_floating_point_v<value_type>)
+            {
+                return generic_vec2_scalar(
+                    rtm::scalar_clamp(v._x, min._x, max._x),
+                    rtm::scalar_clamp(v._y, min._y, max._y));
+            }
+            else
+            {
+                return generic_vec2_scalar(std::clamp(v._x, min._x, max._x),
+                    std::clamp(v._y, min._y, max._y));
+            }
         }
 
     public:
@@ -869,10 +1017,23 @@ namespace move::vectormath
         value_type _y;
     };
 
-    using vec2f = generic_vec2_scalar<float>;
-    using vec2d = generic_vec2_scalar<double>;
+    using vec2f32 = generic_vec2_scalar<float>;
+    using vec2f64 = generic_vec2_scalar<double>;
+    using vec2i8 = generic_vec2_scalar<int8_t>;
+    using vec2i16 = generic_vec2_scalar<int16_t>;
+    using vec2i32 = generic_vec2_scalar<int32_t>;
+    using vec2i64 = generic_vec2_scalar<int64_t>;
+    using vec2u8 = generic_vec2_scalar<uint8_t>;
+    using vec2u16 = generic_vec2_scalar<uint16_t>;
+    using vec2u32 = generic_vec2_scalar<uint32_t>;
+    using vec2u64 = generic_vec2_scalar<uint64_t>;
 
-#if MOVE_VECTORMATH_USE_DOUBLE_PRECISION
+    using vec2f = vec2f32;
+    using vec2d = vec2f64;
+    using vec2i = vec2i32;
+    using vec2u = vec2u32;
+
+#if defined(MOVE_VECTORMATH_USE_DOUBLE_PRECISION)
     using vec2 = vec2d;
 #else
     using vec2 = vec2f;
@@ -888,8 +1049,16 @@ namespace move::vectormath
 
 #if !defined(MOVE_VECTORMATH_NO_SERIALIZATION)
 #include "vmathjson.hpp"
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2f);
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2d);
+MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2f32)
+MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2f64)
+MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2i8)
+MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2i16)
+MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2i32)
+MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2i64)
+MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2u8)
+MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2u16)
+MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2u32)
+MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2u64)
 #endif
 
 template <typename value_type>

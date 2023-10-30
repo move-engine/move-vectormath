@@ -251,7 +251,7 @@ namespace move::vectormath
 
     using normalf = generic_normal;
     using normald = generic_normal;
-#if MOVE_VECTORMATH_USE_DOUBLE_PRECISION
+#if defined(MOVE_VECTORMATH_USE_DOUBLE_PRECISION)
     using normal = normald;
 #else
     using normal = generic_normal;

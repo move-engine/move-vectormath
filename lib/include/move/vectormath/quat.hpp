@@ -410,7 +410,7 @@ namespace move::vectormath
     using quatd = generic_quat<double, wrappers::qd, wrappers::m3x4d,
         wrappers::m4x4d, vec3d, mat4d>;
 
-#if MOVE_VECTORMATH_USE_DOUBLE_PRECISION
+#if defined(MOVE_VECTORMATH_USE_DOUBLE_PRECISION)
     using quat = quatd;
 #else
     using quat = quatf;

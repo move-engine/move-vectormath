@@ -203,6 +203,73 @@ namespace move::vectormath
         }
 
         /**
+         * @brief Determines if all components of the vector are less than the
+         * corresponding components of another vector
+         *
+         * @param v The other vector
+         * @return true All components of the vector are less than the
+         * corresponding components of the other vector
+         * @return false Any component of the vector is greater than or equal
+         * to the corresponding component of the other vector
+         */
+        MVM_INLINE_NODISCARD bool operator<(
+            const generic_vec3_rtm& v) const noexcept
+        {
+            return rtm::mask_all_true3(rtm::vector_less_than(_value, v._value));
+        }
+
+        /**
+         * @brief Determines if all components of the vector are less than or
+         * equal to the corresponding components of another vector
+         *
+         * @param v The other vector
+         * @return true All components of the vector are less than or equal to
+         * the corresponding components of the other vector
+         * @return false Any component of the vector is greater than the
+         * corresponding component of the other vector
+         */
+        MVM_INLINE_NODISCARD bool operator<=(
+            const generic_vec3_rtm& v) const noexcept
+        {
+            return rtm::mask_all_true3(
+                rtm::vector_less_equal(_value, v._value));
+        }
+
+        /**
+         * @brief Determines if all components of the vector are greater than
+         * the corresponding components of another vector
+         *
+         * @param v The other vector
+         * @return true All components of the vector are greater than the
+         * corresponding components of the other vector
+         * @return false Any component of the vector is less than or equal to
+         * the corresponding component of the other vector
+         */
+        MVM_INLINE_NODISCARD bool operator>(
+            const generic_vec3_rtm& v) const noexcept
+        {
+            return rtm::mask_all_true3(
+                rtm::vector_greater_than(_value, v._value));
+        }
+
+        /**
+         * @brief Determines if all components of the vector are greater than or
+         * equal to the corresponding components of another vector
+         *
+         * @param v The other vector
+         * @return true All components of the vector are greater than or equal
+         * to the corresponding components of the other vector
+         * @return false Any component of the vector is less than the
+         * corresponding component of the other vector
+         */
+        MVM_INLINE_NODISCARD bool operator>=(
+            const generic_vec3_rtm& v) const noexcept
+        {
+            return rtm::mask_all_true3(
+                rtm::vector_greater_equal(_value, v._value));
+        }
+
+        /**
          * @brief Assigns the contents of another vector to this vector
          *
          * @param v The other vector
@@ -888,6 +955,23 @@ namespace move::vectormath
             return generic_vec3_rtm(rtm::vector_max(v1._value, v2._value));
         }
 
+        /**
+         * @brief Returns a vector the provided value clamped between the
+         * provided minimum and maximum vectors.
+         *
+         * @param v The vector to clamp
+         * @param min The minimum vector
+         * @param max The maximum vector
+         * @return generic_vec3_rtm The clamped vector
+         */
+        MVM_INLINE_NODISCARD static generic_vec3_rtm clamp(
+            const generic_vec3_rtm& v, const generic_vec3_rtm& min,
+            const generic_vec3_rtm& max) noexcept
+        {
+            return generic_vec3_rtm(
+                rtm::vector_clamp(v._value, min._value, max._value));
+        }
+
     public:
         /**
          * @brief Normalizes the vector
@@ -1082,7 +1166,7 @@ namespace move::vectormath
     using vec3f = generic_vec3_rtm<float, wrappers::v4f>;
     using vec3d = generic_vec3_rtm<double, wrappers::v4d>;
 
-#if MOVE_VECTORMATH_USE_DOUBLE_PRECISION
+#if defined(MOVE_VECTORMATH_USE_DOUBLE_PRECISION)
     using vec3 = vec3d;
 #else
     using vec3 = vec3f;
