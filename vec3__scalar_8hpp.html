@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>lib/include/move/vectormath/vec3.hpp file | move-vectormath</title>
+  <title>lib/include/move/vectormath/vec3_scalar.hpp file | move-vectormath</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,600,600i%7CSource+Code+Pro:400,400i,600" />
   <link rel="stylesheet" href="m-dark+documentation.compiled.css" />
   <link rel="icon" href="favicon-dark.png" type="image/png" />
@@ -49,7 +49,7 @@
     <div class="m-row">
       <div class="m-col-l-10 m-push-l-1">
         <h1>
-          <span class="m-breadcrumb"><a href="dir_97aefd0d527b934f1d99a682da8fe6a9.html">lib</a>/</span><span class="m-breadcrumb"><a href="dir_5a30104352ef4255dc24354b02eb2d20.html">include</a>/</span><span class="m-breadcrumb"><a href="dir_75e33db4fb15466bc91b56a209fde83d.html">move</a>/</span><span class="m-breadcrumb"><a href="dir_c6a2a6cbfd47cdf341a89c7b45a14f66.html">vectormath</a>/</span>vec3.hpp <span class="m-thin">file</span>
+          <span class="m-breadcrumb"><a href="dir_97aefd0d527b934f1d99a682da8fe6a9.html">lib</a>/</span><span class="m-breadcrumb"><a href="dir_5a30104352ef4255dc24354b02eb2d20.html">include</a>/</span><span class="m-breadcrumb"><a href="dir_75e33db4fb15466bc91b56a209fde83d.html">move</a>/</span><span class="m-breadcrumb"><a href="dir_c6a2a6cbfd47cdf341a89c7b45a14f66.html">vectormath</a>/</span>vec3_scalar.hpp <span class="m-thin">file</span>
         </h1>
         <p><span></span></p>
         <div class="m-block m-default">
@@ -59,6 +59,8 @@
               Reference
               <ul>
                 <li><a href="#namespaces">Namespaces</a></li>
+                <li><a href="#nested-classes">Classes</a></li>
+                <li><a href="#func-members">Functions</a></li>
               </ul>
             </li>
           </ul>
@@ -69,6 +71,61 @@
             <dt>namespace <a href="namespacemove.html" class="m-doc">move</a></dt>
             <dd><span></span></dd>
             <dt>namespace <a href="namespacemove_1_1vectormath.html" class="m-doc">move::vectormath</a></dt>
+            <dd><span></span></dd>
+          </dl>
+        </section>
+        <section id="nested-classes">
+          <h2><a href="#nested-classes">Classes</a></h2>
+          <dl class="m-doc">
+            <dt>
+              <div class="m-doc-template">template&lt;typename value_type&gt;</div>
+              struct <a href="structmove_1_1vectormath_1_1generic__vec3__scalar.html" class="m-doc">move::vectormath::generic_vec3_scalar</a>
+            </dt>
+            <dd>A three component vector that can store either floats or doubles. The underlying implementation is basic scalar math.</dd>
+          </dl>
+        </section>
+        <section id="func-members">
+          <h2><a href="#func-members">Functions</a></h2>
+          <dl class="m-doc">
+            <dt id="aae6f3236f02dbf41c5945740801e86ed">
+              <span class="m-doc-wrap-bumper"><a href="#aae6f3236f02dbf41c5945740801e86ed" class="m-doc-self">MOVE_VECTORMATH_JSON_SERIALIZER</a>(</span><span class="m-doc-wrap"><a href="namespacemove_1_1vectormath.html#abd38add6940433dc9f3bc132010d35cc" class="m-doc">move::<wbr />vectormath::<wbr />vec3f32_scalar</a>)</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a606884ce509a58de0a0437809356d9f0">
+              <span class="m-doc-wrap-bumper"><a href="#a606884ce509a58de0a0437809356d9f0" class="m-doc-self">MOVE_VECTORMATH_JSON_SERIALIZER</a>(</span><span class="m-doc-wrap"><a href="namespacemove_1_1vectormath.html#ae689032211a2586624f4e34eb7f1b34c" class="m-doc">move::<wbr />vectormath::<wbr />vec3f64_scalar</a>)</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ab4831492931d58084f4f0cd02ccd991c">
+              <span class="m-doc-wrap-bumper"><a href="#ab4831492931d58084f4f0cd02ccd991c" class="m-doc-self">MOVE_VECTORMATH_JSON_SERIALIZER</a>(</span><span class="m-doc-wrap"><a href="namespacemove_1_1vectormath.html#a9cb28a8700bfa8d5ea5d1527d679b659" class="m-doc">move::<wbr />vectormath::<wbr />vec3i8_scalar</a>)</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a0cc91416260137f9d2808b886d699c8a">
+              <span class="m-doc-wrap-bumper"><a href="#a0cc91416260137f9d2808b886d699c8a" class="m-doc-self">MOVE_VECTORMATH_JSON_SERIALIZER</a>(</span><span class="m-doc-wrap"><a href="namespacemove_1_1vectormath.html#a9ae8a5a0aea72bf5b1b5678ddef064e5" class="m-doc">move::<wbr />vectormath::<wbr />vec3i16_scalar</a>)</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a108b63186f439f5604e877be080a1dd7">
+              <span class="m-doc-wrap-bumper"><a href="#a108b63186f439f5604e877be080a1dd7" class="m-doc-self">MOVE_VECTORMATH_JSON_SERIALIZER</a>(</span><span class="m-doc-wrap"><a href="namespacemove_1_1vectormath.html#a66d65f805c83170123493158e7e6c71b" class="m-doc">move::<wbr />vectormath::<wbr />vec3i32_scalar</a>)</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a3d79198a7b0340285487e326bf00a7ab">
+              <span class="m-doc-wrap-bumper"><a href="#a3d79198a7b0340285487e326bf00a7ab" class="m-doc-self">MOVE_VECTORMATH_JSON_SERIALIZER</a>(</span><span class="m-doc-wrap"><a href="namespacemove_1_1vectormath.html#a36ca77135421a2fb3f7e0ee938f38478" class="m-doc">move::<wbr />vectormath::<wbr />vec3i64_scalar</a>)</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a8421c85b2f93d44697ff6a43a011977f">
+              <span class="m-doc-wrap-bumper"><a href="#a8421c85b2f93d44697ff6a43a011977f" class="m-doc-self">MOVE_VECTORMATH_JSON_SERIALIZER</a>(</span><span class="m-doc-wrap"><a href="namespacemove_1_1vectormath.html#a7419f2c7f66e249787eb03bb473e0e8f" class="m-doc">move::<wbr />vectormath::<wbr />vec3u8_scalar</a>)</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="aba3a3ae0650759ba7e96036ec2944656">
+              <span class="m-doc-wrap-bumper"><a href="#aba3a3ae0650759ba7e96036ec2944656" class="m-doc-self">MOVE_VECTORMATH_JSON_SERIALIZER</a>(</span><span class="m-doc-wrap"><a href="namespacemove_1_1vectormath.html#ae41219abea8178aac4d85cae0d9944ab" class="m-doc">move::<wbr />vectormath::<wbr />vec3u16_scalar</a>)</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="a9925748eefd7d8f768a5fc8074e00411">
+              <span class="m-doc-wrap-bumper"><a href="#a9925748eefd7d8f768a5fc8074e00411" class="m-doc-self">MOVE_VECTORMATH_JSON_SERIALIZER</a>(</span><span class="m-doc-wrap"><a href="namespacemove_1_1vectormath.html#a9f272363f6efe444d414604b1a6e5867" class="m-doc">move::<wbr />vectormath::<wbr />vec3u32_scalar</a>)</span>
+            </dt>
+            <dd><span></span></dd>
+            <dt id="ac186ea459ee4de81418503d98e22a62e">
+              <span class="m-doc-wrap-bumper"><a href="#ac186ea459ee4de81418503d98e22a62e" class="m-doc-self">MOVE_VECTORMATH_JSON_SERIALIZER</a>(</span><span class="m-doc-wrap"><a href="namespacemove_1_1vectormath.html#adb2fafd79970d40643efabd4dd71ffb8" class="m-doc">move::<wbr />vectormath::<wbr />vec3u64_scalar</a>)</span>
+            </dt>
             <dd><span></span></dd>
           </dl>
         </section>
