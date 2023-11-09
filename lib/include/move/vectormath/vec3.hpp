@@ -24,12 +24,18 @@ namespace move::vectormath
 
     using vec3f = vec3f32;
     using vec3d = vec3f64;
-    using vec3i = vec3i32;
-    using vec3u = vec3u32;
 
 #if defined(MOVE_VECTORMATH_USE_DOUBLE_PRECISION)
     using vec3 = vec3d;
+    using vec3i = vec3i64;
+    using vec3u = vec3u64;
 #else
     using vec3 = vec3f;
+    using vec3i = vec3i32;
+    using vec3u = vec3u32;
 #endif
+
+    using fvec3 = vec3;
+    using ivec3 = vec3i;
+    using uvec3 = vec3u;
 }  // namespace move::vectormath

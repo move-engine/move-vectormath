@@ -1032,14 +1032,21 @@ namespace move::vectormath
 
     using vec2f = vec2f32;
     using vec2d = vec2f64;
-    using vec2i = vec2i32;
-    using vec2u = vec2u32;
 
 #if defined(MOVE_VECTORMATH_USE_DOUBLE_PRECISION)
     using vec2 = vec2d;
+    using vec2i = vec2i64;
+    using vec2u = vec2u64;
 #else
     using vec2 = vec2f;
+    using ivec2 = vec2i32;
+    using vec2i = vec2i32;
+    using vec2u = vec2u32;
 #endif
+
+    using fvec2 = vec2f;
+    using ivec2 = vec2i;
+    using uvec2 = vec2u;
 
     template <typename value_type>
     inline std::ostream& operator<<(std::ostream& os,
@@ -1051,16 +1058,28 @@ namespace move::vectormath
 
 #if !defined(MOVE_VECTORMATH_NO_SERIALIZATION)
 #include "vmathjson.hpp"
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2f32)
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2f64)
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2i8)
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2i16)
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2i32)
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2i64)
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2u8)
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2u16)
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2u32)
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2u64)
+// MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2f32)
+// MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2f64)
+// MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2i8)
+// MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2i16)
+// MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2i32)
+// MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2i64)
+// MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2u8)
+// MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2u16)
+// MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2u32)
+// MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec2u64)
+
+namespace nlohmann
+{
+    template <typename value_type>
+    struct adl_serializer<move::vectormath::generic_vec2_scalar<value_type>>
+        : public move::vectormath::json_serializer_template<
+              move::vectormath::generic_vec2_scalar<value_type>,
+              move::vectormath::generic_vec2_scalar<value_type>::num_components>
+    {
+    };
+}  // namespace nlohmann
+
 #endif
 
 template <typename value_type>

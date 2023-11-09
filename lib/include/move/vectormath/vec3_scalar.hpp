@@ -9,18 +9,24 @@
 namespace move::vectormath
 {
     /**
-     * @brief A three component vector that can store either floats or doubles.
-     * The underlying implementation is basic scalar math.
+     * @brief A three component vector that can store floats, doubles, or
+     * integer types. The underlying implementation is basic scalar math.
      * @note This type has no alignment requirements.
      *
      * @tparam value_type The type of the components of the vector
-     * @tparam vector_type_raw The underlying RTM vector type
      */
     template <typename value_type>
     struct generic_vec3_scalar
     {
     public:
+        /**
+         * @brief The type of the components of the vector
+         */
         using component_type = value_type;
+
+        /**
+         * @brief The number of components in the vector
+         */
         constexpr static uint32_t num_components = 3;
 
     public:
@@ -1123,20 +1129,20 @@ namespace move::vectormath
 
     using vec3f_scalar = vec3f32_scalar;
     using vec3d_scalar = vec3f64_scalar;
-    using vec3i_scalar = vec3i32_scalar;
-    using vec3u_scalar = vec3u32_scalar;
 }  // namespace move::vectormath
 
 #if !defined(MOVE_VECTORMATH_NO_SERIALIZATION)
 #include "vmathjson.hpp"
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec3f32_scalar);
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec3f64_scalar);
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec3i8_scalar);
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec3i16_scalar);
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec3i32_scalar);
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec3i64_scalar);
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec3u8_scalar);
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec3u16_scalar);
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec3u32_scalar);
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::vec3u64_scalar);
+
+namespace nlohmann
+{
+    template <typename value_type>
+    struct adl_serializer<move::vectormath::generic_vec3_scalar<value_type>>
+        : public move::vectormath::json_serializer_template<
+              move::vectormath::generic_vec3_scalar<value_type>,
+              move::vectormath::generic_vec3_scalar<value_type>::num_components>
+    {
+    };
+}  // namespace nlohmann
+
 #endif

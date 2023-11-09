@@ -432,8 +432,25 @@ namespace move::vectormath
 
 #if !defined(MOVE_VECTORMATH_NO_SERIALIZATION)
 #include "vmathjson.hpp"
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::quatf);
-MOVE_VECTORMATH_JSON_SERIALIZER(move::vectormath::quatd);
+namespace nlohmann
+{
+    template <typename value_type, typename quat_type_raw,
+        typename underlying_matrix3x4_type_raw,
+        typename underlying_matrix4x4_type_raw, typename vec3_type,
+        typename mat4x4_type>
+    struct adl_serializer<move::vectormath::generic_quat<value_type,
+        quat_type_raw, underlying_matrix3x4_type_raw,
+        underlying_matrix4x4_type_raw, vec3_type, mat4x4_type>>
+        : public move::vectormath::json_serializer_template<
+              move::vectormath::generic_quat<value_type, quat_type_raw,
+                  underlying_matrix3x4_type_raw, underlying_matrix4x4_type_raw,
+                  vec3_type, mat4x4_type>,
+              move::vectormath::generic_quat<value_type, quat_type_raw,
+                  underlying_matrix3x4_type_raw, underlying_matrix4x4_type_raw,
+                  vec3_type, mat4x4_type>::num_components>
+    {
+    };
+}  // namespace nlohmann
 #endif
 
 template <typename value_type, typename quat_type_raw,
