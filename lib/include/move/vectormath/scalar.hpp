@@ -2,9 +2,16 @@
 #include <rtm/scalarf.h>
 #include <cmath>
 #include <type_traits>
+#include "move/vectormath/scalar.hpp"
 
 namespace move::vectormath::scalar
 {
+    template <typename value_t>
+    inline constexpr value_t absolute_difference(value_t a, value_t b)
+    {
+        return a > b ? a - b : b - a;
+    }
+
     template <typename value_t>
     inline constexpr value_t& min_ref(value_t& a, value_t& b)
     {
@@ -130,6 +137,10 @@ namespace move::vectormath::scalar
     template <typename value_t>
     inline constexpr value_t abs(value_t value)
     {
+        if constexpr (std::is_unsigned_v<value_t>)
+        {
+            return value;
+        }
         return value < 0 ? -value : value;
     }
 
@@ -137,7 +148,7 @@ namespace move::vectormath::scalar
     inline constexpr value_t approx(value_t a, value_t b,
         value_t epsilon = std::numeric_limits<value_t>::epsilon())
     {
-        return abs(a - b) < epsilon;
+        return absolute_difference(a, b) < epsilon;
     }
 
     inline constexpr bool approx(int8_t a, int8_t b)
@@ -147,7 +158,7 @@ namespace move::vectormath::scalar
 
     inline constexpr bool approx(int8_t a, int8_t b, int8_t epsilon)
     {
-        return abs(a - b) < epsilon;
+        return absolute_difference(a, b) < epsilon;
     }
 
     inline constexpr bool approx(int16_t a, int16_t b)
@@ -157,7 +168,7 @@ namespace move::vectormath::scalar
 
     inline constexpr bool approx(int16_t a, int16_t b, int16_t epsilon)
     {
-        return abs(a - b) < epsilon;
+        return absolute_difference(a, b) < epsilon;
     }
 
     inline constexpr bool approx(int32_t a, int32_t b)
@@ -167,7 +178,7 @@ namespace move::vectormath::scalar
 
     inline constexpr bool approx(int32_t a, int32_t b, int32_t epsilon)
     {
-        return abs(a - b) < epsilon;
+        return absolute_difference(a, b) < epsilon;
     }
 
     inline constexpr bool approx(int64_t a, int64_t b)
@@ -177,7 +188,7 @@ namespace move::vectormath::scalar
 
     inline constexpr bool approx(int64_t a, int64_t b, int64_t epsilon)
     {
-        return abs(a - b) < epsilon;
+        return absolute_difference(a, b) < epsilon;
     }
 
     inline constexpr bool approx(uint8_t a, uint8_t b)
@@ -187,7 +198,7 @@ namespace move::vectormath::scalar
 
     inline constexpr bool approx(uint8_t a, uint8_t b, uint8_t epsilon)
     {
-        return abs(a - b) < epsilon;
+        return absolute_difference(a, b) < epsilon;
     }
 
     inline constexpr bool approx(uint16_t a, uint16_t b)
@@ -197,7 +208,7 @@ namespace move::vectormath::scalar
 
     inline constexpr bool approx(uint16_t a, uint16_t b, uint16_t epsilon)
     {
-        return abs(a - b) < epsilon;
+        return absolute_difference(a, b) < epsilon;
     }
 
     inline constexpr bool approx(uint32_t a, uint32_t b)
@@ -207,7 +218,7 @@ namespace move::vectormath::scalar
 
     inline constexpr bool approx(uint32_t a, uint32_t b, uint32_t epsilon)
     {
-        return abs(a - b) < epsilon;
+        return absolute_difference(a, b) < epsilon;
     }
 
     inline constexpr bool approx(uint64_t a, uint64_t b)
@@ -217,7 +228,7 @@ namespace move::vectormath::scalar
 
     inline constexpr bool approx(uint64_t a, uint64_t b, uint64_t epsilon)
     {
-        return abs(a - b) < epsilon;
+        return absolute_difference(a, b) < epsilon;
     }
 
     template <typename value_t>

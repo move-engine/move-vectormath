@@ -36,8 +36,7 @@ namespace move::vectormath
          *
          * @return generic_vec4_scalar A new vector initialized to (0, 0, 0, 0)
          */
-        MVM_INLINE_NODISCARD generic_vec4_scalar() noexcept
-            : _x(0), _y(0), _z(0), _w(0)
+        MVM_INLINE_NODISCARD generic_vec4_scalar() noexcept : _value(0, 0, 0, 0)
         {
         }
 
@@ -52,7 +51,7 @@ namespace move::vectormath
          */
         MVM_INLINE_NODISCARD generic_vec4_scalar(value_type x, value_type y = 0,
             value_type z = 0, value_type w = 0) noexcept
-            : _x(x), _y(y), _z(z), _w(w)
+            : _value(x, y, z, w)
         {
         }
 
@@ -94,7 +93,8 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD bool operator==(
             const generic_vec4_scalar& v) const noexcept
         {
-            return _x == v._x && _y == v._y && _z == v._z && _w == v._w;
+            return _value._x == v._value._x && _value._y == v._value._y &&
+                   _value._z == v._value._z && _value._w == v._value._w;
         }
 
         /**
@@ -107,7 +107,8 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD bool operator!=(
             const generic_vec4_scalar& v) const noexcept
         {
-            return _x != v._x || _y != v._y || _z != v._z || _w != v._w;
+            return _value._x != v._value._x || _value._y != v._value._y ||
+                   _value._z != v._value._z || _value._w != v._value._w;
         }
 
         /**
@@ -123,7 +124,8 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD bool operator<(
             const generic_vec4_scalar& v) const noexcept
         {
-            return _x < v._x && _y < v._y && _z < v._z && _w < v._w;
+            return _value._x < v._value._x && _value._y < v._value._y &&
+                   _value._z < v._value._z && _value._w < v._value._w;
         }
 
         /**
@@ -139,7 +141,8 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD bool operator<=(
             const generic_vec4_scalar& v) const noexcept
         {
-            return _x <= v._x && _y <= v._y && _z <= v._z && _w <= v._w;
+            return _value._x <= v._value._x && _value._y <= v._value._y &&
+                   _value._z <= v._value._z && _value._w <= v._value._w;
         }
 
         /**
@@ -155,7 +158,8 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD bool operator>(
             const generic_vec4_scalar& v) const noexcept
         {
-            return _x > v._x && _y > v._y && _z > v._z && _w > v._w;
+            return _value._x > v._value._x && _value._y > v._value._y &&
+                   _value._z > v._value._z && _value._w > v._value._w;
         }
 
         /**
@@ -171,7 +175,8 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD bool operator>=(
             const generic_vec4_scalar& v) const noexcept
         {
-            return _x >= v._x && _y >= v._y && _z >= v._z && _w >= v._w;
+            return _value._x >= v._value._x && _value._y >= v._value._y &&
+                   _value._z >= v._value._z && _value._w >= v._value._w;
         }
 
         /**
@@ -183,10 +188,10 @@ namespace move::vectormath
         MVM_INLINE generic_vec4_scalar& operator=(
             const generic_vec4_scalar& v) noexcept
         {
-            _x = v._x;
-            _y = v._y;
-            _z = v._z;
-            _w = v._w;
+            _value._x = v._value._x;
+            _value._y = v._value._y;
+            _value._z = v._value._z;
+            _value._w = v._value._w;
             return *this;
         }
 
@@ -200,10 +205,10 @@ namespace move::vectormath
         MVM_INLINE generic_vec4_scalar& operator+=(
             const generic_vec4_scalar& v) noexcept
         {
-            _x += v._x;
-            _y += v._y;
-            _z += v._z;
-            _w += v._w;
+            _value._x += v._value._x;
+            _value._y += v._value._y;
+            _value._z += v._value._z;
+            _value._w += v._value._w;
             return *this;
         }
 
@@ -217,10 +222,10 @@ namespace move::vectormath
         MVM_INLINE generic_vec4_scalar& operator-=(
             const generic_vec4_scalar& v) noexcept
         {
-            _x -= v._x;
-            _y -= v._y;
-            _z -= v._z;
-            _w -= v._w;
+            _value._x -= v._value._x;
+            _value._y -= v._value._y;
+            _value._z -= v._value._z;
+            _value._w -= v._value._w;
             return *this;
         }
 
@@ -233,10 +238,10 @@ namespace move::vectormath
          */
         MVM_INLINE generic_vec4_scalar& operator*=(value_type v) noexcept
         {
-            _x *= v;
-            _y *= v;
-            _z *= v;
-            _w *= v;
+            _value._x *= v;
+            _value._y *= v;
+            _value._z *= v;
+            _value._w *= v;
             return *this;
         }
 
@@ -250,10 +255,10 @@ namespace move::vectormath
         MVM_INLINE generic_vec4_scalar& operator*=(
             const generic_vec4_scalar& v) noexcept
         {
-            _x *= v._x;
-            _y *= v._y;
-            _z *= v._z;
-            _w *= v._w;
+            _value._x *= v._value._x;
+            _value._y *= v._value._y;
+            _value._z *= v._value._z;
+            _value._w *= v._value._w;
             return *this;
         }
 
@@ -266,10 +271,10 @@ namespace move::vectormath
          */
         MVM_INLINE generic_vec4_scalar& operator/=(value_type v) noexcept
         {
-            _x /= v;
-            _y /= v;
-            _z /= v;
-            _w /= v;
+            _value._x /= v;
+            _value._y /= v;
+            _value._z /= v;
+            _value._w /= v;
             return *this;
         }
 
@@ -283,10 +288,10 @@ namespace move::vectormath
         MVM_INLINE generic_vec4_scalar& operator/=(
             const generic_vec4_scalar& v) noexcept
         {
-            _x /= v._x;
-            _y /= v._y;
-            _z /= v._z;
-            _w /= v._w;
+            _value._x /= v._value._x;
+            _value._y /= v._value._y;
+            _value._z /= v._value._z;
+            _value._w /= v._value._w;
             return *this;
         }
 
@@ -300,8 +305,9 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD generic_vec4_scalar operator+(
             const generic_vec4_scalar& v) const noexcept
         {
-            return generic_vec4_scalar(
-                _x + v._x, _y + v._y, _z + v._z, _w + v._w);
+            return generic_vec4_scalar(_value._x + v._value._x,
+                _value._y + v._value._y, _value._z + v._value._z,
+                _value._w + v._value._w);
         }
 
         /**
@@ -314,8 +320,9 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD generic_vec4_scalar operator-(
             const generic_vec4_scalar& v) const noexcept
         {
-            return generic_vec4_scalar(
-                _x - v._x, _y - v._y, _z - v._z, _w - v._w);
+            return generic_vec4_scalar(_value._x - v._value._x,
+                _value._y - v._value._y, _value._z - v._value._z,
+                _value._w - v._value._w);
         }
 
         /**
@@ -328,7 +335,8 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD generic_vec4_scalar operator*(
             value_type v) const noexcept
         {
-            return generic_vec4_scalar(_x * v, _y * v, _z * v, _w * v);
+            return generic_vec4_scalar(
+                _value._x * v, _value._y * v, _value._z * v, _value._w * v);
         }
 
         /**
@@ -341,8 +349,9 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD generic_vec4_scalar operator*(
             const generic_vec4_scalar& v) const noexcept
         {
-            return generic_vec4_scalar(
-                _x * v._x, _y * v._y, _z * v._z, _w * v._w);
+            return generic_vec4_scalar(_value._x * v._value._x,
+                _value._y * v._value._y, _value._z * v._value._z,
+                _value._w * v._value._w);
         }
 
         /**
@@ -355,7 +364,8 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD generic_vec4_scalar operator/(
             value_type v) const noexcept
         {
-            return generic_vec4_scalar(_x / v, _y / v, _z / v, _w / v);
+            return generic_vec4_scalar(
+                _value._x / v, _value._y / v, _value._z / v, _value._w / v);
         }
 
         /**
@@ -368,8 +378,9 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD generic_vec4_scalar operator/(
             const generic_vec4_scalar& v) const noexcept
         {
-            return generic_vec4_scalar(
-                _x / v._x, _y / v._y, _z / v._z, _w / v._w);
+            return generic_vec4_scalar(_value._x / v._value._x,
+                _value._y / v._value._y, _value._z / v._value._z,
+                _value._w / v._value._w);
         }
 
         /**
@@ -380,7 +391,8 @@ namespace move::vectormath
          */
         MVM_INLINE_NODISCARD generic_vec4_scalar operator-() const noexcept
         {
-            return generic_vec4_scalar(-_x, -_y, -_z, -_w);
+            return generic_vec4_scalar(
+                -_value._x, -_value._y, -_value._z, -_value._w);
         }
 
     public:
@@ -395,7 +407,7 @@ namespace move::vectormath
          */
         MVM_INLINE_NODISCARD value_type get_component(int index) const noexcept
         {
-            return _data[scalar::min(index, 4)];
+            return _data[scalar::min(index, 3)];
         }
 
         /**
@@ -408,7 +420,7 @@ namespace move::vectormath
          */
         MVM_INLINE void set_component(int index, value_type value)
         {
-            _data[scalar::min(index, 4)] = value;
+            _data[scalar::min(index, 3)] = value;
         }
 
         /**
@@ -431,7 +443,7 @@ namespace move::vectormath
          */
         MVM_INLINE_NODISCARD value_type x() const noexcept
         {
-            return _x;
+            return _value._x;
         }
 
         /**
@@ -441,7 +453,7 @@ namespace move::vectormath
          */
         MVM_INLINE_NODISCARD value_type y() const noexcept
         {
-            return _y;
+            return _value._y;
         }
 
         /**
@@ -451,7 +463,7 @@ namespace move::vectormath
          */
         MVM_INLINE_NODISCARD value_type z() const noexcept
         {
-            return _z;
+            return _value._z;
         }
 
         /**
@@ -461,7 +473,7 @@ namespace move::vectormath
          */
         MVM_INLINE_NODISCARD value_type w() const noexcept
         {
-            return _w;
+            return _value._w;
         }
 
         /**
@@ -520,7 +532,7 @@ namespace move::vectormath
          */
         MVM_INLINE generic_vec4_scalar& set_x(value_type x) noexcept
         {
-            _x = x;
+            _value._x = x;
             return *this;
         }
 
@@ -532,7 +544,7 @@ namespace move::vectormath
          */
         MVM_INLINE generic_vec4_scalar& set_y(value_type y) noexcept
         {
-            _y = y;
+            _value._y = y;
             return *this;
         }
 
@@ -544,7 +556,7 @@ namespace move::vectormath
          */
         MVM_INLINE generic_vec4_scalar& set_z(value_type z) noexcept
         {
-            _z = z;
+            _value._z = z;
             return *this;
         }
 
@@ -556,7 +568,7 @@ namespace move::vectormath
          */
         MVM_INLINE generic_vec4_scalar& set_w(value_type w) noexcept
         {
-            _w = w;
+            _value._w = w;
             return *this;
         }
 
@@ -569,10 +581,10 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD generic_vec4_scalar& fill(
             component_type value) noexcept
         {
-            _x = value;
-            _y = value;
-            _z = value;
-            _w = value;
+            _value._x = value;
+            _value._y = value;
+            _value._z = value;
+            _value._w = value;
             return *this;
         }
 
@@ -588,10 +600,10 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD generic_vec4_scalar& set(component_type x,
             component_type y, component_type z, component_type w) noexcept
         {
-            _x = x;
-            _y = y;
-            _z = z;
-            _w = w;
+            _value._x = x;
+            _value._y = y;
+            _value._z = z;
+            _value._w = w;
             return *this;
         }
 
@@ -604,10 +616,10 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD generic_vec4_scalar& set(
             const generic_vec4_scalar& v) noexcept
         {
-            _x = v._x;
-            _y = v._y;
-            _z = v._z;
-            _w = v._w;
+            _value._x = v._value._x;
+            _value._y = v._value._y;
+            _value._z = v._value._z;
+            _value._w = v._value._w;
             return *this;
         }
 
@@ -629,7 +641,8 @@ namespace move::vectormath
          */
         MVM_INLINE_NODISCARD value_type squared_length() const noexcept
         {
-            return (_x * _x) + (_y * _y) + (_z * _z) + (_w * _w);
+            return (_value._x * _value._x) + (_value._y * _value._y) +
+                   (_value._z * _value._z) + (_value._w * _value._w);
         }
 
         /**
@@ -663,8 +676,10 @@ namespace move::vectormath
             const generic_vec4_scalar& v1,
             const generic_vec4_scalar& v2) noexcept
         {
-            return (v1._x * v2._x) + (v1._y * v2._y) + (v1._z * v2._z) +
-                   (v1._w * v2._w);
+            return (v1._value._x * v2._value._x) +
+                   (v1._value._y * v2._value._y) +
+                   (v1._value._z * v2._value._z) +
+                   (v1._value._w * v2._value._w);
         }
 
         /**
@@ -823,10 +838,11 @@ namespace move::vectormath
             const generic_vec4_scalar& v1, const generic_vec4_scalar& v2,
             value_type t) noexcept
         {
-            return generic_vec4_scalar(scalar::lerp_unclamped(v1._x, v2._x, t),
-                scalar::lerp_unclamped(v1._y, v2._y, t),
-                scalar::lerp_unclamped(v1._z, v2._z, t),
-                scalar::lerp_unclamped(v1._w, v2._w, t));
+            return generic_vec4_scalar(
+                scalar::lerp_unclamped(v1._value._x, v2._value._x, t),
+                scalar::lerp_unclamped(v1._value._y, v2._value._y, t),
+                scalar::lerp_unclamped(v1._value._z, v2._value._z, t),
+                scalar::lerp_unclamped(v1._value._w, v2._value._w, t));
         }
 
         /**
@@ -844,10 +860,11 @@ namespace move::vectormath
             const generic_vec4_scalar& t) noexcept
         {
             return generic_vec4_scalar(
-                scalar::lerp_unclamped(v1._x, v2._x, t._x),
-                scalar::lerp_unclamped(v1._y, v2._y, t._y),
-                scalar::lerp_unclamped(v1._z, v2._z, t._z),
-                scalar::lerp_unclamped(v1._w, v2._w, t._w));
+                scalar::lerp_unclamped(v1._value._x, v2._value._x, t._value._x),
+                scalar::lerp_unclamped(v1._value._y, v2._value._y, t._value._y),
+                scalar::lerp_unclamped(v1._value._z, v2._value._z, t._value._z),
+                scalar::lerp_unclamped(
+                    v1._value._w, v2._value._w, t._value._w));
         }
 
         /**
@@ -864,9 +881,11 @@ namespace move::vectormath
             const generic_vec4_scalar& v1, const generic_vec4_scalar& v2,
             value_type t) noexcept
         {
-            return generic_vec4_scalar(scalar::lerp(v1._x, v2._x, t),
-                scalar::lerp(v1._y, v2._y, t), scalar::lerp(v1._z, v2._z, t),
-                scalar::lerp(v1._w, v2._w, t));
+            return generic_vec4_scalar(
+                scalar::lerp(v1._value._x, v2._value._x, t),
+                scalar::lerp(v1._value._y, v2._value._y, t),
+                scalar::lerp(v1._value._z, v2._value._z, t),
+                scalar::lerp(v1._value._w, v2._value._w, t));
         }
 
         /**
@@ -883,10 +902,11 @@ namespace move::vectormath
             const generic_vec4_scalar& v1, const generic_vec4_scalar& v2,
             const generic_vec4_scalar& t) noexcept
         {
-            return generic_vec4_scalar(scalar::lerp(v1._x, v2._x, t._x),
-                scalar::lerp(v1._y, v2._y, t._y),
-                scalar::lerp(v1._z, v2._z, t._z),
-                scalar::lerp(v1._w, v2._w, t._w));
+            return generic_vec4_scalar(
+                scalar::lerp(v1._value._x, v2._value._x, t._value._x),
+                scalar::lerp(v1._value._y, v2._value._y, t._value._y),
+                scalar::lerp(v1._value._z, v2._value._z, t._value._z),
+                scalar::lerp(v1._value._w, v2._value._w, t._value._w));
         }
 
         /**
@@ -901,9 +921,10 @@ namespace move::vectormath
             const generic_vec4_scalar& v1,
             const generic_vec4_scalar& v2) noexcept
         {
-            return generic_vec4_scalar(scalar::min(v1._x, v2._x),
-                scalar::min(v1._y, v2._y), scalar::min(v1._z, v2._z),
-                scalar::min(v1._w, v2._w));
+            return generic_vec4_scalar(scalar::min(v1._value._x, v2._value._x),
+                scalar::min(v1._value._y, v2._value._y),
+                scalar::min(v1._value._z, v2._value._z),
+                scalar::min(v1._value._w, v2._value._w));
         }
 
         /**
@@ -918,9 +939,10 @@ namespace move::vectormath
             const generic_vec4_scalar& v1,
             const generic_vec4_scalar& v2) noexcept
         {
-            return generic_vec4_scalar(scalar::max(v1._x, v2._x),
-                scalar::max(v1._y, v2._y), scalar::max(v1._z, v2._z),
-                scalar::max(v1._w, v2._w));
+            return generic_vec4_scalar(scalar::max(v1._value._x, v2._value._x),
+                scalar::max(v1._value._y, v2._value._y),
+                scalar::max(v1._value._z, v2._value._z),
+                scalar::max(v1._value._w, v2._value._w));
         }
 
         /**
@@ -936,10 +958,11 @@ namespace move::vectormath
             const generic_vec4_scalar& v, const generic_vec4_scalar& min,
             const generic_vec4_scalar& max) noexcept
         {
-            return generic_vec4_scalar(scalar::clamp(v._x, min._x, max._x),
-                scalar::clamp(v._y, min._y, max._y),
-                scalar::clamp(v._z, min._z, max._z),
-                scalar::clamp(v._w, min._w, max._w));
+            return generic_vec4_scalar(
+                scalar::clamp(v._value._x, min._value._x, max._value._x),
+                scalar::clamp(v._value._y, min._value._y, max._value._y),
+                scalar::clamp(v._value._z, min._value._z, max._value._z),
+                scalar::clamp(v._value._w, min._value._w, max._value._w));
         }
 
     public:
@@ -1132,10 +1155,16 @@ namespace move::vectormath
     private:
         union
         {
-            struct
+            struct data
             {
+                inline data(value_type x, value_type y, value_type z,
+                    value_type w) noexcept
+                    : _x(x), _y(y), _z(z), _w(w)
+                {
+                }
+
                 value_type _x, _y, _z, _w;
-            };
+            } _value;
             value_type _data[4];
         };
     };

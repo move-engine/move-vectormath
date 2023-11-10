@@ -57,6 +57,7 @@ SCENARIO("AABBf tests against DXM", "[move::vectormath::aabbf]")
 #include "bounds-tests.ixx"
 #define MVM_BOUNDS_TEST_BOUNDS_TYPE bounds2i64
 #include "bounds-tests.ixx"
+#define MVM_TEST_IS_UNSIGNED
 #define MVM_BOUNDS_TEST_BOUNDS_TYPE bounds2u8
 #include "bounds-tests.ixx"
 #define MVM_BOUNDS_TEST_BOUNDS_TYPE bounds2u16
@@ -65,13 +66,14 @@ SCENARIO("AABBf tests against DXM", "[move::vectormath::aabbf]")
 #include "bounds-tests.ixx"
 #define MVM_BOUNDS_TEST_BOUNDS_TYPE bounds2u64
 #include "bounds-tests.ixx"
+#define MVM_BOUNDS_TEST_BOUNDS_TYPE bounds2u
+#include "bounds-tests.ixx"
+#undef MVM_TEST_IS_UNSIGNED
 #define MVM_BOUNDS_TEST_BOUNDS_TYPE bounds2f
 #include "bounds-tests.ixx"
 #define MVM_BOUNDS_TEST_BOUNDS_TYPE bounds2d
 #include "bounds-tests.ixx"
 #define MVM_BOUNDS_TEST_BOUNDS_TYPE bounds2i
-#include "bounds-tests.ixx"
-#define MVM_BOUNDS_TEST_BOUNDS_TYPE bounds2u
 #include "bounds-tests.ixx"
 #define MVM_BOUNDS_TEST_BOUNDS_TYPE bounds3f
 #include "bounds-tests.ixx"

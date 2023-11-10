@@ -116,11 +116,11 @@ SCENARIO("Test quatf", "[move::vectormath::quatf]")
 
     WHEN("Two unequal quaternions are created")
     {
-        using move::vectormath::deg_to_rad;
+        using move::vectormath::scalar::deg2rad;
         auto quat1 = quat_type::from_axis_angle(
-            vec3_type(0.0f, 0.0f, 1.0f), deg_to_rad(90.0f));
+            vec3_type(0.0f, 0.0f, 1.0f), deg2rad(90.0f));
         auto quat2 = quat_type::from_axis_angle(
-            vec3_type(0.0f, 0.0f, 1.0f), deg_to_rad(180.0f));
+            vec3_type(0.0f, 0.0f, 1.0f), deg2rad(180.0f));
 
         THEN("They should not be equal")
         {
@@ -130,8 +130,7 @@ SCENARIO("Test quatf", "[move::vectormath::quatf]")
         THEN("Their dot product should be correct")
         {
             // TODO: Why is the angle half of what I'd expect?
-            REQUIRE(
-                std::acos(quat1.dot(quat2)) == Approx(deg_to_rad(90.) / 2.));
+            REQUIRE(std::acos(quat1.dot(quat2)) == Approx(deg2rad(90.) / 2.));
         }
 
         THEN("Their dot product should be the same as DXM")
@@ -255,11 +254,11 @@ SCENARIO("Test quatd", "[move::vectormath::quatd]")
 
     WHEN("Two unequal quaternions are created")
     {
-        using move::vectormath::deg_to_rad;
+        using move::vectormath::scalar::deg2rad;
         auto quat1 = quat_type::from_axis_angle(
-            vec3_type(0.0f, 0.0f, 1.0f), deg_to_rad(90.0f));
+            vec3_type(0.0f, 0.0f, 1.0f), deg2rad(90.0f));
         auto quat2 = quat_type::from_axis_angle(
-            vec3_type(0.0f, 0.0f, 1.0f), deg_to_rad(180.0f));
+            vec3_type(0.0f, 0.0f, 1.0f), deg2rad(180.0f));
 
         THEN("They should not be equal")
         {
@@ -269,8 +268,7 @@ SCENARIO("Test quatd", "[move::vectormath::quatd]")
         THEN("Their dot product should be correct")
         {
             // TODO: Why is the angle half of what I'd expect?
-            REQUIRE(
-                std::acos(quat1.dot(quat2)) == Approx(deg_to_rad(90.) / 2.));
+            REQUIRE(std::acos(quat1.dot(quat2)) == Approx(deg2rad(90.) / 2.));
         }
 
         THEN("Their dot product should be the same as DXM")

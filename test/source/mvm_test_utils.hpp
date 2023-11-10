@@ -3,6 +3,13 @@
 #include <DirectXMath.h>
 #include <sstream>
 
+// For MSVC, disable C4244: 'argument': conversion from 'value_type' to 'float',
+// possible loss of data
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4244)
+#endif
+
 template <typename vec_type>
 inline vec_type vec2_from_dxm(const DirectX::XMVECTOR& vec)
 {
@@ -38,7 +45,8 @@ inline vec_type vec4_from_dxm(const DirectX::XMVECTOR& vec)
 template <typename vec_type>
 inline DirectX::XMVECTOR vec4_to_dxm(const vec_type& vec)
 {
-    return DirectX::XMVectorSet(vec.x(), vec.y(), vec.z(), vec.w());
+    return DirectX::XMVectorSet(
+        float(vec.x()), float(vec.y()), float(vec.z()), float(vec.w()));
 }
 
 template <typename mat_type>
@@ -132,3 +140,7 @@ inline bool equals(const vec_type& mvm, const DirectX::XMVECTOR& dxm)
     }
     return true;
 }
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif

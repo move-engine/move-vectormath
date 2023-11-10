@@ -1,3 +1,10 @@
+// For MSVC, disable C4244: 'argument': conversion from 'value_type' to 'float',
+// possible loss of data
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4244)
+#endif
+
 #include <math.h>
 #include <stdexcept>
 
@@ -695,3 +702,7 @@ SCENARIO("Test mat4d", "[move::vectormath::mat4d]")
         }
     }
 }
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif

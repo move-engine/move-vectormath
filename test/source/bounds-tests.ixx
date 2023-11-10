@@ -51,14 +51,14 @@ SCENARIO(MVM_TEST_NAME(MVM_BOUNDS_TEST_BOUNDS_TYPE),
 
         THEN("The closest point should be zero")
         {
-            vec_type point = vec_type::filled(10);
-            REQUIRE(bounds.closest_point(point) == vec_type::zero());
+            vec_type p1 = vec_type::filled(10);
+            REQUIRE(bounds.closest_point(p1) == vec_type::zero());
         }
 
         AND_WHEN("A point is encapsulated")
         {
-            vec_type point = vec_type::filled(10);
-            bounds.encapsulate(point);
+            vec_type p1 = vec_type::filled(10);
+            bounds.encapsulate(p1);
 
             THEN("All values should be as expected")
             {
@@ -69,22 +69,19 @@ SCENARIO(MVM_TEST_NAME(MVM_BOUNDS_TEST_BOUNDS_TYPE),
                 REQUIRE(bounds.extents() == vec_type::filled(5));
             }
 
-            if constexpr (std::is_unsigned_v<component_type>)
+#if defined(MVM_TEST_IS_UNSIGNED)
+            THEN("The closest point to (0, 0) should be (0, 0)")
             {
-                THEN("The closest point to (0, 0) should be (0, 0)")
-                {
-                    vec_type point = vec_type(0);
-                    REQUIRE(bounds.closest_point(point) == vec_type::zero());
-                }
+                vec_type point = vec_type(0);
+                REQUIRE(bounds.closest_point(point) == vec_type::zero());
             }
-            else
+#else
+            THEN("The closest point to (-100, 0, 0) should be (0, 0, 0)")
             {
-                THEN("The closest point to (-100, 0, 0) should be (0, 0, 0)")
-                {
-                    vec_type point = vec_type(-100);
-                    REQUIRE(bounds.closest_point(point) == vec_type::zero());
-                }
+                vec_type point = vec_type(-100);
+                REQUIRE(bounds.closest_point(point) == vec_type::zero());
             }
+#endif
 
             THEN("The closest point to (100, 0, 0) should be (10, 0, 0)")
             {

@@ -64,6 +64,12 @@ CPMAddPackage("gh:fmtlib/fmt#9.1.0@9.1.0")
 add_library(move-vectormath INTERFACE)
 add_library(move::vectormath ALIAS move-vectormath)
 
+# If we're using MSVC OR clang-cl, we need to set some flags
+if (CMAKE_CXX_COMPILER MATCHES "cl.exe$" OR CMAKE_CXX_COMPILER MATCHES "clang-cl.exe$")
+  set(warning_guard "")
+  target_compile_options(move-vectormath INTERFACE ${warning_guard} /utf-8 /W4 /permissive- /volatile:iso /Zc:preprocessor /EHsc /Zc:__cplusplus /Zc:externConstexpr /Zc:throwingNew)
+endif()
+
 target_link_libraries(move-vectormath INTERFACE rtm njson cereal fmt::fmt)
 
 set_property(
