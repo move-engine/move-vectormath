@@ -441,7 +441,7 @@ namespace move::vectormath
          * @param x The new x component
          * @return generic_vec2_scalar& A reference to the vector
          */
-        MVM_INLINE_NODISCARD generic_vec2_scalar& x(value_type x) noexcept
+        MVM_INLINE generic_vec2_scalar& x(value_type x) noexcept
         {
             _x = x;
             return *this;
@@ -453,7 +453,7 @@ namespace move::vectormath
          * @param y The new y component
          * @return generic_vec2_scalar& A reference to the vector
          */
-        MVM_INLINE_NODISCARD generic_vec2_scalar& y(value_type y) noexcept
+        MVM_INLINE generic_vec2_scalar& y(value_type y) noexcept
         {
             _y = y;
             return *this;
@@ -490,7 +490,7 @@ namespace move::vectormath
          * @return generic_vec2_scalar& A reference to the vector
          */
 
-        MVM_INLINE_NODISCARD generic_vec2_scalar& fill(value_type v) noexcept
+        MVM_INLINE generic_vec2_scalar& fill(value_type v) noexcept
         {
             _x = v;
             _y = v;
@@ -504,8 +504,7 @@ namespace move::vectormath
          * @param y The new y component
          * @return generic_vec2_scalar& A reference to the vector
          */
-        MVM_INLINE_NODISCARD generic_vec2_scalar& set(
-            value_type x, value_type y) noexcept
+        MVM_INLINE generic_vec2_scalar& set(value_type x, value_type y) noexcept
         {
             _x = x;
             _y = y;
@@ -518,7 +517,7 @@ namespace move::vectormath
          * @param v A vector containing the new x and y components
          * @return generic_vec2_scalar& A reference to the vector
          */
-        MVM_INLINE_NODISCARD generic_vec2_scalar& set(
+        MVM_INLINE generic_vec2_scalar& set(
             const generic_vec2_scalar& rhs) noexcept
         {
             _x = rhs._x;

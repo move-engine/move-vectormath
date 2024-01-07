@@ -1,5 +1,11 @@
 #include <math.h>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4244)
+#pragma warning(disable : 4305)
+#endif
+
 #include <catch2/catch_all.hpp>
 #include <cereal/archives/binary.hpp>
 #include "catch2/catch_approx.hpp"
@@ -38,3 +44,7 @@
 #include "vec4-tests.ixx"
 
 #undef MVM_IS_TEST_INCLUDE
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif

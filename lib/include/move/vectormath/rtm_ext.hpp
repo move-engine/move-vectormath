@@ -235,9 +235,9 @@ namespace rtm::ext
         using mat_type = matrix4x4d;
         using value_type = double;
 
-        assert(!scalar_near_equal(width, 0.0f, 0.00001f));
-        assert(!scalar_near_equal(height, 0.0f, 0.00001f));
-        assert(!scalar_near_equal(far, near, 0.00001f));
+        assert(!scalar_near_equal(width, 0.0, 0.00001));
+        assert(!scalar_near_equal(height, 0.0, 0.00001));
+        assert(!scalar_near_equal(far, near, 0.00001));
 
         value_type range = 1.0f / (far - near);
         mat_type result;
@@ -298,9 +298,9 @@ namespace rtm::ext
         using mat_type = matrix4x4f;
         using value_type = float;
 
-        assert(!scalar_near_equal(ViewRight, ViewLeft, 0.00001f));
-        assert(!scalar_near_equal(ViewTop, ViewBottom, 0.00001f));
-        assert(!scalar_near_equal(FarZ, NearZ, 0.00001f));
+        assert(!scalar_near_equal(right, left, 0.00001f));
+        assert(!scalar_near_equal(top, bottom, 0.00001f));
+        assert(!scalar_near_equal(far, near, 0.00001f));
 
         value_type reciprocal_width = 1.0f / (right - left);
         value_type reciprocal_height = 1.0f / (top - bottom);
@@ -325,9 +325,9 @@ namespace rtm::ext
         using mat_type = matrix4x4f;
         using value_type = float;
 
-        assert(!scalar_near_equal(ViewRight, ViewLeft, 0.00001f));
-        assert(!scalar_near_equal(ViewTop, ViewBottom, 0.00001f));
-        assert(!scalar_near_equal(FarZ, NearZ, 0.00001f));
+        assert(!scalar_near_equal(right, left, 0.00001f));
+        assert(!scalar_near_equal(top, bottom, 0.00001f));
+        assert(!scalar_near_equal(far, near, 0.00001f));
 
         value_type reciprocal_width = 1.0f / (right - left);
         value_type reciprocal_height = 1.0f / (top - bottom);
@@ -352,9 +352,9 @@ namespace rtm::ext
         using mat_type = matrix4x4d;
         using value_type = double;
 
-        assert(!scalar_near_equal(ViewRight, ViewLeft, 0.00001));
-        assert(!scalar_near_equal(ViewTop, ViewBottom, 0.00001));
-        assert(!scalar_near_equal(FarZ, NearZ, 0.00001));
+        assert(!scalar_near_equal(right, left, 0.00001));
+        assert(!scalar_near_equal(top, bottom, 0.00001));
+        assert(!scalar_near_equal(far, near, 0.00001));
 
         value_type reciprocal_width = 1.0 / (right - left);
         value_type reciprocal_height = 1.0 / (top - bottom);
@@ -379,9 +379,9 @@ namespace rtm::ext
         using mat_type = matrix4x4d;
         using value_type = double;
 
-        assert(!scalar_near_equal(ViewRight, ViewLeft, 0.00001));
-        assert(!scalar_near_equal(ViewTop, ViewBottom, 0.00001));
-        assert(!scalar_near_equal(FarZ, NearZ, 0.00001));
+        assert(!scalar_near_equal(right, left, 0.00001));
+        assert(!scalar_near_equal(top, bottom, 0.00001));
+        assert(!scalar_near_equal(far, near, 0.00001));
 
         value_type reciprocal_width = 1.0 / (right - left);
         value_type reciprocal_height = 1.0 / (top - bottom);

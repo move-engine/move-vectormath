@@ -1,8 +1,10 @@
 // For MSVC, disable C4244: 'argument': conversion from 'value_type' to 'float',
+// and C4305: 'argument': truncation from 'const double' to 'value_type'
 // possible loss of data
 #ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable : 4244)
+#pragma warning(disable : 4305)
 #endif
 
 #include <math.h>

@@ -5,13 +5,13 @@ if not exist build\ninja-debug (
 )
 
 pushd build\ninja-debug
-    cmake --build . --target move-tests || (
+    cmake --build . --target move-vectormath-test || (
         copy compile_commands.json ..\..\compile_commands.json
         exit /B 1
     )
     copy compile_commands.json ..\..\compile_commands.json
     
     @REM mkdir ..\..\bin
-    @REM copy bin\move-tests* ..\..\bin\
+    @REM copy bin\move-vectormath-test* ..\..\bin\
     @REM copy bin\*.dll ..\..\bin\
 popd

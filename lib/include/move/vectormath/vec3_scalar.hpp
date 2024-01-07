@@ -2,6 +2,7 @@
 #include <ostream>
 
 #include "macros.hpp"
+#include "move/vectormath/scalar.hpp"
 #include "underlying_types.hpp"
 
 #include <fmt/format.h>
@@ -33,8 +34,7 @@ namespace move::vectormath
         /**
          * @brief Construct a new generic_vec3_scalar object
          */
-        MVM_INLINE_NODISCARD generic_vec3_scalar() noexcept
-            : _x(0), _y(0), _z(0)
+        MVM_INLINE_NODISCARD generic_vec3_scalar() noexcept : _value(0, 0, 0)
         {
         }
 
@@ -47,7 +47,7 @@ namespace move::vectormath
          */
         MVM_INLINE_NODISCARD generic_vec3_scalar(
             value_type x, value_type y = 0, value_type z = 0) noexcept
-            : _x(x), _y(y), _z(z)
+            : _value(x, y, z)
         {
         }
 
@@ -90,7 +90,7 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD bool operator==(
             const generic_vec3_scalar& v) const noexcept
         {
-            return v._x == _x && v._y == _y && v._z == _z;
+            return x() == v.x() && y() == v.y() && z() == v.z();
         }
 
         /**
@@ -103,7 +103,7 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD bool operator!=(
             const generic_vec3_scalar& v) const noexcept
         {
-            return v._x != _x || v._y != _y || v._z != _z;
+            return x() != v.x() || y() != v.y() || z() != v.z();
         }
 
         /**
@@ -119,7 +119,7 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD bool operator<(
             const generic_vec3_scalar& v) const noexcept
         {
-            return v._x < _x && v._y < _y && v._z < _z;
+            return x() < v.x() && y() < v.y() && z() < v.z();
         }
 
         /**
@@ -135,7 +135,7 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD bool operator<=(
             const generic_vec3_scalar& v) const noexcept
         {
-            return v._x <= _x && v._y <= _y && v._z <= _z;
+            return x() <= v.x() && y() <= v.y() && z() <= v.z();
         }
 
         /**
@@ -151,7 +151,7 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD bool operator>(
             const generic_vec3_scalar& v) const noexcept
         {
-            return v._x > _x && v._y > _y && v._z > _z;
+            return x() > v.x() && y() > v.y() && z() > v.z();
         }
 
         /**
@@ -167,7 +167,7 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD bool operator>=(
             const generic_vec3_scalar& v) const noexcept
         {
-            return v._x >= _x && v._y >= _y && v._z >= _z;
+            return x() >= v.x() && y() >= v.y() && z() >= v.z();
         }
 
         /**
@@ -179,9 +179,9 @@ namespace move::vectormath
         MVM_INLINE generic_vec3_scalar& operator=(
             const generic_vec3_scalar& v) noexcept
         {
-            _x = v._x;
-            _y = v._y;
-            _z = v._z;
+            x(v.x());
+            y(v.y());
+            z(v.z());
             return *this;
         }
 
@@ -195,9 +195,9 @@ namespace move::vectormath
         MVM_INLINE generic_vec3_scalar& operator+=(
             const generic_vec3_scalar& v) noexcept
         {
-            _x += v._x;
-            _y += v._y;
-            _z += v._z;
+            x(x() + v.x());
+            y(y() + v.y());
+            z(z() + v.z());
             return *this;
         }
 
@@ -211,9 +211,9 @@ namespace move::vectormath
         MVM_INLINE generic_vec3_scalar& operator-=(
             const generic_vec3_scalar& v) noexcept
         {
-            _x -= v._x;
-            _y -= v._y;
-            _z -= v._z;
+            x(x() - v.x());
+            y(y() - v.y());
+            z(z() - v.z());
             return *this;
         }
 
@@ -226,9 +226,9 @@ namespace move::vectormath
          */
         MVM_INLINE generic_vec3_scalar& operator*=(value_type v) noexcept
         {
-            _x *= v;
-            _y *= v;
-            _z *= v;
+            x(x() * v);
+            y(y() * v);
+            z(z() * v);
             return *this;
         }
 
@@ -242,9 +242,9 @@ namespace move::vectormath
         MVM_INLINE generic_vec3_scalar& operator*=(
             const generic_vec3_scalar& v) noexcept
         {
-            _x *= v._x;
-            _y *= v._y;
-            _z *= v._z;
+            x(x() * v.x());
+            y(y() * v.y());
+            z(z() * v.z());
             return *this;
         }
 
@@ -257,9 +257,9 @@ namespace move::vectormath
          */
         MVM_INLINE generic_vec3_scalar& operator/=(value_type v) noexcept
         {
-            _x /= v;
-            _y /= v;
-            _z /= v;
+            x(x() / v);
+            y(y() / v);
+            z(z() / v);
             return *this;
         }
 
@@ -273,9 +273,9 @@ namespace move::vectormath
         MVM_INLINE generic_vec3_scalar& operator/=(
             const generic_vec3_scalar& v) noexcept
         {
-            _x /= v._x;
-            _y /= v._y;
-            _z /= v._z;
+            x(x() / v.x());
+            y(y() / v.y());
+            z(z() / v.z());
             return *this;
         }
 
@@ -289,7 +289,7 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD generic_vec3_scalar operator+(
             const generic_vec3_scalar& v) const noexcept
         {
-            return {_x + v._x, _y + v._y, _z + v._z};
+            return {x() + v.x(), y() + v.y(), z() + v.z()};
         }
 
         /**
@@ -302,7 +302,7 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD generic_vec3_scalar operator-(
             const generic_vec3_scalar& v) const noexcept
         {
-            return {_x - v._x, _y - v._y, _z - v._z};
+            return {x() - v.x(), y() - v.y(), z() - v.z()};
         }
 
         /**
@@ -315,7 +315,7 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD generic_vec3_scalar operator*(
             value_type v) const noexcept
         {
-            return {_x * v, _y * v, _z * v};
+            return {x() * v, y() * v, z() * v};
         }
 
         /**
@@ -328,7 +328,7 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD generic_vec3_scalar operator*(
             const generic_vec3_scalar& v) const noexcept
         {
-            return {_x * v._x, _y * v._y, _z * v._z};
+            return {x() * v.x(), y() * v.y(), z() * v.z()};
         }
 
         /**
@@ -341,7 +341,7 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD generic_vec3_scalar operator/(
             value_type v) const noexcept
         {
-            return {_x / v, _y / v, _z / v};
+            return {x() / v, y() / v, z() / v};
         }
 
         /**
@@ -354,7 +354,7 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD generic_vec3_scalar operator/(
             const generic_vec3_scalar& v) const noexcept
         {
-            return {_x / v._x, _y / v._y, _z / v._z};
+            return {x() / v.x(), y() / v.y(), z() / v.z()};
         }
 
         /**
@@ -365,7 +365,7 @@ namespace move::vectormath
          */
         MVM_INLINE_NODISCARD generic_vec3_scalar operator-() const noexcept
         {
-            return {-_x, -_y, -_z};
+            return {-x(), -y(), -z()};
         }
 
     public:
@@ -380,15 +380,7 @@ namespace move::vectormath
          */
         MVM_INLINE_NODISCARD value_type get_component(int index) const noexcept
         {
-            switch (index)
-            {
-                case 0:
-                    return _x;
-                case 1:
-                    return _y;
-                default:
-                    return _z;
-            }
+            return _data[scalar::min(index, 2)];
         }
 
         /**
@@ -401,18 +393,7 @@ namespace move::vectormath
          */
         MVM_INLINE void set_component(int index, value_type value)
         {
-            switch (index)
-            {
-                case 0:
-                    set_x(value);
-                    break;
-                case 1:
-                    set_y(value);
-                    break;
-                case 2:
-                    set_z(value);
-                    break;
-            }
+            _data[scalar::min(index, 2)] = value;
         }
 
         /**
@@ -436,7 +417,7 @@ namespace move::vectormath
          */
         MVM_INLINE_NODISCARD value_type x() const noexcept
         {
-            return _x;
+            return _value._x;
         }
 
         /**
@@ -446,7 +427,7 @@ namespace move::vectormath
          */
         MVM_INLINE_NODISCARD value_type y() const noexcept
         {
-            return _y;
+            return _value._y;
         }
 
         /**
@@ -456,7 +437,7 @@ namespace move::vectormath
          */
         MVM_INLINE_NODISCARD value_type z() const noexcept
         {
-            return _z;
+            return _value._z;
         }
 
         /**
@@ -500,7 +481,7 @@ namespace move::vectormath
          */
         MVM_INLINE generic_vec3_scalar& set_x(value_type x) noexcept
         {
-            _x = x;
+            _value._x = x;
             return *this;
         }
 
@@ -512,7 +493,7 @@ namespace move::vectormath
          */
         MVM_INLINE generic_vec3_scalar& set_y(value_type y) noexcept
         {
-            _y = y;
+            _value._y = y;
             return *this;
         }
 
@@ -524,7 +505,7 @@ namespace move::vectormath
          */
         MVM_INLINE generic_vec3_scalar& set_z(value_type z) noexcept
         {
-            _z = z;
+            _value._z = z;
             return *this;
         }
 
@@ -536,7 +517,7 @@ namespace move::vectormath
          */
         MVM_INLINE generic_vec3_scalar& fill(component_type value) noexcept
         {
-            _x = _y = _z = value;
+            set(value, value, value);
             return *this;
         }
 
@@ -551,9 +532,9 @@ namespace move::vectormath
         MVM_INLINE generic_vec3_scalar& set(
             value_type x, value_type y, value_type z) noexcept
         {
-            _x = x;
-            _y = y;
-            _z = z;
+            set_x(x);
+            set_y(y);
+            set_z(z);
             return *this;
         }
 
@@ -575,7 +556,8 @@ namespace move::vectormath
          */
         MVM_INLINE_NODISCARD value_type squared_length() const noexcept
         {
-            return _x * _x + _y * _y + _z * _z;
+            return _value._x * _value._x + _value._y * _value._y +
+                   _value._z * _value._z;
         }
 
         /**
@@ -609,7 +591,7 @@ namespace move::vectormath
             const generic_vec3_scalar& v1,
             const generic_vec3_scalar& v2) noexcept
         {
-            return v1._x * v2._x + v1._y * v2._y + v1._z * v2._z;
+            return v1.x() * v2.x() + v1.y() * v2.y() + v1.z() * v2.z();
         }
 
         /**
@@ -679,8 +661,9 @@ namespace move::vectormath
             const generic_vec3_scalar& v1,
             const generic_vec3_scalar& v2) noexcept
         {
-            return {v1._y * v2._z - v1._z * v2._y,
-                v1._z * v2._x - v1._x * v2._z, v1._x * v2._y - v1._y * v2._x};
+            return {v1._value._y * v2._value._z - v1._value._z * v2._value._y,
+                v1._value._z * v2._value._x - v1._value._x * v2._value._z,
+                v1._value._x * v2._value._y - v1._value._y * v2._value._x};
         }
 
         /**
@@ -868,9 +851,9 @@ namespace move::vectormath
             const generic_vec3_scalar& v2) noexcept
         {
             return {
-                std::min(v1._x, v2._x),
-                std::min(v1._y, v2._y),
-                std::min(v1._z, v2._z),
+                scalar::min(v1.x(), v2.x()),
+                scalar::min(v1.y(), v2.y()),
+                scalar::min(v1.z(), v2.z()),
             };
         }
 
@@ -887,9 +870,9 @@ namespace move::vectormath
             const generic_vec3_scalar& v2) noexcept
         {
             return {
-                std::max(v1._x, v2._x),
-                std::max(v1._y, v2._y),
-                std::max(v1._z, v2._z),
+                scalar::max(v1.x(), v2.x()),
+                scalar::max(v1.y(), v2.y()),
+                scalar::max(v1.z(), v2.z()),
             };
         }
 
@@ -907,9 +890,9 @@ namespace move::vectormath
             const generic_vec3_scalar& max) noexcept
         {
             return {
-                std::clamp(v._x, min._x, max._x),
-                std::clamp(v._y, min._y, max._y),
-                std::clamp(v._z, min._z, max._z),
+                scalar::clamp(v.x(), min.x(), max.x()),
+                scalar::clamp(v.y(), min.y(), max.y()),
+                scalar::clamp(v.z(), min.z(), max.z()),
             };
         }
 
@@ -1102,9 +1085,19 @@ namespace move::vectormath
         }
 
     private:
-        value_type _x;
-        value_type _y;
-        value_type _z;
+        union
+        {
+            struct data
+            {
+                inline data(value_type x, value_type y, value_type z) noexcept
+                    : _x(x), _y(y), _z(z)
+                {
+                }
+
+                value_type _x, _y, _z;
+            } _value;
+            value_type _data[3];
+        };
     };
 
     template <typename value_type>
