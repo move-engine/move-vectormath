@@ -631,8 +631,7 @@ namespace move::vectormath
          * @param value The new value for all components
          * @return generic_vec4_rtm& A reference to the vector
          */
-        MVM_INLINE_NODISCARD generic_vec4_rtm& fill(
-            component_type value) noexcept
+        MVM_INLINE generic_vec4_rtm& fill(component_type value) noexcept
         {
             _value = rtm::vector_set(value);
             return *this;
@@ -647,8 +646,8 @@ namespace move::vectormath
          * @param w The new w component
          * @return generic_vec4_rtm& A reference to the vector
          */
-        MVM_INLINE_NODISCARD generic_vec4_rtm& set(component_type x,
-            component_type y, component_type z, component_type w) noexcept
+        MVM_INLINE generic_vec4_rtm& set(component_type x, component_type y,
+            component_type z, component_type w) noexcept
         {
             _value = rtm::vector_set(x, y, z, w);
             return *this;
@@ -660,8 +659,7 @@ namespace move::vectormath
          * @param v The new vector
          * @return generic_vec4_rtm& A reference to the vector
          */
-        MVM_INLINE_NODISCARD generic_vec4_rtm& set(
-            const generic_vec4_rtm& v) noexcept
+        MVM_INLINE generic_vec4_rtm& set(const generic_vec4_rtm& v) noexcept
         {
             _value = v._value;
             return *this;

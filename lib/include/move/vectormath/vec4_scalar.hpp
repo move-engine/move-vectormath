@@ -578,8 +578,7 @@ namespace move::vectormath
          * @param value The new value for all components
          * @return generic_vec4_scalar& A reference to the vector
          */
-        MVM_INLINE_NODISCARD generic_vec4_scalar& fill(
-            component_type value) noexcept
+        MVM_INLINE generic_vec4_scalar& fill(component_type value) noexcept
         {
             _value._x = value;
             _value._y = value;
@@ -597,8 +596,8 @@ namespace move::vectormath
          * @param w The new w component
          * @return generic_vec4_scalar& A reference to the vector
          */
-        MVM_INLINE_NODISCARD generic_vec4_scalar& set(component_type x,
-            component_type y, component_type z, component_type w) noexcept
+        MVM_INLINE generic_vec4_scalar& set(component_type x, component_type y,
+            component_type z, component_type w) noexcept
         {
             _value._x = x;
             _value._y = y;
@@ -613,7 +612,7 @@ namespace move::vectormath
          * @param v The new vector
          * @return generic_vec4_scalar& A reference to the vector
          */
-        MVM_INLINE_NODISCARD generic_vec4_scalar& set(
+        MVM_INLINE generic_vec4_scalar& set(
             const generic_vec4_scalar& v) noexcept
         {
             _value._x = v._value._x;
