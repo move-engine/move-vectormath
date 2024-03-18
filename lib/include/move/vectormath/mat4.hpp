@@ -83,6 +83,38 @@ namespace move::vectormath
         }
 
     public:
+        /* @brief Serializes the matrix to/from an archive.  Intended for use
+         * with Cereal and Cereal-like APIs.
+         *
+         * @tparam Archive The archive type
+         * @param ar The archive
+         */
+        template <typename Archive>
+        void serialize(Archive& archive)
+        {
+            // if this is a write archive
+            if constexpr (Archive::is_saving::value)
+            {
+                for (size_t i = 0; i < 4; ++i)
+                {
+                    for (size_t j = 0; j < 4; ++j)
+                    {
+                        archive(get_component(i, j));
+                    }
+                }
+            }
+            else
+            {
+                value_type values[16];
+                for (size_t i = 0; i < 16; ++i)
+                {
+                    archive(values[i]);
+                }
+                set(values);
+            }
+        }
+
+    public:
         MVM_INLINE_NODISCARD operator underlying_matrix4x4_type&() noexcept
         {
             return _value;
@@ -104,6 +136,12 @@ namespace move::vectormath
         }
 
         MVM_INLINE_NODISCARD value_type operator[](size_t index) const noexcept
+        {
+            return get_component(index / 4, index % 4);
+        }
+
+        MVM_INLINE_NODISCARD value_type get_component(
+            size_t index) const noexcept
         {
             return get_component(index / 4, index % 4);
         }
