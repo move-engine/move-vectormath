@@ -197,45 +197,45 @@ namespace move::vectormath
             return rtm::quat_get_w(_value);
         }
 
-        MVM_INLINE_NODISCARD generic_quat& x(value_type value) const noexcept
+        MVM_INLINE generic_quat& x(value_type value) const noexcept
         {
             return rtm::quat_set_x(_value, value);
         }
 
-        MVM_INLINE_NODISCARD generic_quat& y(value_type value) const noexcept
+        MVM_INLINE generic_quat& y(value_type value) const noexcept
         {
             return rtm::quat_set_y(_value, value);
         }
 
-        MVM_INLINE_NODISCARD generic_quat& z(value_type value) const noexcept
+        MVM_INLINE generic_quat& z(value_type value) const noexcept
         {
             return rtm::quat_set_z(_value, value);
         }
 
-        MVM_INLINE_NODISCARD generic_quat& w(value_type value) const noexcept
+        MVM_INLINE generic_quat& w(value_type value) const noexcept
         {
             return rtm::quat_set_w(_value, value);
         }
 
-        MVM_INLINE_NODISCARD generic_quat& set_x(value_type x) noexcept
+        MVM_INLINE generic_quat& set_x(value_type x) noexcept
         {
             _value = rtm::vector_set_x(_value, x);
             return *this;
         }
 
-        MVM_INLINE_NODISCARD generic_quat& set_y(value_type y) noexcept
+        MVM_INLINE generic_quat& set_y(value_type y) noexcept
         {
             _value = rtm::vector_set_y(_value, y);
             return *this;
         }
 
-        MVM_INLINE_NODISCARD generic_quat& set_z(value_type z) noexcept
+        MVM_INLINE generic_quat& set_z(value_type z) noexcept
         {
             _value = rtm::vector_set_z(_value, z);
             return *this;
         }
 
-        MVM_INLINE_NODISCARD generic_quat& set_w(value_type w) noexcept
+        MVM_INLINE generic_quat& set_w(value_type w) noexcept
         {
             _value = rtm::vector_set_w(_value, w);
             return *this;

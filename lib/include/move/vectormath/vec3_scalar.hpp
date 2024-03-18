@@ -729,23 +729,6 @@ namespace move::vectormath
             const generic_vec3_scalar& incident,
             const generic_vec3_scalar& normal, value_type ior) noexcept
         {
-            // Based on XMVector3Refract
-            /*
-            using namespace rtm;
-            const vector_type& inc = incident._value;
-            const vector_type& nrm = normal._value;
-            const vector_type& index = vector_set(ior);
-
-            value_type dotinorm = vector_dot(inc, nrm);
-            vector_type roiPlusDotinorm = vector_mul(index, dotinorm);
-            vector_type innerSqrt = vector_set(
-                scalar_sqrt(1 - ior * ior * (1 - dotinorm * dotinorm)));
-            ;
-
-            return vector_sub(vector_mul(index, inc),
-                vector_mul(nrm, vector_add(roiPlusDotinorm, innerSqrt)));
-            */
-
             auto dotinorm = dot(incident, normal);
             auto roi_plus_dotinorm = ior * dotinorm;
             auto inner_sqrt =

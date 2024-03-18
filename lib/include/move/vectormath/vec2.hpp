@@ -580,6 +580,24 @@ namespace move::vectormath
             return *this / length();
         }
 
+        /**
+         * @brief Returns the absolute value of the vector
+         *
+         * @return generic_vec2_scalar The absolute vector
+         */
+        MVM_INLINE_NODISCARD generic_vec2_scalar abs() const noexcept
+        {
+            if constexpr (std::is_floating_point_v<value_type>)
+            {
+                return generic_vec2_scalar(
+                    rtm::scalar_abs(_x), rtm::scalar_abs(_y));
+            }
+            else
+            {
+                return generic_vec2_scalar(std::abs(_x), std::abs(_y));
+            }
+        }
+
     public:
         /**
          * @brief Returns the dot product of two vectors
