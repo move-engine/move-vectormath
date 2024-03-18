@@ -113,6 +113,11 @@ namespace move::vectormath
             return *this;
         }
 
+        MVM_INLINE_NODISCARD operator quat_type() const noexcept
+        {
+            return _value;
+        }
+
         MVM_INLINE_NODISCARD generic_quat& operator*=(
             const generic_quat& v) noexcept
         {
