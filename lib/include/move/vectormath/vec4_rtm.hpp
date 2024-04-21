@@ -88,42 +88,44 @@ namespace move::vectormath
         /**
          * @brief Fill the X and Y components of a new generic_vec4_rtm object
          * with those of a scalar vector2, filling the remaining components with
-         * 0.
+         * the provided values.
          *
          * @param v The scalar vector2 to copy
          * @return generic_vec4_rtm A new vector initialized to v
          */
         MVM_INLINE_NODISCARD generic_vec4_rtm(
-            const generic_vec2_scalar<value_type>& v) noexcept
-            : _value(rtm::vector_set(v.x(), v.y(), 0, 0))
+            const generic_vec2_scalar<value_type>& v, value_type z = 0,
+            value_type w = 0) noexcept
+            : _value(rtm::vector_set(v.x(), v.y(), z, w))
         {
         }
 
         /**
          * @brief Fill the X, Y, and Z components of a new generic_vec4_rtm
          * object with those of a scalar vector3, filling the remaining
-         * component with 0.
+         * component with the provided values.
          *
          * @param v The scalar vector3 to copy
          * @return generic_vec4_rtm A new vector initialized to v
          */
         MVM_INLINE_NODISCARD generic_vec4_rtm(
-            const generic_vec3_rtm<value_type, vector_type_raw>& v) noexcept
-            : _value(rtm::vector_set(v.x(), v.y(), v.z(), 0))
+            const generic_vec3_rtm<value_type, vector_type_raw>& v,
+            value_type w = 0) noexcept
+            : _value(rtm::vector_set(v.x(), v.y(), v.z(), w))
         {
         }
 
         /**
          * @brief Fill the X, Y, and Z components of a new generic_vec4_rtm
          * object with those of an RTM vector3, filling the remaining component
-         * with 0.
+         * with the provided values.
          *
          * @param v The scalar vector3 to copy
          * @return generic_vec4_rtm A new vector initialized to v
          */
         MVM_INLINE_NODISCARD generic_vec4_rtm(
-            const generic_vec3_scalar<value_type>& v) noexcept
-            : _value(rtm::vector_set(v.x(), v.y(), v.z(), 0))
+            const generic_vec3_scalar<value_type>& v, value_type w = 0) noexcept
+            : _value(rtm::vector_set(v.x(), v.y(), v.z(), w))
         {
         }
 
