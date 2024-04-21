@@ -135,6 +135,15 @@ namespace move::vectormath
             return *this;
         }
 
+        MVM_INLINE void to_data_array(value_type* value)
+        {
+            using namespace rtm;
+            vector_store(value, matrix_get_row(_value, 0));
+            vector_store(value + 4, matrix_get_row(_value, 1));
+            vector_store(value + 8, matrix_get_row(_value, 2));
+            vector_store(value + 12, matrix_get_row(_value, 3));
+        }
+
         MVM_INLINE_NODISCARD value_type operator[](size_t index) const noexcept
         {
             return get_component(index / 4, index % 4);

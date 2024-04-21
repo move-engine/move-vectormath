@@ -439,6 +439,21 @@ namespace move::vectormath
         }
 
         /**
+         * @brief Stores the components of the vector in an array.  The pointer
+         * must point to least 4 elements of type value_type.
+         *
+         * @param data The array to store the components in (must have at least
+         * 4 elements)
+         */
+        MVM_INLINE void to_data_array(value_type* data) const noexcept
+        {
+            for (uint32_t i = 0; i < num_components; ++i)
+            {
+                data[i] = get_component(i);
+            }
+        }
+
+        /**
          * @brief Returns the x component of the vector
          *
          * @return value_type The x component

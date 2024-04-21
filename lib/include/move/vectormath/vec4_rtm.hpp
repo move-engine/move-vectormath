@@ -573,6 +573,19 @@ namespace move::vectormath
         }
 
         /**
+         * @brief Stores the components of the vector in an array.  The pointer
+         * must point to least 4 elements of type value_type.
+         *
+         * @param data The array to store the components in (must have at least
+         * 4 elements)
+         */
+        MVM_INLINE void to_data_array(value_type* data) const noexcept
+        {
+            rtm::vector_store(_value, data);
+        }
+
+    public:
+        /**
          * @brief Returns the x component of the vector
          *
          * @return value_type The x component
