@@ -246,8 +246,9 @@ SCENARIO(MVM_TEST_NAME(MVM_TEST_TYPE), MVM_TEST_SCOPE(MVM_TEST_TYPE))
                 {
                     auto ior = vec_type::component_type(0.5);
                     auto ref = vec_type::refract(v1, v2, ior);
-                    auto dxm_ref = vec3_from_dxm<vec_type>(
-                        DirectX::XMVector3Refract(dxm_v1, dxm_v2, ior));
+                    auto dxm_ref =
+                        vec3_from_dxm<vec_type>(DirectX::XMVector3Refract(
+                            dxm_v1, dxm_v2, static_cast<float>(ior)));
 
                     REQUIRE(ref.x() == Approx(dxm_ref.x()));
                     REQUIRE(ref.y() == Approx(dxm_ref.y()));
@@ -292,7 +293,6 @@ SCENARIO(MVM_TEST_NAME(MVM_TEST_TYPE), MVM_TEST_SCOPE(MVM_TEST_TYPE))
 
     THEN("Cereal serialization should work")
     {
-        using vec_type = vec3f;
         auto vec = vec_type(1, 2, 3);
         std::stringstream ss;
         {

@@ -388,7 +388,7 @@ namespace move::vectormath
          * @param index The index of the component to set
          * @param value The new value for the component
          */
-        MVM_INLINE void set_component(int index, value_type value)
+        MVM_INLINE void set_component(size_t index, value_type value)
         {
             switch (index)
             {

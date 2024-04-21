@@ -2,6 +2,8 @@
 #include <ostream>
 
 #include "macros.hpp"
+#include "move/vectormath/vec2.hpp"
+#include "move/vectormath/vec3_scalar.hpp"
 #include "scalar.hpp"
 #include "underlying_types.hpp"
 
@@ -418,9 +420,9 @@ namespace move::vectormath
          * @param index The index of the component to set
          * @param value The new value for the component
          */
-        MVM_INLINE void set_component(int index, value_type value)
+        MVM_INLINE void set_component(size_t index, value_type value)
         {
-            _data[scalar::min(index, 3)] = value;
+            _data[scalar::min(index, size_t(3))] = value;
         }
 
         /**
@@ -474,6 +476,28 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD value_type w() const noexcept
         {
             return _value._w;
+        }
+
+        /**
+         * @brief Returns the x and y components of the vector
+         *
+         * @return generic_vec2_scalar<value_type> The x, y components
+         */
+        MVM_INLINE_NODISCARD generic_vec2_scalar<value_type> xy() const noexcept
+        {
+            return generic_vec2_scalar<value_type>(x(), y());
+        }
+
+        /**
+         * @brief Returns the x, y, and z components of the vector
+         *
+         * @return generic_vec3_rtm<value_type, vector_type_raw> The x, y, and z
+         * components
+         */
+        MVM_INLINE_NODISCARD generic_vec3_scalar<value_type> xyz()
+            const noexcept
+        {
+            return generic_vec3_scalar<value_type>(x(), y(), z());
         }
 
         /**

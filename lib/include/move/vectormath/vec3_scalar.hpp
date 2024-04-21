@@ -3,6 +3,7 @@
 
 #include "macros.hpp"
 #include "move/vectormath/scalar.hpp"
+#include "move/vectormath/vec2.hpp"
 #include "underlying_types.hpp"
 
 #include <fmt/format.h>
@@ -302,7 +303,8 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD generic_vec3_scalar operator-(
             const generic_vec3_scalar& v) const noexcept
         {
-            return {x() - v.x(), y() - v.y(), z() - v.z()};
+            return {value_type(x() - v.x()), value_type(y() - v.y()),
+                value_type(z() - v.z())};
         }
 
         /**
@@ -315,7 +317,8 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD generic_vec3_scalar operator*(
             value_type v) const noexcept
         {
-            return {x() * v, y() * v, z() * v};
+            return {
+                value_type(x() * v), value_type(y() * v), value_type(z() * v)};
         }
 
         /**
@@ -391,9 +394,9 @@ namespace move::vectormath
          * @param index The index of the component to set
          * @param value The new value for the component
          */
-        MVM_INLINE void set_component(int index, value_type value)
+        MVM_INLINE void set_component(size_t index, value_type value)
         {
-            _data[scalar::min(index, 2)] = value;
+            _data[scalar::min(index, size_t(2))] = value;
         }
 
         /**
@@ -438,6 +441,16 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD value_type z() const noexcept
         {
             return _value._z;
+        }
+
+        /**
+         * @brief Returns the x and y components of the vector
+         *
+         * @return generic_vec2_scalar<value_type> The x and y components
+         */
+        MVM_INLINE_NODISCARD generic_vec2_scalar<value_type> xy() const noexcept
+        {
+            return {x(), y()};
         }
 
         /**
@@ -546,7 +559,7 @@ namespace move::vectormath
          */
         MVM_INLINE_NODISCARD value_type length() const noexcept
         {
-            return std::sqrt(squared_length());
+            return value_type(std::sqrt(squared_length()));
         }
 
         /**
@@ -661,9 +674,12 @@ namespace move::vectormath
             const generic_vec3_scalar& v1,
             const generic_vec3_scalar& v2) noexcept
         {
-            return {v1._value._y * v2._value._z - v1._value._z * v2._value._y,
-                v1._value._z * v2._value._x - v1._value._x * v2._value._z,
-                v1._value._x * v2._value._y - v1._value._y * v2._value._x};
+            return {value_type(v1._value._y * v2._value._z -
+                               v1._value._z * v2._value._y),
+                value_type(
+                    v1._value._z * v2._value._x - v1._value._x * v2._value._z),
+                value_type(
+                    v1._value._x * v2._value._y - v1._value._y * v2._value._x)};
         }
 
         /**

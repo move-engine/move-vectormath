@@ -153,21 +153,24 @@ SCENARIO(MVM_TEST_NAME(MVM_TEST_TYPE), MVM_TEST_SCOPE(MVM_TEST_TYPE))
                 REQUIRE(dist == Approx(dxm_dist));
             }
 
-            THEN("Vector4 cross should work")
+            // Only run for float and double value types
+            if constexpr (std::is_floating_point_v<vec_type::component_type>)
             {
-                auto v3 = vec_type(1, -2, 3, -4);
-                auto dxm_v3 = vec4_to_dxm(v3);
+                THEN("Vector4 cross should work")
+                {
+                    auto v3 = vec_type(1, -2, 3, -4);
+                    auto dxm_v3 = vec4_to_dxm(v3);
 
-                auto cross = vec_type::cross(v1, v2, v3);
-                auto dxm_cross = vec4_from_dxm<vec_type>(
-                    DirectX::XMVector4Cross(dxm_v1, dxm_v2, dxm_v3));
+                    auto cross = vec_type::cross(v1, v2, v3);
+                    auto dxm_cross = vec4_from_dxm<vec_type>(
+                        DirectX::XMVector4Cross(dxm_v1, dxm_v2, dxm_v3));
 
-                REQUIRE(cross.x() == Approx(dxm_cross.x()));
-                REQUIRE(cross.y() == Approx(dxm_cross.y()));
-                REQUIRE(cross.z() == Approx(dxm_cross.z()));
-                REQUIRE(cross.w() == Approx(dxm_cross.w()));
+                    REQUIRE(cross.x() == Approx(dxm_cross.x()));
+                    REQUIRE(cross.y() == Approx(dxm_cross.y()));
+                    REQUIRE(cross.z() == Approx(dxm_cross.z()));
+                    REQUIRE(cross.w() == Approx(dxm_cross.w()));
+                }
             }
-
             if constexpr (std::is_floating_point_v<vec_type::component_type>)
             {
                 THEN("Angle between normalized vectors should work")

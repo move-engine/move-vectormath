@@ -2,6 +2,10 @@
 #include <ostream>
 
 #include "macros.hpp"
+#include "move/vectormath/vec2.hpp"
+#include "move/vectormath/vec3_rtm.hpp"
+#include "move/vectormath/vec3_scalar.hpp"
+#include "move/vectormath/vec4_scalar.hpp"
 #include "underlying_types.hpp"
 
 #include <rtm/mask4d.h>
@@ -81,6 +85,61 @@ namespace move::vectormath
         {
         }
 
+        /**
+         * @brief Fill the X and Y components of a new generic_vec4_rtm object
+         * with those of a scalar vector2, filling the remaining components with
+         * 0.
+         *
+         * @param v The scalar vector2 to copy
+         * @return generic_vec4_rtm A new vector initialized to v
+         */
+        MVM_INLINE_NODISCARD generic_vec4_rtm(
+            const generic_vec2_scalar<value_type>& v) noexcept
+            : _value(rtm::vector_set(v.x(), v.y(), 0, 0))
+        {
+        }
+
+        /**
+         * @brief Fill the X, Y, and Z components of a new generic_vec4_rtm
+         * object with those of a scalar vector3, filling the remaining
+         * component with 0.
+         *
+         * @param v The scalar vector3 to copy
+         * @return generic_vec4_rtm A new vector initialized to v
+         */
+        MVM_INLINE_NODISCARD generic_vec4_rtm(
+            const generic_vec3_rtm<value_type, vector_type_raw>& v) noexcept
+            : _value(rtm::vector_set(v.x(), v.y(), v.z(), 0))
+        {
+        }
+
+        /**
+         * @brief Fill the X, Y, and Z components of a new generic_vec4_rtm
+         * object with those of an RTM vector3, filling the remaining component
+         * with 0.
+         *
+         * @param v The scalar vector3 to copy
+         * @return generic_vec4_rtm A new vector initialized to v
+         */
+        MVM_INLINE_NODISCARD generic_vec4_rtm(
+            const generic_vec3_scalar<value_type>& v) noexcept
+            : _value(rtm::vector_set(v.x(), v.y(), v.z(), 0))
+        {
+        }
+
+        /**
+         * @brief Fill the X, Y, Z, and W components of a new generic_vec4_rtm
+         * object with those of a scalar vector4.
+         *
+         * @param v The scalar vector4 to copy
+         * @return generic_vec4_rtm A new vector initialized to v
+         */
+        MVM_INLINE_NODISCARD generic_vec4_rtm(
+            const generic_vec4_scalar<value_type>& v) noexcept
+            : _value(rtm::vector_set(v.x(), v.y(), v.z(), v.w()))
+        {
+        }
+
     public:
         /**
          * @brief Returns the internal RTM vector.  Useful for tight loops,
@@ -131,6 +190,28 @@ namespace move::vectormath
         }
 
     public:
+        /***
+         * @brief Converts an RTM vector to a scalar vector
+         *
+         * @return generic_vec4_scalar<value_type> The scalar vector
+         */
+        MVM_INLINE_NODISCARD operator generic_vec4_scalar<value_type>()
+            const noexcept
+        {
+            return generic_vec4_scalar<value_type>(x(), y(), z(), w());
+        };
+
+        /***
+         * @brief Converts an RTM vector to a scalar vector
+         *
+         * @return generic_vec4_scalar<value_type> The scalar vector
+         */
+        MVM_INLINE_NODISCARD generic_vec4_scalar<value_type> to_scalar()
+            const noexcept
+        {
+            return generic_vec4_scalar<value_type>(x(), y(), z(), w());
+        }
+
         /**
          * @brief Returns a reference to the vector as a RTM vector.  This both
          * enables the compiler to do additional optimizations, as well as
@@ -457,7 +538,7 @@ namespace move::vectormath
          * @param index The index of the component to set
          * @param value The new value for the component
          */
-        MVM_INLINE void set_component(int index, value_type value)
+        MVM_INLINE void set_component(size_t index, value_type value)
         {
             switch (index)
             {
@@ -517,6 +598,28 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD value_type z() const noexcept
         {
             return rtm::vector_get_z(_value);
+        }
+
+        /**
+         * @brief Returns the x and y components of the vector
+         *
+         * @return generic_vec2_scalar<value_type> The x, y components
+         */
+        MVM_INLINE_NODISCARD generic_vec2_scalar<value_type> xy() const noexcept
+        {
+            return generic_vec2_scalar<value_type>(x(), y());
+        }
+
+        /**
+         * @brief Returns the x, y, and z components of the vector
+         *
+         * @return generic_vec3_rtm<value_type, vector_type_raw> The x, y, and z
+         * components
+         */
+        MVM_INLINE_NODISCARD generic_vec3_rtm<value_type, vector_type_raw> xyz()
+            const noexcept
+        {
+            return generic_vec3_rtm<value_type, vector_type_raw>(x(), y(), z());
         }
 
         /**

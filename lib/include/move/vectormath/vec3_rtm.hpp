@@ -3,6 +3,7 @@
 #include <type_traits>
 
 #include "macros.hpp"
+#include "move/vectormath/vec2.hpp"
 #include "underlying_types.hpp"
 
 #include <rtm/mask4d.h>
@@ -486,7 +487,7 @@ namespace move::vectormath
          * @param index The index of the component to set
          * @param value The new value for the component
          */
-        MVM_INLINE void set_component(int index, value_type value)
+        MVM_INLINE void set_component(size_t index, value_type value)
         {
             switch (index)
             {
@@ -544,6 +545,16 @@ namespace move::vectormath
         MVM_INLINE_NODISCARD value_type z() const noexcept
         {
             return rtm::vector_get_z(_value);
+        }
+
+        /**
+         * @brief Returns the x and y components of the vector
+         *
+         * @return generic_vec2_scalar<value_type> The x and y components
+         */
+        MVM_INLINE_NODISCARD generic_vec2_scalar<value_type> xy() const noexcept
+        {
+            return {x(), y()};
         }
 
         /**

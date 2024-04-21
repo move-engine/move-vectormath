@@ -158,7 +158,7 @@ namespace move::vectormath
             }
         }
 
-        MVM_INLINE void set_component(int index, value_type value)
+        MVM_INLINE void set_component(size_t index, value_type value)
         {
             switch (index)
             {
