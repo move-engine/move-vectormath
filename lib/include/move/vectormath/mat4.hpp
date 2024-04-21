@@ -138,10 +138,10 @@ namespace move::vectormath
         MVM_INLINE void to_data_array(value_type* value)
         {
             using namespace rtm;
-            vector_store(value, matrix_get_row(_value, 0));
-            vector_store(value + 4, matrix_get_row(_value, 1));
-            vector_store(value + 8, matrix_get_row(_value, 2));
-            vector_store(value + 12, matrix_get_row(_value, 3));
+            vector_store(matrix_get_axis(_value, axis4::x), value);
+            vector_store(matrix_get_axis(_value, axis4::y), value + 4);
+            vector_store(matrix_get_axis(_value, axis4::z), value + 8);
+            vector_store(matrix_get_axis(_value, axis4::w), value + 12);
         }
 
         MVM_INLINE_NODISCARD value_type operator[](size_t index) const noexcept
