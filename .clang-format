@@ -6,7 +6,7 @@ IndentWidth: 4
 Language: Cpp
 # Force pointers to the type for C++.
 DerivePointerAlignment: false
-AlignAfterOpenBracket: false
+AlignAfterOpenBracket: Align
 PointerAlignment: Left
 BreakBeforeBraces: Allman
 NamespaceIndentation: All
@@ -14,3 +14,14 @@ AccessModifierOffset: -4
 IncludeBlocks: Preserve
 AllowShortFunctionsOnASingleLine: None
 AllowShortLambdasOnASingleLine: None
+StatementMacros:
+- MOVE_RESOURCE
+- MOVE_DECLARE_APP
+- MOVE_DECLARE_MODULE
+
+BinPackParameters: false
+AllowAllArgumentsOnNextLine: false
+AllowAllConstructorInitializersOnNextLine: false
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+BreakConstructorInitializers: AfterColon
+Cpp11BracedListStyle: true

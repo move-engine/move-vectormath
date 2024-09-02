@@ -1,0 +1,10 @@
+{
+  "Name": "move-math",
+  "Description": "A new Move project",
+  "Version": "0.0.1",
+  "License": "Unspecified",
+  "MainPackage": "move/math",
+  "MoveCoreVersion": "a25d53b64227d74584cb2b91d124e8026b09eb9c",
+  "RemoteProjects": [],
+  "EnableProfiling": false
+}

@@ -1,0 +1,13 @@
+{
+  "Name": "move/math",
+  "Aliases": [],
+  "Description": "A new Move package",
+  "Version": "0.0.1",
+  "Type": "CppLibrary",
+  "Dependencies": [],
+  "License": "Unspecified",
+  "Keywords": [],
+  "TargetOptions": {
+    "$type": "CppLibrary"
+  }
+}
