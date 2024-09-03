@@ -7,7 +7,7 @@
 #include <movemm/memory-allocator.h>
 #include <move/math/common.hpp>
 #include <move/math/macros.hpp>
-#include <move/math/mat4.hpp>
+#include <move/math/mat4x4.hpp>
 #include <move/meta/type_utils.hpp>
 #include <move/string.hpp>
 
@@ -110,7 +110,7 @@ inline void test_mat4()
             "transformation")
         {
             vec4 test = {1, 2, 3, 1};
-            vec4 result = test * translation;
+            vec4 result = translation * test;
             REQUIRE(result == vec4(2, 4, 6, 1));
         }
 
@@ -119,7 +119,7 @@ inline void test_mat4()
             "transformation")
         {
             vec4 test = {2, 4, 6, 1};
-            vec4 result = test * translation.inverse();
+            vec4 result = translation.inverse() * test;
             REQUIRE(result == vec4(1, 2, 3, 1));
         }
     }
@@ -159,7 +159,7 @@ inline void test_mat4()
             "transformation")
         {
             vec4 test = {1, 0, 0, 1};
-            vec4 result = test * rotation;
+            vec4 result = rotation * test;
             vec4 expected = {0, 0, -1, 1};
 
             INFO(result << " vs " << expected);
@@ -174,7 +174,7 @@ inline void test_mat4()
                 vec3::up(), move::math::deg2rad<component_type>(-90));
 
             vec4 test = {1, 0, 0, 1};
-            vec4 result = test * opposite;
+            vec4 result = opposite * test;
             vec4 expected = {0, 0, 1, 1};
 
             INFO(result << " vs " << expected);
@@ -188,7 +188,7 @@ inline void test_mat4()
             "transformation")
         {
             vec4 test = {1, 0, 0, 1};
-            vec4 result = test * rotation.inverse();
+            vec4 result = rotation.inverse() * test;
             vec4 expected = {0, 0, 1, 1};
 
             INFO(result << " vs " << expected);
@@ -219,8 +219,8 @@ inline void benchmark_mat4()
     };
 }
 
-REPEAT_FOR_EACH_TYPE_WRAPPER_NOACCEL(test_mat4, move::math::mat4);
-REPEAT_FOR_EACH_TYPE_WRAPPER_NOACCEL(benchmark_mat4, move::math::mat4);
+REPEAT_FOR_EACH_TYPE_WRAPPER_NOACCEL(test_mat4, move::math::mat4x4);
+REPEAT_FOR_EACH_TYPE_WRAPPER_NOACCEL(benchmark_mat4, move::math::mat4x4);
 
 SCENARIO("Mat4 full tests")
 {
