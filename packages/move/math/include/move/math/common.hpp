@@ -17,7 +17,7 @@ namespace move::math
     {
         Default,
         Scalar,
-        SIMD
+        RTM
     };
 
     template <typename T>

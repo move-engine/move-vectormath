@@ -12,13 +12,13 @@ namespace move::math
 {
     template <move::math::Acceleration Accel>
     static constexpr auto vec4_acceleration =
-        Accel == Acceleration::Default ? Acceleration::SIMD : Accel;
+        Accel == Acceleration::Default ? Acceleration::RTM : Accel;
 
     template <typename T, move::math::Acceleration Accel>
     using base_vec4_t =
         // If we're doing floating point AND it was requested, use SIMD.
         // Otherwise, use scalar.
-        std::conditional_t<vec4_acceleration<Accel> == Acceleration::SIMD,
+        std::conditional_t<vec4_acceleration<Accel> == Acceleration::RTM,
                            std::conditional_t<std::is_floating_point_v<T>,
                                               simd_rtm::base_vec4<T>,
                                               scalar::base_vec4<T>>,

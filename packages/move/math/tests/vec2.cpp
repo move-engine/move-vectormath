@@ -194,16 +194,16 @@ SCENARIO("Vec2 tests")
 
     // Note: For Vec2, these are currently identical
     // SIMD tests
-    test_vec2<vec2<float, Accel::SIMD>>();
-    test_vec2<vec2<double, Accel::SIMD>>();
+    test_vec2<vec2<float, Accel::RTM>>();
+    test_vec2<vec2<double, Accel::RTM>>();
 
-    test_vec2<vec2<int8_t, Accel::SIMD>>();
-    test_vec2<vec2<int16_t, Accel::SIMD>>();
-    test_vec2<vec2<int32_t, Accel::SIMD>>();
-    test_vec2<vec2<int64_t, Accel::SIMD>>();
+    test_vec2<vec2<int8_t, Accel::RTM>>();
+    test_vec2<vec2<int16_t, Accel::RTM>>();
+    test_vec2<vec2<int32_t, Accel::RTM>>();
+    test_vec2<vec2<int64_t, Accel::RTM>>();
 
-    test_vec2<vec2<uint8_t, Accel::SIMD>>();
-    test_vec2<vec2<uint16_t, Accel::SIMD>>();
-    test_vec2<vec2<uint32_t, Accel::SIMD>>();
-    test_vec2<vec2<uint64_t, Accel::SIMD>>();
+    test_vec2<vec2<uint8_t, Accel::RTM>>();
+    test_vec2<vec2<uint16_t, Accel::RTM>>();
+    test_vec2<vec2<uint32_t, Accel::RTM>>();
+    test_vec2<vec2<uint64_t, Accel::RTM>>();
 }

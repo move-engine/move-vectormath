@@ -27,7 +27,7 @@ namespace move::math::simd_rtm
     struct base_vec4
     {
     public:
-        constexpr static auto acceleration = Acceleration::SIMD;
+        constexpr static auto acceleration = Acceleration::RTM;
         constexpr static bool has_fields = false;
         constexpr static bool has_pointer_semantics = false;
         // Member variables
@@ -262,22 +262,20 @@ namespace move::math::simd_rtm
         template <typename Archive>
         MVM_INLINE void serialize(Archive& archive)
         {
-            // If we're writing
-            if constexpr (Archive::is_output)
+            T data[4];
+            if constexpr (Archive::is_loading::value)
             {
-                T data[4];
-                store_array(data);
-                archive(data);
-            }
-            else
-            {
-                T data[4];
                 archive(data);
                 _value = rtm::vector_load(data);
             }
+            else
+            {
+                store_array(data);
+                archive(data);
+            }
         }
 
-        // Mathemtical operations
+        // Mathematical operations
     public:
         MVM_INLINE_NODISCARD T length() const
         {

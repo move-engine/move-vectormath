@@ -271,7 +271,7 @@ namespace move::math::scalar
             return;
         }
 
-        // Mathemtical operations
+        // Mathematical operations
     public:
         MVM_INLINE_NODISCARD T length() const
         {

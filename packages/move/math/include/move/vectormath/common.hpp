@@ -8,7 +8,7 @@ namespace move::math
     enum class Acceleration
     {
         Scalar,
-        SIMD,
+        RTM,
         Default = Scalar
     };
 

@@ -9,11 +9,11 @@ namespace move::math
 {
     template <move::math::Acceleration Accel>
     static constexpr auto vec3_acceleration =
-        Accel == Acceleration::Default ? Acceleration::SIMD : Accel;
+        Accel == Acceleration::Default ? Acceleration::RTM : Accel;
 
     template <typename T, move::math::Acceleration Accel>
     using base_vec3_t =
-        std::conditional_t<vec3_acceleration<Accel> == Acceleration::SIMD,
+        std::conditional_t<vec3_acceleration<Accel> == Acceleration::RTM,
                            scalar::base_vec3<T>,  // TODO: Replace with SIMD
                                                   // type
                            scalar::base_vec3<T>>;

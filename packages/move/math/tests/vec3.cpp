@@ -468,16 +468,16 @@ SCENARIO("Vec3 tests")
     test_vec3<vec3<uint64_t, Accel::Scalar>>();
 
     // SIMD tests
-    test_vec3<vec3<float, Accel::SIMD>>();
-    test_vec3<vec3<double, Accel::SIMD>>();
+    test_vec3<vec3<float, Accel::RTM>>();
+    test_vec3<vec3<double, Accel::RTM>>();
 
-    test_vec3<vec3<int8_t, Accel::SIMD>>();
-    test_vec3<vec3<int16_t, Accel::SIMD>>();
-    test_vec3<vec3<int32_t, Accel::SIMD>>();
-    test_vec3<vec3<int64_t, Accel::SIMD>>();
+    test_vec3<vec3<int8_t, Accel::RTM>>();
+    test_vec3<vec3<int16_t, Accel::RTM>>();
+    test_vec3<vec3<int32_t, Accel::RTM>>();
+    test_vec3<vec3<int64_t, Accel::RTM>>();
 
-    test_vec3<vec3<uint8_t, Accel::SIMD>>();
-    test_vec3<vec3<uint16_t, Accel::SIMD>>();
-    test_vec3<vec3<uint32_t, Accel::SIMD>>();
-    test_vec3<vec3<uint64_t, Accel::SIMD>>();
+    test_vec3<vec3<uint8_t, Accel::RTM>>();
+    test_vec3<vec3<uint16_t, Accel::RTM>>();
+    test_vec3<vec3<uint32_t, Accel::RTM>>();
+    test_vec3<vec3<uint64_t, Accel::RTM>>();
 }

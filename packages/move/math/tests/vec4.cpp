@@ -541,7 +541,7 @@ SCENARIO("Vec4 full tests")
     test_vec4_multi<Accel::Scalar, float, double, int8_t, int16_t, int32_t,
                     int64_t, uint8_t, uint16_t, uint32_t, uint64_t>();
 
-    test_vec4_multi<Accel::SIMD, float, double, int8_t, int16_t, int32_t,
+    test_vec4_multi<Accel::RTM, float, double, int8_t, int16_t, int32_t,
                     int64_t, uint8_t, uint16_t, uint32_t, uint64_t>();
 }
 
@@ -682,5 +682,5 @@ SCENARIO("Vec4 Benchmarks")
     using Accel = move::math::Acceleration;
 
     benchmark_vec4_multi<Accel::Scalar, float, double>();
-    benchmark_vec4_multi<Accel::SIMD, float, double>();
+    benchmark_vec4_multi<Accel::RTM, float, double>();
 }
