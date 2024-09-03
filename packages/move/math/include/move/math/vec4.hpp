@@ -96,6 +96,7 @@ namespace move::math
 
         // Swizzles
     public:
+        // Vec2 swizzles
         using vec2_t = vec2<T, Accel>;
         MVM_INLINE_NODISCARD vec2_t xy() const
         {
@@ -142,7 +143,23 @@ namespace move::math
             return vec2_t(base_t::get_z(), base_t::get_w());
         }
 
-        using vec3_t = vec2<T, Accel>;
+        MVM_INLINE_NODISCARD vec2_t wx() const
+        {
+            return vec2_t(base_t::get_w(), base_t::get_x());
+        }
+
+        MVM_INLINE_NODISCARD vec2_t wy() const
+        {
+            return vec2_t(base_t::get_w(), base_t::get_y());
+        }
+
+        MVM_INLINE_NODISCARD vec2_t wz() const
+        {
+            return vec2_t(base_t::get_w(), base_t::get_z());
+        }
+
+        // Vec3 swizzles
+        using vec3_t = vec3<T, Accel>;
         MVM_INLINE_NODISCARD vec3_t xyz() const
         {
             return vec3_t(base_t::get_x(), base_t::get_y(), base_t::get_z());
@@ -231,6 +248,36 @@ namespace move::math
         MVM_INLINE_NODISCARD vec3_t zwy() const
         {
             return vec3_t(base_t::get_z(), base_t::get_w(), base_t::get_y());
+        }
+
+        MVM_INLINE_NODISCARD vec3_t wxy() const
+        {
+            return vec3_t(base_t::get_w(), base_t::get_x(), base_t::get_y());
+        }
+
+        MVM_INLINE_NODISCARD vec3_t wxz() const
+        {
+            return vec3_t(base_t::get_w(), base_t::get_x(), base_t::get_z());
+        }
+
+        MVM_INLINE_NODISCARD vec3_t wyx() const
+        {
+            return vec3_t(base_t::get_w(), base_t::get_y(), base_t::get_x());
+        }
+
+        MVM_INLINE_NODISCARD vec3_t wyz() const
+        {
+            return vec3_t(base_t::get_w(), base_t::get_y(), base_t::get_z());
+        }
+
+        MVM_INLINE_NODISCARD vec3_t wzx() const
+        {
+            return vec3_t(base_t::get_w(), base_t::get_z(), base_t::get_x());
+        }
+
+        MVM_INLINE_NODISCARD vec3_t wzy() const
+        {
+            return vec3_t(base_t::get_w(), base_t::get_z(), base_t::get_y());
         }
 
         // Conversions

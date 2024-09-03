@@ -13,7 +13,7 @@ inline void test_vec4()
 {
     using component_type = vec4::component_type;
     using vec2 = vec4::vec2_t;
-    using vec3 = void;
+    using vec3 = vec4::vec3_t;
     static constexpr auto acceleration = vec4::acceleration;
 
     INFO("Testing vec4 with following config:");
@@ -86,6 +86,7 @@ inline void test_vec4()
     {
         vec4 test(1, 2, 3, 4);
 
+        // vec2
         REQUIRE(test.xy() == vec2(1, 2));
         REQUIRE(test.xz() == vec2(1, 3));
         REQUIRE(test.xw() == vec2(1, 4));
@@ -98,7 +99,46 @@ inline void test_vec4()
         REQUIRE(test.zy() == vec2(3, 2));
         REQUIRE(test.zw() == vec2(3, 4));
 
-        // TODO: vec3 swizzles
+        REQUIRE(test.wx() == vec2(4, 1));
+        REQUIRE(test.wy() == vec2(4, 2));
+        REQUIRE(test.wz() == vec2(4, 3));
+
+        // vec3
+        REQUIRE(test.xyz() == vec3(1, 2, 3));
+        REQUIRE(test.xyw() == vec3(1, 2, 4));
+
+        REQUIRE(test.xzy() == vec3(1, 3, 2));
+        REQUIRE(test.xzw() == vec3(1, 3, 4));
+
+        REQUIRE(test.xwy() == vec3(1, 4, 2));
+        REQUIRE(test.xwz() == vec3(1, 4, 3));
+
+        REQUIRE(test.yxz() == vec3(2, 1, 3));
+        REQUIRE(test.yxw() == vec3(2, 1, 4));
+
+        REQUIRE(test.yzx() == vec3(2, 3, 1));
+        REQUIRE(test.yzw() == vec3(2, 3, 4));
+
+        REQUIRE(test.ywx() == vec3(2, 4, 1));
+        REQUIRE(test.ywz() == vec3(2, 4, 3));
+
+        REQUIRE(test.zxy() == vec3(3, 1, 2));
+        REQUIRE(test.zxw() == vec3(3, 1, 4));
+
+        REQUIRE(test.zyx() == vec3(3, 2, 1));
+        REQUIRE(test.zyw() == vec3(3, 2, 4));
+
+        REQUIRE(test.zwx() == vec3(3, 4, 1));
+        REQUIRE(test.zwy() == vec3(3, 4, 2));
+
+        REQUIRE(test.wxy() == vec3(4, 1, 2));
+        REQUIRE(test.wxz() == vec3(4, 1, 3));
+
+        REQUIRE(test.wyx() == vec3(4, 2, 1));
+        REQUIRE(test.wyz() == vec3(4, 2, 3));
+
+        REQUIRE(test.wzx() == vec3(4, 3, 1));
+        REQUIRE(test.wzy() == vec3(4, 3, 2));
     }
 
     WHEN("Two vec4s are added")
