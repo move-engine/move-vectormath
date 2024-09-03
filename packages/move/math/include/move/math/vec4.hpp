@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <limits>
 #include <move/math/macros.hpp>
 #include <move/math/rtm/base_vec4.hpp>
 #include <move/math/scalar/base_vec4.hpp>
@@ -7,6 +8,7 @@
 #include <move/math/vec2.hpp>
 #include <move/math/vec3.hpp>
 #include <type_traits>
+#include "move/math/common.hpp"
 
 namespace move::math
 {
@@ -93,6 +95,20 @@ namespace move::math
         MVM_INLINE vec4(const vec3<OtherT, OtherAccel>& vec, const T& w = 0) :
             base_t(vec.get_x(), vec.get_y(), vec.get_z(), w)
         {
+        }
+
+        template <typename OtherT, Acceleration OtherAccel>
+        MVM_INLINE operator vec3<OtherT, OtherAccel>()
+        {
+            using self_t = vec4;
+            using other_t = vec3<OtherT, OtherAccel>;
+            if constexpr (other_t::acceleration == self_t::acceleration &&
+                          self_t::acceleration == Acceleration::RTM)
+            {
+                return other_t::from_rtm(to_rtm());
+            }
+
+            return other_t(base_t::get_x(), base_t::get_y(), base_t::get_z());
         }
 
         // Swizzles
@@ -288,6 +304,34 @@ namespace move::math
             return *this;
         }
 
+        MVM_INLINE_NODISCARD static vec4 from_rtm(
+            const simd_rtm::detail::v4<T>::type& rtm_vec)
+        {
+            if constexpr (acceleration == Acceleration::RTM)
+            {
+                return vec4(base_t(rtm_vec));
+            }
+            else
+            {
+                return vec4(
+                    rtm::vector_get_x(rtm_vec), rtm::vector_get_y(rtm_vec),
+                    rtm::vector_get_z(rtm_vec), rtm::vector_get_w(rtm_vec));
+            }
+        }
+
+        MVM_INLINE_NODISCARD simd_rtm::detail::v4<T>::type to_rtm() const
+        {
+            if constexpr (acceleration == Acceleration::RTM)
+            {
+                return base_t::to_rtm();
+            }
+            else
+            {
+                return rtm::vector_set(base_t::get_x(), base_t::get_y(),
+                                       base_t::get_z(), base_t::get_w());
+            }
+        }
+
         // Assignment operators
     public:
         MVM_INLINE vec4& operator+=(const vec4& other)
@@ -361,4 +405,22 @@ namespace move::math
 
     using sbyte4 = vec4<int8_t, Acceleration::Default>;
     using byte4 = vec4<int8_t, Acceleration::Default>;
+
+    template <typename T, move::math::Acceleration Accel>
+    MVM_INLINE_NODISCARD bool approx_equal(
+        const vec4<T, Accel>& a,
+        const vec4<T, Accel>& b,
+        const T& epsilon = std::numeric_limits<T>::epsilon())
+    {
+        T aloaded[4];
+        T bloaded[4];
+
+        a.store_array(aloaded);
+        b.store_array(bloaded);
+
+        return approx_equal(aloaded[0], bloaded[0], epsilon) &&
+               approx_equal(aloaded[1], bloaded[1], epsilon) &&
+               approx_equal(aloaded[2], bloaded[2], epsilon) &&
+               approx_equal(aloaded[3], bloaded[3], epsilon);
+    }
 }  // namespace move::math

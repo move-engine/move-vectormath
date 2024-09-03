@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <move/math/macros.hpp>
+#include <move/math/rtm/base_vec3.hpp>
 #include <move/math/scalar/base_vec3.hpp>
 
 #include <move/math/vec2.hpp>
@@ -116,6 +117,21 @@ namespace move::math
         MVM_INLINE_NODISCARD base_t storage() const
         {
             return *this;
+        }
+
+        MVM_INLINE_NODISCARD simd_rtm::detail::v3<T>::type to_rtm() const
+        {
+            // TODO: Fast mode for RTM vec3
+            return rtm::vector_set(base_t::get_x(), base_t::get_y(),
+                                   base_t::get_z(), 0);
+        }
+
+        MVM_INLINE_NODISCARD static vec3 from_rtm(
+            const simd_rtm::detail::v3<T>::type& rtm_vec)
+        {
+            // TODO: Fast mode for RTM vec3
+            return vec3(rtm::vector_get_x(rtm_vec), rtm::vector_get_y(rtm_vec),
+                        rtm::vector_get_z(rtm_vec));
         }
 
         // Assignment operators

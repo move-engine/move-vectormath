@@ -12,7 +12,7 @@ namespace move::math
     template <typename T, move::math::Acceleration Accel>
     using base_vec2_t =
         std::conditional_t<vec2_acceleration<Accel> == Acceleration::RTM,
-                           scalar::base_vec2<T>,  // TODO: Replace with SIMD
+                           scalar::base_vec2<T>,  // TODO: Replace with RTM
                                                   // type
                            scalar::base_vec2<T>>;
 

@@ -32,8 +32,8 @@ namespace move::math::simd_rtm
         constexpr static bool has_pointer_semantics = false;
         // Member variables
     private:
-        using underlying_type = wrapper_type::type;
-        underlying_type _value;
+        using rtm_vec4_t = wrapper_type::type;
+        rtm_vec4_t _value;
 
         // Constructors
     public:
@@ -50,7 +50,7 @@ namespace move::math::simd_rtm
         {
         }
 
-        MVM_INLINE base_vec4(const underlying_type& other) : _value(other)
+        MVM_INLINE base_vec4(const rtm_vec4_t& other) : _value(other)
         {
         }
 
@@ -65,6 +65,11 @@ namespace move::math::simd_rtm
         MVM_INLINE void store_array(T* dest) const
         {
             rtm::vector_store(_value, dest);
+        }
+
+        MVM_INLINE_NODISCARD rtm_vec4_t to_rtm() const
+        {
+            return _value;
         }
 
         // Arithmetic operators
@@ -335,6 +340,7 @@ namespace move::math::simd_rtm
         {
             return fill(0);
         }
+
         // Statics
     public:
         /**
@@ -456,8 +462,8 @@ namespace move::math::simd_rtm
             const base_vec4& incident, const base_vec4& normal) noexcept
         {
             using namespace rtm;
-            const underlying_type& inc = incident._value;
-            const underlying_type& nrm = normal._value;
+            const rtm_vec4_t& inc = incident._value;
+            const rtm_vec4_t& nrm = normal._value;
 
             auto dot = vector_dot(inc, nrm);
             auto dot2 = vector_add(dot, dot);
@@ -478,9 +484,9 @@ namespace move::math::simd_rtm
                                                       T ior) noexcept
         {
             using namespace rtm;
-            const underlying_type& inc = incident._value;
-            const underlying_type& nrm = normal._value;
-            const underlying_type& index = vector_set(ior);
+            const rtm_vec4_t& inc = incident._value;
+            const rtm_vec4_t& nrm = normal._value;
+            const rtm_vec4_t& index = vector_set(ior);
 
             // clang-format off
             // Algorithm:
@@ -500,8 +506,8 @@ namespace move::math::simd_rtm
             // clang-format on
 
             T dotinorm = vector_dot(inc, nrm);
-            underlying_type roiPlusDotinorm = vector_mul(index, dotinorm);
-            underlying_type innerSqrt = vector_set(
+            rtm_vec4_t roiPlusDotinorm = vector_mul(index, dotinorm);
+            rtm_vec4_t innerSqrt = vector_set(
                 scalar_sqrt(1 - ior * ior * (1 - dotinorm * dotinorm)));
             ;
 

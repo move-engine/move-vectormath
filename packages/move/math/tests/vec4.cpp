@@ -1,14 +1,17 @@
 #include <catch2/catch_all.hpp>
+#include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
 
 #include <magic_enum.hpp>
+
+#include <movemm/memory-allocator.h>
 #include <move/math/common.hpp>
 #include <move/math/macros.hpp>
 #include <move/math/vec4.hpp>
 #include <move/meta/type_utils.hpp>
-#include "catch2/catch_approx.hpp"
-#include "move/string.hpp"
-#include "movemm/memory-allocator.h"
+#include <move/string.hpp>
+
+#include "mm_test_common.hpp"
 
 template <typename vec4>
 inline void test_vec4()
@@ -524,13 +527,6 @@ inline void test_vec4()
     }
 }
 
-#define REPEAT_FOR_EACH_TYPE_WRAPPER(op, vectype)                \
-    template <move::math::Acceleration Accel, typename... Types> \
-    inline void op##_multi()                                     \
-    {                                                            \
-        (op<vectype<Types, Accel>>(), ...);                      \
-    }
-
 REPEAT_FOR_EACH_TYPE_WRAPPER(test_vec4, move::math::vec4);
 
 SCENARIO("Vec4 full tests")
@@ -543,16 +539,6 @@ SCENARIO("Vec4 full tests")
 
     test_vec4_multi<Accel::RTM, float, double, int8_t, int16_t, int32_t,
                     int64_t, uint8_t, uint16_t, uint32_t, uint64_t>();
-}
-
-const char* alloc_appended_name(move::string_view lhs, move::string_view rhs)
-{
-    size_t len = lhs.size() + rhs.size() + 1;
-    char* result = (char*)movemm::alloc(len);
-    std::memcpy((void*)result, lhs.data(), lhs.size());
-    std::memcpy((void*)(result + lhs.size()), rhs.data(), rhs.size());
-    result[len - 1] = '\0';
-    return result;
 }
 
 template <typename vec4>

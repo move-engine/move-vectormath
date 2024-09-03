@@ -5,15 +5,21 @@
 #include <move/math/common.hpp>
 #include <move/math/vec4.hpp>
 #include <type_traits>
+#include "move/math/macros.hpp"
 #include "rtm/impl/matrix_common.h"
 #include "rtm/types.h"
 
 namespace move::math
 {
-    namespace simd::detail
+    namespace simd_rtm::detail
     {
+        MVM_TYPE_WRAPPER(m3x4f, rtm::matrix3x4f)
+        MVM_TYPE_WRAPPER(m3x4d, rtm::matrix3x4d)
         MVM_TYPE_WRAPPER(m4x4f, rtm::matrix4x4f)
         MVM_TYPE_WRAPPER(m4x4d, rtm::matrix4x4d)
+
+        template <typename T>
+        using m3x4 = std::conditional_t<std::is_same_v<T, float>, m3x4f, m3x4d>;
 
         template <typename T>
         using m4x4 = std::conditional_t<std::is_same_v<T, float>, m4x4f, m4x4d>;
@@ -69,10 +75,10 @@ namespace move::math
         //         return *this;
         //     }
         // };
-    }  // namespace simd::detail
+    }  // namespace simd_rtm::detail
 
     // mat4 always uses RTM under the hood
-    template <typename T, typename wrapper_type = simd::detail::m4x4<T>>
+    template <typename T, typename wrapper_type = simd_rtm::detail::m4x4<T>>
     requires std::is_floating_point_v<T>
     struct mat4
     {
@@ -84,6 +90,20 @@ namespace move::math
     private:
         using underlying_type = wrapper_type::type;
         underlying_type _value;
+
+        template <typename component_type, Acceleration OtherAccel>
+        friend vec4<component_type, OtherAccel> operator*(
+            const vec4<component_type, OtherAccel>& vec,
+            const mat4<component_type>& mat);
+
+    public:
+        using rtm_vec4_t = typename simd_rtm::detail::v4<T>::type;
+        using rtm_mat3x4_t = typename simd_rtm::detail::m3x4<T>::type;
+        using rtm_mat4x4_t = underlying_type;
+        using vec2_t = vec2<T, acceleration>;
+        using vec3_t = vec3<T, acceleration>;
+        using vec4_t = vec4<T, acceleration>;
+        using component_type = T;
 
     public:
         // Constructors
@@ -130,7 +150,7 @@ namespace move::math
 
         // Pointers
     public:
-        MVM_INLINE void store_array(T* out)
+        MVM_INLINE void store_array(T* out) const
         {
             using namespace rtm;
             for (uint8_t i = 0; i < 4; i++)
@@ -156,13 +176,80 @@ namespace move::math
             return mat4(rtm::matrix_mul(_value, other._value));
         }
 
-        using compatible_vec4 = vec4<T, acceleration>;
-
-        template <typename OtherT, Acceleration OtherAccel>
-        MVM_INLINE_NODISCARD vec4<OtherT, OtherAccel> operator*(
-            const vec4<OtherT, OtherAccel>& other) const
+        MVM_INLINE_NODISCARD vec3_t transform_point(const vec3_t& rhs) const
         {
-            return vec4(rtm::matrix_mul(_value, other.storage()));
+            rtm_vec4_t mul = rtm::vector_set_w(rhs.to_rtm(), component_type(1));
+            rtm_vec4_t res = rtm::vector_mul(
+                mul, rtm::matrix_get_axis(_value, rtm::axis4::x));
+            return vec3_t::from_rtm(res);
+        }
+
+        MVM_INLINE_NODISCARD vec3_t transform_vector(const vec3_t& rhs) const
+        {
+            rtm_vec4_t mul = rtm::vector_set_w(rhs.to_rtm(), component_type(0));
+            rtm_vec4_t res = rtm::vector_mul(
+                mul, rtm::matrix_get_axis(_value, rtm::axis4::x));
+            return vec3_t::from_rtm(res);
+        }
+
+        MVM_INLINE_NODISCARD vec4_t transform(const vec4_t& rhs) const
+        {
+            rtm_vec4_t mul = rhs.to_rtm();
+            rtm_vec4_t res = rtm::vector_mul(
+                mul, rtm::matrix_get_axis(_value, rtm::axis4::x));
+            return vec3_t::from_rtm(res);
+        }
+
+        // Stream overload operators
+    public:
+        template <typename CharT, typename Traits>
+        friend std::basic_ostream<CharT, Traits>& operator<<(
+            std::basic_ostream<CharT, Traits>& os, const mat4& vec)
+        {
+            os << move::meta::type_name<mat4>() << "(";
+            for (uint8_t i = 0; i < 4; i++)
+            {
+                auto row = rtm::matrix_get_axis(vec._value, (rtm::axis4)i);
+                os << "(" << rtm::vector_get_x(row) << ", "
+                   << rtm::vector_get_y(row) << ", " << rtm::vector_get_z(row)
+                   << ", " << rtm::vector_get_w(row) << ")";
+                if (i < 3)
+                {
+                    os << ", ";
+                }
+            }
+            os << ")";
+            return os;
+        }
+
+        // Comparison operators
+    public:
+        MVM_INLINE_NODISCARD bool operator==(const mat4& other) const
+        {
+            using namespace rtm;
+
+            // Load all rows
+            auto r1 = rtm::matrix_get_axis(_value, axis4::x);
+            auto r2 = rtm::matrix_get_axis(_value, axis4::y);
+            auto r3 = rtm::matrix_get_axis(_value, axis4::z);
+            auto r4 = rtm::matrix_get_axis(_value, axis4::w);
+
+            // Load all rows of the other matrix
+            auto o1 = rtm::matrix_get_axis(other._value, axis4::x);
+            auto o2 = rtm::matrix_get_axis(other._value, axis4::y);
+            auto o3 = rtm::matrix_get_axis(other._value, axis4::z);
+            auto o4 = rtm::matrix_get_axis(other._value, axis4::w);
+
+            // Compare all rows
+            return rtm::mask_all_true(rtm::vector_equal(r1, o1)) &&
+                   rtm::mask_all_true(rtm::vector_equal(r2, o2)) &&
+                   rtm::mask_all_true(rtm::vector_equal(r3, o3)) &&
+                   rtm::mask_all_true(rtm::vector_equal(r4, o4));
+        }
+
+        MVM_INLINE_NODISCARD bool operator!=(const mat4& other) const
+        {
+            return !(*this == other);
         }
 
         // Serialization
@@ -182,8 +269,190 @@ namespace move::math
                 archive(data);
             }
         }
+
+        // Mathematical operations
+    public:
+        MVM_INLINE_NODISCARD mat4 inverse() const
+        {
+            return rtm::matrix_inverse(_value);
+        }
+
+        MVM_INLINE_NODISCARD mat4 transposed() const
+        {
+            return rtm::matrix_transpose(_value);
+        }
+
+        MVM_INLINE_NODISCARD T determinant() const
+        {
+            T res;
+            rtm::scalar_store(rtm::matrix_determinant(_value), &res);
+            return res;
+        }
+
+        // Mutators
+    public:
+        MVM_INLINE mat4& fill(const T& val)
+        {
+            _value = rtm::matrix_set(val);
+            return *this;
+        }
+
+        MVM_INLINE mat4& invert_in_place()
+        {
+            _value = rtm::matrix_inverse(_value);
+            return *this;
+        }
+
+        MVM_INLINE mat4& transpose_in_place()
+        {
+            _value = rtm::matrix_transpose(_value);
+            return *this;
+        }
+
+        // Statics
+    public:
+        MVM_INLINE_NODISCARD static mat4 identity()
+        {
+            return mat4(rtm::matrix_identity());
+        }
+
+        MVM_INLINE_NODISCARD static mat4 filled(const T& val)
+        {
+            return mat4(
+                rtm::matrix_set(rtm::vector_set(val), rtm::vector_set(val),
+                                rtm::vector_set(val), rtm::vector_set(val)));
+        }
+
+        MVM_INLINE_NODISCARD static mat4 zero()
+        {
+            return filled(T(0));
+        }
+
+        MVM_INLINE_NODISCARD static mat4 one()
+        {
+            return filled(T(1));
+        }
+
+        MVM_INLINE_NODISCARD static mat4 infinity()
+        {
+            return filled(std::numeric_limits<T>::infinity());
+        }
+
+        MVM_INLINE_NODISCARD static mat4 negative_infinity()
+        {
+            return filled(-std::numeric_limits<T>::infinity());
+        }
+
+        MVM_INLINE_NODISCARD static mat4 nan()
+        {
+            return filled(std::numeric_limits<T>::quiet_NaN());
+        }
+
+        MVM_INLINE_NODISCARD static mat4 translation(const vec3_t& translation)
+        {
+            typename simd_rtm::detail::v4<T>::type translation_row =
+                rtm::vector_set_w(translation.to_rtm(), component_type(1));
+
+            return mat4(rtm::matrix_set(
+                rtm::vector_set(component_type(1), component_type(0),
+                                component_type(0), component_type(0)),
+                rtm::vector_set(component_type(0), component_type(1),
+                                component_type(0), component_type(0)),
+                rtm::vector_set(component_type(0), component_type(0),
+                                component_type(1), component_type(0)),
+                translation_row));
+        }
+
+        /**
+         * @brief Creates a rotation matrix from an axis and an angle.
+         *
+         * @param axis The axis to rotate around
+         * @param angle The angle in radians to rotate by
+         * @return mat4 The rotation matrix
+         */
+        MVM_INLINE_NODISCARD static mat4 angle_axis(const vec3_t& axis,
+                                                    const T& angle)
+        {
+            using namespace rtm;
+
+            auto quat = quat_from_axis_angle(axis.to_rtm(), angle);
+            return rtm_mat4x4_t(
+                matrix_cast<rtm_mat3x4_t>(matrix_from_quat(quat)));
+        }
+
+        MVM_INLINE_NODISCARD static mat4 create_scale(component_type x,
+                                                      component_type y,
+                                                      component_type z) noexcept
+        {
+            using rtm::vector_set;
+            return {
+                vector_set(x, component_type(0), component_type(0),
+                           component_type(0)),
+                vector_set(component_type(0), y, component_type(0),
+                           component_type(0)),
+                vector_set(component_type(0), component_type(0), z,
+                           component_type(0)),
+                vector_set(component_type(0), component_type(0),
+                           component_type(0), component_type(1)),
+            };
+        }
+
+        MVM_INLINE_NODISCARD static mat4 create_scale(
+            const vec3_t& scale) noexcept
+        {
+            using rtm::vector_set;
+            component_type loaded[3];
+            scale.store_array(loaded);
+            return create_scale(loaded[0], loaded[1], loaded[2]);
+        }
+
+        MVM_INLINE_NODISCARD static mat4 euler(const vec3_t& euler_angles)
+        {
+            using namespace rtm;
+
+            auto quat = quat_from_euler(euler_angles.to_rtm());
+            return rtm_mat4x4_t(
+                matrix_cast<rtm_mat3x4_t>(matrix_from_quat(quat)));
+        }
     };
+
+    // Multiplication operator.  Row-major order.
+    template <typename component_type, Acceleration OtherAccel>
+    MVM_INLINE_NODISCARD vec4<component_type, OtherAccel> operator*(
+        const vec4<component_type, OtherAccel>& vec,
+        const mat4<component_type>& mat)
+    {
+        using namespace rtm;
+        using Accel = move::math::Acceleration;
+        using vector_type = simd_rtm::detail::v4<component_type>::type;
+
+        vector_type v = vec.to_rtm();
+        vector_type result = matrix_mul_vector(v, mat._value);
+        return vec4<component_type, OtherAccel>::from_rtm(result);
+    }
 
     using float4x4 = mat4<float>;
     using double4x4 = mat4<double>;
+
+    template <typename T>
+    MVM_INLINE_NODISCARD bool approx_equal(
+        const mat4<T>& a,
+        const mat4<T>& b,
+        const T& epsilon = std::numeric_limits<T>::epsilon())
+    {
+        T aloaded[16];
+        T bloaded[16];
+
+        a.store_array(aloaded);
+        b.store_array(bloaded);
+
+        for (uint8_t i = 0; i < 16; i++)
+        {
+            if (!approx_equal(aloaded[i], bloaded[i], epsilon))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }  // namespace move::math

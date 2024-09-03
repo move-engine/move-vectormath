@@ -9,9 +9,11 @@ namespace move::math
     /*
      * @brief Enum to specify the acceleration type to use.
      *
-     * @note Passing SIMD to a given type or function does not guarantee that it
-     * will use SIMD.  If a SIMD implementation is not available, it will fall
-     * back to Scalar.
+     * @note Passing a value to a given type or function does not guarantee that
+     * it will use the expressed acceleration.  If the desired implementation is
+     * not available, it will fall back to Scalar.  For types, you can check the
+     * ::acceleration static constexpr member to see which acceleration is being
+     * used.
      */
     enum class Acceleration
     {
