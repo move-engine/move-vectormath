@@ -70,10 +70,6 @@ namespace move::math
             return *this;
         }
 
-        MVM_INLINE ~vec3()
-        {
-        }
-
         // Vector length conversions
     public:
         template <typename OtherT, Acceleration OtherAccel>

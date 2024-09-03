@@ -51,10 +51,6 @@ namespace move::math::scalar
             return *this;
         }
 
-        MVM_INLINE ~base_vec4()
-        {
-        }
-
         // Arithmetic operators
     public:
         MVM_INLINE_NODISCARD base_vec4 operator+(const base_vec4& other) const

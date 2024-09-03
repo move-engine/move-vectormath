@@ -67,10 +67,6 @@ namespace move::math
             return *this;
         }
 
-        MVM_INLINE ~vec2()
-        {
-        }
-
         // Conversions
     public:
         MVM_INLINE_NODISCARD base_t storage() const
