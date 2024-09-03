@@ -2,192 +2,163 @@
 #include <cstddef>
 #include <iosfwd>
 
+#include <rtm/mask4d.h>
+#include <rtm/mask4f.h>
+#include <rtm/vector4d.h>
+#include <rtm/vector4f.h>
+
 #include <move/math/common.hpp>
 #include <move/math/macros.hpp>
+#include <move/math/rtm/rtm_common.hpp>
 #include <move/meta/type_utils.hpp>
 
-namespace move::math::scalar
+namespace move::math::simd_rtm
 {
-    template <typename T>
+    namespace detail
+    {
+        MVM_TYPE_WRAPPER(v4f, rtm::vector4f)
+        MVM_TYPE_WRAPPER(v4d, rtm::vector4d)
+
+        template <typename T>
+        using v4 = std::conditional_t<std::is_same_v<T, float>, v4f, v4d>;
+    }  // namespace detail
+
+    template <typename T, typename wrapper_type = detail::v4<T>>
     struct base_vec4
     {
     public:
-        constexpr static auto acceleration = Acceleration::Scalar;
-        constexpr static bool has_fields = true;
-        constexpr static bool has_pointer_semantics = has_fields;
+        constexpr static auto acceleration = Acceleration::SIMD;
+        constexpr static bool has_fields = false;
+        constexpr static bool has_pointer_semantics = false;
         // Member variables
-    public:
-        union
-        {
-            struct
-            {
-                T x, y, z, w;
-            };
-            T data[4];
-        };
+    private:
+        using underlying_type = wrapper_type::type;
+        underlying_type _value;
 
         // Constructors
     public:
-        MVM_INLINE base_vec4() : x(0), y(0), z(0), w(0)
+        MVM_INLINE base_vec4() : _value(rtm::vector_zero())
         {
         }
 
         MVM_INLINE base_vec4(const T& x, const T& y, const T& z, const T& w) :
-            x(x), y(y), z(z), w(w)
+            _value(rtm::vector_set(x, y, z, w))
         {
         }
 
-        MVM_INLINE base_vec4(const base_vec4& other) :
-            x(other.x), y(other.y), z(other.z), w(other.w)
+        MVM_INLINE base_vec4(const base_vec4& other) : _value(other._value)
+        {
+        }
+
+        MVM_INLINE base_vec4(const underlying_type& other) : _value(other)
         {
         }
 
         MVM_INLINE base_vec4& operator=(const base_vec4& other)
         {
-            x = other.x;
-            y = other.y;
-            z = other.z;
-            w = other.w;
+            _value = other._value;
             return *this;
         }
 
         // Pointers
     public:
-        MVM_INLINE_NODISCARD T* to_array()
-        {
-            return data;
-        }
-
-        MVM_INLINE_NODISCARD const T* to_array() const
-        {
-            return data;
-        }
-
         MVM_INLINE void store_array(T* dest) const
         {
-            memcpy(dest, data, sizeof(data));
+            rtm::vector_store(_value, dest);
         }
 
         // Arithmetic operators
     public:
         MVM_INLINE_NODISCARD base_vec4 operator+(const base_vec4& other) const
         {
-            return base_vec4(x + other.x, y + other.y, z + other.z,
-                             w + other.w);
+            return base_vec4(rtm::vector_add(_value, other._value));
         }
 
         MVM_INLINE_NODISCARD base_vec4 operator-(const base_vec4& other) const
         {
-            return base_vec4(x - other.x, y - other.y, z - other.z,
-                             w - other.w);
+            return base_vec4(rtm::vector_sub(_value, other._value));
         }
 
         MVM_INLINE_NODISCARD base_vec4 operator*(const base_vec4& other) const
         {
-            return base_vec4(x * other.x, y * other.y, z * other.z,
-                             w * other.w);
+            return base_vec4(rtm::vector_mul(_value, other._value));
         }
 
         MVM_INLINE_NODISCARD base_vec4 operator/(const base_vec4& other) const
         {
-            return base_vec4(x / other.x, y / other.y, z / other.z,
-                             w / other.w);
+            return base_vec4(rtm::vector_div(_value, other._value));
         }
 
         MVM_INLINE_NODISCARD base_vec4 operator+(const T& scalar) const
         {
-            return base_vec4(x + scalar, y + scalar, z + scalar, w + scalar);
+            return base_vec4(rtm::vector_add(_value, scalar));
         }
 
         MVM_INLINE_NODISCARD base_vec4 operator-(const T& scalar) const
         {
-            return base_vec4(x - scalar, y - scalar, z - scalar, w - scalar);
+            return base_vec4(rtm::vector_sub(_value, scalar));
         }
 
         MVM_INLINE_NODISCARD base_vec4 operator*(const T& scalar) const
         {
-            return base_vec4(x * scalar, y * scalar, z * scalar, w * scalar);
+            return base_vec4(rtm::vector_mul(_value, scalar));
         }
 
         MVM_INLINE_NODISCARD base_vec4 operator/(const T& scalar) const
         {
-            return base_vec4(x / scalar, y / scalar, z / scalar, w / scalar);
+            return base_vec4(rtm::vector_div(_value, scalar));
         }
 
         MVM_INLINE_NODISCARD base_vec4 operator-() const
         {
-            return base_vec4(-x, -y, -z, -w);
+            return base_vec4(rtm::vector_neg(_value));
         }
 
         MVM_INLINE base_vec4& operator+=(const base_vec4& other)
         {
-            x += other.x;
-            y += other.y;
-            z += other.z;
-            w += other.w;
+            _value = rtm::vector_add(_value, other._value);
             return *this;
         }
 
         MVM_INLINE base_vec4& operator-=(const base_vec4& other)
         {
-            x -= other.x;
-            y -= other.y;
-            z -= other.z;
-            w -= other.w;
+            _value = rtm::vector_sub(_value, other._value);
             return *this;
         }
 
         MVM_INLINE base_vec4& operator*=(const base_vec4& other)
         {
-            x *= other.x;
-            y *= other.y;
-            z *= other.z;
-            w *= other.w;
+            _value = rtm::vector_mul(_value, other._value);
             return *this;
         }
 
         MVM_INLINE base_vec4& operator/=(const base_vec4& other)
         {
-            x /= other.x;
-            y /= other.y;
-            z /= other.z;
-            w /= other.w;
+            _value = rtm::vector_div(_value, other._value);
             return *this;
         }
 
         MVM_INLINE base_vec4& operator+=(const T& scalar)
         {
-            x += scalar;
-            y += scalar;
-            z += scalar;
-            w += scalar;
+            _value = rtm::vector_add(_value, scalar);
             return *this;
         }
 
         MVM_INLINE base_vec4& operator-=(const T& scalar)
         {
-            x -= scalar;
-            y -= scalar;
-            z -= scalar;
-            w -= scalar;
+            _value = rtm::vector_sub(_value, scalar);
             return *this;
         }
 
         MVM_INLINE base_vec4& operator*=(const T& scalar)
         {
-            x *= scalar;
-            y *= scalar;
-            z *= scalar;
-            w *= scalar;
+            _value = rtm::vector_mul(_value, scalar);
             return *this;
         }
 
         MVM_INLINE base_vec4& operator/=(const T& scalar)
         {
-            x /= scalar;
-            y /= scalar;
-            z /= scalar;
-            w /= scalar;
+            _value = rtm::vector_div(_value, scalar);
             return *this;
         }
 
@@ -197,8 +168,9 @@ namespace move::math::scalar
         friend std::basic_ostream<CharT, Traits>& operator<<(
             std::basic_ostream<CharT, Traits>& os, const base_vec4& vec)
         {
-            os << move::meta::type_name<base_vec4>() << "(" << vec.x << ", "
-               << vec.y << ", " << vec.z << ", " << vec.w << ")";
+            os << move::meta::type_name<base_vec4>() << "(" << vec.get_x()
+               << ", " << vec.get_y() << ", " << vec.get_z() << ", "
+               << vec.get_w() << ")";
             return os;
         }
 
@@ -206,84 +178,83 @@ namespace move::math::scalar
     public:
         MVM_INLINE_NODISCARD bool operator<(const base_vec4& other) const
         {
-            return x < other.x && y < other.y && z < other.z && w < other.w;
+            return rtm::mask_all_true(
+                rtm::vector_less_than(_value, other._value));
         }
 
         MVM_INLINE_NODISCARD bool operator>(const base_vec4& other) const
         {
-            return x > other.x && y > other.y && z > other.z && w > other.w;
+            return rtm::mask_all_true(
+                rtm::vector_greater_than(_value, other._value));
         }
 
         MVM_INLINE_NODISCARD bool operator<=(const base_vec4& other) const
         {
-            return x <= other.x && y <= other.y && z <= other.z && w <= other.w;
+            return rtm::mask_all_true(
+                rtm::vector_less_equal(_value, other._value));
         }
 
         MVM_INLINE_NODISCARD bool operator>=(const base_vec4& other) const
         {
-            return x >= other.x && y >= other.y && z >= other.z && w >= other.w;
+            return rtm::mask_all_true(
+                rtm::vector_greater_equal(_value, other._value));
         }
 
         MVM_INLINE_NODISCARD bool operator==(const base_vec4& other) const
         {
-            return x == other.x && y == other.y && z == other.z && w == other.w;
+            return rtm::mask_all_true(rtm::vector_equal(_value, other._value));
         }
 
         MVM_INLINE_NODISCARD bool operator!=(const base_vec4& other) const
         {
-            return x != other.x || y != other.y || z != other.z || w != other.w;
+            return !rtm::mask_all_true(rtm::vector_equal(_value, other._value));
         }
 
         // Element access
     public:
-        MVM_INLINE_NODISCARD T& operator[](const std::size_t index)
+        MVM_INLINE_NODISCARD T operator[](const std::size_t index) const
         {
-            return data[math::min<std::size_t>(index, 3)];
-        }
-
-        MVM_INLINE_NODISCARD const T& operator[](const std::size_t index) const
-        {
-            return data[math::min<std::size_t>(index, 3)];
+            return rtm::vector_get_component(_value, rtm::mix4(index));
         }
 
         MVM_INLINE_NODISCARD T get_x() const
         {
-            return x;
+            return rtm::vector_get_x(_value);
         }
 
         MVM_INLINE_NODISCARD T get_y() const
         {
-            return y;
+            return rtm::vector_get_y(_value);
         }
 
         MVM_INLINE_NODISCARD T get_z() const
         {
-            return z;
+            return rtm::vector_get_z(_value);
         }
 
         MVM_INLINE_NODISCARD T get_w() const
         {
-            return w;
+            return rtm::vector_get_w(_value);
         }
 
         MVM_INLINE void set_x(const T& value)
         {
-            x = value;
+            _value = rtm::vector_set_x(_value, value);
         }
 
         MVM_INLINE void set_y(const T& value)
         {
-            y = value;
+            _value = rtm::vector_set_y(_value, value);
         }
 
         MVM_INLINE void set_z(const T& value)
         {
-            z = value;
+            _value = rtm::vector_set_z(_value, value);
         }
 
         MVM_INLINE void set_w(const T& value)
         {
-            w = value;
+            _value = rtm::vector_set_w(_value, value);
         }
 
         // Serialization
@@ -291,53 +262,65 @@ namespace move::math::scalar
         template <typename Archive>
         MVM_INLINE void serialize(Archive& archive)
         {
-            archive(x, y, z, w);
-            return;
+            // If we're writing
+            if constexpr (Archive::is_output)
+            {
+                T data[4];
+                store_array(data);
+                archive(data);
+            }
+            else
+            {
+                T data[4];
+                archive(data);
+                _value = rtm::vector_load(data);
+            }
         }
 
         // Mathemtical operations
     public:
         MVM_INLINE_NODISCARD T length() const
         {
-            return math::sqrt(length_squared());
+            return rtm::vector_length(_value);
         }
 
         MVM_INLINE_NODISCARD T length_squared() const
         {
-            return x * x + y * y + z * z + w * w;
+            return rtm::vector_length_squared(_value);
         }
 
         MVM_INLINE_NODISCARD T reciprocal_length() const
         {
-            return math::sqrt_reciprocal(length_squared());
+            return rtm::vector_length_reciprocal(_value);
         }
 
         MVM_INLINE_NODISCARD base_vec4 normalized() const
         {
-            return *this / length();
+            return base_vec4(rtm::vector_normalize(_value));
         }
 
         MVM_INLINE_NODISCARD T distance(const base_vec4& other) const
         {
-            return (*this - other).length();
+            return rtm::vector_length(rtm::vector_sub(_value, other._value));
         }
 
         MVM_INLINE_NODISCARD T distance_squared(const base_vec4& other) const
         {
-            return (*this - other).length_squared();
+            return rtm::vector_length_squared(
+                rtm::vector_sub(_value, other._value));
         }
 
         // Mutators
     public:
         MVM_INLINE base_vec4& normalize()
         {
-            *this /= length();
+            _value = rtm::vector_normalize(_value);
             return *this;
         }
 
         MVM_INLINE base_vec4& fill(const T& val)
         {
-            x = y = z = w = val;
+            _value = rtm::vector_set(val);
             return *this;
         }
 
@@ -346,10 +329,7 @@ namespace move::math::scalar
                                   const T& z,
                                   const T& w)
         {
-            this->x = x;
-            this->y = y;
-            this->z = z;
-            this->w = w;
+            _value = rtm::vector_set(x, y, z, w);
             return *this;
         }
 
@@ -357,7 +337,6 @@ namespace move::math::scalar
         {
             return fill(0);
         }
-
         // Statics
     public:
         /**
@@ -371,7 +350,7 @@ namespace move::math::scalar
         MVM_INLINE_NODISCARD static T dot(const base_vec4& v1,
                                           const base_vec4& v2) noexcept
         {
-            return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w * v2.w;
+            return rtm::vector_dot(v1._value, v2._value);
         }
 
         /**
@@ -389,58 +368,30 @@ namespace move::math::scalar
             const base_vec4& v3) noexcept
         {
             return {
-                (((static_cast<T>(v2.get_z()) * static_cast<T>(v3.get_w())) -
-                  (static_cast<T>(v2.get_w()) * static_cast<T>(v3.get_z()))) *
-                 static_cast<T>(v1.get_y())) -
-                    (((static_cast<T>(v2.get_y()) *
-                       static_cast<T>(v3.get_w())) -
-                      (static_cast<T>(v2.get_w()) *
-                       static_cast<T>(v3.get_y()))) *
-                     static_cast<T>(v1.get_z())) +
-                    (((static_cast<T>(v2.get_y()) *
-                       static_cast<T>(v3.get_z())) -
-                      (static_cast<T>(v2.get_z()) *
-                       static_cast<T>(v3.get_y()))) *
-                     static_cast<T>(v1.get_w())),
-                (((static_cast<T>(v2.get_w()) * static_cast<T>(v3.get_z())) -
-                  (static_cast<T>(v2.get_z()) * static_cast<T>(v3.get_w()))) *
-                 static_cast<T>(v1.get_x())) -
-                    (((static_cast<T>(v2.get_w()) *
-                       static_cast<T>(v3.get_x())) -
-                      (static_cast<T>(v2.get_x()) *
-                       static_cast<T>(v3.get_w()))) *
-                     static_cast<T>(v1.get_z())) +
-                    (((static_cast<T>(v2.get_z()) *
-                       static_cast<T>(v3.get_x())) -
-                      (static_cast<T>(v2.get_x()) *
-                       static_cast<T>(v3.get_z()))) *
-                     static_cast<T>(v1.get_w())),
-                (((static_cast<T>(v2.get_y()) * static_cast<T>(v3.get_w())) -
-                  (static_cast<T>(v2.get_w()) * static_cast<T>(v3.get_y()))) *
-                 static_cast<T>(v1.get_x())) -
-                    (((static_cast<T>(v2.get_x()) *
-                       static_cast<T>(v3.get_w())) -
-                      (static_cast<T>(v2.get_w()) *
-                       static_cast<T>(v3.get_x()))) *
-                     static_cast<T>(v1.get_y())) +
-                    (((static_cast<T>(v2.get_x()) *
-                       static_cast<T>(v3.get_y())) -
-                      (static_cast<T>(v2.get_y()) *
-                       static_cast<T>(v3.get_x()))) *
-                     static_cast<T>(v1.get_w())),
-                (((static_cast<T>(v2.get_z()) * static_cast<T>(v3.get_y())) -
-                  (static_cast<T>(v2.get_y()) * static_cast<T>(v3.get_z()))) *
-                 static_cast<T>(v1.get_x())) -
-                    (((static_cast<T>(v2.get_z()) *
-                       static_cast<T>(v3.get_x())) -
-                      (static_cast<T>(v2.get_x()) *
-                       static_cast<T>(v3.get_z()))) *
-                     static_cast<T>(v1.get_y())) +
-                    (((static_cast<T>(v2.get_y()) *
-                       static_cast<T>(v3.get_x())) -
-                      (static_cast<T>(v2.get_x()) *
-                       static_cast<T>(v3.get_y()))) *
-                     static_cast<T>(v1.get_z())),
+                (((v2.get_z() * v3.get_w()) - (v2.get_w() * v3.get_z())) *
+                 v1.get_y()) -
+                    (((v2.get_y() * v3.get_w()) - (v2.get_w() * v3.get_y())) *
+                     v1.get_z()) +
+                    (((v2.get_y() * v3.get_z()) - (v2.get_z() * v3.get_y())) *
+                     v1.get_w()),
+                (((v2.get_w() * v3.get_z()) - (v2.get_z() * v3.get_w())) *
+                 v1.get_x()) -
+                    (((v2.get_w() * v3.get_x()) - (v2.get_x() * v3.get_w())) *
+                     v1.get_z()) +
+                    (((v2.get_z() * v3.get_x()) - (v2.get_x() * v3.get_z())) *
+                     v1.get_w()),
+                (((v2.get_y() * v3.get_w()) - (v2.get_w() * v3.get_y())) *
+                 v1.get_x()) -
+                    (((v2.get_x() * v3.get_w()) - (v2.get_w() * v3.get_x())) *
+                     v1.get_y()) +
+                    (((v2.get_x() * v3.get_y()) - (v2.get_y() * v3.get_x())) *
+                     v1.get_w()),
+                (((v2.get_z() * v3.get_y()) - (v2.get_y() * v3.get_z())) *
+                 v1.get_x()) -
+                    (((v2.get_z() * v3.get_x()) - (v2.get_x() * v3.get_z())) *
+                     v1.get_y()) +
+                    (((v2.get_y() * v3.get_x()) - (v2.get_x() * v3.get_y())) *
+                     v1.get_z()),
             };
         }
 
@@ -506,10 +457,15 @@ namespace move::math::scalar
         MVM_INLINE_NODISCARD static base_vec4 reflect(
             const base_vec4& incident, const base_vec4& normal) noexcept
         {
-            auto dot = base_vec4::dot(incident, normal);
-            auto dot2 = dot + dot;
-            auto mul = normal * dot2;
-            return incident - mul;
+            using namespace rtm;
+            const underlying_type& inc = incident._value;
+            const underlying_type& nrm = normal._value;
+
+            auto dot = vector_dot(inc, nrm);
+            auto dot2 = vector_add(dot, dot);
+            auto mul = vector_mul(nrm, dot2);
+            auto res = vector_sub(inc, mul);
+            return res;
         }
 
         /**
@@ -519,11 +475,14 @@ namespace move::math::scalar
          * @param normal The normal vector
          * @param ior The index of refraction
          */
-        MVM_INLINE_NODISCARD static base_vec4 refract(const base_vec4& inc,
-                                                      const base_vec4& nrm,
+        MVM_INLINE_NODISCARD static base_vec4 refract(const base_vec4& incident,
+                                                      const base_vec4& normal,
                                                       T ior) noexcept
         {
-            base_vec4 index = base_vec4(ior, ior, ior, ior);
+            using namespace rtm;
+            const underlying_type& inc = incident._value;
+            const underlying_type& nrm = normal._value;
+            const underlying_type& index = vector_set(ior);
 
             // clang-format off
             // Algorithm:
@@ -542,13 +501,15 @@ namespace move::math::scalar
             //
             // clang-format on
 
-            T dotinorm = base_vec4::dot(inc, nrm);
-            base_vec4 roiPlusDotinorm = index * dotinorm;
-            base_vec4 innerSqrt = base_vec4::filled(
-                math::sqrt(1 - ior * ior * (1 - dotinorm * dotinorm)));
+            T dotinorm = vector_dot(inc, nrm);
+            underlying_type roiPlusDotinorm = vector_mul(index, dotinorm);
+            underlying_type innerSqrt = vector_set(
+                scalar_sqrt(1 - ior * ior * (1 - dotinorm * dotinorm)));
             ;
 
-            return ((index * inc) - (nrm * (roiPlusDotinorm + innerSqrt)));
+            return vector_sub(
+                vector_mul(index, inc),
+                vector_mul(nrm, vector_add(roiPlusDotinorm, innerSqrt)));
         }
 
         /**
@@ -564,10 +525,7 @@ namespace move::math::scalar
             const base_vec4& v1, const base_vec4& v2, T t) noexcept
         {
             // Compute the clamp once
-            return base_vec4(math::lerp_unclamped(v1.x, v2.x, t),
-                             math::lerp_unclamped(v1.y, v2.y, t),
-                             math::lerp_unclamped(v1.z, v2.z, t),
-                             math::lerp_unclamped(v1.w, v2.w, t));
+            return base_vec4(rtm::vector_lerp(v1._value, v2._value, t));
         }
 
         /**
@@ -585,10 +543,7 @@ namespace move::math::scalar
             const base_vec4& v2,
             const base_vec4& t) noexcept
         {
-            return base_vec4(math::lerp_unclamped(v1.x, v2.x, t.x),
-                             math::lerp_unclamped(v1.y, v2.y, t.y),
-                             math::lerp_unclamped(v1.z, v2.z, t.z),
-                             math::lerp_unclamped(v1.w, v2.w, t.w));
+            return base_vec4(rtm::vector_lerp(v1._value, v2._value, t._value));
         }
 
         /**
@@ -606,10 +561,7 @@ namespace move::math::scalar
                                                    T t) noexcept
         {
             T clamped = math::saturate(t);
-            return base_vec4(math::lerp(v1.x, v2.x, clamped),
-                             math::lerp(v1.y, v2.y, clamped),
-                             math::lerp(v1.z, v2.z, clamped),
-                             math::lerp(v1.w, v2.w, clamped));
+            return base_vec4(rtm::vector_lerp(v1._value, v2._value, clamped));
         }
 
         /**
@@ -626,9 +578,9 @@ namespace move::math::scalar
                                                    const base_vec4& v2,
                                                    const base_vec4& t) noexcept
         {
-            return base_vec4(
-                math::lerp(v1.x, v2.x, t.x), math::lerp(v1.y, v2.y, t.y),
-                math::lerp(v1.z, v2.z, t.z), math::lerp(v1.w, v2.w, t.w));
+            auto clamped = rtm::vector_clamp(t._value, rtm::vector_zero(),
+                                             rtm::vector_set(T(1)));
+            return base_vec4(rtm::vector_lerp(v1._value, v2._value, clamped));
         }
 
         /**
@@ -642,8 +594,7 @@ namespace move::math::scalar
         MVM_INLINE_NODISCARD static base_vec4 min(const base_vec4& v1,
                                                   const base_vec4& v2) noexcept
         {
-            return base_vec4(math::min(v1.x, v2.x), math::min(v1.y, v2.y),
-                             math::min(v1.z, v2.z), math::min(v1.w, v2.w));
+            return base_vec4(rtm::vector_min(v1._value, v2._value));
         }
 
         /**
@@ -657,8 +608,7 @@ namespace move::math::scalar
         MVM_INLINE_NODISCARD static base_vec4 max(const base_vec4& v1,
                                                   const base_vec4& v2) noexcept
         {
-            return base_vec4(math::max(v1.x, v2.x), math::max(v1.y, v2.y),
-                             math::max(v1.z, v2.z), math::max(v1.w, v2.w));
+            return base_vec4(rtm::vector_max(v1._value, v2._value));
         }
 
         /**
@@ -676,8 +626,7 @@ namespace move::math::scalar
             const base_vec4& max) noexcept
         {
             return base_vec4(
-                math::clamp(v.x, min.x, max.x), math::clamp(v.y, min.y, max.y),
-                math::clamp(v.z, min.z, max.z), math::clamp(v.w, min.w, max.w));
+                rtm::vector_clamp(v._value, min._value, max._value));
         }
 
         /**
@@ -693,9 +642,8 @@ namespace move::math::scalar
                                                     const T& min,
                                                     const T& max) noexcept
         {
-            return base_vec4(
-                math::clamp(v.x, min, max), math::clamp(v.y, min, max),
-                math::clamp(v.z, min, max), math::clamp(v.w, min, max));
+            return base_vec4(rtm::vector_clamp(v._value, rtm::vector_set(min),
+                                               rtm::vector_set(max)));
         }
 
         // Shorthand
@@ -873,4 +821,4 @@ namespace move::math::scalar
             return z_axis();
         }
     };
-}  // namespace move::math::scalar
+}  // namespace move::math::simd_rtm

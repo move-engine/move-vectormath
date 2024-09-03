@@ -1,10 +1,15 @@
 {
   "Name": "move/math",
-  "Aliases": [],
+  "Aliases": [
+    "move::math",
+    "move-math"
+  ],
   "Description": "A new Move package",
   "Version": "0.0.1",
   "Type": "CppLibrary",
-  "Dependencies": [],
+  "Dependencies": [
+    "rtm"
+  ],
   "License": "Unspecified",
   "Keywords": [],
   "TargetOptions": {

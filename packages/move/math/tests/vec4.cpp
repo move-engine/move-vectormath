@@ -7,6 +7,8 @@
 #include <move/math/vec4.hpp>
 #include <move/meta/type_utils.hpp>
 #include "catch2/catch_approx.hpp"
+#include "move/string.hpp"
+#include "movemm/memory-allocator.h"
 
 template <typename vec4>
 inline void test_vec4()
@@ -311,7 +313,9 @@ inline void test_vec4()
 
         THEN("The pointer is correct")
         {
-            component_type* ptr = test.to_array();
+            component_type ptr[4];
+            test.store_array(ptr);
+
             REQUIRE(ptr[0] == 3);
             REQUIRE(ptr[1] == 4);
             REQUIRE(ptr[2] == 5);
@@ -324,7 +328,9 @@ inline void test_vec4()
         const vec4 test = {3, 4, 5, 6};
         THEN("The pointer is correct")
         {
-            const component_type* ptr = test.to_array();
+            component_type ptr[4];
+            test.store_array(ptr);
+
             REQUIRE(ptr[0] == 3);
             REQUIRE(ptr[1] == 4);
             REQUIRE(ptr[2] == 5);
@@ -518,36 +524,163 @@ inline void test_vec4()
     }
 }
 
-SCENARIO("Vec4 tests")
+#define REPEAT_FOR_EACH_TYPE_WRAPPER(op, vectype)                \
+    template <move::math::Acceleration Accel, typename... Types> \
+    inline void op##_multi()                                     \
+    {                                                            \
+        (op<vectype<Types, Accel>>(), ...);                      \
+    }
+
+REPEAT_FOR_EACH_TYPE_WRAPPER(test_vec4, move::math::vec4);
+
+SCENARIO("Vec4 full tests")
 {
     using namespace move::math;
     using Accel = move::math::Acceleration;
 
-    // Scalar tests
-    test_vec4<vec4<float, Accel::Scalar>>();
-    test_vec4<vec4<double, Accel::Scalar>>();
+    test_vec4_multi<Accel::Scalar, float, double, int8_t, int16_t, int32_t,
+                    int64_t, uint8_t, uint16_t, uint32_t, uint64_t>();
 
-    test_vec4<vec4<int8_t, Accel::Scalar>>();
-    test_vec4<vec4<int16_t, Accel::Scalar>>();
-    test_vec4<vec4<int32_t, Accel::Scalar>>();
-    test_vec4<vec4<int64_t, Accel::Scalar>>();
+    test_vec4_multi<Accel::SIMD, float, double, int8_t, int16_t, int32_t,
+                    int64_t, uint8_t, uint16_t, uint32_t, uint64_t>();
+}
 
-    test_vec4<vec4<uint8_t, Accel::Scalar>>();
-    test_vec4<vec4<uint16_t, Accel::Scalar>>();
-    test_vec4<vec4<uint32_t, Accel::Scalar>>();
-    test_vec4<vec4<uint64_t, Accel::Scalar>>();
+const char* alloc_appended_name(move::string_view lhs, move::string_view rhs)
+{
+    size_t len = lhs.size() + rhs.size() + 1;
+    char* result = (char*)movemm::alloc(len);
+    std::memcpy((void*)result, lhs.data(), lhs.size());
+    std::memcpy((void*)(result + lhs.size()), rhs.data(), rhs.size());
+    result[len - 1] = '\0';
+    return result;
+}
 
-    // SIMD tests
-    test_vec4<vec4<float, Accel::SIMD>>();
-    test_vec4<vec4<double, Accel::SIMD>>();
+template <typename vec4>
+inline void benchmark_vec4()
+{
+    using component_type = vec4::component_type;
+    using vec2 = vec4::vec2_t;
+    using vec3 = vec4::vec3_t;
+    static constexpr auto acceleration = vec4::acceleration;
 
-    test_vec4<vec4<int8_t, Accel::SIMD>>();
-    test_vec4<vec4<int16_t, Accel::SIMD>>();
-    test_vec4<vec4<int32_t, Accel::SIMD>>();
-    test_vec4<vec4<int64_t, Accel::SIMD>>();
+    move::string_view typeName = move::meta::type_name<vec4>();
+    vec4 test1 = {1, 2, 3, 4};
+    vec4 test2 = {3, 4, 5, 6};
+    // BENCHMARK(alloc_appended_name(typeName, " add"))
+    // {
+    //     return test1 + test2;
+    // };
 
-    test_vec4<vec4<uint8_t, Accel::SIMD>>();
-    test_vec4<vec4<uint16_t, Accel::SIMD>>();
-    test_vec4<vec4<uint32_t, Accel::SIMD>>();
-    test_vec4<vec4<uint64_t, Accel::SIMD>>();
+    // BENCHMARK(alloc_appended_name(typeName, " sub"))
+    // {
+    //     return test1 - test2;
+    // };
+
+    // BENCHMARK(alloc_appended_name(typeName, " mul"))
+    // {
+    //     return test1 * test2;
+    // };
+
+    // BENCHMARK(alloc_appended_name(typeName, " div"))
+    // {
+    //     return test1 / test2;
+    // };
+
+    // BENCHMARK(alloc_appended_name(typeName, " dot"))
+    // {
+    //     return vec4::dot(test1, test2);
+    // };
+
+    // BENCHMARK(alloc_appended_name(typeName, " cross"))
+    // {
+    //     return vec4::cross(test1, test2, test1);
+    // };
+
+    // BENCHMARK(alloc_appended_name(typeName, " angle"))
+    // {
+    //     return vec4::angle_between_vectors(test1, test2);
+    // };
+
+    // BENCHMARK(alloc_appended_name(typeName, " lerp"))
+    // {
+    //     return vec4::lerp(test1, test2, component_type(0.5));
+    // };
+
+    // BENCHMARK(alloc_appended_name(typeName, " lerp_unclamped"))
+    // {
+    //     return vec4::lerp_unclamped(test1, test2, component_type(0.5));
+    // };
+
+    // BENCHMARK(alloc_appended_name(typeName, " min"))
+    // {
+    //     return vec4::min(test1, test2);
+    // };
+
+    // BENCHMARK(alloc_appended_name(typeName, " max"))
+    // {
+    //     return vec4::max(test1, test2);
+    // };
+
+    // BENCHMARK(alloc_appended_name(typeName, " clamp"))
+    // {
+    //     return vec4::clamp(test1, 2, 3);
+    // };
+
+    // BENCHMARK(alloc_appended_name(typeName, " clampv"))
+    // {
+    //     return vec4::clamp(test1, {2, 3, 4, 5}, {3, 4, 5, 6});
+    // };
+
+    // BENCHMARK(alloc_appended_name(typeName, " distance"))
+    // {
+    //     return test1.distance(test2);
+    // };
+
+    // BENCHMARK(alloc_appended_name(typeName, " distance_squared"))
+    // {
+    //     return test1.distance_squared(test2);
+    // };
+
+    // BENCHMARK(alloc_appended_name(typeName, " distance_between_points"))
+    // {
+    //     return vec4::distance_between_points(test1, test2);
+    // };
+
+    // BENCHMARK(alloc_appended_name(typeName, "
+    // distance_between_points_squared"))
+    // {
+    //     return vec4::distance_between_points_squared(test1, test2);
+    // };
+
+    // BENCHMARK(alloc_appended_name(typeName, " normalize"))
+    // {
+    //     test1.normalize();
+    //     return test1;
+    // };
+
+    BENCHMARK(alloc_appended_name(typeName, " complex op"))
+    {
+        auto test3 = test1 + test2;
+        test3 *= 15;
+
+        auto start = vec4::cross(test1, test2, test3);
+        auto end = vec4::cross(test3, test1, test2);
+        auto result = vec4::dot(start, end);
+        auto result2 = vec4::angle_between_vectors(start, end);
+        auto result3 = vec4::dot(test3, test1);
+        auto lerped = vec4::lerp(
+            test1, test2, component_type(0.5) * result + result2 - result3);
+        return lerped;
+    };
+}
+
+REPEAT_FOR_EACH_TYPE_WRAPPER(benchmark_vec4, move::math::vec4);
+
+SCENARIO("Vec4 Benchmarks")
+{
+    using namespace move::math;
+    using Accel = move::math::Acceleration;
+
+    benchmark_vec4_multi<Accel::Scalar, float, double>();
+    benchmark_vec4_multi<Accel::SIMD, float, double>();
 }

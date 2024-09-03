@@ -1,10 +1,12 @@
 #pragma once
 #include <cstdint>
 #include <move/math/macros.hpp>
+#include <move/math/rtm/base_vec4.hpp>
 #include <move/math/scalar/base_vec4.hpp>
 
 #include <move/math/vec2.hpp>
 #include <move/math/vec3.hpp>
+#include <type_traits>
 
 namespace move::math
 {
@@ -14,9 +16,12 @@ namespace move::math
 
     template <typename T, move::math::Acceleration Accel>
     using base_vec4_t =
+        // If we're doing floating point AND it was requested, use SIMD.
+        // Otherwise, use scalar.
         std::conditional_t<vec4_acceleration<Accel> == Acceleration::SIMD,
-                           scalar::base_vec4<T>,  // TODO: Replace with SIMD
-                                                  // type
+                           std::conditional_t<std::is_floating_point_v<T>,
+                                              simd_rtm::base_vec4<T>,
+                                              scalar::base_vec4<T>>,
                            scalar::base_vec4<T>>;
 
     template <typename T, move::math::Acceleration Accel>
