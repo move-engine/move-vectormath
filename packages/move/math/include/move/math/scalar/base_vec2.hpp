@@ -1,13 +1,21 @@
 #pragma once
 #include <cstddef>
+#include <iosfwd>
+
 #include <move/math/common.hpp>
 #include <move/math/macros.hpp>
+#include <move/meta/type_utils.hpp>
 
 namespace move::math::scalar
 {
     template <typename T>
     struct base_vec2
     {
+    public:
+        constexpr static auto acceleration = Acceleration::Scalar;
+        constexpr static bool has_fields = true;
+        constexpr static bool has_pointer_semantics = has_fields;
+
         // Member variables
     public:
         union
@@ -91,10 +99,48 @@ namespace move::math::scalar
             return base_vec2(-x, -y);
         }
 
-        // Comparison operators (just spaceship)
+        // Stream overload operators for printing
     public:
-        MVM_INLINE_NODISCARD auto operator<=>(const base_vec2& other) const =
-            default;
+        template <typename CharT, typename Traits>
+        friend std::basic_ostream<CharT, Traits>& operator<<(
+            std::basic_ostream<CharT, Traits>& os, const base_vec2& vec)
+        {
+            os << move::meta::type_name<base_vec2>() << "(" << vec.x << ", "
+               << vec.y << ")";
+            return os;
+        }
+
+        // Comparison operators
+    public:
+        MVM_INLINE_NODISCARD bool operator<(const base_vec2& other) const
+        {
+            return x < other.x && y < other.y;
+        }
+
+        MVM_INLINE_NODISCARD bool operator>(const base_vec2& other) const
+        {
+            return x > other.x && y > other.y;
+        }
+
+        MVM_INLINE_NODISCARD bool operator<=(const base_vec2& other) const
+        {
+            return x <= other.x && y <= other.y;
+        }
+
+        MVM_INLINE_NODISCARD bool operator>=(const base_vec2& other) const
+        {
+            return x >= other.x && y >= other.y;
+        }
+
+        MVM_INLINE_NODISCARD bool operator==(const base_vec2& other) const
+        {
+            return x == other.x && y == other.y;
+        }
+
+        MVM_INLINE_NODISCARD bool operator!=(const base_vec2& other) const
+        {
+            return x != other.x || y != other.y;
+        }
 
         // Element access
     public:
@@ -142,21 +188,6 @@ namespace move::math::scalar
             return data;
         }
 
-        // Mutators
-    public:
-        MVM_INLINE base_vec2& zero()
-        {
-            x = 0;
-            y = 0;
-            return *this;
-        }
-
-        MVM_INLINE base_vec2& normalize()
-        {
-            *this /= length();
-            return *this;
-        }
-
         // Mathematical operations
     public:
         MVM_INLINE_NODISCARD T length() const
@@ -184,8 +215,14 @@ namespace move::math::scalar
             return x / y;
         }
 
-        // Modifiers
+        // Mutators
     public:
+        MVM_INLINE base_vec2& normalize()
+        {
+            *this /= length();
+            return *this;
+        }
+
         MVM_INLINE base_vec2& fill(const T& value)
         {
             set_x(value);
@@ -198,6 +235,11 @@ namespace move::math::scalar
             set_x(x);
             set_y(y);
             return *this;
+        }
+
+        MVM_INLINE base_vec2& set_zero()
+        {
+            return fill(0);
         }
     };
 }  // namespace move::math::scalar

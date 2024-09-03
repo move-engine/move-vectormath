@@ -5,9 +5,16 @@
 
 namespace move::math
 {
-    // No SIMD support for vec2 yet
+    template <move::math::Acceleration Accel>
+    static constexpr auto vec2_acceleration =
+        Accel == Acceleration::Default ? Acceleration::Scalar : Accel;
+
     template <typename T, move::math::Acceleration Accel>
-    using base_vec2_t = move::math::scalar::base_vec2<T>;
+    using base_vec2_t =
+        std::conditional_t<vec2_acceleration<Accel> == Acceleration::SIMD,
+                           scalar::base_vec2<T>,  // TODO: Replace with SIMD
+                                                  // type
+                           scalar::base_vec2<T>>;
 
     template <typename T, move::math::Acceleration Accel>
     struct vec2 : public base_vec2_t<T, Accel>
@@ -16,9 +23,11 @@ namespace move::math
         using base_t = base_vec2_t<T, Accel>;
         using base_vec2_t<T, Accel>::base_vec2_t;
         using component_type = T;
-        constexpr static auto acceleration = Accel;
-        constexpr static bool has_fields = true;
-        constexpr static bool has_pointer_semantics = true;
+
+        constexpr static auto acceleration = base_t::acceleration;
+        constexpr static bool has_fields = base_t::has_fields;
+        constexpr static bool has_pointer_semantics =
+            base_t::has_pointer_semantics;
 
         // Constructors
     public:
@@ -62,6 +71,7 @@ namespace move::math
         {
         }
 
+        // Conversions
     public:
         MVM_INLINE_NODISCARD base_t storage() const
         {
