@@ -74,16 +74,6 @@ namespace move::math
             return *this;
         }
 
-        MVM_INLINE_NODISCARD T* to_array()
-        {
-            return base_t::data;
-        }
-
-        MVM_INLINE_NODISCARD const T* to_array() const
-        {
-            return base_t::data;
-        }
-
         // Assignment operators
     public:
         MVM_INLINE vec2& operator+=(const vec2& other)

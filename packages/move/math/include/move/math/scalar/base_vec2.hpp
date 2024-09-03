@@ -48,8 +48,21 @@ namespace move::math::scalar
             return *this;
         }
 
-        MVM_INLINE ~base_vec2()
+        // Pointers
+    public:
+        MVM_INLINE_NODISCARD T* to_array()
         {
+            return data;
+        }
+
+        MVM_INLINE_NODISCARD const T* to_array() const
+        {
+            return data;
+        }
+
+        MVM_INLINE void store_array(T* dest) const
+        {
+            memcpy(dest, data, sizeof(data));
         }
 
         // Arithmetic operators
