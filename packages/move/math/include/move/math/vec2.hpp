@@ -21,7 +21,6 @@ namespace move::math
     {
     public:
         using base_t = base_vec2_t<T, Accel>;
-        using base_vec2_t<T, Accel>::base_vec2_t;
         using component_type = T;
 
         constexpr static auto acceleration = base_t::acceleration;

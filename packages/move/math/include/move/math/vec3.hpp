@@ -24,8 +24,8 @@ namespace move::math
     {
     public:
         using base_t = base_vec3_t<T, Accel>;
-        using base_vec3_t<T, Accel>::base_vec3_t;
         using component_type = T;
+        using rtm_t = simd_rtm::detail::v3<T>::type;
 
         constexpr static auto acceleration = base_t::acceleration;
         constexpr static bool has_fields = base_t::has_fields;
@@ -119,15 +119,14 @@ namespace move::math
             return *this;
         }
 
-        MVM_INLINE_NODISCARD simd_rtm::detail::v3<T>::type to_rtm() const
+        MVM_INLINE_NODISCARD rtm_t to_rtm() const
         {
             // TODO: Fast mode for RTM vec3
             return rtm::vector_set(base_t::get_x(), base_t::get_y(),
                                    base_t::get_z(), 0);
         }
 
-        MVM_INLINE_NODISCARD static vec3 from_rtm(
-            const simd_rtm::detail::v3<T>::type& rtm_vec)
+        MVM_INLINE_NODISCARD static vec3 from_rtm(const rtm_t& rtm_vec)
         {
             // TODO: Fast mode for RTM vec3
             return vec3(rtm::vector_get_x(rtm_vec), rtm::vector_get_y(rtm_vec),

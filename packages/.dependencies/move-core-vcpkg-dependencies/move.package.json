@@ -41,6 +41,15 @@
         "MinVersion": "1.84.0"
       },
       {
+        "PackageName": "boost-pfr",
+        "CMakeFindPackageString": null,
+        "CMakeLibraryName": null,
+        "ForceDynamicLinkage": false,
+        "NoConfig": true,
+        "Features": {},
+        "MinVersion": "1.84.0"
+      },
+      {
         "PackageName": "boost-interprocess",
         "CMakeFindPackageString": null,
         "CMakeLibraryName": null,
