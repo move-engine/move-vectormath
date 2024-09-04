@@ -1,7 +1,4 @@
-
-#include <cstddef>
-#include <iosfwd>
-
+#pragma once
 #include <rtm/mask4d.h>
 #include <rtm/mask4f.h>
 #include <rtm/vector4d.h>
