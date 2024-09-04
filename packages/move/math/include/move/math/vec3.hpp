@@ -192,18 +192,43 @@ namespace move::math
         }
     };
 
-    using float3 = vec3<float, Acceleration::Default>;
-    using double3 = vec3<double, Acceleration::Default>;
+    using fast_float3 = vec3<float, Acceleration::RTM>;
+    using fast_double3 = vec3<double, Acceleration::RTM>;
+    using storage_float3 = vec3<float, Acceleration::Default>;
+    using storage_double3 = vec3<double, Acceleration::Default>;
 
-    using long3 = vec3<int64_t, Acceleration::Default>;
-    using ulong3 = vec3<uint64_t, Acceleration::Default>;
+    using fast_long3 = vec3<int64_t, Acceleration::Default>;
+    using fast_ulong3 = vec3<uint64_t, Acceleration::Default>;
+    using storage_long3 = vec3<int64_t, Acceleration::Default>;
+    using storage_ulong3 = vec3<uint64_t, Acceleration::Default>;
 
-    using int3 = vec3<int32_t, Acceleration::Default>;
-    using uint3 = vec3<uint32_t, Acceleration::Default>;
+    using fast_int3 = vec3<int32_t, Acceleration::Default>;
+    using fast_uint3 = vec3<uint32_t, Acceleration::Default>;
+    using storage_int3 = vec3<int32_t, Acceleration::Default>;
+    using storage_uint3 = vec3<uint32_t, Acceleration::Default>;
 
-    using short3 = vec3<int16_t, Acceleration::Default>;
-    using ushort3 = vec3<uint16_t, Acceleration::Default>;
+    using fast_short3 = vec3<int16_t, Acceleration::Default>;
+    using fast_ushort3 = vec3<uint16_t, Acceleration::Default>;
+    using storage_short3 = vec3<int16_t, Acceleration::Default>;
+    using storage_ushort3 = vec3<uint16_t, Acceleration::Default>;
 
-    using sbyte3 = vec3<int8_t, Acceleration::Default>;
-    using byte3 = vec3<uint8_t, Acceleration::Default>;
+    using fast_sbyte3 = vec3<int8_t, Acceleration::Default>;
+    using fast_byte3 = vec3<int8_t, Acceleration::Default>;
+    using storage_sbyte3 = vec3<int8_t, Acceleration::Default>;
+    using storage_byte3 = vec3<int8_t, Acceleration::Default>;
+
+    using float3 = storage_float3;
+    using double3 = storage_double3;
+
+    using long3 = storage_long3;
+    using ulong3 = storage_ulong3;
+
+    using int3 = storage_int3;
+    using uint3 = storage_uint3;
+
+    using short3 = storage_short3;
+    using ushort3 = storage_ushort3;
+
+    using sbyte3 = storage_sbyte3;
+    using byte3 = storage_byte3;
 }  // namespace move::math

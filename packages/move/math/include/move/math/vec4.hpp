@@ -390,20 +390,45 @@ namespace move::math
         }
     };
 
-    using float4 = vec4<float, Acceleration::Default>;
-    using double4 = vec4<double, Acceleration::Default>;
+    using fast_float4 = vec4<float, Acceleration::RTM>;
+    using fast_double4 = vec4<double, Acceleration::RTM>;
+    using storage_float4 = vec4<float, Acceleration::Default>;
+    using storage_double4 = vec4<double, Acceleration::Default>;
 
-    using long4 = vec4<int64_t, Acceleration::Default>;
-    using ulong4 = vec4<uint64_t, Acceleration::Default>;
+    using fast_long4 = vec4<int64_t, Acceleration::Default>;
+    using fast_ulong4 = vec4<uint64_t, Acceleration::Default>;
+    using storage_long4 = vec4<int64_t, Acceleration::Default>;
+    using storage_ulong4 = vec4<uint64_t, Acceleration::Default>;
 
-    using int4 = vec4<int32_t, Acceleration::Default>;
-    using uint4 = vec4<uint32_t, Acceleration::Default>;
+    using fast_int4 = vec4<int32_t, Acceleration::Default>;
+    using fast_uint4 = vec4<uint32_t, Acceleration::Default>;
+    using storage_int4 = vec4<int32_t, Acceleration::Default>;
+    using storage_uint4 = vec4<uint32_t, Acceleration::Default>;
 
-    using short4 = vec4<int16_t, Acceleration::Default>;
-    using ushort4 = vec4<uint16_t, Acceleration::Default>;
+    using fast_short4 = vec4<int16_t, Acceleration::Default>;
+    using fast_ushort4 = vec4<uint16_t, Acceleration::Default>;
+    using storage_short4 = vec4<int16_t, Acceleration::Default>;
+    using storage_ushort4 = vec4<uint16_t, Acceleration::Default>;
 
-    using sbyte4 = vec4<int8_t, Acceleration::Default>;
-    using byte4 = vec4<uint8_t, Acceleration::Default>;
+    using fast_sbyte4 = vec4<int8_t, Acceleration::Default>;
+    using fast_byte4 = vec4<int8_t, Acceleration::Default>;
+    using storage_sbyte4 = vec4<int8_t, Acceleration::Default>;
+    using storage_byte4 = vec4<int8_t, Acceleration::Default>;
+
+    using float4 = storage_float4;
+    using double4 = storage_double4;
+
+    using long4 = storage_long4;
+    using ulong4 = storage_ulong4;
+
+    using int4 = storage_int4;
+    using uint4 = storage_uint4;
+
+    using short4 = storage_short4;
+    using ushort4 = storage_ushort4;
+
+    using sbyte4 = storage_sbyte4;
+    using byte4 = storage_byte4;
 
     template <typename T, move::math::Acceleration Accel>
     MVM_INLINE_NODISCARD bool approx_equal(

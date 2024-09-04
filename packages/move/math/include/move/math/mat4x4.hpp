@@ -28,7 +28,7 @@ namespace move::math
 
     // mat4 always uses RTM under the hood
     template <typename T, typename wrapper_type = simd_rtm::detail::m4x4<T>>
-        requires std::is_floating_point_v<T>
+    requires std::is_floating_point_v<T>
     struct mat4x4
     {
     public:
@@ -37,8 +37,8 @@ namespace move::math
         constexpr static bool has_pointer_semantics = false;
 
     private:
-        using underlying_type = wrapper_type::type;
-        underlying_type _value;
+        using rtm_t = wrapper_type::type;
+        rtm_t _value;
 
         template <typename component_type, Acceleration OtherAccel>
         friend vec4<component_type, OtherAccel> operator*(
@@ -48,7 +48,7 @@ namespace move::math
     public:
         using rtm_vec4_t = typename simd_rtm::detail::v4<T>::type;
         using rtm_mat3x4_t = typename simd_rtm::detail::m3x4<T>::type;
-        using rtm_mat4x4_t = underlying_type;
+        using rtm_mat4x4_t = rtm_t;
         using vec3_t = vec3<T, acceleration>;
         using vec4_t = vec4<T, acceleration>;
         using quat_t = quat<T>;
@@ -60,7 +60,7 @@ namespace move::math
         {
         }
 
-        MVM_INLINE mat4x4(const underlying_type& data) : _value(data)
+        MVM_INLINE mat4x4(const rtm_t& data) : _value(data)
         {
         }
 
@@ -91,6 +91,15 @@ namespace move::math
         {
         }
 
+        MVM_INLINE mat4x4(const vec4_t& row0,
+                          const vec4_t& row1,
+                          const vec4_t& row2,
+                          const vec4_t& row3) :
+            _value(rtm::matrix_set(
+                row0.to_rtm(), row1.to_rtm(), row2.to_rtm(), row3.to_rtm()))
+        {
+        }
+
         MVM_INLINE mat4x4& operator=(const mat4x4& other)
         {
             _value = other._value;
@@ -118,12 +127,12 @@ namespace move::math
             _value = matrix_set(x, y, z, w);
         }
 
-        MVM_INLINE_NODISCARD underlying_type to_rtm()
+        MVM_INLINE_NODISCARD rtm_t to_rtm()
         {
             return _value;
         }
 
-        MVM_INLINE_NODISCARD static mat4x4 from_rtm(const underlying_type& data)
+        MVM_INLINE_NODISCARD static mat4x4 from_rtm(const rtm_t& data)
         {
             return data;
         }
@@ -442,6 +451,76 @@ namespace move::math
         vector_type result = matrix_mul_vector(v, mat._value);
         return vec4<component_type, OtherAccel>::from_rtm(result);
     }
+
+    template <typename T>
+    struct storage_mat4x4
+    {
+    public:
+        union
+        {
+            T data[16];
+            struct
+            {
+                T _11, _12, _13, _14;
+                T _21, _22, _23, _24;
+                T _31, _32, _33, _34;
+                T _41, _42, _43, _44;
+            };
+        };
+
+        using mat4x4_t = mat4x4<T>;
+
+    public:
+        inline storage_mat4x4() : storage_mat4x4(mat4x4_t::identity())
+        {
+        }
+
+        inline storage_mat4x4(const mat4x4_t& mat)
+        {
+            mat.store_array(data);
+        }
+
+        // inline storage_mat4x4
+
+        inline storage_mat4x4(const storage_mat4x4& rhs)
+        {
+            for (uint8_t i = 0; i < 16; i++)
+            {
+                data[i] = rhs.data[i];
+            }
+        }
+
+    public:
+        inline storage_mat4x4& operator=(const storage_mat4x4& rhs)
+        {
+            for (uint8_t i = 0; i < 16; i++)
+            {
+                data[i] = rhs.data[i];
+            }
+            return *this;
+        }
+
+        inline storage_mat4x4& operator=(const mat4x4_t& rhs)
+        {
+            rhs.store_array(data);
+            return *this;
+        }
+
+    public:
+        template <typename Archive>
+        inline void serialize(Archive& archive)
+        {
+            archive(data);
+        }
+
+    public:
+        inline operator mat4x4_t() const
+        {
+            mat4x4_t result;
+            result.load_array(data);
+            return result;
+        }
+    };
 
     using float4x4 = mat4x4<float>;
     using double4x4 = mat4x4<double>;

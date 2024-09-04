@@ -9,11 +9,11 @@
         (op<vectype<Types, Accel>>(), ...);                      \
     }
 
-#define REPEAT_FOR_EACH_TYPE_WRAPPER_NOACCEL(op, vectype) \
-    template <typename... Types>                          \
-    inline void op##_multi()                              \
-    {                                                     \
-        (op<vectype<Types>>(), ...);                      \
+#define REPEAT_FOR_EACH_TYPE_WRAPPER_NOACCEL(op, tgtype) \
+    template <typename... Types>                         \
+    inline void op##_multi()                             \
+    {                                                    \
+        (op<tgtype<Types>>(), ...);                      \
     }
 
 inline const char* alloc_appended_name(move::string_view lhs,
