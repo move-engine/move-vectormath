@@ -1,6 +1,7 @@
 #pragma once
 #include <cmath>
 
+#include <limits>
 #include <move/math/macros.hpp>
 #include <type_traits>
 
@@ -337,9 +338,8 @@ namespace move::math
     MVM_INLINE_NODISCARD constexpr bool safe_equal(
         const T1& a,
         const T2& b,
-        const EpsilonT& epsilon =
-            std::numeric_limits<EpsilonT>::epsilon()) requires
-        std::is_floating_point_v<T1> || std::is_floating_point_v<T2>
+        const EpsilonT& epsilon = std::numeric_limits<EpsilonT>::epsilon())
+        requires std::is_floating_point_v<T1> || std::is_floating_point_v<T2>
     {
         using type_to_compare = EpsilonT;
         return abs(static_cast<type_to_compare>(a) -
@@ -347,9 +347,8 @@ namespace move::math
     }
 
     template <typename T1, typename T2>
-    MVM_INLINE_NODISCARD constexpr bool safe_equal(
-        const T1& a,
-        const T2& b) requires std::is_integral_v<T1> && std::is_integral_v<T2>
+    MVM_INLINE_NODISCARD constexpr bool safe_equal(const T1& a, const T2& b)
+        requires std::is_integral_v<T1> && std::is_integral_v<T2>
     {
         return a == b;
     }
