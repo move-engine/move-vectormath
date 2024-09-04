@@ -1,9 +1,9 @@
 #pragma once
 #include <cmath>
-
 #include <limits>
-#include <move/math/macros.hpp>
 #include <type_traits>
+
+#include <move/math/macros.hpp>
 
 namespace move::math
 {

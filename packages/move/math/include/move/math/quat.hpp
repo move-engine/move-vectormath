@@ -1,13 +1,13 @@
 #pragma once
 #include <type_traits>
 
+#include <rtm/impl/vector_common.h>
 #include <rtm/quatd.h>
 #include <rtm/quatf.h>
 
 #include <move/math/common.hpp>
 #include <move/math/macros.hpp>
 #include <move/math/vec4.hpp>
-#include "rtm/impl/vector_common.h"
 
 namespace move::math
 {
@@ -21,7 +21,7 @@ namespace move::math
     }  // namespace simd_rtm::detail
 
     template <typename T, typename wrapper_type = simd_rtm::detail::quat<T>>
-    requires std::is_floating_point_v<T>
+        requires std::is_floating_point_v<T>
     struct quat
     {
     public:
@@ -35,8 +35,8 @@ namespace move::math
 
         template <typename component_type, Acceleration OtherAccel>
         friend vec3<component_type, OtherAccel> operator*(
-            const quat<component_type>& quat,
-            const vec3<component_type, OtherAccel>& vec);
+            const vec3<component_type, OtherAccel>& vec,
+            const quat<component_type>& quat);
 
     public:
         using rtm_vec4_t = typename simd_rtm::detail::v4<T>::type;
@@ -84,7 +84,7 @@ namespace move::math
             quat_load(_value, in);
         }
 
-        MVM_INLINE_NODISCARD underlying_type to_rtm()
+        MVM_INLINE_NODISCARD underlying_type to_rtm() const
         {
             return _value;
         }
@@ -278,8 +278,7 @@ namespace move::math
                               std::numeric_limits<T>::quiet_NaN()));
         }
 
-        template <Acceleration Accel>
-        MVM_INLINE_NODISCARD static quat angle_axis(const vec3<T, Accel>& axis,
+        MVM_INLINE_NODISCARD static quat angle_axis(const vec3_t& axis,
                                                     const T& angle)
         {
             using namespace rtm;
@@ -294,8 +293,7 @@ namespace move::math
             return quat::from_rtm(quat_from_euler(pitch, yaw, roll));
         }
 
-        template <Acceleration Accel>
-        MVM_INLINE_NODISCARD static quat euler(const vec3<T, Accel>& euler)
+        MVM_INLINE_NODISCARD static quat euler(const vec3_t& euler)
         {
             using namespace rtm;
             T data[3];
@@ -335,8 +333,8 @@ namespace move::math
 
     template <typename component_type, Acceleration OtherAccel>
     MVM_INLINE_NODISCARD vec3<component_type, OtherAccel> operator*(
-        const quat<component_type>& quat,
-        const vec3<component_type, OtherAccel>& vec)
+        const vec3<component_type, OtherAccel>& vec,
+        const quat<component_type>& quat)
     {
         using namespace rtm;
         using Accel = move::math::Acceleration;

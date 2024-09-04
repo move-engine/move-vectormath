@@ -104,7 +104,7 @@ inline void test_quat()
         THEN("Rotating a point is correct")
         {
             vec3 point(1, 0, 0);
-            vec3 result = rotation * point;
+            vec3 result = point * rotation;
             REQUIRE(result == vec3(1, 0, 0));
         }
     }

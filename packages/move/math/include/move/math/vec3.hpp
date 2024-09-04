@@ -1,9 +1,9 @@
 #pragma once
 #include <cstdint>
+
 #include <move/math/macros.hpp>
 #include <move/math/rtm/base_vec3.hpp>
 #include <move/math/scalar/base_vec3.hpp>
-
 #include <move/math/vec2.hpp>
 
 namespace move::math
@@ -205,5 +205,5 @@ namespace move::math
     using ushort3 = vec3<uint16_t, Acceleration::Default>;
 
     using sbyte3 = vec3<int8_t, Acceleration::Default>;
-    using byte3 = vec3<int8_t, Acceleration::Default>;
+    using byte3 = vec3<uint8_t, Acceleration::Default>;
 }  // namespace move::math

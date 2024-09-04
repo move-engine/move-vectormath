@@ -8,9 +8,12 @@
 
 #include <move/math/common.hpp>
 #include <move/math/macros.hpp>
+#include <move/math/rtm/rtm_ext.hpp>
+
 #include <move/math/mat3x4.hpp>
+#include <move/math/quat.hpp>
+#include <move/math/vec3.hpp>
 #include <move/math/vec4.hpp>
-#include "move/math/quat.hpp"
 
 namespace move::math
 {
@@ -39,16 +42,16 @@ namespace move::math
 
         template <typename component_type, Acceleration OtherAccel>
         friend vec4<component_type, OtherAccel> operator*(
-            const mat4x4<component_type>& mat,
-            const vec4<component_type, OtherAccel>& vec);
+            const vec4<component_type, OtherAccel>& vec,
+            const mat4x4<component_type>& mat);
 
     public:
         using rtm_vec4_t = typename simd_rtm::detail::v4<T>::type;
         using rtm_mat3x4_t = typename simd_rtm::detail::m3x4<T>::type;
         using rtm_mat4x4_t = underlying_type;
-        using vec2_t = vec2<T, acceleration>;
         using vec3_t = vec3<T, acceleration>;
         using vec4_t = vec4<T, acceleration>;
+        using quat_t = quat<T>;
         using component_type = T;
 
     public:
@@ -148,7 +151,7 @@ namespace move::math
             return vec3_t::from_rtm(res);
         }
 
-        MVM_INLINE_NODISCARD vec4_t transform(const vec4_t& rhs) const
+        MVM_INLINE_NODISCARD vec4_t transform_vector4(const vec4_t& rhs) const
         {
             rtm_vec4_t mul = rhs.to_rtm();
             rtm_vec4_t res = rtm::vector_mul(
@@ -304,8 +307,10 @@ namespace move::math
             return filled(std::numeric_limits<T>::quiet_NaN());
         }
 
+        // Transformation matrix helpers
+    public:
         MVM_INLINE_NODISCARD static mat4x4 translation(
-            const vec3_t& translation)
+            const vec3_t& translation) noexcept
         {
             typename simd_rtm::detail::v4<T>::type translation_row =
                 rtm::vector_set_w(translation.to_rtm(), component_type(1));
@@ -320,7 +325,7 @@ namespace move::math
                 translation_row));
         }
 
-        MVM_INLINE_NODISCARD static mat4x4 create_rotation(const quat<T>& quat)
+        MVM_INLINE_NODISCARD static mat4x4 rotation(const quat_t& quat)
         {
             using namespace rtm;
             return rtm_mat4x4_t(
@@ -344,11 +349,12 @@ namespace move::math
                 matrix_cast<rtm_mat3x4_t>(matrix_from_quat(quat)));
         }
 
-        MVM_INLINE_NODISCARD static mat4x4 create_scale(
-            component_type x, component_type y, component_type z) noexcept
+        MVM_INLINE_NODISCARD static mat4x4 scale(component_type x,
+                                                 component_type y,
+                                                 component_type z) noexcept
         {
             using rtm::vector_set;
-            return {
+            return mat4x4(rtm::matrix_set(
                 vector_set(x, component_type(0), component_type(0),
                            component_type(0)),
                 vector_set(component_type(0), y, component_type(0),
@@ -356,25 +362,77 @@ namespace move::math
                 vector_set(component_type(0), component_type(0), z,
                            component_type(0)),
                 vector_set(component_type(0), component_type(0),
-                           component_type(0), component_type(1)),
-            };
+                           component_type(0), component_type(1))));
         }
 
-        MVM_INLINE_NODISCARD static mat4x4 create_scale(
-            const vec3_t& scale) noexcept
+        MVM_INLINE_NODISCARD static mat4x4 scale(const vec3_t& scale) noexcept
         {
             using rtm::vector_set;
             component_type loaded[3];
             scale.store_array(loaded);
-            return create_scale(loaded[0], loaded[1], loaded[2]);
+            return mat4x4::scale(loaded[0], loaded[1], loaded[2]);
+        }
+
+        /**
+         * @brief Creates a TRS matrix.  Identical to `scale * rotation *
+         * translation`, but faster.
+         *
+         * @param translation The translation vector
+         * @param rotation The rotation quaternion
+         * @param scale The scale vector
+         * @return mat4 The TRS matrix
+         */
+        MVM_INLINE_NODISCARD static mat4x4 trs(const vec3_t& translation,
+                                               const quat_t& rotation,
+                                               const vec3_t& scale) noexcept
+        {
+            return rtm::ext::transform_4x4(translation.to_rtm(),
+                                           rotation.to_rtm(), scale.to_rtm());
+        }
+
+        // Camera matrix helpers
+    public:
+        MVM_INLINE_NODISCARD static mat4x4 look_at(const vec3_t& eye,
+                                                   const vec3_t& target,
+                                                   const vec3_t& up) noexcept
+        {
+            return rtm::ext::look_at_lh(eye.to_rtm(), target.to_rtm(),
+                                        up.to_rtm());
+        }
+
+        MVM_INLINE_NODISCARD static mat4x4 perspective(const T& fov,
+                                                       const T& aspect,
+                                                       const T& near,
+                                                       const T& far) noexcept
+        {
+            return rtm::ext::perspective_fov_lh(fov, aspect, near, far);
+        }
+
+        MVM_INLINE_NODISCARD static mat4x4 orthographic(const T& width,
+                                                        const T& height,
+                                                        const T& near,
+                                                        const T& far) noexcept
+        {
+            return rtm::ext::ortho_lh(width, height, near, far);
+        }
+
+        MVM_INLINE_NODISCARD static mat4x4 orthographic(const T& left,
+                                                        const T& right,
+                                                        const T& bottom,
+                                                        const T& top,
+                                                        const T& near,
+                                                        const T& far) noexcept
+        {
+            return rtm::ext::ortho_off_center_lh(left, right, bottom, top, near,
+                                                 far);
         }
     };
 
     // Multiplication operator.  Row-major order.
     template <typename component_type, Acceleration OtherAccel>
     MVM_INLINE_NODISCARD vec4<component_type, OtherAccel> operator*(
-        const mat4x4<component_type>& mat,
-        const vec4<component_type, OtherAccel>& vec)
+        const vec4<component_type, OtherAccel>& vec,
+        const mat4x4<component_type>& mat)
     {
         using namespace rtm;
         using Accel = move::math::Acceleration;

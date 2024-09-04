@@ -17,15 +17,14 @@ template <typename mat4>
 inline void test_mat4()
 {
     using component_type = mat4::component_type;
-    using vec2 = mat4::vec2_t;
     using vec3 = mat4::vec3_t;
     using vec4 = mat4::vec4_t;
+    using quat = mat4::quat_t;
     static constexpr auto acceleration = mat4::acceleration;
 
     INFO("Testing mat4 with following config:");
     INFO("\tcomponent_type: " << move::meta::type_name<component_type>());
     INFO("\tacceleration: " << magic_enum::enum_name(acceleration));
-    INFO("\tvec2: " << move::meta::type_name<vec2>());
     INFO("\tvec3: " << move::meta::type_name<vec3>());
     INFO("\tvec4: " << move::meta::type_name<vec4>());
     INFO("\tmat4: " << move::meta::type_name<mat4>());
@@ -110,7 +109,7 @@ inline void test_mat4()
             "transformation")
         {
             vec4 test = {1, 2, 3, 1};
-            vec4 result = translation * test;
+            vec4 result = test * translation;
             REQUIRE(result == vec4(2, 4, 6, 1));
         }
 
@@ -119,7 +118,7 @@ inline void test_mat4()
             "transformation")
         {
             vec4 test = {2, 4, 6, 1};
-            vec4 result = translation.inverse() * test;
+            vec4 result = test * translation.inverse();
             REQUIRE(result == vec4(1, 2, 3, 1));
         }
     }
@@ -159,7 +158,7 @@ inline void test_mat4()
             "transformation")
         {
             vec4 test = {1, 0, 0, 1};
-            vec4 result = rotation * test;
+            vec4 result = test * rotation;
             vec4 expected = {0, 0, -1, 1};
 
             INFO(result << " vs " << expected);
@@ -174,7 +173,7 @@ inline void test_mat4()
                 vec3::up(), move::math::deg2rad<component_type>(-90));
 
             vec4 test = {1, 0, 0, 1};
-            vec4 result = opposite * test;
+            vec4 result = test * opposite;
             vec4 expected = {0, 0, 1, 1};
 
             INFO(result << " vs " << expected);
@@ -188,12 +187,57 @@ inline void test_mat4()
             "transformation")
         {
             vec4 test = {1, 0, 0, 1};
-            vec4 result = rotation.inverse() * test;
+            vec4 result = test * rotation.inverse();
             vec4 expected = {0, 0, 1, 1};
 
             INFO(result << " vs " << expected);
             REQUIRE(move::math::approx_equal(result, expected));
         }
+    }
+
+    // Construct full transformation matrix
+    {
+        vec3 translation = {5, 0, 5};
+        quat rotation = quat::angle_axis(
+            vec3::up(), move::math::deg2rad<component_type>(90));
+        vec3 scaleFac = {2, 2, 2};
+        auto trs = mat4::trs(translation, rotation, scaleFac);
+
+        vec3 pointToTransform = {1, 0, 0};
+
+        THEN("The matrix is correct")
+        {
+            auto transformedPoint = vec4(pointToTransform, 1) * trs;
+            auto expectedMatrix = mat4::scale(scaleFac) *
+                                  mat4::rotation(rotation) *
+                                  mat4::translation(translation);
+            auto expectedTransformedPoint =
+                vec4(pointToTransform, 1) * expectedMatrix;
+
+            INFO(trs << " vs " << expectedMatrix);
+            REQUIRE(move::math::approx_equal(trs, expectedMatrix,
+                                             component_type(0.001)));
+        }
+    }
+
+    // Construct a look_at matrix
+    {
+        // TODO: Test this
+    }
+
+    // Construct a perspective matrix
+    {
+        // TODO: Test this
+    }
+
+    // Construct a centered orthographic matrix
+    {
+        // TODO: Test this
+    }
+
+    // Construct an off-center orthographic matrix
+    {
+        // TODO: Test this
     }
 }
 
@@ -201,9 +245,9 @@ template <typename mat4>
 inline void benchmark_mat4()
 {
     using component_type = mat4::component_type;
-    using vec2 = mat4::vec2_t;
     using vec3 = mat4::vec3_t;
     using vec4 = mat4::vec4_t;
+    using quat = mat4::quat_t;
     static constexpr auto acceleration = mat4::acceleration;
     move::string_view typeName = move::meta::type_name<mat4>();
 
@@ -216,6 +260,22 @@ inline void benchmark_mat4()
     BENCHMARK(alloc_appended_name(typeName, ": Inverse"))
     {
         return identity.inverse();
+    };
+
+    vec3 translation = {1, 2, 3};
+    quat rotation = quat::angle_axis(vec3::up(), move::math::deg2rad(90));
+    vec3 scaleFac = {1, 1, 1};
+    BENCHMARK(
+        alloc_appended_name(typeName, ": Transform Construction (builtin)"))
+    {
+        return mat4::trs(translation, rotation, scaleFac);
+    };
+
+    BENCHMARK(
+        alloc_appended_name(typeName, ": Transform Construction (manual)"))
+    {
+        return mat4::scale(scaleFac) * mat4::rotation(rotation) *
+               mat4::translation(translation);
     };
 }
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+
 #include <move/math/common.hpp>
 #include <move/math/scalar/base_vec2.hpp>
 
@@ -145,5 +146,5 @@ namespace move::math
     using ushort2 = vec2<uint16_t, Acceleration::Default>;
 
     using sbyte2 = vec2<int8_t, Acceleration::Default>;
-    using byte2 = vec2<int8_t, Acceleration::Default>;
+    using byte2 = vec2<uint8_t, Acceleration::Default>;
 }  // namespace move::math

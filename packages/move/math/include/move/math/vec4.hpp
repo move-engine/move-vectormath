@@ -1,14 +1,14 @@
 #pragma once
 #include <cstdint>
 #include <limits>
+#include <type_traits>
+
+#include <move/math/common.hpp>
 #include <move/math/macros.hpp>
 #include <move/math/rtm/base_vec4.hpp>
 #include <move/math/scalar/base_vec4.hpp>
-
 #include <move/math/vec2.hpp>
 #include <move/math/vec3.hpp>
-#include <type_traits>
-#include "move/math/common.hpp"
 
 namespace move::math
 {
@@ -16,10 +16,10 @@ namespace move::math
     static constexpr auto vec4_acceleration =
         Accel == Acceleration::Default ? Acceleration::RTM : Accel;
 
+    // If we're doing floating point AND it was requested, use SIMD.  Otherwise,
+    // use scalar.
     template <typename T, move::math::Acceleration Accel>
     using base_vec4_t =
-        // If we're doing floating point AND it was requested, use SIMD.
-        // Otherwise, use scalar.
         std::conditional_t<vec4_acceleration<Accel> == Acceleration::RTM,
                            std::conditional_t<std::is_floating_point_v<T>,
                                               simd_rtm::base_vec4<T>,
@@ -403,7 +403,7 @@ namespace move::math
     using ushort4 = vec4<uint16_t, Acceleration::Default>;
 
     using sbyte4 = vec4<int8_t, Acceleration::Default>;
-    using byte4 = vec4<int8_t, Acceleration::Default>;
+    using byte4 = vec4<uint8_t, Acceleration::Default>;
 
     template <typename T, move::math::Acceleration Accel>
     MVM_INLINE_NODISCARD bool approx_equal(
