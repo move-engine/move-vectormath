@@ -8,6 +8,7 @@
 
 #include <move/math/common.hpp>
 #include <move/math/macros.hpp>
+#include <move/math/mat3x4.hpp>
 #include <move/math/vec4.hpp>
 #include "move/math/quat.hpp"
 
@@ -15,13 +16,8 @@ namespace move::math
 {
     namespace simd_rtm::detail
     {
-        MVM_TYPE_WRAPPER(m3x4f, rtm::matrix3x4f)
-        MVM_TYPE_WRAPPER(m3x4d, rtm::matrix3x4d)
         MVM_TYPE_WRAPPER(m4x4f, rtm::matrix4x4f)
         MVM_TYPE_WRAPPER(m4x4d, rtm::matrix4x4d)
-
-        template <typename T>
-        using m3x4 = std::conditional_t<std::is_same_v<T, float>, m3x4f, m3x4d>;
 
         template <typename T>
         using m4x4 = std::conditional_t<std::is_same_v<T, float>, m4x4f, m4x4d>;
@@ -29,7 +25,7 @@ namespace move::math
 
     // mat4 always uses RTM under the hood
     template <typename T, typename wrapper_type = simd_rtm::detail::m4x4<T>>
-    requires std::is_floating_point_v<T>
+        requires std::is_floating_point_v<T>
     struct mat4x4
     {
     public:
