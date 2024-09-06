@@ -1,0 +1,18 @@
+{
+  "Name": "cmake/rtm",
+  "Aliases": [
+    "rtm"
+  ],
+  "Description": "This library is geared towards realtime applications that require their math to be as fast as possible. Much care was taken to maximize inlining opportunities and for code generation to be optimal when a function isn\u0027t inlined by passing values in registers whenever possible. It contains 3D and 4D arithmetic commonly used in video games and realtime applications.",
+  "Version": "2.3.0",
+  "Type": "CMakeLibrary",
+  "Dependencies": [],
+  "License": "MIT",
+  "Keywords": [],
+  "TargetOptions": {
+    "$type": "CMakeLibrary",
+    "ExportedTargets": [
+      "rtm"
+    ]
+  }
+}

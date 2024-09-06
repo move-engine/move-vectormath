@@ -1,22 +1,10 @@
-# Move Vectormath
+# move-vectormath
 
-This is the vectormath library for the Move Engine.  It is a somewhat high-level wrapper for [RTM](https://github.com/nfrechette/rtm/) with a number of extensions, presenting a more familiar interface for game programmers [while maintaining most of RTM's performance](https://github.com/RasterDuck/vectormathbench).
-
-# Status
-
-Move Vectormath is still fairly WIP.  It has fairly robust tests, though it does not currently achieve full coverage.  While it is not nearly as feature complete as more mature libraries such as DirectXMath or GLM, it has some things that RTM doesn't while missing some things that RTM has.
-
-It is currently tested and benchmarked on Ubuntu and Windows.
-
-# Documentation
-
-Documentation is generated with Doxygen and can be found [here](https://move-engine.github.io/move-vectormath/).
+This is the move-vectormath project.
 
 # Building and installing
 
-This is a header-only library, but it depends on RTM (another header only library).  If your project uses CMake, you can use FetchContent, CPM, or add this repository as a submodule, then simply link against `move-vectormath`, which will automatically acquire the RTM dependency using CPM.
-
-If your project does not use CMake, make sure the RTM headers are available in your project's include path, then add "${thisDir}/lib/include" to your include path.
+See the [BUILDING](BUILDING.md) document.
 
 # Contributing
 

@@ -1,0 +1,18 @@
+{
+  "Name": "move-math",
+  "Description": "A new Move project",
+  "Version": "0.2.0",
+  "License": "Unspecified",
+  "MainPackage": "move::math",
+  "MoveCoreVersion": "v0.3.2",
+  "RemoteProjects": [
+    {
+      "Type": "Git",
+      "Name": "move-common-packages",
+      "Url": "git@github.com:move-engine/move-common-packages.git",
+      "Tag": "f3bcb6f23b4f40fa788e2d802024332cbc031065",
+      "Branch": "main"
+    }
+  ],
+  "EnableProfiling": false
+}
