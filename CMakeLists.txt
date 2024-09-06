@@ -10,6 +10,14 @@ project(
     LANGUAGES NONE
 )
 
+# Dependencies
 add_subdirectory(packages/cmake/rtm)
+
+# Library
 add_library(move-vectormath INTERFACE)
 target_include_directories(move-vectormath INTERFACE packages/move/math/include)
+
+# Aliases
+add_library(move::vectormath ALIAS move-vectormath)
+add_library(move::math ALIAS move-vectormath)
+add_library(move-math ALIAS move-vectormath)
