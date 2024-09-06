@@ -49,9 +49,9 @@ namespace move::math
         using rtm_vec4_t = typename simd_rtm::detail::v4<T>::type;
         using rtm_mat3x4_t = typename simd_rtm::detail::m3x4<T>::type;
         using rtm_mat4x4_t = rtm_t;
-        using vec3_t = vec3<T, Acceleration::Scalar>;
+        using vec3_t = vec3<T, acceleration>;
         using fast_vec3_t = vec3<T, acceleration>;
-        using vec4_t = vec4<T, Acceleration::Scalar>;
+        using vec4_t = vec4<T, acceleration>;
         using fast_vec4_t = vec4<T, acceleration>;
         using quat_t = quat<T>;
         using component_type = T;
