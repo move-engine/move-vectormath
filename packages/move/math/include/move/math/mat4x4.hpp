@@ -351,6 +351,27 @@ namespace move::math
                 matrix_cast<rtm_mat3x4_t>(matrix_from_quat(quat.to_rtm())));
         }
 
+        MVM_INLINE_NODISCARD static mat4x4 rotation_x(const T& angle)
+        {
+            using namespace rtm;
+            return rtm_mat4x4_t(matrix_cast<rtm_mat3x4_t>(
+                matrix_from_euler_xyz(vector_set(angle, T(0), T(0)))));
+        }
+
+        MVM_INLINE_NODISCARD static mat4x4 rotation_y(const T& angle)
+        {
+            using namespace rtm;
+            return rtm_mat4x4_t(matrix_cast<rtm_mat3x4_t>(
+                matrix_from_euler_xyz(vector_set(T(0), angle, T(0)))));
+        }
+
+        MVM_INLINE_NODISCARD static mat4x4 rotation_z(const T& angle)
+        {
+            using namespace rtm;
+            return rtm_mat4x4_t(matrix_cast<rtm_mat3x4_t>(
+                matrix_from_euler_xyz(vector_set(T(0), T(0), angle))));
+        }
+
         /**
          * @brief Creates a rotation matrix from an axis and an angle.
          *
