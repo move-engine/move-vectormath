@@ -122,15 +122,15 @@ namespace move::math
             return to_accel<Acceleration::Scalar>();
         }
 
-        MVM_NODISCARD operator vec3<T, Acceleration::Scalar>() const
-        {
-            return storable();
-        }
+        // MVM_NODISCARD operator vec3<T, Acceleration::Scalar>() const
+        // {
+        //     return storable();
+        // }
 
-        MVM_NODISCARD operator vec3<T, Acceleration::RTM>() const
-        {
-            return fast();
-        }
+        // MVM_NODISCARD operator vec3<T, Acceleration::RTM>() const
+        // {
+        //     return fast();
+        // }
 
         MVM_NODISCARD operator rtm_t() const
         {
