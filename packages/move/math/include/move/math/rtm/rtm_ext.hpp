@@ -55,7 +55,7 @@ namespace rtm::ext
         return result;
     }
 
-    template <typename mat_type = matrix4x4f, typename vec_type = vector4f>
+    template <typename mat_type, typename vec_type>
     RTM_DISABLE_SECURITY_COOKIE_CHECK MVM_INLINE_NODISCARD constexpr mat_type
     look_at_lh(const vec_type& eye, const vec_type& center, const vec_type& up)
     {

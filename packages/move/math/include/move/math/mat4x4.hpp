@@ -123,10 +123,10 @@ namespace move::math
         MVM_INLINE void load_array(const T* in)
         {
             using namespace rtm;
-            vector4f x = vector_load(in);
-            vector4f y = vector_load(in + 4);
-            vector4f z = vector_load(in + 8);
-            vector4f w = vector_load(in + 12);
+            rtm_vec4_t x = vector_load(in);
+            rtm_vec4_t y = vector_load(in + 4);
+            rtm_vec4_t z = vector_load(in + 8);
+            rtm_vec4_t w = vector_load(in + 12);
             _value = matrix_set(x, y, z, w);
         }
 
@@ -334,14 +334,14 @@ namespace move::math
             typename simd_rtm::detail::v4<T>::type translation_row =
                 rtm::vector_set_w(translation.to_rtm(), component_type(1));
 
-            return mat4x4(rtm::matrix_set(
+            return {rtm::matrix_set(
                 rtm::vector_set(component_type(1), component_type(0),
                                 component_type(0), component_type(0)),
                 rtm::vector_set(component_type(0), component_type(1),
                                 component_type(0), component_type(0)),
                 rtm::vector_set(component_type(0), component_type(0),
                                 component_type(1), component_type(0)),
-                translation_row));
+                translation_row)};
         }
 
         MVM_INLINE_NODISCARD static mat4x4 rotation(const quat_t& quat)
@@ -393,7 +393,8 @@ namespace move::math
                                                  component_type y,
                                                  component_type z) noexcept
         {
-            return scale(fast_vec3_t(x, y, z));
+            return rtm_mat4x4_t(rtm::matrix_cast<rtm_mat3x4_t>(
+                rtm::matrix_from_scale(rtm::vector_set(x, y, z, 1))));
         }
 
         MVM_INLINE_NODISCARD static mat4x4 scale(
@@ -428,8 +429,22 @@ namespace move::math
             const fast_vec3_t& target,
             const fast_vec3_t& up) noexcept
         {
-            return rtm::ext::look_at_lh(eye.to_rtm(), target.to_rtm(),
-                                        up.to_rtm());
+            // auto intermediate = mat4
+            return (rtm::ext::look_at_lh<rtm_mat4x4_t, rtm_vec4_t>(
+                eye.to_rtm(), target.to_rtm(), up.to_rtm()));
+
+            // Change unsafe nans to safe nans
+            // T data[16];
+            // intermediate.store_array(data);
+            // for (uint8_t i = 0; i < 16; i++)
+            // {
+            //     if (std::isnan(data[i]))
+            //     {
+            //         data[i] = std::numeric_limits<T>::quiet_NaN();
+            //     }
+            // }
+            // intermediate.load_array(data);
+            // return intermediate;
         }
 
         MVM_INLINE_NODISCARD static mat4x4 perspective(const T& fov,

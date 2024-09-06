@@ -1,4 +1,5 @@
 #pragma once
+#include <cmath>
 #include <type_traits>
 
 #include <rtm/impl/vector_common.h>
@@ -367,6 +368,11 @@ namespace move::math
 
         for (uint8_t i = 0; i < 4; i++)
         {
+            if (std::isnan(aloaded[i]) && std::isnan(bloaded[i]))
+            {
+                continue;
+            }
+
             if (!approx_equal(aloaded[i], bloaded[i], epsilon))
             {
                 return false;

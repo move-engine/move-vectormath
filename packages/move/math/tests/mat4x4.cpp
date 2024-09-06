@@ -80,6 +80,57 @@ inline void test_mat4()
         }
     }
 
+    // Bulk ops crash testing
+    {
+        mat4 test1 = mat4::identity();
+        mat4 test2 = mat4::translation(vec3(1, 2, 3));
+        mat4 test3 = mat4::angle_axis(vec3::up(),
+                                      move::math::deg2rad<component_type>(65));
+        mat4 test4 = mat4::translation(vec3(6, 3, 4));
+        mat4 test5 = mat4::translation(vec3(22, -19, 12));
+        mat4 test6 = mat4::scale(2, 2, 2);
+        mat4 test7 = mat4::identity();
+        mat4 test8 = mat4::translation(vec3(32, 12, 4));
+        mat4 test9 = mat4::translation(vec3(-18, 4, -89));
+        mat4 test10 = mat4::angle_axis(vec3::right(),
+                                       move::math::deg2rad<component_type>(23));
+        mat4 test11 = mat4::translation(vec3(11, 333, 4));
+        mat4 test12 = mat4::translation(vec3(1, 2, 3));
+        mat4 test13 = mat4::angle_axis(vec3::up(),
+                                       move::math::deg2rad<component_type>(65));
+        mat4 test14 = mat4::translation(vec3(6, 3, 4));
+        mat4 test15 = mat4::translation(vec3(22, -19, 12));
+        mat4 test16 = mat4::scale(2, 2, 2);
+
+        REQUIRE_NOTHROW(test1 * test2);
+        REQUIRE_NOTHROW(test1 * test2 * test3);
+        REQUIRE_NOTHROW(test1 * test2 * test3 * test4);
+        REQUIRE_NOTHROW(test1 * test2 * test3 * test4 * test5);
+        REQUIRE_NOTHROW(test1 * test2 * test3 * test4 * test5 * test6);
+        REQUIRE_NOTHROW(test1 * test2 * test3 * test4 * test5 * test6 * test7);
+        REQUIRE_NOTHROW(test1 * test2 * test3 * test4 * test5 * test6 * test7 *
+                        test8);
+        REQUIRE_NOTHROW(test1 * test2 * test3 * test4 * test5 * test6 * test7 *
+                        test8 * test9);
+        REQUIRE_NOTHROW(test1 * test2 * test3 * test4 * test5 * test6 * test7 *
+                        test8 * test9 * test10);
+        REQUIRE_NOTHROW(test1 * test2 * test3 * test4 * test5 * test6 * test7 *
+                        test8 * test9 * test10 * test11);
+        REQUIRE_NOTHROW(test1 * test2 * test3 * test4 * test5 * test6 * test7 *
+                        test8 * test9 * test10 * test11 * test12);
+        REQUIRE_NOTHROW(test1 * test2 * test3 * test4 * test5 * test6 * test7 *
+                        test8 * test9 * test10 * test11 * test12 * test13);
+        REQUIRE_NOTHROW(test1 * test2 * test3 * test4 * test5 * test6 * test7 *
+                        test8 * test9 * test10 * test11 * test12 * test13 *
+                        test14);
+        REQUIRE_NOTHROW(test1 * test2 * test3 * test4 * test5 * test6 * test7 *
+                        test8 * test9 * test10 * test11 * test12 * test13 *
+                        test14 * test15);
+        REQUIRE_NOTHROW(test1 * test2 * test3 * test4 * test5 * test6 * test7 *
+                        test8 * test9 * test10 * test11 * test12 * test13 *
+                        test14 * test15 * test16);
+    }
+
     // Transform matrix testing
     {
         mat4 translation = mat4::translation(vec3(1, 2, 3));
@@ -225,7 +276,78 @@ inline void test_mat4()
 
     // Construct a look_at matrix
     {
-        // TODO: Test this
+        auto defaultLookAt =
+            mat4::look_at(vec3::zero(), vec3::forward(), vec3::up());
+
+        THEN("The matrix is correct")
+        {
+            auto expected =
+                mat4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+            INFO(defaultLookAt << " vs " << expected);
+            REQUIRE(move::math::approx_equal(defaultLookAt, expected,
+                                             component_type(0.001)));
+        }
+
+        THEN(
+            "Multiplying a vector by the matrix results in the correct "
+            "transformation")
+        {
+            vec4 test = {1, 0, 0, 1};
+            vec4 result = test * defaultLookAt;
+            vec4 expected = {1, 0, 0, 1};
+
+            INFO(result << " vs " << expected);
+            REQUIRE(move::math::approx_equal(result, expected));
+        }
+
+        THEN(
+            "Multiplying the vector by the inverse results in the correct "
+            "transformation")
+        {
+            vec4 test = {1, 0, 0, 1};
+            vec4 result = test * defaultLookAt.inverse();
+            vec4 expected = {1, 0, 0, 1};
+
+            INFO(result << " vs " << expected);
+            REQUIRE(move::math::approx_equal(result, expected));
+        }
+    }
+
+    // Construct a look_at matrix with a non - default eye position
+    {
+        auto defaultLookAt =
+            mat4::look_at(vec3::left() * 2, vec3::right(), vec3::up());
+
+        THEN("The matrix is correct")
+        {
+            auto expected =
+                mat4(0, 0, -1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 2, 0, 0, 1);
+            INFO(defaultLookAt << " vs " << expected);
+            REQUIRE(move::math::approx_equal(defaultLookAt, expected,
+                                             component_type(0.001)));
+        }
+
+        THEN(
+            "Multiplying a vector by the matrix results in the correct "
+            "transformation")
+        {
+            vec4 test = {0, 1, 0, 1};
+            vec4 result = test * defaultLookAt;
+            vec4 expected = {0, 1, 0, 1};
+
+            INFO(result << " vs " << expected);
+            REQUIRE(move::math::approx_equal(result, expected));
+        }
+    }
+
+    // Construct a broken look_at matrix
+    {
+        auto brokenLookAt = mat4::look_at({1, 2, 3}, {4, 5, 6}, {7, 8, 9});
+        auto broken2 =
+            mat4::filled(std::numeric_limits<component_type>::signaling_NaN());
+
+        REQUIRE_FALSE(move::math::approx_equal(brokenLookAt, broken2,
+                                               component_type(0.001)));
     }
 
     // Construct a perspective matrix
@@ -309,6 +431,122 @@ inline void benchmark_mat4()
             mat4::rotation(rotation) *
             //
             mat4::translation(translation);
+    };
+
+    // Bulk ops crash testing
+    BENCHMARK(alloc_appended_name(typeName, ": Bulk ops"))
+    {
+        mat4 test0 = mat4::scale(2, 2, 2);
+        mat4 test1 = mat4::identity();
+        mat4 test2 = mat4::translation(vec3(1, 2, 3));
+        mat4 test3 = mat4::angle_axis(vec3::up(),
+                                      move::math::deg2rad<component_type>(65));
+        mat4 test4 = mat4::translation(vec3(6, 3, 4));
+        mat4 test5 = mat4::translation(vec3(22, -19, 12));
+        mat4 test6 = mat4::scale(2, 2, 2);
+        mat4 test7 = mat4::identity();
+        mat4 test8 = mat4::translation(vec3(32, 12, 4));
+        mat4 test9 = mat4::translation(vec3(-18, 4, -89));
+        mat4 test10 = mat4::angle_axis(vec3::right(),
+                                       move::math::deg2rad<component_type>(23));
+        mat4 test11 = mat4::translation(vec3(11, 333, 4));
+        mat4 test12 = mat4::translation(vec3(1, 2, 3));
+        mat4 test13 = mat4::angle_axis(vec3::up(),
+                                       move::math::deg2rad<component_type>(65));
+        mat4 test14 = mat4::translation(vec3(6, 3, 4));
+        mat4 test15 = mat4::translation(vec3(22, -19, 12));
+
+        mat4 tests[] = {test0,  test1,  test2,  test3, test4,  test5,
+                        test6,  test7,  test8,  test9, test10, test11,
+                        test12, test13, test14, test15};
+
+        REQUIRE_NOTHROW(
+            [&]
+            {
+                return test0 * test1;
+            }());
+        REQUIRE_NOTHROW(
+            [&]
+            {
+                return test0 * test1 * test2;
+            }());
+        REQUIRE_NOTHROW(
+            [&]
+            {
+                return test0 * test1 * test2 * test3;
+            }());
+        REQUIRE_NOTHROW(
+            [&]
+            {
+                return test0 * test1 * test2 * test3 * test4;
+            }());
+        REQUIRE_NOTHROW(
+            [&]
+            {
+                return test0 * test1 * test2 * test3 * test4 * test5;
+            }());
+        REQUIRE_NOTHROW(
+            [&]
+            {
+                return test0 * test1 * test2 * test3 * test4 * test5 * test6;
+            }());
+        REQUIRE_NOTHROW(
+            [&]
+            {
+                return test0 * test1 * test2 * test3 * test4 * test5 * test6 *
+                       test7;
+            }());
+        REQUIRE_NOTHROW(
+            [&]
+            {
+                return test0 * test1 * test2 * test3 * test4 * test5 * test6 *
+                       test7 * test8;
+            }());
+        REQUIRE_NOTHROW(
+            [&]
+            {
+                return test0 * test1 * test2 * test3 * test4 * test5 * test6 *
+                       test7 * test8 * test9;
+            }());
+        REQUIRE_NOTHROW(
+            [&]
+            {
+                return test0 * test1 * test2 * test3 * test4 * test5 * test6 *
+                       test7 * test8 * test9 * test10;
+            }());
+        REQUIRE_NOTHROW(
+            [&]
+            {
+                return test0 * test1 * test2 * test3 * test4 * test5 * test6 *
+                       test7 * test8 * test9 * test10 * test11;
+            }());
+        REQUIRE_NOTHROW(
+            [&]
+            {
+                return test0 * test1 * test2 * test3 * test4 * test5 * test6 *
+                       test7 * test8 * test9 * test10 * test11 * test12;
+            }());
+        REQUIRE_NOTHROW(
+            [&]
+            {
+                return test0 * test1 * test2 * test3 * test4 * test5 * test6 *
+                       test7 * test8 * test9 * test10 * test11 * test12 *
+                       test13;
+            }());
+        REQUIRE_NOTHROW(
+            [&]
+            {
+                return test0 * test1 * test2 * test3 * test4 * test5 * test6 *
+                       test7 * test8 * test9 * test10 * test11 * test12 *
+                       test13 * test14;
+            }());
+        REQUIRE_NOTHROW(
+            [&]
+            {
+                return test0 * test1 * test2 * test3 * test4 * test5 * test6 *
+                       test7 * test8 * test9 * test10 * test11 * test12 *
+                       test13 * test14 * test15;
+            }());
     };
 }
 

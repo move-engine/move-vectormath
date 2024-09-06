@@ -122,17 +122,17 @@ namespace move::math
             return to_accel<Acceleration::Scalar>();
         }
 
-        MVM_INLINE_NODISCARD operator vec3<T, Acceleration::Scalar>() const
+        MVM_NODISCARD operator vec3<T, Acceleration::Scalar>() const
         {
             return storable();
         }
 
-        MVM_INLINE_NODISCARD operator vec3<T, Acceleration::RTM>() const
+        MVM_NODISCARD operator vec3<T, Acceleration::RTM>() const
         {
             return fast();
         }
 
-        MVM_INLINE_NODISCARD operator rtm_t() const
+        MVM_NODISCARD operator rtm_t() const
         {
             return to_rtm();
         }
@@ -176,7 +176,7 @@ namespace move::math
         {
             // TODO: Fast mode for RTM vec3
             return rtm::vector_set(base_t::get_x(), base_t::get_y(),
-                                   base_t::get_z(), 0);
+                                   base_t::get_z(), 1);
         }
 
         MVM_INLINE_NODISCARD static vec3 from_rtm(const rtm_t& rtm_vec)
