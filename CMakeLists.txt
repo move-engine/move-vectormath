@@ -11,6 +11,5 @@ project(
 )
 
 add_subdirectory(packages/cmake/rtm)
-
 add_library(move-vectormath INTERFACE)
 target_include_directories(move-vectormath INTERFACE packages/move/math/include)
