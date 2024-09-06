@@ -467,8 +467,8 @@ namespace move::math
     using storage_sbyte4 = vec4<int8_t, Acceleration::Default>;
     using storage_byte4 = vec4<int8_t, Acceleration::Default>;
 
-    using float4 = storage_float4;
-    using double4 = storage_double4;
+    using float4 = fast_float4;
+    using double4 = fast_double4;
 
     using long4 = storage_long4;
     using ulong4 = storage_ulong4;
@@ -482,17 +482,17 @@ namespace move::math
     using sbyte4 = storage_sbyte4;
     using byte4 = storage_byte4;
 
-    using vec4f = float4;
-    using vec4d = double4;
-    using vec4i = int4;
-    using vec4u = uint4;
-    using vec4l = long4;
-    using vec4ul = ulong4;
-    using vec4s = short4;
-    using vec4us = ushort4;
+    using vec4f = storage_float4;
+    using vec4d = storage_double4;
+    using vec4i = storage_int4;
+    using vec4u = storage_uint4;
+    using vec4l = storage_long4;
+    using vec4ul = storage_ulong4;
+    using vec4s = storage_short4;
+    using vec4us = storage_ushort4;
 
-    using vec4b = sbyte4;
-    using vec4sb = byte4;
+    using vec4b = storage_sbyte4;
+    using vec4sb = storage_byte4;
 
     template <typename T, move::math::Acceleration Accel>
     MVM_INLINE_NODISCARD bool approx_equal(

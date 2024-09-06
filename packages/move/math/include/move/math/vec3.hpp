@@ -270,8 +270,8 @@ namespace move::math
     using storage_sbyte3 = vec3<int8_t, Acceleration::Default>;
     using storage_byte3 = vec3<int8_t, Acceleration::Default>;
 
-    using float3 = storage_float3;
-    using double3 = storage_double3;
+    using float3 = fast_float3;
+    using double3 = fast_double3;
 
     using long3 = storage_long3;
     using ulong3 = storage_ulong3;
@@ -285,15 +285,15 @@ namespace move::math
     using sbyte3 = storage_sbyte3;
     using byte3 = storage_byte3;
 
-    using vec3f = float3;
-    using vec3d = double3;
-    using vec3i = int3;
-    using vec3u = uint3;
-    using vec3l = long3;
-    using vec3ul = ulong3;
-    using vec3s = short3;
-    using vec3us = ushort3;
+    using vec3f = storage_float3;
+    using vec3d = storage_double3;
+    using vec3i = storage_int3;
+    using vec3u = storage_uint3;
+    using vec3l = storage_long3;
+    using vec3ul = storage_ulong3;
+    using vec3s = storage_short3;
+    using vec3us = storage_ushort3;
 
-    using vec3b = sbyte3;
-    using vec3sb = byte3;
+    using vec3b = storage_sbyte3;
+    using vec3sb = storage_byte3;
 }  // namespace move::math
