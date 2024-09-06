@@ -444,28 +444,28 @@ namespace move::math
 
     using fast_float4 = vec4<float, Acceleration::RTM>;
     using fast_double4 = vec4<double, Acceleration::RTM>;
-    using storage_float4 = vec4<float, Acceleration::Default>;
-    using storage_double4 = vec4<double, Acceleration::Default>;
+    using storage_float4 = vec4<float, Acceleration::Scalar>;
+    using storage_double4 = vec4<double, Acceleration::Scalar>;
 
     using fast_long4 = vec4<int64_t, Acceleration::Default>;
     using fast_ulong4 = vec4<uint64_t, Acceleration::Default>;
-    using storage_long4 = vec4<int64_t, Acceleration::Default>;
-    using storage_ulong4 = vec4<uint64_t, Acceleration::Default>;
+    using storage_long4 = vec4<int64_t, Acceleration::Scalar>;
+    using storage_ulong4 = vec4<uint64_t, Acceleration::Scalar>;
 
     using fast_int4 = vec4<int32_t, Acceleration::Default>;
     using fast_uint4 = vec4<uint32_t, Acceleration::Default>;
-    using storage_int4 = vec4<int32_t, Acceleration::Default>;
-    using storage_uint4 = vec4<uint32_t, Acceleration::Default>;
+    using storage_int4 = vec4<int32_t, Acceleration::Scalar>;
+    using storage_uint4 = vec4<uint32_t, Acceleration::Scalar>;
 
     using fast_short4 = vec4<int16_t, Acceleration::Default>;
     using fast_ushort4 = vec4<uint16_t, Acceleration::Default>;
-    using storage_short4 = vec4<int16_t, Acceleration::Default>;
-    using storage_ushort4 = vec4<uint16_t, Acceleration::Default>;
+    using storage_short4 = vec4<int16_t, Acceleration::Scalar>;
+    using storage_ushort4 = vec4<uint16_t, Acceleration::Scalar>;
 
     using fast_sbyte4 = vec4<int8_t, Acceleration::Default>;
     using fast_byte4 = vec4<int8_t, Acceleration::Default>;
-    using storage_sbyte4 = vec4<int8_t, Acceleration::Default>;
-    using storage_byte4 = vec4<int8_t, Acceleration::Default>;
+    using storage_sbyte4 = vec4<int8_t, Acceleration::Scalar>;
+    using storage_byte4 = vec4<int8_t, Acceleration::Scalar>;
 
     using float4 = fast_float4;
     using double4 = fast_double4;

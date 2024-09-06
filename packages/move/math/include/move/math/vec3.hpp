@@ -247,28 +247,28 @@ namespace move::math
 
     using fast_float3 = vec3<float, Acceleration::RTM>;
     using fast_double3 = vec3<double, Acceleration::RTM>;
-    using storage_float3 = vec3<float, Acceleration::Default>;
-    using storage_double3 = vec3<double, Acceleration::Default>;
+    using storage_float3 = vec3<float, Acceleration::Scalar>;
+    using storage_double3 = vec3<double, Acceleration::Scalar>;
 
     using fast_long3 = vec3<int64_t, Acceleration::Default>;
     using fast_ulong3 = vec3<uint64_t, Acceleration::Default>;
-    using storage_long3 = vec3<int64_t, Acceleration::Default>;
-    using storage_ulong3 = vec3<uint64_t, Acceleration::Default>;
+    using storage_long3 = vec3<int64_t, Acceleration::Scalar>;
+    using storage_ulong3 = vec3<uint64_t, Acceleration::Scalar>;
 
     using fast_int3 = vec3<int32_t, Acceleration::Default>;
     using fast_uint3 = vec3<uint32_t, Acceleration::Default>;
-    using storage_int3 = vec3<int32_t, Acceleration::Default>;
-    using storage_uint3 = vec3<uint32_t, Acceleration::Default>;
+    using storage_int3 = vec3<int32_t, Acceleration::Scalar>;
+    using storage_uint3 = vec3<uint32_t, Acceleration::Scalar>;
 
     using fast_short3 = vec3<int16_t, Acceleration::Default>;
     using fast_ushort3 = vec3<uint16_t, Acceleration::Default>;
-    using storage_short3 = vec3<int16_t, Acceleration::Default>;
-    using storage_ushort3 = vec3<uint16_t, Acceleration::Default>;
+    using storage_short3 = vec3<int16_t, Acceleration::Scalar>;
+    using storage_ushort3 = vec3<uint16_t, Acceleration::Scalar>;
 
     using fast_sbyte3 = vec3<int8_t, Acceleration::Default>;
     using fast_byte3 = vec3<int8_t, Acceleration::Default>;
-    using storage_sbyte3 = vec3<int8_t, Acceleration::Default>;
-    using storage_byte3 = vec3<int8_t, Acceleration::Default>;
+    using storage_sbyte3 = vec3<int8_t, Acceleration::Scalar>;
+    using storage_byte3 = vec3<int8_t, Acceleration::Scalar>;
 
     using float3 = fast_float3;
     using double3 = fast_double3;
