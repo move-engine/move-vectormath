@@ -4,7 +4,10 @@
 
 #include <move/math/common.hpp>
 #include <move/math/macros.hpp>
+#if __has_include(<move/meta/type_utils.hpp>)
+#define MVM_HAS_MOVE_CORE
 #include <move/meta/type_utils.hpp>
+#endif
 
 namespace move::math::scalar
 {
@@ -210,8 +213,13 @@ namespace move::math::scalar
         friend std::basic_ostream<CharT, Traits>& operator<<(
             std::basic_ostream<CharT, Traits>& os, const base_vec4& vec)
         {
-            os << move::meta::type_name<base_vec4>() << "(" << vec.x << ", "
-               << vec.y << ", " << vec.z << ", " << vec.w << ")";
+#if defined(MVM_HAS_MOVE_CORE)
+            os << move::meta::type_name<base_vec4>() << "("
+#else
+            os << "base_vec4("
+#endif
+               << vec.x << ", " << vec.y << ", " << vec.z << ", " << vec.w
+               << ")";
             return os;
         }
 

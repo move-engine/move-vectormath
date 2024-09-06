@@ -8,7 +8,10 @@
 #include <move/math/common.hpp>
 #include <move/math/macros.hpp>
 #include <move/math/mat4x4.hpp>
+#if __has_include(<move/meta/type_utils.hpp>)
+#define MVM_HAS_MOVE_CORE
 #include <move/meta/type_utils.hpp>
+#endif
 #include <move/string.hpp>
 
 #include "mm_test_common.hpp"

@@ -180,7 +180,11 @@ namespace move::math
         friend std::basic_ostream<CharT, Traits>& operator<<(
             std::basic_ostream<CharT, Traits>& os, const mat4x4& vec)
         {
+#if defined(MVM_HAS_MOVE_CORE)
             os << move::meta::type_name<mat4x4>() << "(";
+#else
+            os << "mat4x4(";
+#endif
             for (uint8_t i = 0; i < 4; i++)
             {
                 auto row = rtm::matrix_get_axis(vec._value, (rtm::axis4)i);

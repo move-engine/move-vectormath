@@ -116,7 +116,11 @@ namespace move::math
         friend std::basic_ostream<CharT, Traits>& operator<<(
             std::basic_ostream<CharT, Traits>& os, const quat& vec)
         {
+#if defined(MVM_HAS_MOVE_CORE)
             os << move::meta::type_name<quat>() << "(";
+#else
+            os << "quat(";
+#endif
             T data[4];
             vec.store_array(data);
             for (uint8_t i = 0; i < 4; i++)

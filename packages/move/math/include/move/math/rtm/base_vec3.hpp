@@ -7,7 +7,11 @@
 #include <move/math/common.hpp>
 #include <move/math/macros.hpp>
 #include <move/math/rtm/rtm_common.hpp>
+
+#if __has_include(<move/meta/type_utils.hpp>)
+#define MVM_HAS_MOVE_CORE
 #include <move/meta/type_utils.hpp>
+#endif
 
 namespace move::math::simd_rtm
 {
@@ -185,8 +189,13 @@ namespace move::math::simd_rtm
         friend std::basic_ostream<CharT, Traits>& operator<<(
             std::basic_ostream<CharT, Traits>& os, const base_vec3& vec)
         {
-            os << move::meta::type_name<base_vec3>() << "(" << vec.get_x()
-               << ", " << vec.get_y() << ", " << vec.get_z() << ")";
+#if defined(MVM_HAS_MOVE_CORE)
+            os << move::meta::type_name<base_vec3>() << "("
+#else
+            os << "base_vec3("
+#endif
+               << vec.get_x() << ", " << vec.get_y() << ", " << vec.get_z()
+               << ")";
             return os;
         }
 
