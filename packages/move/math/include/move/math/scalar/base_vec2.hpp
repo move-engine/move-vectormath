@@ -235,6 +235,11 @@ namespace move::math::scalar
             return x / y;
         }
 
+        MVM_INLINE_NODISCARD T dot(const base_vec2& other) const
+        {
+            return x * other.x + y * other.y;
+        }
+
         // Mutators
     public:
         MVM_INLINE base_vec2& normalize()

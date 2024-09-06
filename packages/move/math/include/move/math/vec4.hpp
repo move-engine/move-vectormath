@@ -482,6 +482,18 @@ namespace move::math
     using sbyte4 = storage_sbyte4;
     using byte4 = storage_byte4;
 
+    using vec4f = float4;
+    using vec4d = double4;
+    using vec4i = int4;
+    using vec4u = uint4;
+    using vec4l = long4;
+    using vec4ul = ulong4;
+    using vec4s = short4;
+    using vec4us = ushort4;
+
+    using vec4b = sbyte4;
+    using vec4sb = byte4;
+
     template <typename T, move::math::Acceleration Accel>
     MVM_INLINE_NODISCARD bool approx_equal(
         const vec4<T, Accel>& a,

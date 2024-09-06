@@ -128,18 +128,55 @@ namespace move::math
         }
     };
 
-    using float2 = vec2<float, Acceleration::Default>;
-    using double2 = vec2<double, Acceleration::Default>;
+    using fast_float2 = vec2<float, Acceleration::RTM>;
+    using fast_double2 = vec2<double, Acceleration::RTM>;
+    using storage_float2 = vec2<float, Acceleration::Default>;
+    using storage_double2 = vec2<double, Acceleration::Default>;
 
-    using long2 = vec2<int64_t, Acceleration::Default>;
-    using ulong2 = vec2<uint64_t, Acceleration::Default>;
+    using fast_long2 = vec2<int64_t, Acceleration::Default>;
+    using fast_ulong2 = vec2<uint64_t, Acceleration::Default>;
+    using storage_long2 = vec2<int64_t, Acceleration::Default>;
+    using storage_ulong2 = vec2<uint64_t, Acceleration::Default>;
 
-    using int2 = vec2<int32_t, Acceleration::Default>;
-    using uint2 = vec2<uint32_t, Acceleration::Default>;
+    using fast_int2 = vec2<int32_t, Acceleration::Default>;
+    using fast_uint2 = vec2<uint32_t, Acceleration::Default>;
+    using storage_int2 = vec2<int32_t, Acceleration::Default>;
+    using storage_uint2 = vec2<uint32_t, Acceleration::Default>;
 
-    using short2 = vec2<int16_t, Acceleration::Default>;
-    using ushort2 = vec2<uint16_t, Acceleration::Default>;
+    using fast_short2 = vec2<int16_t, Acceleration::Default>;
+    using fast_ushort2 = vec2<uint16_t, Acceleration::Default>;
+    using storage_short2 = vec2<int16_t, Acceleration::Default>;
+    using storage_ushort2 = vec2<uint16_t, Acceleration::Default>;
 
-    using sbyte2 = vec2<int8_t, Acceleration::Default>;
-    using byte2 = vec2<uint8_t, Acceleration::Default>;
+    using fast_sbyte2 = vec2<int8_t, Acceleration::Default>;
+    using fast_byte2 = vec2<int8_t, Acceleration::Default>;
+    using storage_sbyte2 = vec2<int8_t, Acceleration::Default>;
+    using storage_byte2 = vec2<int8_t, Acceleration::Default>;
+
+    using float2 = storage_float2;
+    using double2 = storage_double2;
+
+    using long2 = storage_long2;
+    using ulong2 = storage_ulong2;
+
+    using int2 = storage_int2;
+    using uint2 = storage_uint2;
+
+    using short2 = storage_short2;
+    using ushort2 = storage_ushort2;
+
+    using sbyte2 = storage_sbyte2;
+    using byte2 = storage_byte2;
+
+    using vec2f = float2;
+    using vec2d = double2;
+    using vec2i = int2;
+    using vec2u = uint2;
+    using vec2l = long2;
+    using vec2ul = ulong2;
+    using vec2s = short2;
+    using vec2us = ushort2;
+
+    using vec2b = sbyte2;
+    using vec2sb = byte2;
 }  // namespace move::math

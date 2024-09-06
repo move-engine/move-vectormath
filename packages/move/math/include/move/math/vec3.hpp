@@ -284,4 +284,16 @@ namespace move::math
 
     using sbyte3 = storage_sbyte3;
     using byte3 = storage_byte3;
+
+    using vec3f = float3;
+    using vec3d = double3;
+    using vec3i = int3;
+    using vec3u = uint3;
+    using vec3l = long3;
+    using vec3ul = ulong3;
+    using vec3s = short3;
+    using vec3us = ushort3;
+
+    using vec3b = sbyte3;
+    using vec3sb = byte3;
 }  // namespace move::math
