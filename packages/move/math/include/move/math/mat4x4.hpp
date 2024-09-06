@@ -38,7 +38,7 @@ namespace move::math
         constexpr static bool has_pointer_semantics = false;
 
     private:
-        using rtm_t = wrapper_type::type;
+        using rtm_t = typename wrapper_type::type;
         rtm_t _value;
 
         template <typename component_type, Acceleration OtherAccel>
