@@ -35,7 +35,7 @@ namespace move::math::simd_rtm
 
         // Member variables
     private:
-        using rtm_vec3_t = wrapper_type::type;
+        using rtm_vec3_t = typename wrapper_type::type;
         rtm_vec3_t _value;
 
         // Constructors

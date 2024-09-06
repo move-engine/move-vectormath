@@ -36,7 +36,7 @@ namespace move::math::simd_rtm
         constexpr static bool has_pointer_semantics = false;
         // Member variables
     private:
-        using rtm_vec4_t = wrapper_type::type;
+        using rtm_vec4_t = typename wrapper_type::type;
         rtm_vec4_t _value;
 
         // Constructors

@@ -31,7 +31,7 @@ namespace move::math
         constexpr static bool has_pointer_semantics = false;
 
     private:
-        using underlying_type = wrapper_type::type;
+        using underlying_type = typename wrapper_type::type;
         underlying_type _value;
 
         template <typename component_type, Acceleration OtherAccel>
@@ -342,7 +342,7 @@ namespace move::math
         const quat<component_type>& quat)
     {
         using Accel = move::math::Acceleration;
-        using vector_type = simd_rtm::detail::v4<component_type>::type;
+        using vector_type = typename simd_rtm::detail::v4<component_type>::type;
 
         vector_type result = rtm::quat_mul_vector3(vec.to_rtm(), quat._value);
         return vec3<component_type, OtherAccel>::from_rtm(result);

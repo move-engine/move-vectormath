@@ -483,7 +483,7 @@ namespace move::math
     {
         using namespace rtm;
         using Accel = move::math::Acceleration;
-        using vector_type = simd_rtm::detail::v4<component_type>::type;
+        using vector_type = typename simd_rtm::detail::v4<component_type>::type;
 
         vector_type v = vec.to_rtm();
         vector_type result = matrix_mul_vector(v, mat._value);

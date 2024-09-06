@@ -40,7 +40,7 @@ namespace move::math
     public:
         using base_t = base_vec4_t<T, Accel>;
         using component_type = T;
-        using rtm_t = simd_rtm::detail::v4<T>::type;
+        using rtm_t = typename simd_rtm::detail::v4<T>::type;
 
         constexpr static auto acceleration = base_t::acceleration;
         constexpr static bool has_fields = base_t::has_fields;
