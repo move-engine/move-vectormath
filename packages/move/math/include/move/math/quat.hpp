@@ -21,7 +21,7 @@ namespace move::math
     }  // namespace simd_rtm::detail
 
     template <typename T, typename wrapper_type = simd_rtm::detail::quat<T>>
-        requires std::is_floating_point_v<T>
+    requires std::is_floating_point_v<T>
     struct quat
     {
     public:
@@ -336,12 +336,11 @@ namespace move::math
         const vec3<component_type, OtherAccel>& vec,
         const quat<component_type>& quat)
     {
-        using namespace rtm;
         using Accel = move::math::Acceleration;
         using vector_type = simd_rtm::detail::v4<component_type>::type;
 
-        vector_type result = quat_mul_vector3(vec.to_rtm(), quat._value);
-        return vec4<component_type, OtherAccel>::from_rtm(result);
+        vector_type result = rtm::quat_mul_vector3(vec.to_rtm(), quat._value);
+        return vec3<component_type, OtherAccel>::from_rtm(result);
     }
 
     using quatf = quat<float>;

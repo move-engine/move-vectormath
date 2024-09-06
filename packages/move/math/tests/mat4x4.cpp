@@ -251,6 +251,14 @@ inline void benchmark_mat4()
     static constexpr auto acceleration = mat4::acceleration;
     move::string_view typeName = move::meta::type_name<mat4>();
 
+    INFO("Benchmarking mat4 with following config:");
+    INFO("\tcomponent_type: " << move::meta::type_name<component_type>());
+    INFO("\tacceleration: " << magic_enum::enum_name(acceleration));
+    INFO("\tvec3: " << move::meta::type_name<vec3>());
+    INFO("\tvec4: " << move::meta::type_name<vec4>());
+    INFO("\tquat: " << move::meta::type_name<quat>());
+    INFO("\tmat4: " << move::meta::type_name<mat4>());
+
     mat4 identity;
     BENCHMARK(alloc_appended_name(typeName, ": Identity construction"))
     {
@@ -274,8 +282,11 @@ inline void benchmark_mat4()
     BENCHMARK(
         alloc_appended_name(typeName, ": Transform Construction (manual)"))
     {
-        return mat4::scale(scaleFac) * mat4::rotation(rotation) *
-               mat4::translation(translation);
+        auto scale = mat4::scale(scaleFac);
+        auto rot = mat4::rotation(rotation);
+        auto tra = mat4::translation(translation);
+        INFO("??");
+        return scale * rot * tra;
     };
 }
 

@@ -7,6 +7,7 @@
 #include <move/math/vec3.hpp>
 #include <move/meta/type_utils.hpp>
 #include "catch2/catch_approx.hpp"
+#include "mm_test_common.hpp"
 
 template <typename vec3>
 inline void test_vec3()
@@ -250,10 +251,21 @@ inline void test_vec3()
 
         THEN("The pointer is correct")
         {
-            component_type* ptr = test.to_array();
-            REQUIRE(ptr[0] == 3);
-            REQUIRE(ptr[1] == 4);
-            REQUIRE(ptr[2] == 5);
+            if constexpr (vec3::has_pointer_semantics)
+            {
+                component_type* ptr = test.to_array();
+                REQUIRE(ptr[0] == 3);
+                REQUIRE(ptr[1] == 4);
+                REQUIRE(ptr[2] == 5);
+            }
+            else
+            {
+                component_type ptr[3];
+                test.store_array(ptr);
+                REQUIRE(ptr[0] == 3);
+                REQUIRE(ptr[1] == 4);
+                REQUIRE(ptr[2] == 5);
+            }
         }
     }
 
@@ -262,10 +274,21 @@ inline void test_vec3()
         const vec3 test = {3, 4, 5};
         THEN("The pointer is correct")
         {
-            const component_type* ptr = test.to_array();
-            REQUIRE(ptr[0] == 3);
-            REQUIRE(ptr[1] == 4);
-            REQUIRE(ptr[2] == 5);
+            if constexpr (vec3::has_pointer_semantics)
+            {
+                const component_type* ptr = test.to_array();
+                REQUIRE(ptr[0] == 3);
+                REQUIRE(ptr[1] == 4);
+                REQUIRE(ptr[2] == 5);
+            }
+            else
+            {
+                component_type ptr[3];
+                test.store_array(ptr);
+                REQUIRE(ptr[0] == 3);
+                REQUIRE(ptr[1] == 4);
+                REQUIRE(ptr[2] == 5);
+            }
         }
     }
 
@@ -447,6 +470,7 @@ inline void test_vec3()
         }
     }
 }
+REPEAT_FOR_EACH_TYPE_WRAPPER(test_vec3, move::math::vec3);
 
 SCENARIO("Vec3 tests")
 {
@@ -454,30 +478,8 @@ SCENARIO("Vec3 tests")
     using Accel = move::math::Acceleration;
 
     // Scalar tests
-    test_vec3<vec3<float, Accel::Scalar>>();
-    test_vec3<vec3<double, Accel::Scalar>>();
-
-    test_vec3<vec3<int8_t, Accel::Scalar>>();
-    test_vec3<vec3<int16_t, Accel::Scalar>>();
-    test_vec3<vec3<int32_t, Accel::Scalar>>();
-    test_vec3<vec3<int64_t, Accel::Scalar>>();
-
-    test_vec3<vec3<uint8_t, Accel::Scalar>>();
-    test_vec3<vec3<uint16_t, Accel::Scalar>>();
-    test_vec3<vec3<uint32_t, Accel::Scalar>>();
-    test_vec3<vec3<uint64_t, Accel::Scalar>>();
-
+    test_vec3_multi<Accel::Scalar, float, double, int8_t, int16_t, int32_t,
+                    int64_t, uint8_t, uint16_t, uint32_t, uint64_t>();
     // SIMD tests
-    test_vec3<vec3<float, Accel::RTM>>();
-    test_vec3<vec3<double, Accel::RTM>>();
-
-    test_vec3<vec3<int8_t, Accel::RTM>>();
-    test_vec3<vec3<int16_t, Accel::RTM>>();
-    test_vec3<vec3<int32_t, Accel::RTM>>();
-    test_vec3<vec3<int64_t, Accel::RTM>>();
-
-    test_vec3<vec3<uint8_t, Accel::RTM>>();
-    test_vec3<vec3<uint16_t, Accel::RTM>>();
-    test_vec3<vec3<uint32_t, Accel::RTM>>();
-    test_vec3<vec3<uint64_t, Accel::RTM>>();
+    test_vec3_multi<Accel::RTM, float, double>();
 }

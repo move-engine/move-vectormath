@@ -69,11 +69,6 @@ namespace move::math
 
         // Conversions
     public:
-        MVM_INLINE_NODISCARD base_t storage() const
-        {
-            return *this;
-        }
-
         // Assignment operators
     public:
         MVM_INLINE vec2& operator+=(const vec2& other)

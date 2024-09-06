@@ -24,7 +24,8 @@ namespace move::math::simd_rtm
     }  // namespace detail
 
     template <typename T, typename wrapper_type = detail::v4<T>>
-    struct base_vec4
+    // requires std::is_floating_point_v<T>
+    struct alignas(16) base_vec4
     {
     public:
         constexpr static auto acceleration = Acceleration::RTM;
@@ -67,9 +68,29 @@ namespace move::math::simd_rtm
             rtm::vector_store(_value, dest);
         }
 
+        MVM_INLINE base_vec4& load_array(const T* src)
+        {
+            _value = rtm::vector_load(src);
+            return *this;
+        }
+
+        MVM_INLINE_NODISCARD static base_vec4 from_array(const T* src)
+        {
+            base_vec4 result;
+            result._value = rtm::vector_load(src);
+            return result;
+        }
+
         MVM_INLINE_NODISCARD rtm_vec4_t to_rtm() const
         {
             return _value;
+        }
+
+        MVM_INLINE_NODISCARD static base_vec4 from_rtm(const rtm_vec4_t& data)
+        {
+            base_vec4 result;
+            result._value = data;
+            return result;
         }
 
         // Arithmetic operators
@@ -447,9 +468,9 @@ namespace move::math::simd_rtm
         MVM_INLINE_NODISCARD static T angle_between_vectors(
             const base_vec4& v1, const base_vec4& v2) noexcept
         {
-            auto v1norm = v1.normalized();
-            auto v2norm = v2.normalized();
-            return angle_between_normalized_vectors(v1norm, v2norm);
+            auto v1norm = rtm::vector_normalize(v1._value);
+            auto v2norm = rtm::vector_normalize(v2._value);
+            return math::acos(dot(v1norm, v2norm));
         }
 
         /**

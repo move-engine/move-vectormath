@@ -29,7 +29,7 @@ namespace move::math
     // mat4 always uses RTM under the hood
     template <typename T, typename wrapper_type = simd_rtm::detail::m4x4<T>>
     requires std::is_floating_point_v<T>
-    struct mat4x4
+    struct alignas(16) mat4x4
     {
     public:
         constexpr static auto acceleration = Acceleration::RTM;
@@ -49,8 +49,10 @@ namespace move::math
         using rtm_vec4_t = typename simd_rtm::detail::v4<T>::type;
         using rtm_mat3x4_t = typename simd_rtm::detail::m3x4<T>::type;
         using rtm_mat4x4_t = rtm_t;
-        using vec3_t = vec3<T, acceleration>;
-        using vec4_t = vec4<T, acceleration>;
+        using vec3_t = vec3<T, Acceleration::Scalar>;
+        using fast_vec3_t = vec3<T, acceleration>;
+        using vec4_t = vec4<T, Acceleration::Scalar>;
+        using fast_vec4_t = vec4<T, acceleration>;
         using quat_t = quat<T>;
         using component_type = T;
 
@@ -91,10 +93,10 @@ namespace move::math
         {
         }
 
-        MVM_INLINE mat4x4(const vec4_t& row0,
-                          const vec4_t& row1,
-                          const vec4_t& row2,
-                          const vec4_t& row3) :
+        MVM_INLINE mat4x4(const fast_vec4_t& row0,
+                          const fast_vec4_t& row1,
+                          const fast_vec4_t& row2,
+                          const fast_vec4_t& row3) :
             _value(rtm::matrix_set(
                 row0.to_rtm(), row1.to_rtm(), row2.to_rtm(), row3.to_rtm()))
         {
@@ -144,28 +146,31 @@ namespace move::math
             return mat4x4(rtm::matrix_mul(_value, other._value));
         }
 
-        MVM_INLINE_NODISCARD vec3_t transform_point(const vec3_t& rhs) const
+        MVM_INLINE_NODISCARD fast_vec3_t
+        transform_point(const fast_vec3_t& rhs) const
         {
             rtm_vec4_t mul = rtm::vector_set_w(rhs.to_rtm(), component_type(1));
             rtm_vec4_t res = rtm::vector_mul(
                 mul, rtm::matrix_get_axis(_value, rtm::axis4::x));
-            return vec3_t::from_rtm(res);
+            return fast_vec3_t::from_rtm(res);
         }
 
-        MVM_INLINE_NODISCARD vec3_t transform_vector(const vec3_t& rhs) const
+        MVM_INLINE_NODISCARD fast_vec3_t
+        transform_vector(const fast_vec3_t& rhs) const
         {
             rtm_vec4_t mul = rtm::vector_set_w(rhs.to_rtm(), component_type(0));
             rtm_vec4_t res = rtm::vector_mul(
                 mul, rtm::matrix_get_axis(_value, rtm::axis4::x));
-            return vec3_t::from_rtm(res);
+            return fast_vec3_t::from_rtm(res);
         }
 
-        MVM_INLINE_NODISCARD vec4_t transform_vector4(const vec4_t& rhs) const
+        MVM_INLINE_NODISCARD fast_vec4_t
+        transform_vector4(const fast_vec4_t& rhs) const
         {
             rtm_vec4_t mul = rhs.to_rtm();
             rtm_vec4_t res = rtm::vector_mul(
                 mul, rtm::matrix_get_axis(_value, rtm::axis4::x));
-            return vec3_t::from_rtm(res);
+            return fast_vec3_t::from_rtm(res);
         }
 
         // Stream overload operators
@@ -319,7 +324,7 @@ namespace move::math
         // Transformation matrix helpers
     public:
         MVM_INLINE_NODISCARD static mat4x4 translation(
-            const vec3_t& translation) noexcept
+            const fast_vec3_t& translation) noexcept
         {
             typename simd_rtm::detail::v4<T>::type translation_row =
                 rtm::vector_set_w(translation.to_rtm(), component_type(1));
@@ -348,7 +353,7 @@ namespace move::math
          * @param angle The angle in radians to rotate by
          * @return mat4 The rotation matrix
          */
-        MVM_INLINE_NODISCARD static mat4x4 angle_axis(const vec3_t& axis,
+        MVM_INLINE_NODISCARD static mat4x4 angle_axis(const fast_vec3_t& axis,
                                                       const T& angle)
         {
             using namespace rtm;
@@ -374,7 +379,8 @@ namespace move::math
                            component_type(0), component_type(1))));
         }
 
-        MVM_INLINE_NODISCARD static mat4x4 scale(const vec3_t& scale) noexcept
+        MVM_INLINE_NODISCARD static mat4x4 scale(
+            const fast_vec3_t& scale) noexcept
         {
             using rtm::vector_set;
             component_type loaded[3];
@@ -391,9 +397,10 @@ namespace move::math
          * @param scale The scale vector
          * @return mat4 The TRS matrix
          */
-        MVM_INLINE_NODISCARD static mat4x4 trs(const vec3_t& translation,
-                                               const quat_t& rotation,
-                                               const vec3_t& scale) noexcept
+        MVM_INLINE_NODISCARD static mat4x4 trs(
+            const fast_vec3_t& translation,
+            const quat_t& rotation,
+            const fast_vec3_t& scale) noexcept
         {
             return rtm::ext::transform_4x4(translation.to_rtm(),
                                            rotation.to_rtm(), scale.to_rtm());
@@ -401,9 +408,10 @@ namespace move::math
 
         // Camera matrix helpers
     public:
-        MVM_INLINE_NODISCARD static mat4x4 look_at(const vec3_t& eye,
-                                                   const vec3_t& target,
-                                                   const vec3_t& up) noexcept
+        MVM_INLINE_NODISCARD static mat4x4 look_at(
+            const fast_vec3_t& eye,
+            const fast_vec3_t& target,
+            const fast_vec3_t& up) noexcept
         {
             return rtm::ext::look_at_lh(eye.to_rtm(), target.to_rtm(),
                                         up.to_rtm());

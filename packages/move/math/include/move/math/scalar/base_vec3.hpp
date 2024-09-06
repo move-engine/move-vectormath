@@ -67,6 +67,19 @@ namespace move::math::scalar
             memcpy(dest, data, sizeof(data));
         }
 
+        MVM_INLINE base_vec3& load_array(const T* src)
+        {
+            memcpy(data, src, sizeof(data));
+            return *this;
+        }
+
+        MVM_INLINE_NODISCARD static base_vec3 from_array(const T* src)
+        {
+            base_vec3 result;
+            memcpy(result.data, src, sizeof(data));
+            return result;
+        }
+
         // Arithmetic operators
     public:
         MVM_INLINE_NODISCARD base_vec3 operator+(const base_vec3& other) const

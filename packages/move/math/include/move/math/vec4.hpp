@@ -12,21 +12,29 @@
 
 namespace move::math
 {
-    template <move::math::Acceleration Accel>
-    static constexpr auto vec4_acceleration =
-        Accel == Acceleration::Default ? Acceleration::RTM : Accel;
+    namespace detail
+    {
+        template <typename T, move::math::Acceleration Accel>
+        static constexpr auto real_vec4_acceleration =
+            Accel == Acceleration::RTM || Accel == Acceleration::Default
+                ? (std::is_floating_point_v<T> ? Acceleration::RTM
+                                               : Acceleration::Scalar)
+                : Acceleration::Scalar;
+    }
 
     // If we're doing floating point AND it was requested, use SIMD.  Otherwise,
     // use scalar.
     template <typename T, move::math::Acceleration Accel>
     using base_vec4_t =
-        std::conditional_t<vec4_acceleration<Accel> == Acceleration::RTM,
-                           std::conditional_t<std::is_floating_point_v<T>,
-                                              simd_rtm::base_vec4<T>,
-                                              scalar::base_vec4<T>>,
+        std::conditional_t<detail::real_vec4_acceleration<T, Accel> ==
+                               Acceleration::RTM,
+                           simd_rtm::base_vec4<T>,
                            scalar::base_vec4<T>>;
 
-    template <typename T, move::math::Acceleration Accel>
+    template <typename T,
+              move::math::Acceleration RequestedAccel,
+              Acceleration Accel =
+                  detail::real_vec4_acceleration<T, RequestedAccel>>
     struct vec4 : public base_vec4_t<T, Accel>
     {
     public:
@@ -52,14 +60,13 @@ namespace move::math
         }
 
         // implicit conversion from base_vec4_t
-        MVM_INLINE vec4(base_t other) : base_t(other)
+        MVM_INLINE vec4(const scalar::base_vec4<T>& rhs) :
+            base_t(rhs.x, rhs.y, rhs.z, rhs.w)
         {
         }
 
-        template <typename ComponentT, Acceleration OtherAccel>
-        // implicit conversion from base_vec4_t
-        MVM_INLINE vec4(base_vec4_t<ComponentT, OtherAccel> other) :
-            base_t(other.get_x(), other.get_y(), other.get_z(), other.get_w())
+        MVM_INLINE vec4(const simd_rtm::base_vec4<T>& rhs) :
+            base_t(rhs.get_x(), rhs.get_y(), rhs.get_z(), rhs.get_w())
         {
         }
 
@@ -97,18 +104,35 @@ namespace move::math
         {
         }
 
-        template <typename OtherT, Acceleration OtherAccel>
-        MVM_INLINE operator vec3<OtherT, OtherAccel>()
+        // Acceleration conversions
+    public:
+        template <Acceleration TargetAccel>
+        MVM_INLINE_NODISCARD vec4<T, TargetAccel> to_accel() const
         {
-            using self_t = vec4;
-            using other_t = vec3<OtherT, OtherAccel>;
-            if constexpr (other_t::acceleration == self_t::acceleration &&
-                          self_t::acceleration == Acceleration::RTM)
+            if constexpr (acceleration ==
+                          detail::real_vec4_acceleration<T, TargetAccel>)
             {
-                return other_t::from_rtm(to_rtm());
+                return *this;
             }
+            else
+            {
+                T data[4];
+                store_array(data);
+                return vec4<T, TargetAccel>::from_array(data);
+            }
+        }
 
-            return other_t(base_t::get_x(), base_t::get_y(), base_t::get_z());
+        MVM_INLINE_NODISCARD
+        vec4<T, detail::real_vec4_acceleration<T, Acceleration::RTM>> fast()
+            const
+        {
+            return to_accel<
+                detail::real_vec4_acceleration<T, Acceleration::RTM>>();
+        }
+
+        MVM_INLINE_NODISCARD vec4<T, Acceleration::Scalar> storable() const
+        {
+            return to_accel<Acceleration::Scalar>();
         }
 
         // Swizzles
@@ -299,11 +323,6 @@ namespace move::math
 
         // Conversions
     public:
-        MVM_INLINE_NODISCARD base_t storage() const
-        {
-            return *this;
-        }
-
         MVM_INLINE_NODISCARD static vec4 from_rtm(const rtm_t& rtm_vec)
         {
             if constexpr (acceleration == Acceleration::RTM)
@@ -330,6 +349,39 @@ namespace move::math
                                        base_t::get_z(), base_t::get_w());
             }
         }
+
+        // Implicit
+        // template <typename OtherT, Acceleration OtherAccel>
+        // MVM_INLINE operator vec4<OtherT, OtherAccel>()
+        // {
+        //     using self_t = vec4;
+        //     using other_t = vec4<OtherT, OtherAccel>;
+        //     if constexpr (std::is_same_v<T, OtherT> &&
+        //                   other_t::acceleration == self_t::acceleration &&
+        //                   self_t::acceleration == Acceleration::RTM)
+        //     {
+        //         return other_t::from_rtm(to_rtm());
+        //     }
+
+        //     return other_t(base_t::get_x(), base_t::get_y(), base_t::get_z(),
+        //                    base_t::get_w());
+        // }
+
+        // template <typename OtherT, Acceleration OtherAccel>
+        // MVM_INLINE operator base_vec4_t<OtherT, OtherAccel>()
+        // {
+        //     using self_t = vec4;
+        //     using other_t = base_vec4_t<OtherT, OtherAccel>;
+        //     if constexpr (std::is_same_v<T, OtherT> &&
+        //                   other_t::acceleration == self_t::acceleration &&
+        //                   self_t::acceleration == Acceleration::RTM)
+        //     {
+        //         return other_t::from_rtm(to_rtm());
+        //     }
+
+        //     return other_t(base_t::get_x(), base_t::get_y(), base_t::get_z(),
+        //                    base_t::get_w());
+        // }
 
         // Assignment operators
     public:

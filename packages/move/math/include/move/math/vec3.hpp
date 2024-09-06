@@ -1,25 +1,39 @@
 #pragma once
 #include <cstdint>
+#include <limits>
+#include <type_traits>
 
 #include <move/math/macros.hpp>
 #include <move/math/rtm/base_vec3.hpp>
 #include <move/math/scalar/base_vec3.hpp>
 #include <move/math/vec2.hpp>
+#include "move/math/common.hpp"
 
 namespace move::math
 {
-    template <move::math::Acceleration Accel>
-    static constexpr auto vec3_acceleration =
-        Accel == Acceleration::Default ? Acceleration::RTM : Accel;
+    namespace detail
+    {
+        template <typename T, move::math::Acceleration Accel>
+        static constexpr auto real_vec3_acceleration =
+            Accel == Acceleration::RTM || Accel == Acceleration::Default
+                ? (std::is_floating_point_v<T> ? Acceleration::RTM
+                                               : Acceleration::Scalar)
+                : Acceleration::Scalar;
+    }
 
+    // If we're doing floating point AND it was requested, use SIMD.  Otherwise,
+    // use scalar.
     template <typename T, move::math::Acceleration Accel>
     using base_vec3_t =
-        std::conditional_t<vec3_acceleration<Accel> == Acceleration::RTM,
-                           scalar::base_vec3<T>,  // TODO: Replace with SIMD
-                                                  // type
+        std::conditional_t<detail::real_vec3_acceleration<T, Accel> ==
+                               Acceleration::RTM,
+                           simd_rtm::base_vec3<T>,
                            scalar::base_vec3<T>>;
 
-    template <typename T, move::math::Acceleration Accel>
+    template <typename T,
+              move::math::Acceleration RequestedAccel,
+              move::math::Acceleration Accel =
+                  detail::real_vec3_acceleration<T, RequestedAccel>>
     struct vec3 : public base_vec3_t<T, Accel>
     {
     public:
@@ -44,15 +58,13 @@ namespace move::math
         {
         }
 
-        // implicit conversion from base_vec3_t
-        MVM_INLINE vec3(base_t other) : base_t(other)
+        MVM_INLINE vec3(const scalar::base_vec3<T>& rhs) :
+            base_t(rhs.x, rhs.y, rhs.z)
         {
         }
 
-        template <typename ComponentT, Acceleration OtherAccel>
-        // implicit conversion from base_vec3_t
-        MVM_INLINE vec3(base_vec3_t<ComponentT, OtherAccel> other) :
-            base_t(other.get_x(), other.get_y(), other.get_z())
+        MVM_INLINE vec3(const simd_rtm::base_vec3<T>& rhs) :
+            base_t(rhs.get_x(), rhs.get_y(), rhs.get_z())
         {
         }
 
@@ -77,6 +89,52 @@ namespace move::math
         MVM_INLINE vec3(const vec2<OtherT, OtherAccel>& vec, const T& z = 0) :
             base_t(vec.get_x(), vec.get_y(), z)
         {
+        }
+
+        // Acceleration conversions
+    public:
+        template <Acceleration TargetAccel>
+        MVM_INLINE_NODISCARD vec3<T, TargetAccel> to_accel() const
+        {
+            if constexpr (acceleration ==
+                          detail::real_vec3_acceleration<T, TargetAccel>)
+            {
+                return *this;
+            }
+            else
+            {
+                T data[3];
+                base_t::store_array(data);
+                return vec3<T, TargetAccel>::base_t::from_array(data);
+            }
+        }
+
+        MVM_INLINE_NODISCARD
+        vec3<T, detail::real_vec3_acceleration<T, Acceleration::RTM>> fast()
+            const
+        {
+            return to_accel<
+                detail::real_vec3_acceleration<T, Acceleration::RTM>>();
+        }
+
+        MVM_INLINE_NODISCARD vec3<T, Acceleration::Scalar> storable() const
+        {
+            return to_accel<Acceleration::Scalar>();
+        }
+
+        MVM_INLINE_NODISCARD operator vec3<T, Acceleration::Scalar>() const
+        {
+            return storable();
+        }
+
+        MVM_INLINE_NODISCARD operator vec3<T, Acceleration::RTM>() const
+        {
+            return fast();
+        }
+
+        MVM_INLINE_NODISCARD operator rtm_t() const
+        {
+            return to_rtm();
         }
 
         // Swizzles
@@ -114,11 +172,6 @@ namespace move::math
 
         // Conversions
     public:
-        MVM_INLINE_NODISCARD base_t storage() const
-        {
-            return *this;
-        }
-
         MVM_INLINE_NODISCARD rtm_t to_rtm() const
         {
             // TODO: Fast mode for RTM vec3
