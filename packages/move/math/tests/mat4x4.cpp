@@ -279,14 +279,33 @@ inline void benchmark_mat4()
         return mat4::trs(translation, rotation, scaleFac);
     };
 
-    BENCHMARK(
-        alloc_appended_name(typeName, ": Transform Construction (manual)"))
+    // BENCHMARK(
+    //     alloc_appended_name(typeName, ": Transform Construction (manual)"))
+    // {
+    //     vec3 translation = {1, 2, 3};
+    //     quat rotation = quat::angle_axis(vec3::up(),
+    //     move::math::deg2rad(90)); vec3 scaleFac = {1, 1, 1};
+
+    //     auto scale = mat4::scale(scaleFac);
+    //     auto rot = mat4::rotation(rotation);
+    //     auto tra = mat4::translation(translation);
+
+    //     auto result1 = scale * rot;
+    //     auto result2 = result1 * tra;
+
+    //     return result2;
+    // };
+
+    BENCHMARK(alloc_appended_name(typeName,
+                                  ": Transform Construction (manual, inline)"))
     {
-        auto scale = mat4::scale(scaleFac);
-        auto rot = mat4::rotation(rotation);
-        auto tra = mat4::translation(translation);
-        INFO("??");
-        return scale * rot * tra;
+        return
+            //
+            // mat4::scale(scaleFac) *
+            //
+            mat4::rotation(rotation) *
+            //
+            mat4::translation(translation);
     };
 }
 

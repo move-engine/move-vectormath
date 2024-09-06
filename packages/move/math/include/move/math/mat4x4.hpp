@@ -14,6 +14,7 @@
 #include <move/math/quat.hpp>
 #include <move/math/vec3.hpp>
 #include <move/math/vec4.hpp>
+#include "rtm/impl/matrix_affine_common.h"
 
 namespace move::math
 {
@@ -49,9 +50,9 @@ namespace move::math
         using rtm_vec4_t = typename simd_rtm::detail::v4<T>::type;
         using rtm_mat3x4_t = typename simd_rtm::detail::m3x4<T>::type;
         using rtm_mat4x4_t = rtm_t;
-        using vec3_t = vec3<T, acceleration>;
+        using vec3_t = vec3<T, Acceleration::Scalar>;
         using fast_vec3_t = vec3<T, acceleration>;
-        using vec4_t = vec4<T, acceleration>;
+        using vec4_t = vec4<T, Acceleration::Scalar>;
         using fast_vec4_t = vec4<T, acceleration>;
         using quat_t = quat<T>;
         using component_type = T;
@@ -367,25 +368,14 @@ namespace move::math
                                                  component_type y,
                                                  component_type z) noexcept
         {
-            using rtm::vector_set;
-            return mat4x4(rtm::matrix_set(
-                vector_set(x, component_type(0), component_type(0),
-                           component_type(0)),
-                vector_set(component_type(0), y, component_type(0),
-                           component_type(0)),
-                vector_set(component_type(0), component_type(0), z,
-                           component_type(0)),
-                vector_set(component_type(0), component_type(0),
-                           component_type(0), component_type(1))));
+            return scale(fast_vec3_t(x, y, z));
         }
 
         MVM_INLINE_NODISCARD static mat4x4 scale(
             const fast_vec3_t& scale) noexcept
         {
-            using rtm::vector_set;
-            component_type loaded[3];
-            scale.store_array(loaded);
-            return mat4x4::scale(loaded[0], loaded[1], loaded[2]);
+            return rtm_mat4x4_t(rtm::matrix_cast<rtm_mat3x4_t>(
+                rtm::matrix_from_scale(scale.to_rtm())));
         }
 
         /**
