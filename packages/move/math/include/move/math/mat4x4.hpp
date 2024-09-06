@@ -354,22 +354,22 @@ namespace move::math
         MVM_INLINE_NODISCARD static mat4x4 rotation_x(const T& angle)
         {
             using namespace rtm;
-            return rtm_mat4x4_t(matrix_cast<rtm_mat3x4_t>(
-                matrix_from_euler_xyz(vector_set(angle, T(0), T(0)))));
+            return rotation(
+                quat_from_axis_angle(vector_set(T(1), T(0), T(0)), angle));
         }
 
         MVM_INLINE_NODISCARD static mat4x4 rotation_y(const T& angle)
         {
             using namespace rtm;
-            return rtm_mat4x4_t(matrix_cast<rtm_mat3x4_t>(
-                matrix_from_euler_xyz(vector_set(T(0), angle, T(0)))));
+            return rotation(
+                quat_from_axis_angle(vector_set(T(0), T(1), T(0)), angle));
         }
 
         MVM_INLINE_NODISCARD static mat4x4 rotation_z(const T& angle)
         {
             using namespace rtm;
-            return rtm_mat4x4_t(matrix_cast<rtm_mat3x4_t>(
-                matrix_from_euler_xyz(vector_set(T(0), T(0), angle))));
+            return rotation(
+                quat_from_axis_angle(vector_set(T(0), T(0), T(1)), angle));
         }
 
         /**
