@@ -235,9 +235,12 @@ namespace move::math::scalar
             return x / y;
         }
 
-        MVM_INLINE_NODISCARD T dot(const base_vec2& other) const
+        // Static functions
+    public:
+        MVM_INLINE_NODISCARD static T dot(const base_vec2& lhs,
+                                          const base_vec2& rhs)
         {
-            return x * other.x + y * other.y;
+            return lhs.x * rhs.x + lhs.y * rhs.y;
         }
 
         // Mutators
