@@ -524,8 +524,14 @@ namespace move::math
         }
     };
 
-    using float4x4 = mat4x4<float>;
-    using double4x4 = mat4x4<double>;
+    // TODO: Storage type
+    using fast_float4x4 = mat4x4<float>;
+    using fast_double4x4 = mat4x4<double>;
+    using float4x4 = fast_float4x4;
+    using double4x4 = fast_double4x4;
+
+    using mat4x4f = float4x4;
+    using mat4x4d = double4x4;
 
     template <typename T>
     MVM_INLINE_NODISCARD bool approx_equal(
