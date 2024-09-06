@@ -429,9 +429,9 @@ namespace move::math
             const fast_vec3_t& target,
             const fast_vec3_t& up) noexcept
         {
-            // auto intermediate = mat4
-            return (rtm::ext::look_at_lh<rtm_mat4x4_t, rtm_vec4_t>(
-                eye.to_rtm(), target.to_rtm(), up.normalized().to_rtm()));
+            // mat4x4 intermediate =
+            return rtm::ext::look_at_lh<rtm_mat4x4_t, rtm_vec4_t>(
+                eye.to_rtm(), target.to_rtm(), up.normalized().to_rtm());
 
             // Change unsafe nans to safe nans
             // T data[16];
