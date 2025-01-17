@@ -299,6 +299,23 @@ namespace move::math
     using vec3b = storage_sbyte3;
     using vec3sb = storage_byte3;
 
+    template <typename T, move::math::Acceleration Accel>
+    MVM_INLINE_NODISCARD bool approx_equal(
+        const vec3<T, Accel>& a,
+        const vec3<T, Accel>& b,
+        const T& epsilon = std::numeric_limits<T>::epsilon())
+    {
+        T aloaded[3];
+        T bloaded[3];
+
+        a.store_array(aloaded);
+        b.store_array(bloaded);
+
+        return approx_equal(aloaded[0], bloaded[0], epsilon) &&
+               approx_equal(aloaded[1], bloaded[1], epsilon) &&
+               approx_equal(aloaded[2], bloaded[2], epsilon);
+    }
+
     namespace traits
     {
         template <typename T, Acceleration Accel>

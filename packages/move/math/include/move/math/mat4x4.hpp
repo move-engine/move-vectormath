@@ -1,6 +1,7 @@
 #pragma once
 #include <type_traits>
 
+#include <rtm/impl/matrix_affine_common.h>
 #include <rtm/impl/matrix_common.h>
 #include <rtm/matrix4x4d.h>
 #include <rtm/matrix4x4f.h>
@@ -14,7 +15,6 @@
 #include <move/math/quat.hpp>
 #include <move/math/vec3.hpp>
 #include <move/math/vec4.hpp>
-#include "rtm/impl/matrix_affine_common.h"
 
 namespace move::math
 {
@@ -29,7 +29,7 @@ namespace move::math
 
     // mat4 always uses RTM under the hood
     template <typename T, typename wrapper_type = simd_rtm::detail::m4x4<T>>
-    requires std::is_floating_point_v<T>
+        requires std::is_floating_point_v<T>
     struct alignas(16) mat4x4
     {
     public:
