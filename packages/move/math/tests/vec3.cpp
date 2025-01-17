@@ -15,6 +15,14 @@
 template <typename vec3>
 inline void test_vec3()
 {
+    REQUIRE(vec3::element_count == 3);
+    REQUIRE(move::math::traits::is_vector_type_v<vec3>);
+    REQUIRE(!move::math::traits::is_matrix_type_v<vec3>);
+    REQUIRE(move::math::traits::component_count_v<vec3> == 3);
+    REQUIRE(std::is_same_v<move::math::traits::component_type_t<vec3>,
+                           typename vec3::component_type>);
+    ;
+
     using component_type = vec3::component_type;
     using vec2 = vec3::vec2_t;
     static constexpr auto acceleration = vec3::acceleration;

@@ -145,10 +145,10 @@ SCENARIO("Quat full tests")
     test_quat_multi<float, double>();
 }
 
-SCENARIO("Quat benchmarks")
-{
-    using namespace move::math;
-    using Accel = move::math::Acceleration;
+// SCENARIO("Quat benchmarks")
+// {
+//     using namespace move::math;
+//     using Accel = move::math::Acceleration;
 
-    benchmark_quat_multi<float, double>();
-}
+//     benchmark_quat_multi<float, double>();
+// }

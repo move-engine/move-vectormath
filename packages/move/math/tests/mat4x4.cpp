@@ -562,10 +562,10 @@ SCENARIO("Mat4 full tests")
     test_mat4_multi<float, double>();
 }
 
-SCENARIO("Mat4 benchmarks")
-{
-    using namespace move::math;
-    using Accel = move::math::Acceleration;
+// SCENARIO("Mat4 benchmarks")
+// {
+//     using namespace move::math;
+//     using Accel = move::math::Acceleration;
 
-    benchmark_mat4_multi<float, double>();
-}
+//     benchmark_mat4_multi<float, double>();
+// }

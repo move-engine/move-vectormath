@@ -10,6 +10,7 @@
   "Dependencies": [
     "rtm"
   ],
+  "TestDependencies": [],
   "License": "Unspecified",
   "Keywords": [],
   "TargetOptions": {

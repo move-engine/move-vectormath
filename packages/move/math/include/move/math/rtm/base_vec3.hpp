@@ -32,6 +32,8 @@ namespace move::math::simd_rtm
         constexpr static auto acceleration = Acceleration::RTM;
         constexpr static bool has_fields = false;
         constexpr static bool has_pointer_semantics = false;
+        constexpr static uint32_t element_count = 3;
+        using component_type = T;
 
         // Member variables
     private:
@@ -772,4 +774,5 @@ namespace move::math::simd_rtm
             return z_axis();
         }
     };
+
 }  // namespace move::math::simd_rtm

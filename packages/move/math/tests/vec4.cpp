@@ -8,6 +8,7 @@
 #include <move/math/common.hpp>
 #include <move/math/macros.hpp>
 #include <move/math/vec4.hpp>
+#include "move/math/traits.hpp"
 #if __has_include(<move/meta/type_utils.hpp>)
 #define MVM_HAS_MOVE_CORE
 #include <move/meta/type_utils.hpp>
@@ -19,6 +20,13 @@
 template <typename vec4>
 inline void test_vec4()
 {
+    REQUIRE(vec4::element_count == 4);
+    REQUIRE(move::math::traits::is_vector_type_v<vec4>);
+    REQUIRE(!move::math::traits::is_matrix_type_v<vec4>);
+    REQUIRE(move::math::traits::component_count_v<vec4> == 4);
+    REQUIRE(std::is_same_v<move::math::traits::component_type_t<vec4>,
+                           typename vec4::component_type>);
+
     using component_type = vec4::component_type;
     using vec2 = vec4::vec2_t;
     using vec3 = vec4::vec3_t;
@@ -663,11 +671,11 @@ SCENARIO("Vec4 full tests")
     test_vec4_multi<Accel::RTM, float, double>();
 }
 
-SCENARIO("Vec4 Benchmarks")
-{
-    using namespace move::math;
-    using Accel = move::math::Acceleration;
+// SCENARIO("Vec4 Benchmarks")
+// {
+//     using namespace move::math;
+//     using Accel = move::math::Acceleration;
 
-    benchmark_vec4_multi<Accel::Scalar, float, double>();
-    benchmark_vec4_multi<Accel::RTM, float, double>();
-}
+//     benchmark_vec4_multi<Accel::Scalar, float, double>();
+//     benchmark_vec4_multi<Accel::RTM, float, double>();
+// }

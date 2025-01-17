@@ -7,6 +7,7 @@
 #include <move/math/macros.hpp>
 #include <move/math/rtm/base_vec4.hpp>
 #include <move/math/scalar/base_vec4.hpp>
+#include <move/math/traits.hpp>
 #include <move/math/vec2.hpp>
 #include <move/math/vec3.hpp>
 
@@ -46,6 +47,7 @@ namespace move::math
         constexpr static bool has_fields = base_t::has_fields;
         constexpr static bool has_pointer_semantics =
             base_t::has_pointer_semantics;
+        constexpr static uint32_t element_count = base_t::element_count;
 
         // Constructors
     public:
@@ -511,4 +513,13 @@ namespace move::math
                approx_equal(aloaded[2], bloaded[2], epsilon) &&
                approx_equal(aloaded[3], bloaded[3], epsilon);
     }
+
+    namespace traits
+    {
+        template <typename T, Acceleration Accel>
+        constexpr bool is_vector_type_v<vec4<T, Accel>> = true;
+
+        template <typename T, Acceleration Accel>
+        constexpr uint32_t component_count_v<vec4<T, Accel>> = 4;
+    }  // namespace traits
 }  // namespace move::math

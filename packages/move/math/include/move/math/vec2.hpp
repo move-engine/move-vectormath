@@ -3,6 +3,7 @@
 
 #include <move/math/common.hpp>
 #include <move/math/scalar/base_vec2.hpp>
+#include <move/math/traits.hpp>
 
 namespace move::math
 {
@@ -28,6 +29,7 @@ namespace move::math
         constexpr static bool has_fields = base_t::has_fields;
         constexpr static bool has_pointer_semantics =
             base_t::has_pointer_semantics;
+        constexpr static uint32_t element_count = base_t::element_count;
 
         // Constructors
     public:
@@ -179,4 +181,13 @@ namespace move::math
 
     using vec2b = storage_sbyte2;
     using vec2sb = storage_byte2;
+
+    namespace traits
+    {
+        template <typename T, Acceleration Accel>
+        constexpr bool is_vector_type_v<vec2<T, Accel>> = true;
+
+        template <typename T, Acceleration Accel>
+        constexpr uint32_t component_count_v<vec2<T, Accel>> = 2;
+    }  // namespace traits
 }  // namespace move::math

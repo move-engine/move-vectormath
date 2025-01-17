@@ -3,11 +3,12 @@
 #include <limits>
 #include <type_traits>
 
+#include <move/math/common.hpp>
 #include <move/math/macros.hpp>
 #include <move/math/rtm/base_vec3.hpp>
 #include <move/math/scalar/base_vec3.hpp>
+#include <move/math/traits.hpp>
 #include <move/math/vec2.hpp>
-#include "move/math/common.hpp"
 
 namespace move::math
 {
@@ -45,6 +46,7 @@ namespace move::math
         constexpr static bool has_fields = base_t::has_fields;
         constexpr static bool has_pointer_semantics =
             base_t::has_pointer_semantics;
+        constexpr static uint32_t element_count = base_t::element_count;
 
         // Constructors
     public:
@@ -296,4 +298,13 @@ namespace move::math
 
     using vec3b = storage_sbyte3;
     using vec3sb = storage_byte3;
+
+    namespace traits
+    {
+        template <typename T, Acceleration Accel>
+        constexpr bool is_vector_type_v<vec3<T, Accel>> = true;
+
+        template <typename T, Acceleration Accel>
+        constexpr uint32_t component_count_v<vec3<T, Accel>> = 3;
+    }  // namespace traits
 }  // namespace move::math

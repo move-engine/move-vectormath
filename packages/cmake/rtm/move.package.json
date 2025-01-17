@@ -7,6 +7,7 @@
   "Version": "2.3.0",
   "Type": "CMakeLibrary",
   "Dependencies": [],
+  "TestDependencies": [],
   "License": "MIT",
   "Keywords": [],
   "TargetOptions": {

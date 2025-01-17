@@ -18,6 +18,9 @@ namespace move::math::scalar
         constexpr static auto acceleration = Acceleration::Scalar;
         constexpr static bool has_fields = true;
         constexpr static bool has_pointer_semantics = has_fields;
+        constexpr static uint32_t element_count = 3;
+        using component_type = T;
+
         // Member variables
     public:
         union
