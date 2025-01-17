@@ -568,6 +568,8 @@ namespace move::math
 
     using mat4x4f = float4x4;
     using mat4x4d = double4x4;
+    using storage_float4x4 = storage_mat4x4<float>;
+    using storage_double4x4 = storage_mat4x4<double>;
 
     template <typename T>
     MVM_INLINE_NODISCARD bool approx_equal(

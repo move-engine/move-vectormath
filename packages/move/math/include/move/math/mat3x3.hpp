@@ -444,11 +444,19 @@ namespace move::math
         }
     };
 
-    using mat3x3f = mat3x3<float>;
-    using mat3x3d = mat3x3<double>;
+    using fast_float3x3 = mat3x3<float>;
+    using fast_double3x3 = mat3x3<double>;
+
+    using mat3x3f = fast_float3x3;
+    using mat3x3d = fast_double3x3;
 
     using storage_mat3x3f = storage_mat3x3<float>;
     using storage_mat3x3d = storage_mat3x3<double>;
+
+    using float3x3 = mat3x3<float>;
+    using double3x3 = mat3x3<double>;
+    using storage_float3x3 = storage_mat3x3<float>;
+    using storage_double3x3 = storage_mat3x3<double>;
 
     template <typename T>
     MVM_INLINE_NODISCARD bool approx_equal(
