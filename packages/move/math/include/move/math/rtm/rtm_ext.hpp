@@ -2,6 +2,7 @@
 #include <cassert>
 #include <limits>
 #include <move/math/macros.hpp>
+#include "move/math/common.hpp"
 
 #include <rtm/macros.h>
 
@@ -132,7 +133,7 @@ namespace rtm::ext
         using mat_type = matrix4x4d;
         using value_type = double;
 
-        assert(near > 0.f && far > 0.);
+        assert(near > 0. && far > 0.);
         assert(!scalar_near_equal(fovY, 0.0, 0.00001 * 2.0));
         assert(!scalar_near_equal(aspectRatio, 0.0, 0.00001));
         assert(!scalar_near_equal(far, near, 0.00001));
@@ -201,7 +202,7 @@ namespace rtm::ext
 
         value_type sin_fov;
         value_type cos_fov;
-        scalar_sincos(0.5f * fovY, sin_fov, cos_fov);
+        scalar_sincos(0.5 * fovY, sin_fov, cos_fov);
 
         value_type height = cos_fov / sin_fov;
         value_type width = height / aspectRatio;
@@ -252,7 +253,7 @@ namespace rtm::ext
         assert(!scalar_near_equal(height, 0.0, 0.00001));
         assert(!scalar_near_equal(far, near, 0.00001));
 
-        value_type range = 1.0f / (far - near);
+        value_type range = 1.0 / (far - near);
         mat_type result;
         result.x_axis = vector_set(2.0 / width, 0.0, 0.0, 0.0);
         result.y_axis = vector_set(0.0, 2.0 / height, 0.0, 0.0);
@@ -298,7 +299,7 @@ namespace rtm::ext
         assert(!scalar_near_equal(height, 0.0, 0.00001));
         assert(!scalar_near_equal(far, near, 0.00001));
 
-        value_type range = 1.0f / (near - far);
+        value_type range = 1.0 / (near - far);
         mat_type result;
         result.x_axis = vector_set(2.0 / width, 0.0, 0.0, 0.0);
         result.y_axis = vector_set(0.0, 2.0 / height, 0.0, 0.0);
@@ -585,56 +586,159 @@ namespace rtm::ext
         return vector_set(double(vector_get_z(input)));
     }
 
-    // TODO: This and exp
-    // RTM_DISABLE_SECURITY_COOKIE_CHECK
-    // MVM_INLINE_NODISCARD quatf quat_ln(const quatf& input)
-    // {
-    //     // static const XMVECTORF32 OneMinusEpsilon = {{{1.0f - 0.00001f,
-    //     //     1.0f - 0.00001f, 1.0f - 0.00001f, 1.0f - 0.00001f}}};
+    RTM_DISABLE_SECURITY_COOKIE_CHECK
+    MVM_INLINE_NODISCARD quatf quat_ln(const quatf& input)
+    {
+        // Based on DirectXMath implementation
+        // For a unit quaternion q = [cos(θ/2), sin(θ/2)*n], ln(q) = [0, θ*n]
+        using namespace rtm;
+        
+        using value_t = float;
+        static constexpr value_t epsilon = value_t(0.00001);
+        
+        vector4f q = quat_to_vector(input);
+        value_t qw = vector_get_w(q);
+        
+        // Clamp qw to [-1, 1] to avoid numerical issues with acos
+        qw = move::math::clamp(qw, value_t(-1), value_t(1));
+        
+        // If quaternion is close to identity, return zero
+        if (abs(qw) >= value_t(1) - epsilon)
+        {
+            return quat_set(value_t(0), value_t(0), value_t(0), value_t(0));
+        }
+        
+        // Calculate theta = acos(|qw|)
+        value_t theta = acos(abs(qw));
+        value_t sin_theta = sin(theta);
+        
+        // If sin(theta) is too small, return zero to avoid division by zero
+        if (abs(sin_theta) < epsilon)
+        {
+            return quat_set(value_t(0), value_t(0), value_t(0), value_t(0));
+        }
+        
+        // Calculate scale factor: theta / sin(theta)
+        value_t scale = theta / sin_theta;
+        
+        // Apply scale to xyz components, set w to zero
+        value_t qx = vector_get_x(q) * scale;
+        value_t qy = vector_get_y(q) * scale;
+        value_t qz = vector_get_z(q) * scale;
+        
+        return quat_set(qx, qy, qz, value_t(0));
+    }
 
-    //     // XMVECTOR QW = XMVectorSplatW(Q);
-    //     // XMVECTOR Q0 = XMVectorSelect(g_XMSelect1110.v, Q,
-    //     // g_XMSelect1110.v);
+    RTM_DISABLE_SECURITY_COOKIE_CHECK
+    MVM_INLINE_NODISCARD quatd quat_ln(const quatd& input)
+    {
+        // Based on DirectXMath implementation
+        // For a unit quaternion q = [cos(θ/2), sin(θ/2)*n], ln(q) = [0, θ*n]
+        using namespace rtm;
+        
+        using value_t = double;
+        static constexpr value_t epsilon = value_t(0.00001);
+        
+        vector4d q = quat_to_vector(input);
+        value_t qw = vector_get_w(q);
+        
+        // Clamp qw to [-1, 1] to avoid numerical issues with acos
+        qw = move::math::clamp(qw, value_t(-1), value_t(1));
+        
+        // If quaternion is close to identity, return zero
+        if (abs(qw) >= value_t(1) - epsilon)
+        {
+            return quat_set(value_t(0), value_t(0), value_t(0), value_t(0));
+        }
+        
+        // Calculate theta = acos(|qw|)
+        value_t theta = acos(abs(qw));
+        value_t sin_theta = sin(theta);
+        
+        // If sin(theta) is too small, return zero to avoid division by zero
+        if (abs(sin_theta) < epsilon)
+        {
+            return quat_set(value_t(0), value_t(0), value_t(0), value_t(0));
+        }
+        
+        // Calculate scale factor: theta / sin(theta)
+        value_t scale = theta / sin_theta;
+        
+        // Apply scale to xyz components, set w to zero
+        value_t qx = vector_get_x(q) * scale;
+        value_t qy = vector_get_y(q) * scale;
+        value_t qz = vector_get_z(q) * scale;
+        
+        return quat_set(qx, qy, qz, value_t(0));
+    }
 
-    //     // XMVECTOR ControlW = XMVectorInBounds(QW, OneMinusEpsilon.v);
+    RTM_DISABLE_SECURITY_COOKIE_CHECK
+    MVM_INLINE_NODISCARD quatf quat_exp(const quatf& input)
+    {
+        // Based on DirectXMath implementation
+        // For a pure quaternion q = [0, θ*n], exp(q) = [cos(θ), sin(θ)*n]
+        using namespace rtm;
+        
+        using value_t = float;
+        static constexpr value_t epsilon = value_t(0.00001);
+        
+        vector4f q = quat_to_vector(input);
+        value_t qx = vector_get_x(q);
+        value_t qy = vector_get_y(q);
+        value_t qz = vector_get_z(q);
+        
+        // Calculate the magnitude of the vector part (theta)
+        value_t theta = sqrt(qx * qx + qy * qy + qz * qz);
+        
+        // If theta is very small, return identity quaternion
+        if (theta < epsilon)
+        {
+            return quat_set(value_t(0), value_t(0), value_t(0), value_t(1));
+        }
+        
+        // Calculate sin(theta) and cos(theta)
+        value_t sin_theta = sin(theta);
+        value_t cos_theta = cos(theta);
+        
+        // Calculate scale factor: sin(theta) / theta
+        value_t scale = sin_theta / theta;
+        
+        // Result: [sin(theta)/theta * xyz, cos(theta)]
+        return quat_set(qx * scale, qy * scale, qz * scale, cos_theta);
+    }
 
-    //     // XMVECTOR Theta = XMVectorACos(QW);
-    //     // XMVECTOR SinTheta = XMVectorSin(Theta);
-
-    //     // XMVECTOR S = XMVectorDivide(Theta, SinTheta);
-
-    //     // XMVECTOR Result = XMVectorMultiply(Q0, S);
-    //     // Result = XMVectorSelect(Q0, Result, ControlW);
-
-    //     // return Result;
-
-    //     using quat_t = quatf;
-    //     using vector_t = vector4f;
-    //     using value_t = float;
-    //     using mask_t = mask4f;
-
-    //     static constexpr value_t epsilon =
-    //         std::numeric_limits<value_t>::epsilon();
-
-    //     static const vector_t one_minus_epsilon =
-    //         vector_set(value_t(1.0) - epsilon);
-
-    //     static const mask_t select1110 =
-    //         vector_set(value_t(1), value_t(1), value_t(1), value_t(0));
-
-    //     vector_t qw = vector_splat_w(quat_to_vector(input));
-    //     vector_t q0 = vector_select(select1110, select1110, qw);
-
-    //     mask_t control_w = vector_in_bounds(qw, one_minus_epsilon);
-
-    //     vector_t theta = vector_acos(qw);
-    //     vector_t sin_theta = vector_sin(theta);
-
-    //     vector_t s = vector_div(theta, sin_theta);
-
-    //     vector_t result = vector_mul(q0, s);
-    //     result = vector_select(control_w, q0, result);
-
-    //     return vector_to_quat(result);
-    // }
+    RTM_DISABLE_SECURITY_COOKIE_CHECK
+    MVM_INLINE_NODISCARD quatd quat_exp(const quatd& input)
+    {
+        // Based on DirectXMath implementation
+        // For a pure quaternion q = [0, θ*n], exp(q) = [cos(θ), sin(θ)*n]
+        using namespace rtm;
+        
+        using value_t = double;
+        static constexpr value_t epsilon = value_t(0.00001);
+        
+        vector4d q = quat_to_vector(input);
+        value_t qx = vector_get_x(q);
+        value_t qy = vector_get_y(q);
+        value_t qz = vector_get_z(q);
+        
+        // Calculate the magnitude of the vector part (theta)
+        value_t theta = sqrt(qx * qx + qy * qy + qz * qz);
+        
+        // If theta is very small, return identity quaternion
+        if (theta < epsilon)
+        {
+            return quat_set(value_t(0), value_t(0), value_t(0), value_t(1));
+        }
+        
+        // Calculate sin(theta) and cos(theta)
+        value_t sin_theta = sin(theta);
+        value_t cos_theta = cos(theta);
+        
+        // Calculate scale factor: sin(theta) / theta
+        value_t scale = sin_theta / theta;
+        
+        // Result: [sin(theta)/theta * xyz, cos(theta)]
+        return quat_set(qx * scale, qy * scale, qz * scale, cos_theta);
+    }
 }  // namespace rtm::ext

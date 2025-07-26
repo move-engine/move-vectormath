@@ -110,6 +110,68 @@ inline void test_quat()
             vec3 result = point * rotation;
             REQUIRE(result == vec3(1, 0, 0));
         }
+
+        THEN("Logarithm and exponential are inverse operations")
+        {
+            // For a unit quaternion, exp(ln(q)) should equal q
+            quat log_result = rotation.ln();
+            quat exp_result = log_result.exp();
+            REQUIRE(move::math::approx_equal(rotation, exp_result, component_type(0.001)));
+            
+            // Also test static versions
+            quat static_log = quat::ln(rotation);
+            quat static_exp = quat::exp(static_log);
+            REQUIRE(move::math::approx_equal(rotation, static_exp, component_type(0.001)));
+            REQUIRE(move::math::approx_equal(log_result, static_log, component_type(0.001)));
+        }
+
+        THEN("Identity quaternion logarithm is zero")
+        {
+            quat identity = quat::identity();
+            quat log_identity = identity.ln();
+            quat zero_quat = quat::zero();
+            
+            REQUIRE(move::math::approx_equal(log_identity, zero_quat, component_type(0.001)));
+        }
+
+        THEN("Zero quaternion exponential is identity")
+        {
+            quat zero_quat = quat::zero();
+            quat exp_zero = zero_quat.exp();
+            quat identity = quat::identity();
+            
+            REQUIRE(move::math::approx_equal(exp_zero, identity, component_type(0.001)));
+        }
+
+        THEN("Logarithm of quaternion multiplication is addition of logarithms")
+        {
+            // This is a property of quaternion logarithms for commuting quaternions
+            // For rotations around the same axis: ln(q1 * q2) ≈ ln(q1) + ln(q2)
+            quat rotation1 = quat::angle_axis(vec3(1, 0, 0), move::math::deg2rad(component_type(30)));
+            quat rotation2 = quat::angle_axis(vec3(1, 0, 0), move::math::deg2rad(component_type(60)));
+            
+            quat combined = rotation1 * rotation2;
+            quat log_combined = combined.ln();
+            
+            quat log1 = rotation1.ln();
+            quat log2 = rotation2.ln();
+            
+            // For pure quaternions (w=0), addition is component-wise
+            component_type log_combined_x = log_combined.get_x();
+            component_type log_combined_y = log_combined.get_y();
+            component_type log_combined_z = log_combined.get_z();
+            component_type log_combined_w = log_combined.get_w();
+            
+            component_type log_sum_x = log1.get_x() + log2.get_x();
+            component_type log_sum_y = log1.get_y() + log2.get_y();
+            component_type log_sum_z = log1.get_z() + log2.get_z();
+            component_type log_sum_w = log1.get_w() + log2.get_w();
+            
+            REQUIRE(move::math::abs(log_combined_x - log_sum_x) < component_type(0.001));
+            REQUIRE(move::math::abs(log_combined_y - log_sum_y) < component_type(0.001));
+            REQUIRE(move::math::abs(log_combined_z - log_sum_z) < component_type(0.001));
+            REQUIRE(move::math::abs(log_combined_w - log_sum_w) < component_type(0.001));
+        }
     }
 }
 

@@ -351,19 +351,98 @@ inline void test_mat4()
                                                component_type(0.001)));
     }
 
-    // Construct a perspective matrix
+    // Construct perspective matrices
     {
-        // TODO: Test this
+        // Use the mat4 wrapper (defaults to LH) and rtm::ext for RH
+        auto perspectiveLH = mat4::perspective(
+            move::math::deg2rad<component_type>(90),  // 90 degree FOV
+            component_type(16.0/9.0),                 // 16:9 aspect ratio
+            component_type(0.1),                      // near plane
+            component_type(100.0)                     // far plane
+        );
+        
+        auto perspectiveRH = mat4::from_rtm(rtm::ext::perspective_fov_rh(
+            move::math::deg2rad<component_type>(90),  
+            component_type(16.0/9.0),                 
+            component_type(0.1),                      
+            component_type(100.0)                     
+        ));
+        
+        THEN("The perspective matrices are valid")
+        {
+            // Test that the matrices are not identity or zero
+            REQUIRE_FALSE(move::math::approx_equal(perspectiveLH, mat4::identity()));
+            REQUIRE_FALSE(move::math::approx_equal(perspectiveRH, mat4::identity()));
+            REQUIRE_FALSE(move::math::approx_equal(perspectiveLH, mat4::zero()));
+            REQUIRE_FALSE(move::math::approx_equal(perspectiveRH, mat4::zero()));
+            
+            // Test that LH and RH are different (they should be)
+            REQUIRE_FALSE(move::math::approx_equal(perspectiveLH, perspectiveRH));
+        }
     }
 
-    // Construct a centered orthographic matrix
+    // Construct orthographic matrices (centered)
     {
-        // TODO: Test this
+        // Use the mat4 wrapper (defaults to LH) and rtm::ext for RH
+        auto orthoLH = mat4::orthographic(
+            component_type(10.0),   // width
+            component_type(10.0),   // height
+            component_type(0.1),    // near
+            component_type(100.0)   // far
+        );
+        
+        auto orthoRH = mat4::from_rtm(rtm::ext::ortho_rh(
+            component_type(10.0),   
+            component_type(10.0),   
+            component_type(0.1),    
+            component_type(100.0)   
+        ));
+        
+        THEN("The orthographic matrices are valid")
+        {
+            // Test that the matrices are not identity or zero
+            REQUIRE_FALSE(move::math::approx_equal(orthoLH, mat4::identity()));
+            REQUIRE_FALSE(move::math::approx_equal(orthoRH, mat4::identity()));
+            REQUIRE_FALSE(move::math::approx_equal(orthoLH, mat4::zero()));
+            REQUIRE_FALSE(move::math::approx_equal(orthoRH, mat4::zero()));
+            
+            // Test that LH and RH are different (they should be)
+            REQUIRE_FALSE(move::math::approx_equal(orthoLH, orthoRH));
+        }
     }
 
-    // Construct an off-center orthographic matrix
+    // Construct off-center orthographic matrices
     {
-        // TODO: Test this
+        // Use the mat4 wrapper (defaults to LH) and rtm::ext for RH
+        auto orthoOffCenterLH = mat4::orthographic(
+            component_type(-5.0),   // left
+            component_type(5.0),    // right
+            component_type(-5.0),   // bottom
+            component_type(5.0),    // top
+            component_type(0.1),    // near
+            component_type(100.0)   // far
+        );
+        
+        auto orthoOffCenterRH = mat4::from_rtm(rtm::ext::ortho_off_center_rh(
+            component_type(-5.0),   
+            component_type(5.0),    
+            component_type(-5.0),   
+            component_type(5.0),    
+            component_type(0.1),    
+            component_type(100.0)   
+        ));
+        
+        THEN("The off-center orthographic matrices are valid")
+        {
+            // Test that the matrices are not identity or zero
+            REQUIRE_FALSE(move::math::approx_equal(orthoOffCenterLH, mat4::identity()));
+            REQUIRE_FALSE(move::math::approx_equal(orthoOffCenterRH, mat4::identity()));
+            REQUIRE_FALSE(move::math::approx_equal(orthoOffCenterLH, mat4::zero()));
+            REQUIRE_FALSE(move::math::approx_equal(orthoOffCenterRH, mat4::zero()));
+            
+            // Test that LH and RH are different (they should be)
+            REQUIRE_FALSE(move::math::approx_equal(orthoOffCenterLH, orthoOffCenterRH));
+        }
     }
 }
 

@@ -9,6 +9,7 @@
 #include <move/math/common.hpp>
 #include <move/math/macros.hpp>
 #include <move/math/vec4.hpp>
+#include <move/math/rtm/rtm_ext.hpp>
 
 namespace move::math
 {
@@ -248,6 +249,18 @@ namespace move::math
             return quat_dot(_value, other._value);
         }
 
+        MVM_INLINE_NODISCARD quat ln() const
+        {
+            using namespace rtm;
+            return quat::from_rtm(rtm::ext::quat_ln(_value));
+        }
+
+        MVM_INLINE_NODISCARD quat exp() const
+        {
+            using namespace rtm;
+            return quat::from_rtm(rtm::ext::quat_exp(_value));
+        }
+
         // Mutators
     public:
         MVM_INLINE quat& invert_in_place()
@@ -333,6 +346,16 @@ namespace move::math
             using namespace rtm;
             return quat::from_rtm(
                 quat_from_axis_angle(vector_set(T(0), T(0), T(1)), angle));
+        }
+
+        MVM_INLINE_NODISCARD static quat ln(const quat& q)
+        {
+            return q.ln();
+        }
+
+        MVM_INLINE_NODISCARD static quat exp(const quat& q)
+        {
+            return q.exp();
         }
     };
 
