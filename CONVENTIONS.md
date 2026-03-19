@@ -1,7 +1,7 @@
 # Math Conventions
 
 ## TL;DR
-* Left-handed coordinate system, Y-up
+* Left-handed coordinate system: +X right, +Y up, +Z forward
 * Matrices are row-major
 * `Vector * Matrix` transforms the vector by the matrix
 * Rotation helpers use radians
@@ -11,7 +11,9 @@
 ## Coordinate System
 
 - The library uses a left-handed coordinate system.
+- Positive X is right.
 - Positive Y is up.
+- Positive Z is forward.
 
 ## Matrix Conventions
 

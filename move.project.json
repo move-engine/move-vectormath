@@ -3,7 +3,7 @@
   "Description": "A new Move project",
   "Version": "0.2.0",
   "License": "Unspecified",
-  "MainPackage": "move::math",
+  "MainPackage": "move/math_examples",
   "MoveCoreVersion": "v0.3.2",
   "RemoteProjects": [
     {

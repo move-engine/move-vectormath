@@ -1,0 +1,24 @@
+{
+  "Name": "move/math_examples",
+  "Aliases": [
+    "move-math-examples"
+  ],
+  "Description": "Example applications built on top of move-vectormath.",
+  "Version": "0.0.1",
+  "Type": "Application",
+  "Dependencies": [
+    "move/math"
+  ],
+  "TestDependencies": [],
+  "License": "MIT",
+  "Keywords": [
+    "examples",
+    "raytracer",
+    "vectormath"
+  ],
+  "TargetOptions": {
+    "$type": "Application",
+    "BinaryName": "move-math-ray-tracer",
+    "LaunchWithTerminal": true
+  }
+}
