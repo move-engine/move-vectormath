@@ -16,6 +16,7 @@ add_subdirectory(packages/cmake/rtm)
 # Library
 add_library(move-vectormath INTERFACE)
 target_include_directories(move-vectormath INTERFACE packages/move/math/include)
+target_link_libraries(move-vectormath INTERFACE rtm)
 
 # Aliases
 add_library(move::vectormath ALIAS move-vectormath)
