@@ -1,4 +1,5 @@
 #pragma once
+#include <cassert>
 #include <rtm/mask4d.h>
 #include <rtm/mask4f.h>
 #include <rtm/vector4d.h>
@@ -201,7 +202,8 @@ namespace move::math::simd_rtm
             return os;
         }
 
-        // Comparison operators
+        // Comparison operators. These are component-wise checks and are not a
+        // total ordering.
     public:
         MVM_INLINE_NODISCARD bool operator<(const base_vec3& other) const
         {
@@ -242,8 +244,16 @@ namespace move::math::simd_rtm
     public:
         MVM_INLINE_NODISCARD const T operator[](const std::size_t index) const
         {
-            return rtm::vector_get_component(
-                _value, rtm::mix4(math::min<std::size_t>(index, 2)));
+            assert(index < element_count);
+            switch (index)
+            {
+                case 0:
+                    return rtm::vector_get_x(_value);
+                case 1:
+                    return rtm::vector_get_y(_value);
+                default:
+                    return rtm::vector_get_z(_value);
+            }
         }
 
         MVM_INLINE_NODISCARD T get_x() const
@@ -374,7 +384,6 @@ namespace move::math::simd_rtm
          *
          * @param v1 The first vector
          * @param v2 The second vector
-         * @param v3 The third vector
          * @return base_vec3 The cross product
          */
         MVM_INLINE_NODISCARD static base_vec3 cross(
@@ -785,12 +794,12 @@ namespace move::math::simd_rtm
          * @brief Returns a vector with the sign of each component
          *
          * @param v The input vector
-         * @return base_vec3 The vector with component signs (-1 or 1)
+         * @return base_vec3 The vector with component signs (-1, 0, or 1)
          */
         MVM_INLINE_NODISCARD static base_vec3 sign(const base_vec3& v) noexcept
         {
-            // For RTM, implement using scalar operations to avoid complexity
-            return base_vec3(math::sign(v.get_x()), math::sign(v.get_y()), math::sign(v.get_z()));
+            return base_vec3(math::sign(v.get_x()), math::sign(v.get_y()),
+                             math::sign(v.get_z()));
         }
 
         /**

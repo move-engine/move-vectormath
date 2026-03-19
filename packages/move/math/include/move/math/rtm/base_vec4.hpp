@@ -1,4 +1,5 @@
 #pragma once
+#include <cassert>
 #include <cstddef>
 #include <iosfwd>
 #include <limits>
@@ -223,7 +224,8 @@ namespace move::math::simd_rtm
             return os;
         }
 
-        // Comparison operators
+        // Comparison operators. These are component-wise checks and are not a
+        // total ordering.
     public:
         MVM_INLINE_NODISCARD bool operator<(const base_vec4& other) const
         {
@@ -263,7 +265,18 @@ namespace move::math::simd_rtm
     public:
         MVM_INLINE_NODISCARD T operator[](const std::size_t index) const
         {
-            return rtm::vector_get_component(_value, rtm::mix4(index));
+            assert(index < element_count);
+            switch (index)
+            {
+                case 0:
+                    return rtm::vector_get_x(_value);
+                case 1:
+                    return rtm::vector_get_y(_value);
+                case 2:
+                    return rtm::vector_get_z(_value);
+                default:
+                    return rtm::vector_get_w(_value);
+            }
         }
 
         MVM_INLINE_NODISCARD T get_x() const

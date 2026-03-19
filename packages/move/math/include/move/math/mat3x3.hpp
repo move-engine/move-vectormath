@@ -132,7 +132,7 @@ namespace move::math
             _value = matrix_set(x, y, z);
         }
 
-        MVM_INLINE_NODISCARD rtm_t to_rtm()
+        MVM_INLINE_NODISCARD rtm_t to_rtm() const
         {
             return _value;
         }
@@ -462,19 +462,25 @@ namespace move::math
         const mat3x3<T>& b,
         const T& epsilon = std::numeric_limits<T>::epsilon())
     {
-        T aloaded[9];
-        T bloaded[9];
+        using fast_vec3_t = typename mat3x3<T>::fast_vec3_t;
 
-        a.store_array(aloaded);
-        b.store_array(bloaded);
-
-        for (uint8_t i = 0; i < 9; i++)
-        {
-            if (!approx_equal(aloaded[i], bloaded[i], epsilon))
-            {
-                return false;
-            }
-        }
-        return true;
+        return approx_equal(
+                   fast_vec3_t::from_rtm(
+                       rtm::matrix_get_axis(a.to_rtm(), rtm::axis3::x)),
+                   fast_vec3_t::from_rtm(
+                       rtm::matrix_get_axis(b.to_rtm(), rtm::axis3::x)),
+                   epsilon) &&
+               approx_equal(
+                   fast_vec3_t::from_rtm(
+                       rtm::matrix_get_axis(a.to_rtm(), rtm::axis3::y)),
+                   fast_vec3_t::from_rtm(
+                       rtm::matrix_get_axis(b.to_rtm(), rtm::axis3::y)),
+                   epsilon) &&
+               approx_equal(
+                   fast_vec3_t::from_rtm(
+                       rtm::matrix_get_axis(a.to_rtm(), rtm::axis3::z)),
+                   fast_vec3_t::from_rtm(
+                       rtm::matrix_get_axis(b.to_rtm(), rtm::axis3::z)),
+                   epsilon);
     }
 }  // namespace move::math

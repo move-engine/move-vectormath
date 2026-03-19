@@ -26,7 +26,7 @@
 #define MVM_NODISCARD __attribute__((warn_unused_result))
 #elif defined(_MSC_VER)
 #define MVM_NODISCARD _Check_return_
-#elif
+#else
 #define MVM_NODISCARD
 #endif
 

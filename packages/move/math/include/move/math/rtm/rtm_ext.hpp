@@ -27,8 +27,7 @@ namespace rtm::ext
         // Largely taken from GLM's implementation
         using namespace rtm;
         const vec_type look_dir(vector_normalize3(vector_sub(eye, center)));
-        const vec_type right_dir(
-            vector_normalize3(vector_mul(vector_cross3(up, look_dir), 1)));
+        const vec_type right_dir(vector_normalize3(vector_cross3(up, look_dir)));
         const vec_type actual_up_dir(vector_cross3(look_dir, right_dir));
 
         mat_type result = matrix_identity();
@@ -63,8 +62,7 @@ namespace rtm::ext
         // Largely taken from GLM's implementation
         using namespace rtm;
         const vec_type look_dir(vector_normalize3(vector_sub(center, eye)));
-        const vec_type right_dir(
-            vector_normalize3(vector_mul(vector_cross3(up, look_dir), 1)));
+        const vec_type right_dir(vector_normalize3(vector_cross3(up, look_dir)));
         const vec_type actual_up_dir(vector_cross3(look_dir, right_dir));
 
         mat_type result = matrix_identity();

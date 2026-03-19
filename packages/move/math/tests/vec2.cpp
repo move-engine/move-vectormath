@@ -168,6 +168,19 @@ inline void test_vec2()
         }
     }
 
+    WHEN("A vec2 is indexed")
+    {
+        vec2 test = {1, 2};
+        test[0] = 4;
+        test[1] = 5;
+
+        THEN("The indexed values are correct")
+        {
+            REQUIRE(test[0] == 4);
+            REQUIRE(test[1] == 5);
+        }
+    }
+
     WHEN("A vec2's length is computed")
     {
         vec2 test = {3, 4};
@@ -199,8 +212,7 @@ SCENARIO("Vec2 tests")
     test_vec2<vec2<uint32_t, Accel::Scalar>>();
     test_vec2<vec2<uint64_t, Accel::Scalar>>();
 
-    // Note: For Vec2, these are currently identical
-    // SIMD tests
+    // Vec2 RTM requests currently resolve to the scalar backend.
     test_vec2<vec2<float, Accel::RTM>>();
     test_vec2<vec2<double, Accel::RTM>>();
 
@@ -213,4 +225,15 @@ SCENARIO("Vec2 tests")
     test_vec2<vec2<uint16_t, Accel::RTM>>();
     test_vec2<vec2<uint32_t, Accel::RTM>>();
     test_vec2<vec2<uint64_t, Accel::RTM>>();
+}
+
+TEST_CASE("vec2 wrapper compound assignments return self")
+{
+    move::math::float2 lhs(1.0f, 2.0f);
+    move::math::float2 rhs(2.0f, 3.0f);
+
+    REQUIRE(&(lhs += rhs) == &lhs);
+    REQUIRE(&(lhs -= rhs) == &lhs);
+    REQUIRE(&(lhs *= move::math::float2(1.0f, 1.0f)) == &lhs);
+    REQUIRE(&(lhs /= move::math::float2(1.0f, 1.0f)) == &lhs);
 }

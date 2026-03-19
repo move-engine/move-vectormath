@@ -444,14 +444,15 @@ inline void test_vec4()
     {
         WHEN("Computing the cross product between two vectors")
         {
-            vec4 test1 = {1, 2, 3, 4};
-            vec4 test2 = {4, 3, 2, 1};
-            vec4 test3 = {1, 2, 3, 4};
+            vec4 test1 = {1, 0, 0, 0};
+            vec4 test2 = {0, 1, 0, 0};
+            vec4 test3 = {0, 0, 1, 0};
             vec4 cross = vec4::cross(test1, test2, test3);
+            vec4 expected = {0, 0, 0, -1};
 
             THEN("The cross product is correct")
             {
-                // TODO: Check cross product
+                REQUIRE(cross == expected);
             }
         }
     }
@@ -542,6 +543,27 @@ inline void test_vec4()
         // lerp (vector factor)
         REQUIRE(vec4::lerp(test1, test2, {0, 1, 0, 1}) == vec4(0, 5, 0, 5));
         REQUIRE(vec4::lerp(test1, test2, {1, 2, 1, 0}) == vec4(5, 5, 5, 0));
+    }
+
+    WHEN("A vec4 is indexed")
+    {
+        vec4 test = {1, 2, 3, 4};
+
+        THEN("Indexed access is correct")
+        {
+            REQUIRE(test[0] == 1);
+            REQUIRE(test[1] == 2);
+            REQUIRE(test[2] == 3);
+            REQUIRE(test[3] == 4);
+            if constexpr (vec4::acceleration == move::math::Acceleration::Scalar)
+            {
+                test[0] = 5;
+                test[1] = 6;
+                test[2] = 7;
+                test[3] = 8;
+                REQUIRE(test == vec4(5, 6, 7, 8));
+            }
+        }
     }
 
     WHEN("Computing the minimum of two vectors")
@@ -719,6 +741,17 @@ SCENARIO("Vec4 full tests")
                     int64_t, uint8_t, uint16_t, uint32_t, uint64_t>();
 
     test_vec4_multi<Accel::RTM, float, double>();
+}
+
+TEST_CASE("vec4 wrapper compound assignments return self")
+{
+    move::math::float4 lhs(1.0f, 2.0f, 3.0f, 4.0f);
+    move::math::float4 rhs(2.0f, 3.0f, 4.0f, 5.0f);
+
+    REQUIRE(&(lhs += rhs) == &lhs);
+    REQUIRE(&(lhs -= rhs) == &lhs);
+    REQUIRE(&(lhs *= move::math::float4(1.0f, 1.0f, 1.0f, 1.0f)) == &lhs);
+    REQUIRE(&(lhs /= move::math::float4(1.0f, 1.0f, 1.0f, 1.0f)) == &lhs);
 }
 
 // SCENARIO("Vec4 Benchmarks")

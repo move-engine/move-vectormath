@@ -176,65 +176,78 @@ namespace move::math
     public:
         MVM_INLINE_NODISCARD rtm_t to_rtm() const
         {
-            // TODO: Fast mode for RTM vec3
-            return rtm::vector_set(base_t::get_x(), base_t::get_y(),
-                                   base_t::get_z(), 1);
+            if constexpr (acceleration == Acceleration::RTM)
+            {
+                return rtm::vector_set_w(base_t::to_rtm(), T(1));
+            }
+            else
+            {
+                return rtm::vector_set(base_t::get_x(), base_t::get_y(),
+                                       base_t::get_z(), T(1));
+            }
         }
 
         MVM_INLINE_NODISCARD static vec3 from_rtm(const rtm_t& rtm_vec)
         {
-            // TODO: Fast mode for RTM vec3
-            return vec3(rtm::vector_get_x(rtm_vec), rtm::vector_get_y(rtm_vec),
-                        rtm::vector_get_z(rtm_vec));
+            if constexpr (acceleration == Acceleration::RTM)
+            {
+                return vec3(base_t(rtm::vector_set_w(rtm_vec, T(0))));
+            }
+            else
+            {
+                return vec3(rtm::vector_get_x(rtm_vec),
+                            rtm::vector_get_y(rtm_vec),
+                            rtm::vector_get_z(rtm_vec));
+            }
         }
 
         // Assignment operators
     public:
         MVM_INLINE vec3& operator+=(const vec3& other)
         {
-            *this = *this + other;
+            base_t::operator+=(other);
             return *this;
         }
 
         MVM_INLINE vec3& operator-=(const vec3& other)
         {
-            *this = *this - other;
+            base_t::operator-=(other);
             return *this;
         }
 
         MVM_INLINE vec3& operator*=(const vec3& other)
         {
-            *this = *this * other;
+            base_t::operator*=(other);
             return *this;
         }
 
         MVM_INLINE vec3& operator/=(const vec3& other)
         {
-            *this = *this / other;
+            base_t::operator/=(other);
             return *this;
         }
 
         MVM_INLINE vec3& operator+=(const T& scalar)
         {
-            *this = *this + scalar;
+            base_t::operator+=(scalar);
             return *this;
         }
 
         MVM_INLINE vec3& operator-=(const T& scalar)
         {
-            *this = *this - scalar;
+            base_t::operator-=(scalar);
             return *this;
         }
 
         MVM_INLINE vec3& operator*=(const T& scalar)
         {
-            *this = *this * scalar;
+            base_t::operator*=(scalar);
             return *this;
         }
 
         MVM_INLINE vec3& operator/=(const T& scalar)
         {
-            *this = *this / scalar;
+            base_t::operator/=(scalar);
             return *this;
         }
 
@@ -268,9 +281,9 @@ namespace move::math
     using storage_ushort3 = vec3<uint16_t, Acceleration::Scalar>;
 
     using fast_sbyte3 = vec3<int8_t, Acceleration::Default>;
-    using fast_byte3 = vec3<int8_t, Acceleration::Default>;
+    using fast_byte3 = vec3<uint8_t, Acceleration::Default>;
     using storage_sbyte3 = vec3<int8_t, Acceleration::Scalar>;
-    using storage_byte3 = vec3<int8_t, Acceleration::Scalar>;
+    using storage_byte3 = vec3<uint8_t, Acceleration::Scalar>;
 
     using float3 = fast_float3;
     using double3 = fast_double3;
@@ -296,8 +309,8 @@ namespace move::math
     using vec3s = storage_short3;
     using vec3us = storage_ushort3;
 
-    using vec3b = storage_sbyte3;
-    using vec3sb = storage_byte3;
+    using vec3b = storage_byte3;
+    using vec3sb = storage_sbyte3;
 
     template <typename T, move::math::Acceleration Accel>
     MVM_INLINE_NODISCARD bool approx_equal(
@@ -305,15 +318,23 @@ namespace move::math
         const vec3<T, Accel>& b,
         const T& epsilon = std::numeric_limits<T>::epsilon())
     {
-        T aloaded[3];
-        T bloaded[3];
+        if constexpr (vec3<T, Accel>::acceleration == Acceleration::RTM)
+        {
+            return rtm::vector_all_near_equal3(a.to_rtm(), b.to_rtm(),
+                                               epsilon);
+        }
+        else
+        {
+            T aloaded[3];
+            T bloaded[3];
 
-        a.store_array(aloaded);
-        b.store_array(bloaded);
+            a.store_array(aloaded);
+            b.store_array(bloaded);
 
-        return approx_equal(aloaded[0], bloaded[0], epsilon) &&
-               approx_equal(aloaded[1], bloaded[1], epsilon) &&
-               approx_equal(aloaded[2], bloaded[2], epsilon);
+            return approx_equal(aloaded[0], bloaded[0], epsilon) &&
+                   approx_equal(aloaded[1], bloaded[1], epsilon) &&
+                   approx_equal(aloaded[2], bloaded[2], epsilon);
+        }
     }
 
     namespace traits

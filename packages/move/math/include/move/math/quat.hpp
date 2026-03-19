@@ -224,7 +224,7 @@ namespace move::math
             return quat::from_rtm(quat_conjugate(_value));
         }
 
-        MVM_INLINE_NODISCARD quat normalize() const
+        MVM_INLINE_NODISCARD quat normalized() const
         {
             using namespace rtm;
             return quat::from_rtm(quat_normalize(_value));
@@ -382,24 +382,14 @@ namespace move::math
         const quat<T>& b,
         const T& epsilon = std::numeric_limits<T>::epsilon())
     {
-        T aloaded[4];
-        T bloaded[4];
+        const auto lane_equal = [&](T lhs, T rhs) {
+            return (std::isnan(lhs) && std::isnan(rhs)) ||
+                   approx_equal(lhs, rhs, epsilon);
+        };
 
-        a.store_array(aloaded);
-        b.store_array(bloaded);
-
-        for (uint8_t i = 0; i < 4; i++)
-        {
-            if (std::isnan(aloaded[i]) && std::isnan(bloaded[i]))
-            {
-                continue;
-            }
-
-            if (!approx_equal(aloaded[i], bloaded[i], epsilon))
-            {
-                return false;
-            }
-        }
-        return true;
+        return lane_equal(a.get_x(), b.get_x()) &&
+               lane_equal(a.get_y(), b.get_y()) &&
+               lane_equal(a.get_z(), b.get_z()) &&
+               lane_equal(a.get_w(), b.get_w());
     }
 }  // namespace move::math

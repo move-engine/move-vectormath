@@ -1,4 +1,5 @@
 #pragma once
+#include <cassert>
 #include <cstddef>
 #include <iosfwd>
 
@@ -212,7 +213,8 @@ namespace move::math::scalar
             return os;
         }
 
-        // Comparison operators
+        // Comparison operators. These are component-wise checks and are not a
+        // total ordering.
     public:
         MVM_INLINE_NODISCARD bool operator<(const base_vec3& other) const
         {
@@ -248,12 +250,14 @@ namespace move::math::scalar
     public:
         MVM_INLINE_NODISCARD T& operator[](const std::size_t index)
         {
-            return data[math::min<std::size_t>(index, 2)];
+            assert(index < element_count);
+            return data[index];
         }
 
         MVM_INLINE_NODISCARD const T& operator[](const std::size_t index) const
         {
-            return data[math::min<std::size_t>(index, 2)];
+            assert(index < element_count);
+            return data[index];
         }
 
         MVM_INLINE_NODISCARD T get_x() const
@@ -376,7 +380,6 @@ namespace move::math::scalar
          *
          * @param v1 The first vector
          * @param v2 The second vector
-         * @param v3 The third vector
          * @return base_vec3 The cross product
          */
         MVM_INLINE_NODISCARD static base_vec3 cross(
@@ -526,10 +529,9 @@ namespace move::math::scalar
                                                    const base_vec3& v2,
                                                    T t) noexcept
         {
-            T clamped = math::saturate(t);
-            return base_vec3(math::lerp(v1.x, v2.x, clamped),
-                             math::lerp(v1.y, v2.y, clamped),
-                             math::lerp(v1.z, v2.z, clamped));
+            return base_vec3(math::lerp(v1.x, v2.x, t),
+                             math::lerp(v1.y, v2.y, t),
+                             math::lerp(v1.z, v2.z, t));
         }
 
         /**
@@ -797,7 +799,7 @@ namespace move::math::scalar
          * @brief Returns a vector with the sign of each component
          *
          * @param v The input vector
-         * @return base_vec3 The vector with component signs (-1 or 1)
+         * @return base_vec3 The vector with component signs (-1, 0, or 1)
          */
         MVM_INLINE_NODISCARD static base_vec3 sign(const base_vec3& v) noexcept
         {

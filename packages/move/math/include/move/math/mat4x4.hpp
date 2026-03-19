@@ -130,7 +130,7 @@ namespace move::math
             _value = matrix_set(x, y, z, w);
         }
 
-        MVM_INLINE_NODISCARD rtm_t to_rtm()
+        MVM_INLINE_NODISCARD rtm_t to_rtm() const
         {
             return _value;
         }
@@ -574,19 +574,31 @@ namespace move::math
         const mat4x4<T>& b,
         const T& epsilon = std::numeric_limits<T>::epsilon())
     {
-        T aloaded[16];
-        T bloaded[16];
+        using fast_vec4_t = typename mat4x4<T>::fast_vec4_t;
 
-        a.store_array(aloaded);
-        b.store_array(bloaded);
-
-        for (uint8_t i = 0; i < 16; i++)
-        {
-            if (!approx_equal(aloaded[i], bloaded[i], epsilon))
-            {
-                return false;
-            }
-        }
-        return true;
+        return approx_equal(
+                   fast_vec4_t::from_rtm(
+                       rtm::matrix_get_axis(a.to_rtm(), rtm::axis4::x)),
+                   fast_vec4_t::from_rtm(
+                       rtm::matrix_get_axis(b.to_rtm(), rtm::axis4::x)),
+                   epsilon) &&
+               approx_equal(
+                   fast_vec4_t::from_rtm(
+                       rtm::matrix_get_axis(a.to_rtm(), rtm::axis4::y)),
+                   fast_vec4_t::from_rtm(
+                       rtm::matrix_get_axis(b.to_rtm(), rtm::axis4::y)),
+                   epsilon) &&
+               approx_equal(
+                   fast_vec4_t::from_rtm(
+                       rtm::matrix_get_axis(a.to_rtm(), rtm::axis4::z)),
+                   fast_vec4_t::from_rtm(
+                       rtm::matrix_get_axis(b.to_rtm(), rtm::axis4::z)),
+                   epsilon) &&
+               approx_equal(
+                   fast_vec4_t::from_rtm(
+                       rtm::matrix_get_axis(a.to_rtm(), rtm::axis4::w)),
+                   fast_vec4_t::from_rtm(
+                       rtm::matrix_get_axis(b.to_rtm(), rtm::axis4::w)),
+                   epsilon);
     }
 }  // namespace move::math

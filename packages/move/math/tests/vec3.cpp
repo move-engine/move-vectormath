@@ -393,12 +393,12 @@ inline void test_vec3()
         {
             vec3 test1 = {1, 2, 3};
             vec3 test2 = {4, 3, 2};
-            vec3 test3 = {1, 2, 3};
             vec3 cross = vec3::cross(test1, test2);
+            vec3 expected = {-5, 10, -5};
 
             THEN("The cross product is correct")
             {
-                // TODO: Check cross product
+                REQUIRE(cross == expected);
             }
         }
     }
@@ -517,7 +517,7 @@ inline void test_vec3()
         {
             vec3 test = {component_type(-2), component_type(0), component_type(3)};
             vec3 result = vec3::sign(test);
-            vec3 expected = {component_type(-1), component_type(1), component_type(1)};  // Note: sign(0) = 1 by definition in common.hpp
+            vec3 expected = {component_type(-1), component_type(0), component_type(1)};
 
             THEN("The signs are correct")
             {
@@ -526,14 +526,33 @@ inline void test_vec3()
         }
         else
         {
-            // For unsigned types, sign should always return 1
+            // For unsigned types, zero stays zero and positive values return 1.
             vec3 test = {component_type(2), component_type(0), component_type(3)};
             vec3 result = vec3::sign(test);
-            vec3 expected = {component_type(1), component_type(1), component_type(1)};
+            vec3 expected = {component_type(1), component_type(0), component_type(1)};
 
             THEN("The signs are correct (unsigned)")
             {
                 REQUIRE(result == expected);
+            }
+        }
+    }
+
+    WHEN("A vec3 is indexed")
+    {
+        vec3 test = {1, 2, 3};
+
+        THEN("Indexed access is correct")
+        {
+            REQUIRE(test[0] == 1);
+            REQUIRE(test[1] == 2);
+            REQUIRE(test[2] == 3);
+            if constexpr (vec3::acceleration == move::math::Acceleration::Scalar)
+            {
+                test[0] = 4;
+                test[1] = 5;
+                test[2] = 6;
+                REQUIRE(test == vec3(4, 5, 6));
             }
         }
     }
@@ -663,6 +682,19 @@ inline void test_vec3()
 
     if constexpr (std::is_same_v<component_type, float>)
     {
+        WHEN("Converting a vec3 to and from RTM")
+        {
+            vec3 original = {component_type(1.25), component_type(-2.5),
+                             component_type(3.75)};
+            vec3 round_trip = vec3::from_rtm(original.to_rtm());
+
+            THEN("The components are preserved")
+            {
+                REQUIRE(move::math::approx_equal(round_trip, original,
+                                                 component_type(0.001)));
+            }
+        }
+
         WHEN("Serializing and deserializing a vec3 through an archive")
         {
             vec3 original = {component_type(1.25), component_type(-2.5),
@@ -695,6 +727,17 @@ TEST_CASE("scalar::base_vec3 operator-= returns self")
     REQUIRE(lhs.x == Catch::Approx(2.0f));
     REQUIRE(lhs.y == Catch::Approx(3.0f));
     REQUIRE(lhs.z == Catch::Approx(4.0f));
+}
+
+TEST_CASE("vec3 wrapper compound assignments return self")
+{
+    move::math::float3 lhs(1.0f, 2.0f, 3.0f);
+    move::math::float3 rhs(2.0f, 3.0f, 4.0f);
+
+    REQUIRE(&(lhs += rhs) == &lhs);
+    REQUIRE(&(lhs -= rhs) == &lhs);
+    REQUIRE(&(lhs *= move::math::float3(1.0f, 1.0f, 1.0f)) == &lhs);
+    REQUIRE(&(lhs /= move::math::float3(1.0f, 1.0f, 1.0f)) == &lhs);
 }
 
 SCENARIO("Vec3 tests")

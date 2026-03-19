@@ -389,49 +389,49 @@ namespace move::math
     public:
         MVM_INLINE vec4& operator+=(const vec4& other)
         {
-            *this = *this + other;
+            base_t::operator+=(other);
             return *this;
         }
 
         MVM_INLINE vec4& operator-=(const vec4& other)
         {
-            *this = *this - other;
+            base_t::operator-=(other);
             return *this;
         }
 
         MVM_INLINE vec4& operator*=(const vec4& other)
         {
-            *this = *this * other;
+            base_t::operator*=(other);
             return *this;
         }
 
         MVM_INLINE vec4& operator/=(const vec4& other)
         {
-            *this = *this / other;
+            base_t::operator/=(other);
             return *this;
         }
 
         MVM_INLINE vec4& operator+=(const T& scalar)
         {
-            *this = *this + scalar;
+            base_t::operator+=(scalar);
             return *this;
         }
 
         MVM_INLINE vec4& operator-=(const T& scalar)
         {
-            *this = *this - scalar;
+            base_t::operator-=(scalar);
             return *this;
         }
 
         MVM_INLINE vec4& operator*=(const T& scalar)
         {
-            *this = *this * scalar;
+            base_t::operator*=(scalar);
             return *this;
         }
 
         MVM_INLINE vec4& operator/=(const T& scalar)
         {
-            *this = *this / scalar;
+            base_t::operator/=(scalar);
             return *this;
         }
 
@@ -465,9 +465,9 @@ namespace move::math
     using storage_ushort4 = vec4<uint16_t, Acceleration::Scalar>;
 
     using fast_sbyte4 = vec4<int8_t, Acceleration::Default>;
-    using fast_byte4 = vec4<int8_t, Acceleration::Default>;
+    using fast_byte4 = vec4<uint8_t, Acceleration::Default>;
     using storage_sbyte4 = vec4<int8_t, Acceleration::Scalar>;
-    using storage_byte4 = vec4<int8_t, Acceleration::Scalar>;
+    using storage_byte4 = vec4<uint8_t, Acceleration::Scalar>;
 
     using float4 = fast_float4;
     using double4 = fast_double4;
@@ -493,8 +493,8 @@ namespace move::math
     using vec4s = storage_short4;
     using vec4us = storage_ushort4;
 
-    using vec4b = storage_sbyte4;
-    using vec4sb = storage_byte4;
+    using vec4b = storage_byte4;
+    using vec4sb = storage_sbyte4;
 
     template <typename T, move::math::Acceleration Accel>
     MVM_INLINE_NODISCARD bool approx_equal(
@@ -502,16 +502,23 @@ namespace move::math
         const vec4<T, Accel>& b,
         const T& epsilon = std::numeric_limits<T>::epsilon())
     {
-        T aloaded[4];
-        T bloaded[4];
+        if constexpr (vec4<T, Accel>::acceleration == Acceleration::RTM)
+        {
+            return rtm::vector_all_near_equal(a.to_rtm(), b.to_rtm(), epsilon);
+        }
+        else
+        {
+            T aloaded[4];
+            T bloaded[4];
 
-        a.store_array(aloaded);
-        b.store_array(bloaded);
+            a.store_array(aloaded);
+            b.store_array(bloaded);
 
-        return approx_equal(aloaded[0], bloaded[0], epsilon) &&
-               approx_equal(aloaded[1], bloaded[1], epsilon) &&
-               approx_equal(aloaded[2], bloaded[2], epsilon) &&
-               approx_equal(aloaded[3], bloaded[3], epsilon);
+            return approx_equal(aloaded[0], bloaded[0], epsilon) &&
+                   approx_equal(aloaded[1], bloaded[1], epsilon) &&
+                   approx_equal(aloaded[2], bloaded[2], epsilon) &&
+                   approx_equal(aloaded[3], bloaded[3], epsilon);
+        }
     }
 
     namespace traits

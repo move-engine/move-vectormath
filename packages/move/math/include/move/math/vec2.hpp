@@ -7,16 +7,9 @@
 
 namespace move::math
 {
-    template <move::math::Acceleration Accel>
-    static constexpr auto vec2_acceleration =
-        Accel == Acceleration::Default ? Acceleration::Scalar : Accel;
-
+    // Vec2 remains scalar-only until a real RTM backend exists.
     template <typename T, move::math::Acceleration Accel>
-    using base_vec2_t =
-        std::conditional_t<vec2_acceleration<Accel> == Acceleration::RTM,
-                           scalar::base_vec2<T>,  // TODO: Replace with RTM
-                                                  // type
-                           scalar::base_vec2<T>>;
+    using base_vec2_t = scalar::base_vec2<T>;
 
     template <typename T, move::math::Acceleration Accel>
     struct vec2 : public base_vec2_t<T, Accel>
@@ -75,49 +68,49 @@ namespace move::math
     public:
         MVM_INLINE vec2& operator+=(const vec2& other)
         {
-            *this = *this + other;
+            base_t::operator+=(other);
             return *this;
         }
 
         MVM_INLINE vec2& operator-=(const vec2& other)
         {
-            *this = *this - other;
+            base_t::operator-=(other);
             return *this;
         }
 
         MVM_INLINE vec2& operator*=(const vec2& other)
         {
-            *this = *this * other;
+            base_t::operator*=(other);
             return *this;
         }
 
         MVM_INLINE vec2& operator/=(const vec2& other)
         {
-            *this = *this / other;
+            base_t::operator/=(other);
             return *this;
         }
 
         MVM_INLINE vec2& operator+=(const T& scalar)
         {
-            *this = *this + scalar;
+            base_t::operator+=(scalar);
             return *this;
         }
 
         MVM_INLINE vec2& operator-=(const T& scalar)
         {
-            *this = *this - scalar;
+            base_t::operator-=(scalar);
             return *this;
         }
 
         MVM_INLINE vec2& operator*=(const T& scalar)
         {
-            *this = *this * scalar;
+            base_t::operator*=(scalar);
             return *this;
         }
 
         MVM_INLINE vec2& operator/=(const T& scalar)
         {
-            *this = *this / scalar;
+            base_t::operator/=(scalar);
             return *this;
         }
 
@@ -130,8 +123,8 @@ namespace move::math
         }
     };
 
-    using fast_float2 = vec2<float, Acceleration::RTM>;
-    using fast_double2 = vec2<double, Acceleration::RTM>;
+    using fast_float2 = vec2<float, Acceleration::Scalar>;
+    using fast_double2 = vec2<double, Acceleration::Scalar>;
     using storage_float2 = vec2<float, Acceleration::Scalar>;
     using storage_double2 = vec2<double, Acceleration::Scalar>;
 
@@ -151,9 +144,9 @@ namespace move::math
     using storage_ushort2 = vec2<uint16_t, Acceleration::Scalar>;
 
     using fast_sbyte2 = vec2<int8_t, Acceleration::Default>;
-    using fast_byte2 = vec2<int8_t, Acceleration::Default>;
+    using fast_byte2 = vec2<uint8_t, Acceleration::Default>;
     using storage_sbyte2 = vec2<int8_t, Acceleration::Scalar>;
-    using storage_byte2 = vec2<int8_t, Acceleration::Scalar>;
+    using storage_byte2 = vec2<uint8_t, Acceleration::Scalar>;
 
     using float2 = fast_float2;
     using double2 = fast_double2;
@@ -179,8 +172,8 @@ namespace move::math
     using vec2s = storage_short2;
     using vec2us = storage_ushort2;
 
-    using vec2b = storage_sbyte2;
-    using vec2sb = storage_byte2;
+    using vec2b = storage_byte2;
+    using vec2sb = storage_sbyte2;
 
     namespace traits
     {

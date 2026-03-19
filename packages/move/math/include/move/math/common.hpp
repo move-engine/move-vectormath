@@ -24,19 +24,19 @@ namespace move::math
     };
 
     template <typename T>
-    MVM_INLINE_NODISCARD constexpr T sqrt(const T& value)
+    MVM_INLINE_NODISCARD T sqrt(const T& value)
     {
         return std::sqrt(value);
     }
 
     template <typename T>
-    MVM_INLINE_NODISCARD constexpr T sqrt_reciprocal(const T& value)
+    MVM_INLINE_NODISCARD T sqrt_reciprocal(const T& value)
     {
         return T(1) / std::sqrt(value);
     }
 
     template <typename T>
-    MVM_INLINE_NODISCARD constexpr T abs(const T& value)
+    MVM_INLINE_NODISCARD T abs(const T& value)
     {
         if constexpr (std::is_unsigned_v<T>)
         {
@@ -131,37 +131,37 @@ namespace move::math
     }
 
     template <typename T>
-    MVM_INLINE_NODISCARD constexpr T pow(T value, T exponent)
+    MVM_INLINE_NODISCARD T pow(T value, T exponent)
     {
         return std::pow(value, exponent);
     }
 
     template <typename T>
-    MVM_INLINE_NODISCARD constexpr T exp(T value)
+    MVM_INLINE_NODISCARD T exp(T value)
     {
         return std::exp(value);
     }
 
     template <typename T>
-    MVM_INLINE_NODISCARD constexpr T log(T value)
+    MVM_INLINE_NODISCARD T log(T value)
     {
         return std::log(value);
     }
 
     template <typename T>
-    MVM_INLINE_NODISCARD constexpr T log2(T value)
+    MVM_INLINE_NODISCARD T log2(T value)
     {
         return std::log2(value);
     }
 
     template <typename T>
-    MVM_INLINE_NODISCARD constexpr T log10(T value)
+    MVM_INLINE_NODISCARD T log10(T value)
     {
         return std::log10(value);
     }
 
     template <typename T>
-    MVM_INLINE_NODISCARD constexpr T logn(T value, T base)
+    MVM_INLINE_NODISCARD T logn(T value, T base)
     {
         return log(value) / log(base);
     }
@@ -169,47 +169,47 @@ namespace move::math
     template <typename T>
     MVM_INLINE_NODISCARD constexpr T sign(const T& value)
     {
-        return value < T(0) ? T(-1) : T(1);
+        return value > T(0) ? T(1) : (value < T(0) ? T(-1) : T(0));
     }
 
     template <typename T>
-    MVM_INLINE_NODISCARD constexpr T floor(const T& value)
+    MVM_INLINE_NODISCARD T floor(const T& value)
     {
         return std::floor(value);
     }
 
     template <typename T>
-    MVM_INLINE_NODISCARD constexpr T ceil(const T& value)
+    MVM_INLINE_NODISCARD T ceil(const T& value)
     {
         return std::ceil(value);
     }
 
     template <typename T>
-    MVM_INLINE_NODISCARD constexpr T round(const T& value)
+    MVM_INLINE_NODISCARD T round(const T& value)
     {
         return std::round(value);
     }
 
     template <typename T>
-    MVM_INLINE_NODISCARD constexpr T trunc(const T& value)
+    MVM_INLINE_NODISCARD T trunc(const T& value)
     {
         return std::trunc(value);
     }
 
     template <typename T>
-    MVM_INLINE_NODISCARD constexpr T frac(const T& value)
+    MVM_INLINE_NODISCARD T frac(const T& value)
     {
         return value - floor(value);
     }
 
     template <typename T>
-    MVM_INLINE_NODISCARD constexpr T mod(const T& value, const T& divisor)
+    MVM_INLINE_NODISCARD T mod(const T& value, const T& divisor)
     {
         return value - divisor * floor(value / divisor);
     }
 
     template <typename T>
-    MVM_INLINE_NODISCARD constexpr T remainder(const T& value, const T& divisor)
+    MVM_INLINE_NODISCARD T remainder(const T& value, const T& divisor)
     {
         return std::remainder(value, divisor);
     }
@@ -254,79 +254,79 @@ namespace move::math
     }
 
     template <typename value_t>
-    MVM_INLINE_NODISCARD constexpr value_t sin(value_t value)
+    MVM_INLINE_NODISCARD value_t sin(value_t value)
     {
         return std::sin(value);
     }
 
     template <typename value_t>
-    MVM_INLINE_NODISCARD constexpr value_t cos(value_t value)
+    MVM_INLINE_NODISCARD value_t cos(value_t value)
     {
         return std::cos(value);
     }
 
     template <typename value_t>
-    MVM_INLINE_NODISCARD constexpr value_t tan(value_t value)
+    MVM_INLINE_NODISCARD value_t tan(value_t value)
     {
         return std::tan(value);
     }
 
     template <typename value_t>
-    MVM_INLINE_NODISCARD constexpr value_t asin(value_t value)
+    MVM_INLINE_NODISCARD value_t asin(value_t value)
     {
         return std::asin(value);
     }
 
     template <typename value_t>
-    MVM_INLINE_NODISCARD constexpr value_t acos(value_t value)
+    MVM_INLINE_NODISCARD value_t acos(value_t value)
     {
         return std::acos(value);
     }
 
     template <typename value_t>
-    MVM_INLINE_NODISCARD constexpr value_t atan(value_t value)
+    MVM_INLINE_NODISCARD value_t atan(value_t value)
     {
         return std::atan(value);
     }
 
     template <typename value_t>
-    MVM_INLINE_NODISCARD constexpr value_t atan2(value_t y, value_t x)
+    MVM_INLINE_NODISCARD value_t atan2(value_t y, value_t x)
     {
         return std::atan2(y, x);
     }
 
     template <typename value_t>
-    MVM_INLINE_NODISCARD constexpr value_t sinh(value_t value)
+    MVM_INLINE_NODISCARD value_t sinh(value_t value)
     {
         return std::sinh(value);
     }
 
     template <typename value_t>
-    MVM_INLINE_NODISCARD constexpr value_t cosh(value_t value)
+    MVM_INLINE_NODISCARD value_t cosh(value_t value)
     {
         return std::cosh(value);
     }
 
     template <typename value_t>
-    MVM_INLINE_NODISCARD constexpr value_t tanh(value_t value)
+    MVM_INLINE_NODISCARD value_t tanh(value_t value)
     {
         return std::tanh(value);
     }
 
     template <typename value_t>
-    MVM_INLINE_NODISCARD constexpr value_t asinh(value_t value)
+    MVM_INLINE_NODISCARD value_t asinh(value_t value)
     {
         return std::asinh(value);
     }
 
     template <typename value_t>
-    MVM_INLINE_NODISCARD constexpr value_t acosh(value_t value)
+    MVM_INLINE_NODISCARD value_t acosh(value_t value)
     {
         return std::acosh(value);
     }
 
     template <typename value_t>
-    MVM_INLINE_NODISCARD constexpr value_t atanh(value_t value)
+    MVM_INLINE_NODISCARD value_t atanh(value_t value)
     {
         return std::atanh(value);
     }
@@ -395,7 +395,7 @@ namespace move::math
     template <typename T1,
               typename T2,
               typename EpsilonT = most_detailed_t<T1, T2>>
-    MVM_INLINE_NODISCARD constexpr bool approx_equal(
+    MVM_INLINE_NODISCARD bool approx_equal(
         const T1& a,
         const T2& b,
         const EpsilonT& epsilon = std::numeric_limits<EpsilonT>::epsilon())

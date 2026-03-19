@@ -1,4 +1,5 @@
 #pragma once
+#include <cassert>
 #include <cstddef>
 #include <cstring>
 #include <iosfwd>
@@ -202,7 +203,8 @@ namespace move::math::scalar
             return os;
         }
 
-        // Comparison operators
+        // Comparison operators. These are component-wise checks and are not a
+        // total ordering.
     public:
         MVM_INLINE_NODISCARD bool operator<(const base_vec2& other) const
         {
@@ -238,12 +240,14 @@ namespace move::math::scalar
     public:
         MVM_INLINE_NODISCARD T& operator[](const size_t& index)
         {
-            return data[math::min<std::size_t>(index, 1)];
+            assert(index < element_count);
+            return data[index];
         }
 
         MVM_INLINE_NODISCARD const T& operator[](const size_t& index) const
         {
-            return data[math::min<std::size_t>(index, 1)];
+            assert(index < element_count);
+            return data[index];
         }
 
         MVM_INLINE_NODISCARD T get_x() const
