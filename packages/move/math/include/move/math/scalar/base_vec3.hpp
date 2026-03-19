@@ -470,11 +470,18 @@ namespace move::math::scalar
                                                       T ior) noexcept
         {
             auto dotinorm = dot(incident, normal);
+            auto discriminant = T(1) - ior * ior * (T(1) - dotinorm * dotinorm);
+            
+            // Total internal reflection occurs when discriminant < 0
+            if (discriminant < T(0))
+            {
+                return base_vec3{T(0), T(0), T(0)};  // Return zero vector
+            }
+            
             auto roi_plus_dotinorm = ior * dotinorm;
-            auto inner_sqrt =
-                (std::sqrt(1 - ior * ior * (1 - dotinorm * dotinorm)));
+            auto inner_sqrt = std::sqrt(discriminant);
 
-            return ior * incident - (roi_plus_dotinorm + inner_sqrt) * normal;
+            return incident * ior - normal * (roi_plus_dotinorm + inner_sqrt);
         }
 
         /**
@@ -783,6 +790,45 @@ namespace move::math::scalar
         MVM_INLINE_NODISCARD static base_vec3 forward() noexcept
         {
             return z_axis();
+        }
+
+        /**
+         * @brief Returns a vector with the absolute value of each component
+         *
+         * @param v The input vector
+         * @return base_vec3 The vector with absolute values
+         */
+        MVM_INLINE_NODISCARD static base_vec3 abs(const base_vec3& v) noexcept
+        {
+            return base_vec3(math::abs(v.x), math::abs(v.y), math::abs(v.z));
+        }
+
+        /**
+         * @brief Returns a vector with the sign of each component
+         *
+         * @param v The input vector
+         * @return base_vec3 The vector with component signs (-1 or 1)
+         */
+        MVM_INLINE_NODISCARD static base_vec3 sign(const base_vec3& v) noexcept
+        {
+            return base_vec3(math::sign(v.x), math::sign(v.y), math::sign(v.z));
+        }
+
+        /**
+         * @brief Projects a vector onto a plane defined by its normal
+         *
+         * @param v The vector to project
+         * @param plane_normal The normal vector of the plane (should be normalized)
+         * @return base_vec3 The projection of v onto the plane
+         */
+        MVM_INLINE_NODISCARD static base_vec3 project_onto_plane(
+            const base_vec3& v, const base_vec3& plane_normal) noexcept
+        {
+            // Project v onto the plane by subtracting the component parallel to the normal
+            // projection = v - (v · n) * n
+            auto dot_vn = dot(v, plane_normal);
+            auto parallel_component = plane_normal * dot_vn;
+            return v - parallel_component;
         }
     };
 }  // namespace move::math::scalar

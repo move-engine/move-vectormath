@@ -411,8 +411,153 @@ inline void test_vec3()
                 Catch::Approx(component_type(1.5707964)));
     }
 
-    // TODO: Test reflect
-    // TODO: Test refract
+    if constexpr (std::is_floating_point_v<component_type>)
+    {
+        WHEN("Testing reflect function")
+        {
+            vec3 incident = {1, -1, 0};
+            vec3 normal = {0, 1, 0};  // Upward normal
+            vec3 reflected = vec3::reflect(incident, normal);
+            vec3 expected = {1, 1, 0};  // Reflected upward
+
+            THEN("The reflection is correct")
+            {
+                REQUIRE(move::math::approx_equal(reflected, expected));
+            }
+        }
+
+        WHEN("Testing refract function")
+        {
+            vec3 incident = {1, -1, 0};
+            incident = incident.normalized();
+            vec3 normal = {0, 1, 0};  // Upward normal
+            component_type ior = component_type(1.2);  // More realistic IOR for testing
+            vec3 refracted = vec3::refract(incident, normal, ior);
+
+            THEN("The refracted vector is valid")
+            {
+                // Basic sanity check - refracted vector should not be NaN
+                REQUIRE(!std::isnan(refracted.get_x()));
+                REQUIRE(!std::isnan(refracted.get_y()));
+                REQUIRE(!std::isnan(refracted.get_z()));
+                
+                // For this configuration, we shouldn't get total internal reflection
+                REQUIRE(refracted.length() > component_type(0.01));
+                // The refracted ray should be bent away from the normal (toward the surface)
+                // So Y component should be less negative (higher in value) than incident
+                REQUIRE(refracted.get_y() > incident.get_y());
+            }
+        }
+    }
+
+    WHEN("Testing abs function")
+    {
+        if constexpr (std::is_signed_v<component_type>)
+        {
+            vec3 test = {component_type(-1), component_type(2), component_type(-3)};
+            vec3 result = vec3::abs(test);
+            vec3 expected = {component_type(1), component_type(2), component_type(3)};
+
+            THEN("The absolute values are correct")
+            {
+                REQUIRE(result == expected);
+            }
+        }
+        else
+        {
+            // For unsigned types, abs should return the same value
+            vec3 test = {component_type(1), component_type(2), component_type(3)};
+            vec3 result = vec3::abs(test);
+
+            THEN("The absolute values are correct (unsigned)")
+            {
+                REQUIRE(result == test);
+            }
+        }
+    }
+
+    WHEN("Testing sign function")
+    {
+        if constexpr (std::is_signed_v<component_type>)
+        {
+            vec3 test = {component_type(-2), component_type(0), component_type(3)};
+            vec3 result = vec3::sign(test);
+            vec3 expected = {component_type(-1), component_type(1), component_type(1)};  // Note: sign(0) = 1 by definition in common.hpp
+
+            THEN("The signs are correct")
+            {
+                REQUIRE(result == expected);
+            }
+        }
+        else
+        {
+            // For unsigned types, sign should always return 1
+            vec3 test = {component_type(2), component_type(0), component_type(3)};
+            vec3 result = vec3::sign(test);
+            vec3 expected = {component_type(1), component_type(1), component_type(1)};
+
+            THEN("The signs are correct (unsigned)")
+            {
+                REQUIRE(result == expected);
+            }
+        }
+    }
+
+    if constexpr (std::is_floating_point_v<component_type>)
+    {
+        WHEN("Testing project_onto_plane function")
+        {
+            vec3 v = {1, 2, 3};
+            vec3 plane_normal = {0, 1, 0};  // XZ plane (normal is Y-axis)
+            vec3 projected = vec3::project_onto_plane(v, plane_normal);
+            vec3 expected = {1, 0, 3};  // Y component should be removed
+
+            THEN("The projection is correct")
+            {
+                REQUIRE(move::math::approx_equal(projected, expected));
+            }
+        }
+
+        WHEN("Testing project_onto_plane with diagonal plane")
+        {
+            vec3 v = {1, 1, 1};
+            vec3 plane_normal = {1, 1, 1};
+            plane_normal = plane_normal.normalized();  // Normalize the normal
+            vec3 projected = vec3::project_onto_plane(v, plane_normal);
+
+            THEN("The projected vector lies on the plane")
+            {
+                // The projected vector should be perpendicular to the normal
+                component_type dot_with_normal = vec3::dot(projected, plane_normal);
+                REQUIRE(move::math::approx_equal(dot_with_normal, component_type(0), component_type(0.001)));
+            }
+        }
+
+        WHEN("Testing project_onto_plane with vector parallel to plane")
+        {
+            vec3 plane_normal = {0, 0, 1};  // XY plane
+            vec3 v = {1, 1, 0};             // Already on XY plane
+            vec3 projected = vec3::project_onto_plane(v, plane_normal);
+
+            THEN("Vector parallel to plane remains unchanged")
+            {
+                REQUIRE(move::math::approx_equal(projected, v));
+            }
+        }
+
+        WHEN("Testing project_onto_plane with vector perpendicular to plane")
+        {
+            vec3 plane_normal = {0, 0, 1};  // XY plane
+            vec3 v = {0, 0, 5};             // Perpendicular to XY plane
+            vec3 projected = vec3::project_onto_plane(v, plane_normal);
+
+            THEN("Vector perpendicular to plane becomes zero")
+            {
+                vec3 expected = {0, 0, 0};
+                REQUIRE(move::math::approx_equal(projected, expected));
+            }
+        }
+    }
 
     WHEN("Lerping between vectors")
     {

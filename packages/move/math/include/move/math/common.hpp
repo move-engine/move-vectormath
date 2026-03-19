@@ -38,7 +38,14 @@ namespace move::math
     template <typename T>
     MVM_INLINE_NODISCARD constexpr T abs(const T& value)
     {
-        return std::abs(value);
+        if constexpr (std::is_unsigned_v<T>)
+        {
+            return value;  // Unsigned types are always non-negative
+        }
+        else
+        {
+            return std::abs(value);
+        }
     }
 
     template <typename T>
