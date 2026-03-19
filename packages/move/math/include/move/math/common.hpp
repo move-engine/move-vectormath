@@ -331,6 +331,38 @@ namespace move::math
         return std::atanh(value);
     }
 
+    namespace detail
+    {
+        template <typename Vec, typename Scalar>
+        MVM_INLINE_NODISCARD Vec refract_ior_relative_to_air(
+            const Vec& incident,
+            const Vec& normal,
+            Scalar ior) noexcept
+        {
+            if (ior <= Scalar(0))
+            {
+                return Vec::zero();
+            }
+
+            const Scalar dot_inorm = Vec::dot(incident, normal);
+            const bool entering = dot_inorm <= Scalar(0);
+            const Vec working_normal = entering ? normal : -normal;
+            const Scalar eta = entering ? Scalar(1) / ior : ior;
+            const Scalar cos_i = clamp(-Vec::dot(incident, working_normal),
+                                       Scalar(0), Scalar(1));
+            const Scalar k =
+                Scalar(1) - eta * eta * (Scalar(1) - cos_i * cos_i);
+
+            if (k < Scalar(0))
+            {
+                return Vec::zero();
+            }
+
+            return incident * eta +
+                   working_normal * (eta * cos_i - sqrt(k));
+        }
+    }  // namespace detail
+
     // If floating typeness of both is equal, use the bigger type.
     // Otherwise use the one that is a floating point type.
     template <typename T1, typename T2>

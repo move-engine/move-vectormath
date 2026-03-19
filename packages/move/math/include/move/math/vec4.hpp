@@ -119,8 +119,8 @@ namespace move::math
             else
             {
                 T data[4];
-                store_array(data);
-                return vec4<T, TargetAccel>::from_array(data);
+                base_t::store_array(data);
+                return vec4<T, TargetAccel>::base_t::from_array(data);
             }
         }
 

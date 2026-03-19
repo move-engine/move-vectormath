@@ -83,7 +83,7 @@ namespace move::math
         MVM_INLINE void load_array(const T* in)
         {
             using namespace rtm;
-            quat_load(_value, in);
+            _value = quat_load(in);
         }
 
         MVM_INLINE_NODISCARD underlying_type to_rtm() const
@@ -215,8 +215,7 @@ namespace move::math
     public:
         MVM_INLINE_NODISCARD quat inverse() const
         {
-            using namespace rtm;
-            return quat::from_rtm(quat_normalize(quat_conjugate(_value)));
+            return quat::from_rtm(rtm::ext::quat_inverse(_value));
         }
 
         MVM_INLINE_NODISCARD quat conjugate() const
@@ -265,7 +264,7 @@ namespace move::math
     public:
         MVM_INLINE quat& invert_in_place()
         {
-            _value = rtm::quat_normalize(rtm::quat_conjugate(_value));
+            _value = rtm::ext::quat_inverse(_value);
             return *this;
         }
 

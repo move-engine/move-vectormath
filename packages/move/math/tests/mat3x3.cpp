@@ -201,6 +201,64 @@ inline void test_mat3()
             INFO(result << " vs " << expected);
             REQUIRE(move::math::approx_equal(result, expected));
         }
+
+        THEN("transform_vector matches vector-matrix multiplication")
+        {
+            vec3 test = {1, 0, 0};
+            auto result = rotation.transform_vector(test.fast());
+            vec3 expected = test * rotation;
+
+            REQUIRE(move::math::approx_equal(result, expected.fast(),
+                                             component_type(0.001)));
+        }
+    }
+
+    // Transform helper testing
+    {
+        mat3 identity = mat3::identity();
+        mat3 rotation = mat3::angle_axis(
+            vec3::up(), move::math::deg2rad<component_type>(90));
+
+        THEN("transform_vector on the identity matrix preserves the vector")
+        {
+            vec3 test = {1, 2, 3};
+            REQUIRE(move::math::approx_equal(identity.transform_vector(test.fast()),
+                                             test.fast(),
+                                             component_type(0.001)));
+        }
+
+        THEN("transform_vector applies rotation correctly")
+        {
+            vec3 test = {1, 0, 0};
+            vec3 expected = {0, 0, -1};
+            REQUIRE(move::math::approx_equal(rotation.transform_vector(test.fast()),
+                                             expected.fast(),
+                                             component_type(0.001)));
+        }
+
+        THEN("store_array and load_array round-trip identity")
+        {
+            component_type data[9];
+            identity.store_array(data);
+
+            mat3 loaded;
+            loaded.load_array(data);
+
+            REQUIRE(move::math::approx_equal(loaded, identity,
+                                             component_type(0.001)));
+        }
+
+        THEN("store_array and load_array round-trip a rotation matrix")
+        {
+            component_type data[9];
+            rotation.store_array(data);
+
+            mat3 loaded;
+            loaded.load_array(data);
+
+            REQUIRE(move::math::approx_equal(loaded, rotation,
+                                             component_type(0.001)));
+        }
     }
 }
 

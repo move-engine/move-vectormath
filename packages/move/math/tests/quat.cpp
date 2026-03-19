@@ -97,6 +97,20 @@ inline void test_quat()
             REQUIRE(result == Approx(1));
         }
 
+        THEN("A non-unit quaternion inverts correctly")
+        {
+            quat non_unit(component_type(1), component_type(2),
+                          component_type(3), component_type(4));
+            quat product = non_unit * non_unit.inverse();
+            REQUIRE(move::math::approx_equal(product, quat::identity(),
+                                             component_type(0.001)));
+        }
+
+        THEN("The zero quaternion inverse stays zero")
+        {
+            REQUIRE(quat::zero().inverse() == quat::zero());
+        }
+
         THEN("Rotating a point is correct")
         {
             vec3 point(1, 0, 0);

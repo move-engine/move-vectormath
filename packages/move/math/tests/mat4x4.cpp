@@ -175,6 +175,33 @@ inline void test_mat4()
             vec4 result = test * translation.inverse();
             REQUIRE(result == vec4(1, 2, 3, 1));
         }
+
+        THEN("transform_point matches vector-matrix multiplication")
+        {
+            vec3 test = {1, 2, 3};
+            auto result = translation.transform_point(test.fast());
+            vec4 expected = vec4(test, 1) * translation;
+
+            REQUIRE(move::math::approx_equal(result, expected.xyz().fast(),
+                                             component_type(0.001)));
+        }
+
+        THEN("transform_vector ignores translation")
+        {
+            vec3 test = {1, 2, 3};
+            auto result = translation.transform_vector(test.fast());
+            REQUIRE(move::math::approx_equal(result, test.fast(),
+                                             component_type(0.001)));
+        }
+
+        THEN("transform_vector4 matches vector-matrix multiplication")
+        {
+            vec4 test = {1, 2, 3, 1};
+            vec4 result = translation.transform_vector4(test.fast());
+            vec4 expected = test * translation;
+            REQUIRE(move::math::approx_equal(result, expected,
+                                             component_type(0.001)));
+        }
     }
 
     // Rotation matrix testing
@@ -246,6 +273,25 @@ inline void test_mat4()
 
             INFO(result << " vs " << expected);
             REQUIRE(move::math::approx_equal(result, expected));
+        }
+
+        THEN("transform_point on the identity matrix preserves the point")
+        {
+            vec3 test = {1, 2, 3};
+            REQUIRE(move::math::approx_equal(mat4::identity().transform_point(
+                                                 test.fast()),
+                                             test.fast(),
+                                             component_type(0.001)));
+        }
+
+        THEN("transform_vector applies rotation without translation")
+        {
+            vec3 test = {1, 0, 0};
+            vec3 expected = {0, 0, -1};
+            REQUIRE(move::math::approx_equal(rotation.transform_vector(
+                                                 test.fast()),
+                                             expected.fast(),
+                                             component_type(0.001)));
         }
     }
 

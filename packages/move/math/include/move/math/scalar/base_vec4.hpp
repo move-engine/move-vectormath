@@ -537,42 +537,18 @@ namespace move::math::scalar
         }
 
         /**
-         * @brief Refracts incident across normal and returns the result
+         * @brief Refracts incident across normal and returns the result.
          *
          * @param incident The incident vector
-         * @param normal The normal vector
-         * @param ior The index of refraction
+         * @param normal The surface normal, pointing out of the material
+         * @param ior The material index of refraction relative to air
          */
         MVM_INLINE_NODISCARD static base_vec4 refract(const base_vec4& inc,
                                                       const base_vec4& nrm,
                                                       T ior) noexcept
         {
-            base_vec4 index = base_vec4(ior, ior, ior, ior);
-
-            // clang-format off
-            // Algorithm:
-            // Result = RefractionIndex * Incident - Normal * (RefractionIndex * dot(Incident, Normal) + sqrt(1 - RefractionIndex * RefractionIndex * (1 - dot(Incident, Normal) * dot(Incident, Normal))))
-            // 
-            // Expanded:
-            // dotinorm = dot(Incident, Normal);
-            // roiPlusDotinorm = RefractionIndex * dotinorm
-            // innerSqrt = sqrt(1 - RefractionIndex * RefractionIndex * (1 -
-            //             dotinorm * dotinorm))
-            //
-            // Result = RefractionIndex * Incident - Normal * (
-            //     roiPlusDotinorm +
-            //     innerSqrt
-            // )
-            //
-            // clang-format on
-
-            T dotinorm = base_vec4::dot(inc, nrm);
-            base_vec4 roiPlusDotinorm = index * dotinorm;
-            base_vec4 innerSqrt = base_vec4::filled(
-                math::sqrt(1 - ior * ior * (1 - dotinorm * dotinorm)));
-            ;
-
-            return ((index * inc) - (nrm * (roiPlusDotinorm + innerSqrt)));
+            return move::math::detail::refract_ior_relative_to_air(inc, nrm,
+                                                                   ior);
         }
 
         /**

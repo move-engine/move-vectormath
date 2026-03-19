@@ -1,6 +1,7 @@
 #pragma once
 #include <cstddef>
 #include <iosfwd>
+#include <limits>
 
 #include <rtm/mask4d.h>
 #include <rtm/mask4f.h>
@@ -41,6 +42,18 @@ namespace move::math::simd_rtm
     private:
         using rtm_vec4_t = typename wrapper_type::type;
         rtm_vec4_t _value;
+
+        MVM_INLINE_NODISCARD static rtm_vec4_t normalize4(
+            const rtm_vec4_t& value)
+        {
+            const T len_sq = rtm::vector_length_squared(value);
+            if (len_sq <= std::numeric_limits<T>::epsilon())
+            {
+                return rtm::vector_zero();
+            }
+
+            return rtm::vector_mul(value, T(1) / math::sqrt(len_sq));
+        }
 
         // Constructors
     public:
@@ -330,7 +343,7 @@ namespace move::math::simd_rtm
 
         MVM_INLINE_NODISCARD base_vec4 normalized() const
         {
-            return base_vec4(rtm::vector_normalize(_value));
+            return base_vec4(normalize4(_value));
         }
 
         MVM_INLINE_NODISCARD T distance(const base_vec4& other) const
@@ -348,7 +361,7 @@ namespace move::math::simd_rtm
     public:
         MVM_INLINE base_vec4& normalize()
         {
-            _value = rtm::vector_normalize(_value);
+            _value = normalize4(_value);
             return *this;
         }
 
@@ -478,9 +491,9 @@ namespace move::math::simd_rtm
         MVM_INLINE_NODISCARD static T angle_between_vectors(
             const base_vec4& v1, const base_vec4& v2) noexcept
         {
-            auto v1norm = rtm::vector_normalize(v1._value);
-            auto v2norm = rtm::vector_normalize(v2._value);
-            return math::acos(dot(v1norm, v2norm));
+            auto v1norm = normalize4(v1._value);
+            auto v2norm = normalize4(v2._value);
+            return math::acos(T(rtm::vector_dot(v1norm, v2norm)));
         }
 
         /**
@@ -504,47 +517,18 @@ namespace move::math::simd_rtm
         }
 
         /**
-         * @brief Refracts incident across normal and returns the result
+         * @brief Refracts incident across normal and returns the result.
          *
          * @param incident The incident vector
-         * @param normal The normal vector
-         * @param ior The index of refraction
+         * @param normal The surface normal, pointing out of the material
+         * @param ior The material index of refraction relative to air
          */
         MVM_INLINE_NODISCARD static base_vec4 refract(const base_vec4& incident,
                                                       const base_vec4& normal,
                                                       T ior) noexcept
         {
-            using namespace rtm;
-            const rtm_vec4_t& inc = incident._value;
-            const rtm_vec4_t& nrm = normal._value;
-            const rtm_vec4_t& index = vector_set(ior);
-
-            // clang-format off
-            // Algorithm:
-            // Result = RefractionIndex * Incident - Normal * (RefractionIndex * dot(Incident, Normal) + sqrt(1 - RefractionIndex * RefractionIndex * (1 - dot(Incident, Normal) * dot(Incident, Normal))))
-            // 
-            // Expanded:
-            // dotinorm = dot(Incident, Normal);
-            // roiPlusDotinorm = RefractionIndex * dotinorm
-            // innerSqrt = sqrt(1 - RefractionIndex * RefractionIndex * (1 -
-            //             dotinorm * dotinorm))
-            //
-            // Result = RefractionIndex * Incident - Normal * (
-            //     roiPlusDotinorm +
-            //     innerSqrt
-            // )
-            //
-            // clang-format on
-
-            T dotinorm = vector_dot(inc, nrm);
-            rtm_vec4_t roiPlusDotinorm = vector_mul(index, dotinorm);
-            rtm_vec4_t innerSqrt = vector_set(
-                scalar_sqrt(1 - ior * ior * (1 - dotinorm * dotinorm)));
-            ;
-
-            return vector_sub(
-                vector_mul(index, inc),
-                vector_mul(nrm, vector_add(roiPlusDotinorm, innerSqrt)));
+            return move::math::detail::refract_ior_relative_to_air(
+                incident, normal, ior);
         }
 
         /**

@@ -151,8 +151,7 @@ namespace move::math
         transform_point(const fast_vec3_t& rhs) const
         {
             rtm_vec4_t mul = rtm::vector_set_w(rhs.to_rtm(), component_type(1));
-            rtm_vec4_t res = rtm::vector_mul(
-                mul, rtm::matrix_get_axis(_value, rtm::axis4::x));
+            rtm_vec4_t res = rtm::matrix_mul_vector(mul, _value);
             return fast_vec3_t::from_rtm(res);
         }
 
@@ -160,8 +159,7 @@ namespace move::math
         transform_vector(const fast_vec3_t& rhs) const
         {
             rtm_vec4_t mul = rtm::vector_set_w(rhs.to_rtm(), component_type(0));
-            rtm_vec4_t res = rtm::vector_mul(
-                mul, rtm::matrix_get_axis(_value, rtm::axis4::x));
+            rtm_vec4_t res = rtm::matrix_mul_vector(mul, _value);
             return fast_vec3_t::from_rtm(res);
         }
 
@@ -169,9 +167,8 @@ namespace move::math
         transform_vector4(const fast_vec4_t& rhs) const
         {
             rtm_vec4_t mul = rhs.to_rtm();
-            rtm_vec4_t res = rtm::vector_mul(
-                mul, rtm::matrix_get_axis(_value, rtm::axis4::x));
-            return fast_vec3_t::from_rtm(res);
+            rtm_vec4_t res = rtm::matrix_mul_vector(mul, _value);
+            return fast_vec4_t::from_rtm(res);
         }
 
         // Stream overload operators

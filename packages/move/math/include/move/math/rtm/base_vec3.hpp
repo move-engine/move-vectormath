@@ -69,7 +69,7 @@ namespace move::math::simd_rtm
     public:
         MVM_INLINE void store_array(T* dest) const
         {
-            rtm::vector_store(_value, dest);
+            rtm::vector_store3(_value, dest);
         }
 
         MVM_INLINE base_vec3& load_array(const T* src)
@@ -285,7 +285,7 @@ namespace move::math::simd_rtm
             if constexpr (Archive::is_loading::value)
             {
                 archive(data);
-                _value = rtm::vector_load(data);
+                _value = rtm::vector_load3(data);
             }
             else
             {
@@ -458,29 +458,18 @@ namespace move::math::simd_rtm
         }
 
         /**
-         * @brief Refracts incident across normal and returns the result
+         * @brief Refracts incident across normal and returns the result.
          *
          * @param incident The incident vector
-         * @param normal The normal vector
-         * @param ior The index of refraction
+         * @param normal The surface normal, pointing out of the material
+         * @param ior The material index of refraction relative to air
          */
         MVM_INLINE_NODISCARD static base_vec3 refract(const base_vec3& incident,
                                                       const base_vec3& normal,
                                                       T ior) noexcept
         {
-            auto dotinorm = dot(incident, normal);
-            auto discriminant = T(1) - ior * ior * (T(1) - dotinorm * dotinorm);
-            
-            // Total internal reflection occurs when discriminant < 0
-            if (discriminant < T(0))
-            {
-                return base_vec3{rtm::vector_zero()};  // Return zero vector
-            }
-            
-            auto roi_plus_dotinorm = ior * dotinorm;
-            auto inner_sqrt = std::sqrt(discriminant);
-
-            return incident * ior - normal * (roi_plus_dotinorm + inner_sqrt);
+            return move::math::detail::refract_ior_relative_to_air(
+                incident, normal, ior);
         }
 
         /**

@@ -146,6 +146,7 @@ namespace move::math::scalar
             x -= other.x;
             y -= other.y;
             z -= other.z;
+            return *this;
         }
 
         MVM_INLINE base_vec3& operator*=(const base_vec3& other)
@@ -459,29 +460,18 @@ namespace move::math::scalar
         }
 
         /**
-         * @brief Refracts incident across normal and returns the result
+         * @brief Refracts incident across normal and returns the result.
          *
          * @param incident The incident vector
-         * @param normal The normal vector
-         * @param ior The index of refraction
+         * @param normal The surface normal, pointing out of the material
+         * @param ior The material index of refraction relative to air
          */
         MVM_INLINE_NODISCARD static base_vec3 refract(const base_vec3& incident,
                                                       const base_vec3& normal,
                                                       T ior) noexcept
         {
-            auto dotinorm = dot(incident, normal);
-            auto discriminant = T(1) - ior * ior * (T(1) - dotinorm * dotinorm);
-            
-            // Total internal reflection occurs when discriminant < 0
-            if (discriminant < T(0))
-            {
-                return base_vec3{T(0), T(0), T(0)};  // Return zero vector
-            }
-            
-            auto roi_plus_dotinorm = ior * dotinorm;
-            auto inner_sqrt = std::sqrt(discriminant);
-
-            return incident * ior - normal * (roi_plus_dotinorm + inner_sqrt);
+            return move::math::detail::refract_ior_relative_to_air(
+                incident, normal, ior);
         }
 
         /**

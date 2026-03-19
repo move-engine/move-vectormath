@@ -4,6 +4,7 @@
 #include <magic_enum.hpp>
 #include <move/math/common.hpp>
 #include <move/math/macros.hpp>
+#include <move/math/scalar/base_vec3.hpp>
 #include <move/math/vec3.hpp>
 #if __has_include(<move/meta/type_utils.hpp>)
 #define MVM_HAS_MOVE_CORE
@@ -440,12 +441,46 @@ inline void test_vec3()
                 REQUIRE(!std::isnan(refracted.get_x()));
                 REQUIRE(!std::isnan(refracted.get_y()));
                 REQUIRE(!std::isnan(refracted.get_z()));
-                
+
                 // For this configuration, we shouldn't get total internal reflection
                 REQUIRE(refracted.length() > component_type(0.01));
-                // The refracted ray should be bent away from the normal (toward the surface)
-                // So Y component should be less negative (higher in value) than incident
-                REQUIRE(refracted.get_y() > incident.get_y());
+                // Entering a denser material bends the ray toward the normal.
+                REQUIRE(refracted.get_y() < incident.get_y());
+            }
+        }
+
+        WHEN("Testing refraction from air into a denser material")
+        {
+            vec3 incident = {1, -1, 0};
+            incident = incident.normalized();
+            vec3 normal = {0, 1, 0};
+            vec3 refracted =
+                vec3::refract(incident, normal, component_type(1.5));
+
+            THEN("The refracted vector is finite, non-zero, and bends toward the normal")
+            {
+                REQUIRE(!std::isnan(refracted.get_x()));
+                REQUIRE(!std::isnan(refracted.get_y()));
+                REQUIRE(!std::isnan(refracted.get_z()));
+                REQUIRE(refracted.length() ==
+                        Catch::Approx(component_type(1)).epsilon(
+                            component_type(0.001)));
+                REQUIRE(refracted.get_y() < incident.get_y());
+            }
+        }
+
+        WHEN("Testing total internal reflection when leaving a denser material")
+        {
+            vec3 incident = {1, component_type(0.2), 0};
+            incident = incident.normalized();
+            vec3 normal = {0, 1, 0};
+            vec3 refracted =
+                vec3::refract(incident, normal, component_type(1.5));
+
+            THEN("The refracted vector collapses to zero")
+            {
+                REQUIRE(move::math::approx_equal(refracted, vec3(vec3::zero()),
+                                                 component_type(0.001)));
             }
         }
     }
@@ -625,8 +660,42 @@ inline void test_vec3()
             REQUIRE(vec3::clamp(test, {2, 3, 4}, {3, 4, 5}) == vec3(2, 3, 4));
         }
     }
+
+    if constexpr (std::is_same_v<component_type, float>)
+    {
+        WHEN("Serializing and deserializing a vec3 through an archive")
+        {
+            vec3 original = {component_type(1.25), component_type(-2.5),
+                             component_type(3.75)};
+            capture_archive<component_type> saver;
+            original.serialize(saver);
+
+            vec3 loaded;
+            replay_archive<component_type> loader{saver.values};
+            loaded.serialize(loader);
+
+            THEN("The serialized values round-trip correctly")
+            {
+                REQUIRE(move::math::approx_equal(loaded, original,
+                                                 component_type(0.001)));
+            }
+        }
+    }
 }
 REPEAT_FOR_EACH_TYPE_WRAPPER(test_vec3, move::math::vec3);
+
+TEST_CASE("scalar::base_vec3 operator-= returns self")
+{
+    move::math::scalar::base_vec3<float> lhs(3.0f, 4.0f, 5.0f);
+    move::math::scalar::base_vec3<float> rhs(1.0f, 1.0f, 1.0f);
+
+    auto* result = &(lhs -= rhs);
+
+    REQUIRE(result == &lhs);
+    REQUIRE(lhs.x == Catch::Approx(2.0f));
+    REQUIRE(lhs.y == Catch::Approx(3.0f));
+    REQUIRE(lhs.z == Catch::Approx(4.0f));
+}
 
 SCENARIO("Vec3 tests")
 {

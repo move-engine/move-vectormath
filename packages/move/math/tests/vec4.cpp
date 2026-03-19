@@ -465,8 +465,58 @@ inline void test_vec4()
                 Catch::Approx(component_type(1.5707964)));
     }
 
-    // TODO: Test reflect
-    // TODO: Test refract
+    if constexpr (std::is_floating_point_v<component_type>)
+    {
+        WHEN("Testing reflect function")
+        {
+            vec4 incident = {1, -1, 0, 0};
+            vec4 normal = {0, 1, 0, 0};
+            vec4 reflected = vec4::reflect(incident, normal);
+            vec4 expected = {1, 1, 0, 0};
+
+            THEN("The reflection is correct")
+            {
+                REQUIRE(move::math::approx_equal(reflected, expected,
+                                                 component_type(0.001)));
+            }
+        }
+
+        WHEN("Testing refraction from air into a denser material")
+        {
+            vec4 incident = {1, -1, 0, 0};
+            incident = incident.normalized();
+            vec4 normal = {0, 1, 0, 0};
+            vec4 refracted =
+                vec4::refract(incident, normal, component_type(1.5));
+
+            THEN("The refracted vector is finite, non-zero, and bends toward the normal")
+            {
+                REQUIRE(!std::isnan(refracted.get_x()));
+                REQUIRE(!std::isnan(refracted.get_y()));
+                REQUIRE(!std::isnan(refracted.get_z()));
+                REQUIRE(!std::isnan(refracted.get_w()));
+                REQUIRE(refracted.length() ==
+                        Catch::Approx(component_type(1)).epsilon(
+                            component_type(0.001)));
+                REQUIRE(refracted.get_y() < incident.get_y());
+            }
+        }
+
+        WHEN("Testing total internal reflection when leaving a denser material")
+        {
+            vec4 incident = {1, component_type(0.2), 0, 0};
+            incident = incident.normalized();
+            vec4 normal = {0, 1, 0, 0};
+            vec4 refracted =
+                vec4::refract(incident, normal, component_type(1.5));
+
+            THEN("The refracted vector collapses to zero")
+            {
+                REQUIRE(move::math::approx_equal(refracted, vec4(vec4::zero()),
+                                                 component_type(0.001)));
+            }
+        }
+    }
 
     WHEN("Lerping between vectors")
     {

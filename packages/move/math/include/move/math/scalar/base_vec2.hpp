@@ -1,5 +1,6 @@
 #pragma once
 #include <cstddef>
+#include <cstring>
 #include <iosfwd>
 
 #include <move/math/common.hpp>
@@ -70,6 +71,19 @@ namespace move::math::scalar
             memcpy(dest, data, sizeof(data));
         }
 
+        MVM_INLINE base_vec2& load_array(const T* src)
+        {
+            memcpy(data, src, sizeof(data));
+            return *this;
+        }
+
+        MVM_INLINE_NODISCARD static base_vec2 from_array(const T* src)
+        {
+            base_vec2 result;
+            memcpy(result.data, src, sizeof(data));
+            return result;
+        }
+
         // Arithmetic operators
     public:
         MVM_INLINE_NODISCARD base_vec2 operator+(const base_vec2& other) const
@@ -115,6 +129,62 @@ namespace move::math::scalar
         MVM_INLINE_NODISCARD base_vec2 operator-() const
         {
             return base_vec2(-x, -y);
+        }
+
+        MVM_INLINE base_vec2& operator+=(const base_vec2& other)
+        {
+            x += other.x;
+            y += other.y;
+            return *this;
+        }
+
+        MVM_INLINE base_vec2& operator-=(const base_vec2& other)
+        {
+            x -= other.x;
+            y -= other.y;
+            return *this;
+        }
+
+        MVM_INLINE base_vec2& operator*=(const base_vec2& other)
+        {
+            x *= other.x;
+            y *= other.y;
+            return *this;
+        }
+
+        MVM_INLINE base_vec2& operator/=(const base_vec2& other)
+        {
+            x /= other.x;
+            y /= other.y;
+            return *this;
+        }
+
+        MVM_INLINE base_vec2& operator+=(const T& scalar)
+        {
+            x += scalar;
+            y += scalar;
+            return *this;
+        }
+
+        MVM_INLINE base_vec2& operator-=(const T& scalar)
+        {
+            x -= scalar;
+            y -= scalar;
+            return *this;
+        }
+
+        MVM_INLINE base_vec2& operator*=(const T& scalar)
+        {
+            x *= scalar;
+            y *= scalar;
+            return *this;
+        }
+
+        MVM_INLINE base_vec2& operator/=(const T& scalar)
+        {
+            x /= scalar;
+            y /= scalar;
+            return *this;
         }
 
         // Stream overload operators for printing
@@ -196,6 +266,14 @@ namespace move::math::scalar
         {
             this->y = y;
             return *this;
+        }
+
+        // Serialization
+    public:
+        template <typename Archive>
+        MVM_INLINE void serialize(Archive& archive)
+        {
+            archive(x, y);
         }
 
         // Conversion operators

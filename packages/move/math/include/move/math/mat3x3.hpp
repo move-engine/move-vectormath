@@ -101,7 +101,7 @@ namespace move::math
             using namespace rtm;
 
             T temp[4 * 4];
-            for (uint8_t i = 0; i < 4; i++)
+            for (uint8_t i = 0; i < 3; i++)
             {
                 vector_store(matrix_get_axis(_value, (axis3)i), temp + i * 4);
             }
@@ -129,8 +129,7 @@ namespace move::math
             rtm_vec4_t x = vector_load(temp);
             rtm_vec4_t y = vector_load(temp + 4);
             rtm_vec4_t z = vector_load(temp + 8);
-            rtm_vec4_t w = vector_zero();
-            _value = matrix_set(x, y, z, w);
+            _value = matrix_set(x, y, z);
         }
 
         MVM_INLINE_NODISCARD rtm_t to_rtm()
@@ -154,8 +153,7 @@ namespace move::math
         transform_vector(const fast_vec3_t& rhs) const
         {
             rtm_vec4_t mul = rtm::vector_set_w(rhs.to_rtm(), component_type(0));
-            rtm_vec4_t res = rtm::vector_mul(
-                mul, rtm::matrix_get_axis(_value, rtm::axis3::x));
+            rtm_vec4_t res = rtm::matrix_mul_vector3(mul, _value);
             return fast_vec3_t::from_rtm(res);
         }
 
@@ -308,7 +306,7 @@ namespace move::math
         MVM_INLINE_NODISCARD static mat3x3 rotation(const quat_t& quat)
         {
             using namespace rtm;
-            return matrix_cast<rtm_t>(matrix_from_quat(quat.to_rtm()));
+            return mat3x3(matrix_cast<rtm_t>(matrix_from_quat(quat.to_rtm())));
         }
 
         MVM_INLINE_NODISCARD static mat3x3 rotation_x(const T& angle)
@@ -345,21 +343,21 @@ namespace move::math
             using namespace rtm;
 
             auto quat = quat_from_axis_angle(axis.to_rtm(), angle);
-            return rtm_mat3x3_t(matrix_cast<rtm_t>(matrix_from_quat(quat)));
+            return mat3x3(matrix_cast<rtm_t>(matrix_from_quat(quat)));
         }
 
         MVM_INLINE_NODISCARD static mat3x3 scale(component_type x,
                                                  component_type y,
                                                  component_type z) noexcept
         {
-            return rtm_mat3x3_t(rtm::matrix_cast<rtm_t>(
+            return mat3x3(rtm::matrix_cast<rtm_t>(
                 rtm::matrix_from_scale(rtm::vector_set(x, y, z, 1))));
         }
 
         MVM_INLINE_NODISCARD static mat3x3 scale(
             const fast_vec3_t& scale) noexcept
         {
-            return rtm_mat3x3_t(rtm::matrix_cast<rtm_t>(
+            return mat3x3(rtm::matrix_cast<rtm_t>(
                 rtm::matrix_from_scale(scale.to_rtm())));
         }
     };
