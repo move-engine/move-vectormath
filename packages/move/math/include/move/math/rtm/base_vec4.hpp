@@ -53,7 +53,8 @@ namespace move::math::simd_rtm
                 return rtm::vector_zero();
             }
 
-            return rtm::vector_mul(value, T(1) / math::sqrt(len_sq));
+            return rtm::vector_mul(
+                value, rtm::scalar_sqrt_reciprocal(len_sq));
         }
 
         // Constructors
