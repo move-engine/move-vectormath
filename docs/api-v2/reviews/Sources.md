@@ -111,3 +111,12 @@ documentation and first-party source where available.
 - [Triangle-ray intersection](https://learn.microsoft.com/en-us/windows/win32/api/directxcollision/nf-directxcollision-intersects)
 - [DirectXTK SimpleMath guide](https://github.com/microsoft/DirectXTK/wiki/Using-the-SimpleMath-library)
 - [DirectXTK SimpleMath source](https://github.com/microsoft/DirectXTK/blob/main/Inc/SimpleMath.h)
+
+### GPU data layout
+
+- [Vulkan shader memory layout guide](https://docs.vulkan.org/guide/latest/shader_memory_layout.html)
+- [Vulkan shader interface memory-layout requirements](https://docs.vulkan.org/spec/latest/chapters/interfaces.html)
+- [HLSL constant-variable packing rules](https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-packing-rules)
+- [HLSL shader constants](https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-constants)
+- [Metal `MTLPackedFloat3`](https://developer.apple.com/documentation/metal/mtlpackedfloat3-c.struct)
+- [Current WGSL host-shareable memory layout](https://gpuweb.github.io/gpuweb/wgsl/#memory-layouts)

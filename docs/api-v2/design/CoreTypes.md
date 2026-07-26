@@ -72,7 +72,7 @@ focused headers.
 
 ## Packed storage
 
-Storage types are simple aggregates with documented fields/layout:
+Compact storage types are simple aggregates with documented fields/layout:
 
 ```cpp
 struct PackedVec3f { float X, Y, Z; };
@@ -80,10 +80,17 @@ struct PackedVec4f { float X, Y, Z, W; };
 struct PackedMat4f { float Elements[16]; };
 ```
 
+`Packed` means dense CPU/raw-transfer representation; it does not mean
+universally compatible with shader blocks. In particular, `PackedVec3f` has a
+12-byte array stride, while common GPU float3 arrays use a 16-byte stride.
+Opt-in GPU layout types cover those contracts.
+
 Targets:
 
 | Type | Proposed size | Proposed alignment |
 |---|---:|---:|
+| `Vec2f` | 8 or 16 prototype | 8 or 16 prototype |
+| `PackedVec2f` | 8 | 4 |
 | `Vec3f` | 16 | 16 |
 | `PackedVec3f` | 12 | 4 |
 | `Vec4f` | 16 | 16 |
@@ -92,7 +99,26 @@ Targets:
 | `PackedMat4f` | 64 | 4 |
 
 These are targets to validate during the architecture proof, not yet an ABI
-commitment. Storage/compute conversion is explicit and has bulk overloads.
+commitment. Component offsets and array stride are part of the eventual
+contract. Storage/compute conversion is explicit and has contiguous,
+strided/interleaved, and fused bulk overloads.
+
+Phase A should attempt to make `Vec3f` byte-compatible with a common
+16-byte-stride shader float3 array: size/alignment 16 with XYZ at byte offsets
+0, 4, and 8. This is accepted only if triviality and generated code remain
+competitive with native RTM storage. The fourth slot has no vector or
+homogeneous semantic meaning, is always initialized, and is ignored by value
+equality. A canonicalizing store is used when deterministic transfer bytes are
+required.
+
+`Vec2f` is a separate decision: retaining an 8-byte representation can matter
+for UV, screen-space, and 2D particle arrays, while a 16-byte representation
+may reduce backend load/repack work. Both must be measured rather than deriving
+the answer from `Vec3f`.
+
+GPU matrix transfer types separately state matrix major order and vector
+stride. A 36-byte compact `PackedMat3f` and a 48-byte shader-block mat3 are
+different representations.
 
 ## Angles
 
@@ -167,4 +193,3 @@ Vec3f value(NoInit);
 
 Invariant types such as `Direction3` and `Rotation3` cannot be uninitialized
 through their public API.
-

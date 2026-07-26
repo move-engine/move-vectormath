@@ -24,23 +24,26 @@ A thin facade means that public types and common operations add little
 implementation machinery over optimized primitives. It does not mean omitting
 useful geometry.
 
-The reviewed APIs suggest three layers:
+The reviewed APIs suggest four concerns with one-way dependencies:
 
 ```text
 semantic/game API
     Point, Direction, Rotation, Transform, Aabb, Ray, Frustum
                  ↓ shared algorithms
-core value API
-    Vec, Mat, Quat representation and small primitive vocabulary
+core compute API
+    SIMD-friendly Vec, Mat, Quat and small primitive vocabulary
                  ↓ selected backend primitives
-backend/storage API
-    scalar, RTM/SIMD, packed formats, loads/stores
+backend API
+    scalar or RTM/SIMD primitive implementation
+
+storage/transfer API ── explicit load/store ──► core compute API
+    compact CPU, GPU layouts, encoded formats, strided views
 ```
 
-Unity Mathematics and DirectXMath make the bottom two layers visible. Unity
-Engine, Godot, and Unreal emphasize the top layer. Move can provide all three
-without duplicating algorithms by keeping the dependency direction one-way and
-splitting headers by capability.
+Unity Mathematics and DirectXMath make the lower layers visible. Unity Engine,
+Godot, and Unreal emphasize the top layer. Move can provide all four concerns
+without duplicating algorithms by keeping backend choice out of public
+representation identity and splitting headers by capability.
 
 ## Familiarity is evidence, not authority
 
@@ -185,6 +188,34 @@ Scalar and RTM tests should compile as separate targets. A consumer selects one
 backend consistently for the target; it should not include and instantiate
 both in every translation unit.
 
+## Practical storage and GPU paths
+
+V1's fast-versus-storage motivation should be preserved. A 16-byte compute
+three-vector can remain SIMD-resident across an operation chain, while a
+12-byte three-vector can reduce cache and transfer bandwidth. Neither is
+universally faster; the crossover depends on working-set size and operations
+per load.
+
+GPU transfer adds a third representation concern. A compact 12-byte float3 is
+valid for some vertex, structured, Metal packed, or scalar-layout uses, while
+Vulkan/WGSL float3 arrays commonly require 16-byte alignment and stride. HLSL
+constant buffers pack within 16-byte registers, and matrix major order/vector
+stride remain separate choices. Therefore:
+
+- `PackedVec3f` means dense 12-byte storage, not “works in every shader”;
+- GPU transfer types state payload size, alignment, stride, and matrix order;
+- a compute span can be uploaded without conversion only when layout traits
+  prove compatibility;
+- interleaved vertex/particle/instance fields use strided views;
+- batch kernels fuse load, computation, and output layout conversion;
+- SoA/AoSoA remains an optimization selected from measured workloads.
+
+This provides the ergonomic choice v1 intended without restoring
+`Acceleration` to public type identity. The complete review and proposal are
+in
+[`StorageComputeAndGpuInterop.md`](StorageComputeAndGpuInterop.md) and
+[`DataLayoutAndGpuInterop.md`](../../design/DataLayoutAndGpuInterop.md).
+
 ## Precision strategy
 
 Unreal's large-world work and Godot's build-wide precision choice show that
@@ -211,6 +242,7 @@ The target should combine:
   contracts;
 - Unreal's production geometry breadth and prepared/unsafe paths;
 - Source/GMod's game-loop cost awareness;
+- explicit CPU-storage and GPU-transfer layout contracts;
 - a stronger semantic type system than any reviewed API.
 
 That is a coherent niche: a standalone, SIMD-capable C++ game/graphics math

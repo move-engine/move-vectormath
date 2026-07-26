@@ -21,6 +21,7 @@
 - [`synthesis/FeatureMatrix.md`](synthesis/FeatureMatrix.md)
 - [`synthesis/ComparativeAnalysis.md`](synthesis/ComparativeAnalysis.md)
 - [`synthesis/Recommendations.md`](synthesis/Recommendations.md)
+- [`synthesis/StorageComputeAndGpuInterop.md`](synthesis/StorageComputeAndGpuInterop.md)
 
 Reports use the common rubric in [`Methodology.md`](Methodology.md). Primary
 references and reviewed versions are maintained in [`Sources.md`](Sources.md).

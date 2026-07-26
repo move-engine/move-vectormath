@@ -17,10 +17,13 @@
 
 ## 2. Semantic design
 
-- Propose compute and packed storage types.
+- Propose compute, packed CPU storage, and explicit GPU transfer types.
 - Define point, direction, normal, rotation, and transform semantics.
 - Define bounds, primitives, intersection results, and frustum facilities.
-- Specify invariants, construction, error behavior, layouts, and costs.
+- Specify invariants, construction, error behavior, component offsets, array
+  strides, matrix order, layouts, and costs.
+- Specify contiguous and strided fused conversion paths for interleaved game
+  and graphics data.
 - Propose backend policy and header organization.
 
 ## 3. Design checkpoint
@@ -33,12 +36,14 @@ After approval:
 
 1. Introduce `mv::math` and PascalCase conventions.
 2. Extract scalar and RTM primitive policies.
-3. Implement compute vectors and packed storage.
-4. Implement semantic vector and rotation types.
-5. Implement matrices and transform representations.
-6. Implement primitives, bounds, queries, and frustum support.
-7. Split core and extension headers.
-8. Port and extend tests and benchmarks.
-9. Compare v2 against the retained v1 baseline.
+3. Prototype native-backed and fixed-layout compute vectors.
+4. Implement compact storage and initial GPU transfer layouts.
+5. Implement contiguous/strided fused load-operate-store kernels.
+6. Implement semantic vector and rotation types.
+7. Implement matrices and transform representations.
+8. Implement primitives, bounds, queries, and frustum support.
+9. Split core and extension headers.
+10. Port and extend tests and benchmarks.
+11. Compare v2 against the retained v1 baseline.
 
 There will be no legacy compatibility surface.

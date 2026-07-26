@@ -62,7 +62,14 @@ packages/move/math/include/mv/math/
     Bounds.hpp
     Directions.hpp
 
+  gpu/
+    Layouts.hpp
+    Vectors.hpp
+    Matrices.hpp
+    Encodings.hpp
+
   batch/
+    StridedSpan.hpp
     Transforms.hpp
     Queries.hpp
     Culling.hpp
@@ -158,6 +165,8 @@ cover:
 - one query family;
 - frustum/culling;
 - packed formats;
+- GPU transfer layouts;
+- contiguous and strided batch views;
 - each adapter;
 - `Core.hpp`, `Spatial.hpp`, and `All.hpp`.
 
@@ -175,6 +184,8 @@ packages/move/math/tests/v2/
   queries/
   culling/
   packed/
+  gpu/
+  batch/
   properties/
   codegen/
   compile/
@@ -200,9 +211,10 @@ benchmarks/
   geometry/ray_aabb/
   culling/frustum_aabb/
   workloads/
+  storage/
+  gpu_transfer/
   compilation/
 ```
 
 This answers “which library is fastest for this capability?” directly and
 matches nanobench's grouping/relative-baseline strengths.
-

@@ -158,7 +158,32 @@ TransformPoints(inputSpan, worldTransform, outputSpan);
 ```
 
 The conversion is visible at single-value boundaries and amortizable through
-batch functions.
+batch functions. Batch overloads also accept strided field views so
+interleaved vertex, particle, and instance structures do not require a gather
+copy.
+
+## GPU transfer layouts
+
+```cpp
+#include <mv/math/gpu/Layouts.hpp>
+
+static_assert(sizeof(gpu::Float3Packed) == 12);
+static_assert(sizeof(gpu::Float3Slot16) == 16);
+
+// Direct view only when Vec3f's published layout satisfies this profile.
+auto uploadBytes =
+    AsGpuBytes<GpuLayout::Float3Array16>(std::span(positions));
+
+// Fused transform and layout conversion when it does not.
+TransformPoints(
+    packedLocalPositions,
+    localToWorld,
+    std::span<gpu::Float3Slot16>(uploadPositions));
+```
+
+There is no unqualified `GpuVec3f`: the layout name states whether the payload
+is packed or occupies a 16-byte array slot. Matrix transfer types likewise
+state major order and vector stride.
 
 ## Graphics convention
 

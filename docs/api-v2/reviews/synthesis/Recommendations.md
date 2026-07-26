@@ -18,6 +18,9 @@
     of the API contract.
 11. Treat familiar engine vocabulary as a discoverability input, not a
     compatibility contract.
+12. Keep semantic role, byte representation, and execution backend independent.
+13. Publish exact GPU-transfer layout contracts rather than treating
+    `PackedVec3f` as universally shader-blittable.
 
 ## Core functionality to add
 
@@ -29,7 +32,9 @@
 - `Point2/3` affine semantics;
 - `RigidTransform2/3` and `AffineTransform2/3`;
 - explicit packed vector/matrix/quaternion storage types;
-- array/span transforms;
+- explicit GPU transfer types for 12-byte and 16-byte float3 layouts, padded
+  shader matrices, and common vertex encodings;
+- contiguous and strided array transforms with fused input/output conversion;
 - optional no-init construction with a named tag.
 
 ## Geometry functionality to add
@@ -99,7 +104,11 @@ qualified names, or required policy arguments.
 ### Phase A: architectural proof
 
 - backend primitive contract;
-- `Vec2/3/4`, packed counterparts, angles, `Direction3`, and `Rotation3`;
+- `Vec2/3/4`, packed counterparts, first GPU float3 transfer layouts, angles,
+  `Direction3`, and `Rotation3`;
+- contiguous and strided load/operate/store kernels;
+- native-backed versus fixed-layout `Vec3f` representation comparison;
+- 8-byte versus 16-byte `Vec2f` representation comparison;
 - compile/layout/codegen baselines;
 - scalar and RTM backend test targets.
 
@@ -124,7 +133,7 @@ qualified names, or required policy arguments.
 ### Phase E: ecosystem and optimization
 
 - formatting/serialization/backend adapters;
-- batch/SoA facilities based on measured workloads;
+- additional SoA/AoSoA facilities based on measured workloads;
 - benchmark comparison against v1 and competing libraries.
 
 ## Acceptance criteria
@@ -145,4 +154,12 @@ The redesign is successful only if:
 - approachability does not require a parallel compatibility facade or increase
   core-header dependencies;
 - float and double types have explicit, stable layouts;
+- compact CPU, compute, and GPU transfer layouts are distinct and ergonomic;
+- component offsets, array stride, matrix major order, and padding policy are
+  asserted for transfer types;
+- compatible compute arrays support checked zero-copy upload;
+- packed and interleaved data can be processed with one load/store boundary and
+  no temporary compute array;
+- packed-versus-compute crossover benchmarks cover realistic cache working
+  sets and operation-chain lengths;
 - benchmarks compare semantically equivalent contracts.

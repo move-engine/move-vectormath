@@ -26,4 +26,11 @@ copyable unless a specific invariant requires controlled construction.
   deliberate, documented types?
 - Do invariant types such as `Direction3f` have the same runtime footprint as
   their underlying compute representation?
-
+- Are component offsets, array stride, and matrix major order documented for
+  every transfer type?
+- Can a 16-byte compute array be uploaded directly to a compatible shader
+  layout without repacking?
+- Are 12-byte packed, 16-byte compute, and GPU-layout types kept distinct when
+  their array/structure contracts differ?
+- Can interleaved storage be processed through strided/fused kernels without a
+  gather into a temporary compute array?

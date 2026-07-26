@@ -15,6 +15,12 @@
 - Backend selection must not require virtual dispatch.
 - Packed storage and optimized compute representations must have visible costs.
 - Public templates must not expose incidental RTM wrapper implementation types.
+- Semantic role, byte representation, and backend selection are independent
+  design axes.
+- GPU transfer types name exact layout contracts; no type is declared
+  universally GPU-blittable.
+- Packed/interleaved data must support fused and strided processing without an
+  intermediate compute array.
 
 ## Approachability
 

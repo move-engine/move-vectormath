@@ -143,7 +143,7 @@ The intended properties are:
 
 ## Storage boundary
 
-Packed data is separate:
+Packed and GPU-transfer data are separate from compute identity:
 
 ```cpp
 PackedVec3f stored;             // 12-byte transport/storage value
@@ -151,17 +151,44 @@ Vec3f value = Load(stored);     // explicit compute boundary
 Store(stored, value);
 ```
 
-Bulk forms operate on spans and permit backend vectorization:
+This preserves v1's useful fast/storage distinction without making
+acceleration policy part of public type identity. `Vec3f` is the
+SIMD-friendly compute value; `PackedVec3f` is the dense CPU/raw-transfer
+value. Neither is universally faster—the right persistent representation
+depends on operations per load and working-set pressure.
+
+GPU layouts require an additional explicit contract. A 12-byte packed float3
+is not interchangeable with a shader float3 array that requires 16-byte
+alignment/stride. Opt-in GPU transfer types and compatibility traits cover
+these cases; there is no universal `GpuVec3f`.
+
+Bulk forms operate on contiguous or strided views and permit backend
+vectorization:
 
 ```cpp
 TransformPoints(
     std::span<const PackedPoint3f> input,
     RigidTransform3f transform,
-    std::span<PackedPoint3f> output);
+    std::span<gpu::Float3Slot16> output);
+
+TransformPoints(
+    StridedSpan<const PackedPoint3f> input,
+    RigidTransform3f transform,
+    StridedSpan<PackedPoint3f> output);
 ```
 
 An implicit packed-to-compute conversion is not proposed because it hides a
-load and can cause repeated conversions in loops.
+load and can cause repeated conversions in loops. Fused batch kernels load
+once, perform the complete operation, and store once without an intermediate
+compute array.
+
+When a compute/storage span exactly satisfies a declared GPU layout, a
+trait-constrained byte view permits zero-copy upload. Compatibility includes
+component offsets, alignment, array stride, matrix order, and padding policy;
+equal `sizeof` is not sufficient.
+
+The detailed contract is in
+[`DataLayoutAndGpuInterop.md`](DataLayoutAndGpuInterop.md).
 
 ## Interoperability
 
@@ -182,13 +209,17 @@ Point and direction adapters choose W explicitly.
 Every backend must pass:
 
 - the same behavioral/property tests;
-- size, alignment, triviality, and standard-layout assertions;
+- size, alignment, component-offset, triviality, and standard-layout
+  assertions;
 - generated-code comparisons for primitive and representative composed
   operations;
 - compile-time and preprocessed-line measurements;
 - runtime counter benchmarks;
 - scalar-versus-SIMD numerical parity within documented tolerance.
 
+The architecture proof also measures 12-byte packed, 16-byte compute, and
+16-byte GPU-slot arrays across cache-sized working sets, plus strided
+interleaved data and fused layout conversion.
+
 The existing ray benchmarks showing identical Move/raw-RTM instruction counts
 are the minimum zero-overhead standard to preserve.
-
