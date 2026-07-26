@@ -1,42 +1,156 @@
-name: Vectormath
+name: Vectormath CI
 
 on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: vectormath-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  linux:
+  test:
+    name: ${{ matrix.name }}
+    timeout-minutes: 20
     strategy:
+      fail-fast: false
       matrix:
-        compiler: [g++, clang++]
-    runs-on: ubuntu-latest
+        include:
+          - name: GCC 12 / Release
+            os: ubuntu-24.04
+            compiler: g++-12
+            build_type: Release
+            warnings_as_errors: ON
+          - name: GCC 12 / Debug
+            os: ubuntu-24.04
+            compiler: g++-12
+            build_type: Debug
+            warnings_as_errors: ON
+          - name: Clang 16 / Release
+            os: ubuntu-24.04
+            compiler: clang++-16
+            build_type: Release
+            warnings_as_errors: ON
+          - name: AppleClang / macOS 15 arm64
+            os: macos-15
+            compiler: clang++
+            build_type: Release
+            warnings_as_errors: OFF
+          - name: MSVC / Windows 2022
+            os: windows-2022
+            compiler: cl
+            build_type: Release
+            warnings_as_errors: OFF
+    runs-on: ${{ matrix.os }}
     env:
       CXX: ${{ matrix.compiler }}
+      CPM_SOURCE_CACHE: ${{ runner.temp }}/cpm
     steps:
       - uses: actions/checkout@v4
       - name: Configure
         run: >
           cmake -S . -B build
+          -DMOVE_VECTORMATH_BUILD_TESTS=ON
           -DMOVE_VECTORMATH_BUILD_STANDALONE_TESTS=ON
-          -DCMAKE_BUILD_TYPE=Release
+          -DMOVE_VECTORMATH_WARNINGS_AS_ERRORS=${{ matrix.warnings_as_errors }}
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+      - name: Build
+        run: cmake --build build --config ${{ matrix.build_type }} --parallel 2
+      - name: Test
+        run: >
+          ctest --test-dir build --output-on-failure
+          -C ${{ matrix.build_type }} --parallel 2
+      - name: Configure downstream consumer
+        run: >
+          cmake -S tests/consumer -B build-consumer
+          -DMOVE_VECTORMATH_SOURCE_DIR=${{ github.workspace }}
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+      - name: Build downstream consumer
+        run: >
+          cmake --build build-consumer
+          --config ${{ matrix.build_type }} --parallel 2
+      - name: Test downstream consumer
+        run: >
+          ctest --test-dir build-consumer --output-on-failure
+          -C ${{ matrix.build_type }}
+
+  sanitizers:
+    name: AddressSanitizer + UndefinedBehaviorSanitizer
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      CXX: clang++-16
+      CPM_SOURCE_CACHE: ${{ runner.temp }}/cpm
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: >
+          cmake -S . -B build
+          -DMOVE_VECTORMATH_BUILD_TESTS=ON
+          -DMOVE_VECTORMATH_BUILD_STANDALONE_TESTS=ON
+          -DMOVE_VECTORMATH_WARNINGS_AS_ERRORS=ON
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer"
+          -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=address,undefined"
       - name: Build
         run: cmake --build build --parallel 2
       - name: Test
-        run: ctest --test-dir build --output-on-failure
+        env:
+          ASAN_OPTIONS: detect_leaks=0
+          UBSAN_OPTIONS: print_stacktrace=1
+        run: ctest --test-dir build --output-on-failure --parallel 2
 
-  platforms:
-    strategy:
-      matrix:
-        os: [macos-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
+  coverage:
+    name: Coverage
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      CXX: g++-12
+      CPM_SOURCE_CACHE: ${{ runner.temp }}/cpm
     steps:
       - uses: actions/checkout@v4
       - name: Configure
         run: >
           cmake -S . -B build
+          -DMOVE_VECTORMATH_BUILD_TESTS=ON
           -DMOVE_VECTORMATH_BUILD_STANDALONE_TESTS=ON
-          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_CXX_FLAGS="--coverage -O0 -g"
+          -DCMAKE_EXE_LINKER_FLAGS="--coverage"
       - name: Build
-        run: cmake --build build --config Release --parallel 2
+        run: cmake --build build --parallel 2
       - name: Test
-        run: ctest --test-dir build --output-on-failure -C Release
+        run: ctest --test-dir build --output-on-failure --parallel 2
+      - name: Generate coverage report
+        run: |
+          pipx run --spec gcovr==8.3 gcovr \
+            --root . \
+            --filter packages/move/math/include \
+            --xml-pretty \
+            --output coverage.xml \
+            --print-summary \
+            build
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: vectormath-coverage
+          path: coverage.xml
+          if-no-files-found: error
+
+  source-hygiene:
+    name: Source hygiene
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check patch whitespace
+        run: git show --check --oneline --no-renames HEAD
+      - name: Check maintained test harness formatting
+        run: >
+          clang-format-16 --dry-run --Werror
+          packages/move/math/tests/mm_test_common.hpp
+          tests/standalone.cpp
+          tests/consumer/main.cpp

@@ -2,17 +2,9 @@
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
 
-#include <magic_enum.hpp>
-
-#include <movemm/memory-allocator.h>
 #include <move/math/common.hpp>
 #include <move/math/macros.hpp>
 #include <move/math/quat.hpp>
-#if __has_include(<move/meta/type_utils.hpp>)
-#define MVM_HAS_MOVE_CORE
-#include <move/meta/type_utils.hpp>
-#endif
-#include <move/string.hpp>
 
 #include "mm_test_common.hpp"
 
@@ -25,11 +17,11 @@ inline void test_quat()
     static constexpr auto acceleration = quat::acceleration;
 
     INFO("Testing quat with following config:");
-    INFO("\tcomponent_type: " << move::meta::type_name<component_type>());
-    INFO("\tacceleration: " << magic_enum::enum_name(acceleration));
-    INFO("\tvec3: " << move::meta::type_name<vec3>());
-    INFO("\tvec4: " << move::meta::type_name<vec4>());
-    INFO("\tquat: " << move::meta::type_name<quat>());
+    INFO("\tcomponent_type: " << mvm_test::type_name<component_type>());
+    INFO("\tacceleration: " << static_cast<int>(acceleration));
+    INFO("\tvec3: " << mvm_test::type_name<vec3>());
+    INFO("\tvec4: " << mvm_test::type_name<vec4>());
+    INFO("\tquat: " << mvm_test::type_name<quat>());
 
     REQUIRE(quat::zero() == quat(0, 0, 0, 0));
     REQUIRE(quat::identity() == quat(0, 0, 0, 1));
@@ -232,11 +224,7 @@ inline void test_quat()
 template <typename quat>
 inline void benchmark_quat()
 {
-    using component_type = quat::component_type;
-    using vec3 = quat::vec3_t;
-    using vec4 = quat::vec4_t;
-    static constexpr auto acceleration = quat::acceleration;
-    move::string_view typeName = move::meta::type_name<quat>();
+    std::string_view typeName = mvm_test::type_name<quat>();
 
     quat identity;
     BENCHMARK(alloc_appended_name(typeName, ": Identity construction"))
@@ -256,7 +244,6 @@ REPEAT_FOR_EACH_TYPE_WRAPPER_NOACCEL(benchmark_quat, move::math::quat);
 SCENARIO("Quat full tests")
 {
     using namespace move::math;
-    using Accel = move::math::Acceleration;
 
     test_quat_multi<float, double>();
 }

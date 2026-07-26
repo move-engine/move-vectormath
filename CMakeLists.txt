@@ -19,20 +19,72 @@ target_include_directories(move-vectormath INTERFACE packages/move/math/include)
 target_link_libraries(move-vectormath INTERFACE rtm)
 target_compile_features(move-vectormath INTERFACE cxx_std_20)
 
+function(move_vectormath_enable_strict_warnings target)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
+        target_compile_options(${target} PRIVATE -Wall -Wextra -Wconversion)
+        if(MOVE_VECTORMATH_WARNINGS_AS_ERRORS)
+            target_compile_options(${target} PRIVATE -Werror)
+        endif()
+    elseif(MSVC)
+        target_compile_options(${target} PRIVATE /W4)
+        if(MOVE_VECTORMATH_WARNINGS_AS_ERRORS)
+            target_compile_options(${target} PRIVATE /WX)
+        endif()
+    endif()
+endfunction()
+
+option(MOVE_VECTORMATH_WARNINGS_AS_ERRORS
+       "Treat warnings in vectormath-owned test targets as errors" OFF)
+option(MOVE_VECTORMATH_BUILD_TESTS "Build the complete Catch2 test suite" OFF)
 option(MOVE_VECTORMATH_BUILD_STANDALONE_TESTS
        "Build dependency-light public API and numerical contract tests" OFF)
-if(MOVE_VECTORMATH_BUILD_STANDALONE_TESTS)
+
+if(MOVE_VECTORMATH_BUILD_TESTS OR MOVE_VECTORMATH_BUILD_STANDALONE_TESTS)
     enable_testing()
+endif()
+
+if(MOVE_VECTORMATH_BUILD_TESTS)
+    CPMAddPackage(
+        NAME Catch2
+        GITHUB_REPOSITORY catchorg/Catch2
+        VERSION 3.5.2
+        GIT_TAG v3.5.2
+        OPTIONS
+            "CATCH_INSTALL_DOCS OFF"
+            "CATCH_INSTALL_EXTRAS OFF"
+    )
+
+    add_executable(
+        move-vectormath-tests
+        packages/move/math/tests/mat3x3.cpp
+        packages/move/math/tests/mat4x4.cpp
+        packages/move/math/tests/quat.cpp
+        packages/move/math/tests/smoke.cpp
+        packages/move/math/tests/vec2.cpp
+        packages/move/math/tests/vec3.cpp
+        packages/move/math/tests/vec4.cpp
+    )
+    target_link_libraries(move-vectormath-tests
+                          PRIVATE move-vectormath Catch2::Catch2WithMain)
+    move_vectormath_enable_strict_warnings(move-vectormath-tests)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
+        # Catch2's assertion decomposition compares test literals inside its
+        # own templates. The standalone target still checks the public API
+        # with -Wconversion; suppress the third-party expansion noise here.
+        target_compile_options(move-vectormath-tests PRIVATE -Wno-conversion)
+    endif()
+
+    list(APPEND CMAKE_MODULE_PATH "${Catch2_SOURCE_DIR}/extras")
+    include(Catch)
+    catch_discover_tests(move-vectormath-tests DISCOVERY_MODE PRE_TEST)
+endif()
+
+if(MOVE_VECTORMATH_BUILD_STANDALONE_TESTS)
     add_executable(move-vectormath-standalone-tests
                    tests/standalone.cpp)
     target_link_libraries(move-vectormath-standalone-tests
                           PRIVATE move-vectormath)
-    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
-        target_compile_options(move-vectormath-standalone-tests
-                               PRIVATE -Wall -Wextra -Wconversion)
-    elseif(MSVC)
-        target_compile_options(move-vectormath-standalone-tests PRIVATE /W4)
-    endif()
+    move_vectormath_enable_strict_warnings(move-vectormath-standalone-tests)
     add_test(NAME move-vectormath-standalone
              COMMAND move-vectormath-standalone-tests)
 endif()

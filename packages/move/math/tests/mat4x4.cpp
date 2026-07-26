@@ -2,17 +2,9 @@
 #include <catch2/catch_approx.hpp>
 #include <catch2/catch_test_macros.hpp>
 
-#include <magic_enum.hpp>
-
-#include <movemm/memory-allocator.h>
 #include <move/math/common.hpp>
 #include <move/math/macros.hpp>
 #include <move/math/mat4x4.hpp>
-#if __has_include(<move/meta/type_utils.hpp>)
-#define MVM_HAS_MOVE_CORE
-#include <move/meta/type_utils.hpp>
-#endif
-#include <move/string.hpp>
 
 #include "mm_test_common.hpp"
 
@@ -26,11 +18,11 @@ inline void test_mat4()
     static constexpr auto acceleration = mat4::acceleration;
 
     INFO("Testing mat4 with following config:");
-    INFO("\tcomponent_type: " << move::meta::type_name<component_type>());
-    INFO("\tacceleration: " << magic_enum::enum_name(acceleration));
-    INFO("\tvec3: " << move::meta::type_name<vec3>());
-    INFO("\tvec4: " << move::meta::type_name<vec4>());
-    INFO("\tmat4: " << move::meta::type_name<mat4>());
+    INFO("\tcomponent_type: " << mvm_test::type_name<component_type>());
+    INFO("\tacceleration: " << static_cast<int>(acceleration));
+    INFO("\tvec3: " << mvm_test::type_name<vec3>());
+    INFO("\tvec4: " << mvm_test::type_name<vec4>());
+    INFO("\tmat4: " << mvm_test::type_name<mat4>());
 
     REQUIRE(mat4::zero() ==
             mat4(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
@@ -317,6 +309,9 @@ inline void test_mat4()
             INFO(trs << " vs " << expectedMatrix);
             REQUIRE(move::math::approx_equal(trs, expectedMatrix,
                                              component_type(0.001)));
+            REQUIRE(move::math::approx_equal(transformedPoint,
+                                             expectedTransformedPoint,
+                                             component_type(0.001)));
         }
     }
 
@@ -500,15 +495,15 @@ inline void benchmark_mat4()
     using vec4 = mat4::vec4_t;
     using quat = mat4::quat_t;
     static constexpr auto acceleration = mat4::acceleration;
-    move::string_view typeName = move::meta::type_name<mat4>();
+    std::string_view typeName = mvm_test::type_name<mat4>();
 
     INFO("Benchmarking mat4 with following config:");
-    INFO("\tcomponent_type: " << move::meta::type_name<component_type>());
-    INFO("\tacceleration: " << magic_enum::enum_name(acceleration));
-    INFO("\tvec3: " << move::meta::type_name<vec3>());
-    INFO("\tvec4: " << move::meta::type_name<vec4>());
-    INFO("\tquat: " << move::meta::type_name<quat>());
-    INFO("\tmat4: " << move::meta::type_name<mat4>());
+    INFO("\tcomponent_type: " << mvm_test::type_name<component_type>());
+    INFO("\tacceleration: " << static_cast<int>(acceleration));
+    INFO("\tvec3: " << mvm_test::type_name<vec3>());
+    INFO("\tvec4: " << mvm_test::type_name<vec4>());
+    INFO("\tquat: " << mvm_test::type_name<quat>());
+    INFO("\tmat4: " << mvm_test::type_name<mat4>());
 
     mat4 identity;
     BENCHMARK(alloc_appended_name(typeName, ": Identity construction"))
@@ -682,7 +677,6 @@ REPEAT_FOR_EACH_TYPE_WRAPPER_NOACCEL(benchmark_mat4, move::math::mat4x4);
 SCENARIO("Mat4 full tests")
 {
     using namespace move::math;
-    using Accel = move::math::Acceleration;
 
     test_mat4_multi<float, double>();
 }

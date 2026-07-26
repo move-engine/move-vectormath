@@ -1,15 +1,10 @@
 #include <catch2/catch_all.hpp>
 #include <catch2/catch_test_macros.hpp>
 
-#include <magic_enum.hpp>
 #include <move/math/common.hpp>
 #include <move/math/macros.hpp>
 #include <move/math/scalar/base_vec3.hpp>
 #include <move/math/vec3.hpp>
-#if __has_include(<move/meta/type_utils.hpp>)
-#define MVM_HAS_MOVE_CORE
-#include <move/meta/type_utils.hpp>
-#endif
 #include "catch2/catch_approx.hpp"
 #include "mm_test_common.hpp"
 
@@ -29,11 +24,11 @@ inline void test_vec3()
     static constexpr auto acceleration = vec3::acceleration;
 
     INFO("Testing vec3 with following config:");
-    INFO("\tcomponent_type: " << move::meta::type_name<component_type>());
-    INFO("\tacceleration: " << magic_enum::enum_name(acceleration));
-    INFO("\tvec2: " << move::meta::type_name<vec2>());
-    INFO("\tvec3: " << move::meta::type_name<vec3>());
-    INFO("\tvec3: " << move::meta::type_name<vec3>());
+    INFO("\tcomponent_type: " << mvm_test::type_name<component_type>());
+    INFO("\tacceleration: " << static_cast<int>(acceleration));
+    INFO("\tvec2: " << mvm_test::type_name<vec2>());
+    INFO("\tvec3: " << mvm_test::type_name<vec3>());
+    INFO("\tvec3: " << mvm_test::type_name<vec3>());
     REQUIRE(vec3::zero() == vec3(0, 0, 0));
     REQUIRE(vec3::one() == vec3(1, 1, 1));
 

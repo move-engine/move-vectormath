@@ -1,17 +1,27 @@
 #pragma once
 
 #include <cstddef>
-#include <cstring>
-#include <move/meta/type_utils.hpp>
+#include <string>
+#include <string_view>
 #include <type_traits>
+#include <typeinfo>
 #include <vector>
-#include "move/string.hpp"
+
+namespace mvm_test
+{
+    template <typename T>
+    inline const char* type_name()
+    {
+        return typeid(T).name();
+    }
+}  // namespace mvm_test
+
 #define REPEAT_FOR_EACH_TYPE_WRAPPER(op, vectype)                \
     template <move::math::Acceleration Accel, typename Type>     \
     inline void op##_one()                                       \
     {                                                            \
         using tested_type = vectype<Type, Accel>;                \
-        DYNAMIC_SECTION(move::meta::type_name<tested_type>())    \
+        DYNAMIC_SECTION(mvm_test::type_name<tested_type>())      \
         {                                                        \
             op<tested_type>();                                   \
         }                                                        \
@@ -22,30 +32,27 @@
         (op##_one<Accel, Types>(), ...);                         \
     }
 
-#define REPEAT_FOR_EACH_TYPE_WRAPPER_NOACCEL(op, tgtype)      \
-    template <typename Type>                                  \
-    inline void op##_one()                                    \
-    {                                                         \
-        using tested_type = tgtype<Type>;                     \
-        DYNAMIC_SECTION(move::meta::type_name<tested_type>()) \
-        {                                                     \
-            op<tested_type>();                                \
-        }                                                     \
-    }                                                         \
-    template <typename... Types>                              \
-    inline void op##_multi()                                  \
-    {                                                         \
-        (op##_one<Types>(), ...);                             \
+#define REPEAT_FOR_EACH_TYPE_WRAPPER_NOACCEL(op, tgtype)    \
+    template <typename Type>                                \
+    inline void op##_one()                                  \
+    {                                                       \
+        using tested_type = tgtype<Type>;                   \
+        DYNAMIC_SECTION(mvm_test::type_name<tested_type>()) \
+        {                                                   \
+            op<tested_type>();                              \
+        }                                                   \
+    }                                                       \
+    template <typename... Types>                            \
+    inline void op##_multi()                                \
+    {                                                       \
+        (op##_one<Types>(), ...);                           \
     }
 
-inline const char* alloc_appended_name(move::string_view lhs,
-                                       move::string_view rhs)
+inline std::string alloc_appended_name(std::string_view lhs,
+                                       std::string_view rhs)
 {
-    size_t len = lhs.size() + rhs.size() + 1;
-    char* result = (char*)movemm::alloc(len);
-    std::memcpy((void*)result, lhs.data(), lhs.size());
-    std::memcpy((void*)(result + lhs.size()), rhs.data(), rhs.size());
-    result[len - 1] = '\0';
+    std::string result(lhs);
+    result.append(rhs);
     return result;
 }
 

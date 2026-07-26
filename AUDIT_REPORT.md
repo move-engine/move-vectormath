@@ -6,8 +6,7 @@
 
 **Date:** July 25, 2026
 
-**Status:** Implementation and local verification complete; changes are not
-committed.
+**Status:** Implementation and local verification complete.
 
 ## Executive Summary
 
@@ -20,7 +19,7 @@ did not execute every intended type/backend combination.
 The remediation establishes explicit contracts for these cases, updates the
 implementation to follow them, expands regression coverage, adds a
 dependency-light CMake test target, and adds cross-platform CI configuration.
-The complete Catch2 suite passes with 17,062 assertions in 12 test cases. The
+The complete Catch2 suite passes with 17,064 assertions in 12 test cases. The
 same suite also passes under AddressSanitizer and UndefinedBehaviorSanitizer.
 
 ## Scope
@@ -242,9 +241,11 @@ The root configuration now:
 - Enables C++.
 - Requires C++20 through the interface target.
 - Provides `MOVE_VECTORMATH_BUILD_STANDALONE_TESTS`.
+- Provides `MOVE_VECTORMATH_BUILD_TESTS` for the complete Catch2 suite.
 - Builds a public-API and numerical-contract executable when that option is on.
 - Enables `-Wall -Wextra -Wconversion` for GCC/Clang and `/W4` for MSVC on that
   target.
+- Can promote warnings in repository-owned test targets to errors.
 - Registers the executable with CTest.
 
 The standalone test uses active runtime checks even in Release builds and
@@ -252,16 +253,24 @@ compile-time assertions for API/trait contracts.
 
 ### 14. Continuous integration and metadata were incomplete
 
-A GitHub Actions workflow was added for:
+A GitHub Actions workflow now runs on every push and pull request and covers:
 
-- Linux with GCC.
-- Linux with Clang.
-- macOS.
-- Windows/MSVC.
+- GCC 12 in Release and Debug.
+- Clang 16 in Release.
+- AppleClang on macOS 15 arm64.
+- MSVC on Windows 2022.
+- AddressSanitizer and UndefinedBehaviorSanitizer.
+- GCC coverage generation with an uploaded Cobertura report.
+- Whitespace and maintained test-harness formatting checks.
+- A separate FetchContent consumer configure/build/test.
 
-Each job configures, builds, and runs the standalone CTest target in Release
-mode. Linux GCC and Clang were validated locally; the macOS and Windows jobs are
-configured for CI but were not executed locally.
+The build matrix runs both the complete Catch2 suite and the dependency-light
+standalone target. Linux Release, Debug, sanitizer, coverage-instrumented, and
+downstream-consumer paths were validated locally; macOS and Windows remain
+configured for hosted CI. The obsolete disabled workflow template was removed.
+Workflow permissions are read-only, redundant runs are cancelled, jobs have
+timeouts, dependencies are cached within each job, and matrix failures do not
+cancel unrelated platforms.
 
 The package metadata now contains a meaningful description, version `0.2.0`,
 MIT license metadata, and relevant search keywords.
@@ -287,21 +296,26 @@ supported without a compatibility break.
 
 ## Verification Performed
 
-The final source state was formatted and passed `git diff --check`.
+The maintained test-harness files were formatted and the final source state
+passed `git diff --check`.
 
 The following validation completed successfully:
 
-- Root CMake configure/build with standalone tests enabled.
-- CTest standalone target: 1 of 1 test passed.
+- Root CMake Release and Debug configure/builds with the complete Catch2 suite
+  and standalone tests enabled.
+- CTest: 13 of 13 discovered tests passed in Release and Debug.
+- A separate downstream FetchContent consumer configured, built, and passed.
+- Coverage instrumentation configured, built, ran all 13 tests, and produced
+  98 runtime coverage data files; CI performs the final gcovr report step.
 - Direct Release builds with GCC and Clang using `-O2 -DNDEBUG`,
   `-Wall`, `-Wextra`, and `-Wconversion`.
 - Standalone compilation of every public `.hpp` header with GCC.
 - Syntax compilation of all original Catch2 test translation units with GCC
   and Clang.
 - Full directly linked Catch2 suite:
-  **17,062 assertions in 12 test cases passed**.
+  **17,064 assertions in 12 test cases passed**.
 - Full Catch2 suite under AddressSanitizer and UndefinedBehaviorSanitizer:
-  **17,062 assertions in 12 test cases passed**.
+  **17,064 assertions in 12 test cases passed**.
 
 Leak detection was disabled for the sanitizer run because LeakSanitizer is not
 available under the environment's ptrace configuration. Address and undefined
@@ -323,6 +337,8 @@ CMake/CTest path.
 
 - `.github/workflows/vectormath.yml`
 - `tests/standalone.cpp`
+- `tests/consumer/CMakeLists.txt`
+- `tests/consumer/main.cpp`
 - `AUDIT_REPORT.md`
 
 ## Outcome
