@@ -15,10 +15,11 @@ Comparative API prepass.
 - Completed the current Move API review
 - Recorded v1 layout, compilation, and runtime baselines
 - Completed the Unity, Unreal, Source, Garry's Mod, Godot, and DirectX reviews
+- Completed the comparative feature matrix, analysis, and recommendations
 
 ## In progress
 
-- Comparative feature matrix and synthesis
+- Semantic type, geometry, query, and backend architecture proposal
 
 ## Pending checkpoint
 
