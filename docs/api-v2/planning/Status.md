@@ -16,6 +16,8 @@ Design checkpoint.
 - Recorded v1 layout, compilation, and runtime baselines
 - Completed the Unity, Unreal, Source, Garry's Mod, Godot, and DirectX reviews
 - Completed the comparative feature matrix, analysis, and recommendations
+- Completed the Unity familiarity-without-imitation review pass and propagated
+  its semantic-transparency rules into the v2 design
 - Completed the semantic, transform, geometry, query, frustum, invariant,
   backend, header, and proposed-call-site designs
 

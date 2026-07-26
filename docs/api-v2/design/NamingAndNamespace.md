@@ -77,8 +77,10 @@ Use consistent pairs:
 |---|---|
 | exact predicate | `IsZero`, `IsFinite`, `IsUnit` |
 | tolerance predicate | `IsNearlyZero`, `IsNearlyEqual` |
-| non-mutating value | `Normalized`, `ClampedLength` |
-| mutating operation | `Normalize`, `ClampLength` |
+| explicit normalization fallback | `NormalizedOrZero` |
+| mutating fallible normalization | `NormalizeInPlace` |
+| non-mutating value | `ClampedLength` |
+| mutating operation | `ClampLength` |
 | squared quantity | `LengthSquared`, `DistanceSquared` |
 | one-shot boolean query | `Intersects` |
 | three-state query | `Classify` |
@@ -103,13 +105,35 @@ Examples:
 
 ```cpp
 v.LengthSquared();
-v.Normalized();
-Direction3f::TryFrom(v);
+auto direction = Direction3f::TryFrom(v);
+auto fallbackValue = NormalizedOrZero(v);
 Rotation3f::FromAxisAngle(axis, 90.0_deg);
 Distance(pointA, pointB);
 TransformPoint(transform, point);
 Intersect(ray, triangle);
 ```
+
+## Familiar names and explicit contracts
+
+Established Unity, Unreal, Godot, Source, DirectXMath, and shader terminology
+is useful for discoverability, but is not a compatibility contract. Retain
+familiar names such as `Dot`, `Cross`, `MoveTowards`, `TransformPoint`, and
+`PointAt` when they accurately describe the operation.
+
+Add a qualifier when it exposes behavior that would otherwise be surprising:
+
+- `Lerp` is the unclamped mathematical operation; `LerpClamped` opts into
+  clamping;
+- exact `operator==` is separate from `IsNearlyEqual`;
+- `TryNormalize`/`TryFrom` reports failure and `NormalizedOrZero` names its
+  fallback;
+- `TryProjectPoint` exposes projective homogeneous division and failure;
+- `InflatedBy` distinguishes a per-side margin from a total size change.
+
+Do not copy a familiar name when it hides which transform components are
+applied. Overload sets for point, vector, direction, and normal transforms are
+constrained by semantic type. The detailed policy lives in
+[`Approachability.md`](Approachability.md).
 
 ## Angle naming
 

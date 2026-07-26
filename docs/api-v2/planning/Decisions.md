@@ -16,6 +16,16 @@
 - Packed storage and optimized compute representations must have visible costs.
 - Public templates must not expose incidental RTM wrapper implementation types.
 
+## Approachability
+
+- Familiar engine vocabulary is a discoverability input, not a normative
+  design authority.
+- Unity users receive a task-oriented on-ramp, not a compatibility facade.
+- Familiar names are retained when their contracts are semantically honest.
+- Clamping, tolerance, fallback, normalization, transform capability,
+  projective failure, and local/world mutation policy must be explicit.
+- Scene hierarchy state and mutation do not belong to pure transform values.
+
 ## Process
 
 - Comparative research precedes core implementation.

@@ -42,6 +42,35 @@ Engine, Godot, and Unreal emphasize the top layer. Move can provide all three
 without duplicating algorithms by keeping the dependency direction one-way and
 splitting headers by capability.
 
+## Familiarity is evidence, not authority
+
+Popular engine APIs reveal which terms users will search for and which tasks
+deserve direct support. They do not establish that every contract is sound.
+Unity is especially important as an on-ramp and especially risky as a design
+template:
+
+- its gameplay vocabulary is highly discoverable;
+- a single `Vector3` erases point/direction/normal distinctions;
+- approximate `operator==` differs from exact `Equals`;
+- `Lerp` clamps in `UnityEngine` but not in Unity Mathematics;
+- normalization can silently return zero;
+- transform helpers differ in their treatment of scale;
+- scene hierarchy behavior and pure transform math share one `Transform`;
+- TRS and `lossyScale` expose representational caveats only at runtime;
+- matrix helper names expose 3x4 versus 4x4 mechanics rather than affine versus
+  projective intent.
+
+Move should retain honest, familiar terms such as `Dot`, `Cross`,
+`MoveTowards`, `TransformPoint`, `Bounds` as a documentation search term, and
+ray point evaluation. It should deliberately differ where semantics improve:
+exact equality, named tolerance, explicit clamping/fallback, angle wrappers,
+semantic spatial types, and capability-specific transform values.
+
+Approachability is supplied by short names, task examples, predictable
+overloads, search metadata, and a Unity migration guide—not by a duplicate
+compatibility facade. This keeps the API coherent and avoids adding headers,
+templates, and maintenance work solely for familiarity.
+
 ## Semantic types are a performance feature
 
 Semantic types are often treated only as safety wrappers. In this domain they
@@ -178,7 +207,8 @@ Move should provide:
 The target should combine:
 
 - DirectXMath's storage/compute and modularity discipline;
-- Unity/Godot's intent-oriented vocabulary;
+- familiar Unity/Godot vocabulary after filtering it through explicit
+  contracts;
 - Unreal's production geometry breadth and prepared/unsafe paths;
 - Source/GMod's game-loop cost awareness;
 - a stronger semantic type system than any reviewed API.
@@ -186,4 +216,3 @@ The target should combine:
 That is a coherent niche: a standalone, SIMD-capable C++ game/graphics math
 library that remains approachable at the call site and makes common invariants
 both safer and cheaper.
-

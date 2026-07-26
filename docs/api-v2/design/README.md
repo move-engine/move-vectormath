@@ -3,6 +3,7 @@
 This directory contains the proposed public surface and its rationale:
 
 - [`NamingAndNamespace.md`](NamingAndNamespace.md)
+- [`Approachability.md`](Approachability.md)
 - [`BackendArchitecture.md`](BackendArchitecture.md)
 - [`CoreTypes.md`](CoreTypes.md)
 - [`SemanticTypes.md`](SemanticTypes.md)

@@ -16,6 +16,8 @@
 9. Provide explicit safe construction and measured preconditioned paths.
 10. Publish coordinate, matrix, quaternion, and projection conventions as part
     of the API contract.
+11. Treat familiar engine vocabulary as a discoverability input, not a
+    compatibility contract.
 
 ## Core functionality to add
 
@@ -67,6 +69,31 @@
 
 These can be first-party adapters without burdening foundational types.
 
+## Approachability and migration
+
+Move should be immediately searchable by Unity users without reproducing
+Unity's surprising contracts. The initial documentation set should include a
+task-based Unity on-ramp covering:
+
+- `Vector3` arithmetic versus `Vec3`, `Point3`, `Direction3`, and `Normal3`;
+- `Quaternion` versus invariant `Rotation3` and algebraic `Quat`;
+- scene `Transform` versus rigid, TRS-authoring, and affine values;
+- point, vector, direction, and normal transformation;
+- exact equality versus `IsNearlyEqual`;
+- unclamped `Lerp` versus `LerpClamped`;
+- `TryNormalize` and `NormalizedOrZero`;
+- `Aabb3` discovery from the familiar `Bounds` term;
+- affine `TransformPoint` versus projective `TryProjectPoint`.
+
+Documentation search should map familiar terms such as `Bounds`, `GetPoint`,
+`.normalized`, and `MultiplyPoint3x4` to the relevant Move concepts. These are
+documentation/search aliases, not duplicate C++ API aliases.
+
+No convenience operation should silently ignore translation, scale, or shear;
+change angle units; clamp an input; select a fallback; or choose local/world
+hierarchy preservation. Those choices are visible through semantic types,
+qualified names, or required policy arguments.
+
 ## Prioritization
 
 ### Phase A: architectural proof
@@ -111,6 +138,11 @@ The redesign is successful only if:
 - vector-only compile cost is materially below v1;
 - adding geometry does not affect translation units that do not include it;
 - all failure and coordinate conventions are documented and tested;
+- familiar engine tasks have concise examples and intentional semantic
+  differences are documented;
+- names and overloads expose clamping, fallback, tolerance, normalization,
+  transform capability, and projective failure where applicable;
+- approachability does not require a parallel compatibility facade or increase
+  core-header dependencies;
 - float and double types have explicit, stable layouts;
 - benchmarks compare semantically equivalent contracts.
-

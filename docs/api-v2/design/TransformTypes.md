@@ -67,8 +67,8 @@ This is an authoring/decomposition representation, not a closed transform
 algebra. Composition returns `AffineTransform3` unless a specialized checked
 operation proves the result remains TRS without shear.
 
-Naming this limitation is preferable to Unreal/Godot-style transform APIs that
-look general while scale composition has caveats.
+Naming this limitation is preferable to Unity/Unreal/Godot-style transform
+APIs that look general while scale composition has caveats.
 
 ## AffineTransform3
 
@@ -95,6 +95,34 @@ Transforming a `Direction3` through a general affine transform is fallible or
 renormalizing because length may change. Transforming a `Normal3` is fallible
 for singular transforms.
 
+## No ambiguous transform helpers
+
+Move retains familiar transform vocabulary, but overload availability is part
+of the contract:
+
+```cpp
+Point3f TransformPoint(AffineTransform3f transform, Point3f point);
+Vec3f TransformVector(AffineTransform3f transform, Vec3f vector);
+Direction3f TransformDirection(RigidTransform3f transform,
+                               Direction3f direction);
+std::optional<Normal3f> TransformNormal(AffineTransform3f transform,
+                                       Normal3f normal);
+```
+
+`TransformVector` applies the full linear part. It does not apply translation.
+`TransformDirection` is provided when the transform structurally preserves the
+unit-direction invariant. A general affine overload must not silently ignore
+scale or shear merely to preserve length. The caller can transform to a vector
+and explicitly normalize, or provide/extract a rotation.
+
+Normals are never treated as ordinary directions under nonuniform scale.
+`TransformNormal` uses the inverse transpose, restores the unit invariant, and
+reports singular failure.
+
+These rules deliberately refine Unity's familiar `TransformPoint`,
+`TransformVector`, and `TransformDirection` names. The names provide an on-ramp;
+the types prevent their documented caveats from becoming hidden policy.
+
 ## Projective matrices
 
 Perspective projection is not affine. It remains a `Mat4` or a dedicated
@@ -102,6 +130,21 @@ projection value. Project/unproject functions must make homogeneous division
 and clip convention explicit and can fail when W is unsuitable.
 
 Do not put projective behavior into `AffineTransform3`.
+Do not encode the distinction with an implementation-shaped name such as
+`MultiplyPoint3x4`; use `TransformPoint` for affine values and an explicitly
+fallible operation such as `TryProjectPoint` for projective matrices.
+
+## Scene hierarchy is not a math value
+
+These transform types contain no parent, cached world state, dirty flag, or
+reparenting behavior. Unity's scene `Transform` makes these concerns feel like
+one facility, but hierarchy mutation and its local/world preservation policy
+belong in an engine scene API.
+
+If such an API is added elsewhere, reparenting should require an explicit
+policy such as `ReparentPolicy::PreserveWorld` or
+`ReparentPolicy::PreserveLocal`. It should not use a defaulted boolean whose
+effects include changing local translation, rotation, or scale.
 
 ## Composition order
 
@@ -127,4 +170,3 @@ order. Ambiguous bare multiplication should not be the only composition API.
 Decomposition returns a typed object containing translation, rotation, scale,
 shear/reflection information, and status rather than several output
 parameters.
-

@@ -18,6 +18,13 @@ point/direction/normal/rotation roles through the type system, while the
 existing benchmark evidence shows Move's wrapper approach can compile to the
 same instruction count as its backend.
 
+The surface should remain approachable to users arriving from Unity and other
+engines, but those APIs are not treated as design authorities. Move retains
+honest, searchable vocabulary while making equality tolerance, interpolation
+clamping, normalization failure, transform capability, and scene mutation
+policy explicit. A Unity on-ramp is documentation, not a second compatibility
+facade.
+
 ## Recommended answers to open decisions
 
 1. Use `mv::math`, interpreting the namespace migration as `move` → `mv` while
@@ -38,6 +45,9 @@ same instruction count as its backend.
 8. Keep unchecked invariant construction internal initially. Add a public path
    only when measured code cannot express the precondition through semantic
    types.
+9. Apply the familiarity-without-imitation policy: preserve familiar names
+   where accurate, constrain transform overloads by semantic type, and document
+   intentional Unity differences without legacy aliases.
 
 ## Recommended implementation authorization
 
@@ -70,4 +80,3 @@ representations that block them.
 
 This checkpoint contains documentation only. No v2 core implementation has
 started, consistent with the agreed review-before-implementation process.
-
