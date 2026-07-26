@@ -133,7 +133,8 @@ jobs:
             --xml-pretty \
             --output coverage.xml \
             --print-summary \
-            build
+            build/CMakeFiles/move-vectormath-tests.dir \
+            build/CMakeFiles/move-vectormath-standalone-tests.dir
       - name: Upload coverage report
         uses: actions/upload-artifact@v6
         with:
