@@ -38,21 +38,18 @@ namespace mv::math
 
         [[nodiscard]] Vec4 operator+(const Vec4& other) const noexcept
         {
-            using Ops = detail::SelectedVectorOps<T>;
             return FromNative(Ops::Add(Ops::Load4(Components_),
                                        Ops::Load4(other.Components_)));
         }
 
         [[nodiscard]] Vec4 operator-(const Vec4& other) const noexcept
         {
-            using Ops = detail::SelectedVectorOps<T>;
             return FromNative(Ops::Subtract(Ops::Load4(Components_),
                                             Ops::Load4(other.Components_)));
         }
 
         [[nodiscard]] Vec4 operator*(T scalar) const noexcept
         {
-            using Ops = detail::SelectedVectorOps<T>;
             return FromNative(Ops::Multiply(Ops::Load4(Components_), scalar));
         }
 

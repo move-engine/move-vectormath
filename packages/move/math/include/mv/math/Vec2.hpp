@@ -42,21 +42,18 @@ namespace mv::math
 
         [[nodiscard]] Vec2 operator+(const Vec2& other) const noexcept
         {
-            using Ops = detail::SelectedVectorOps<T>;
             return FromNative(Ops::Add(Ops::Load2(Components_),
                                        Ops::Load2(other.Components_)));
         }
 
         [[nodiscard]] Vec2 operator-(const Vec2& other) const noexcept
         {
-            using Ops = detail::SelectedVectorOps<T>;
             return FromNative(Ops::Subtract(Ops::Load2(Components_),
                                             Ops::Load2(other.Components_)));
         }
 
         [[nodiscard]] Vec2 operator*(T scalar) const noexcept
         {
-            using Ops = detail::SelectedVectorOps<T>;
             return FromNative(Ops::Multiply(Ops::Load2(Components_), scalar));
         }
 
