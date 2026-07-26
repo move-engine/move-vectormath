@@ -8,6 +8,19 @@ namespace mv::math
 {
     template <typename T>
         requires std::is_arithmetic_v<T>
+    class Vec3;
+
+    template <typename T>
+        requires std::is_arithmetic_v<T>
+    [[nodiscard]] T Dot(const Vec3<T>& left, const Vec3<T>& right) noexcept;
+
+    template <typename T>
+        requires std::is_arithmetic_v<T>
+    [[nodiscard]] Vec3<T> Cross(const Vec3<T>& left,
+                                const Vec3<T>& right) noexcept;
+
+    template <typename T>
+        requires std::is_arithmetic_v<T>
     class alignas(sizeof(T) * 4U) Vec3
     {
     private:
@@ -103,13 +116,8 @@ namespace mv::math
         inline static constexpr T Zero_[4] = {T(0), T(0), T(0), T(0)};
         typename Ops::Native Native_;
 
-        template <typename U>
-            requires std::is_arithmetic_v<U>
-        friend U Dot(const Vec3<U>&, const Vec3<U>&) noexcept;
-
-        template <typename U>
-            requires std::is_arithmetic_v<U>
-        friend Vec3<U> Cross(const Vec3<U>&, const Vec3<U>&) noexcept;
+        friend T Dot<T>(const Vec3&, const Vec3&) noexcept;
+        friend Vec3 Cross<T>(const Vec3&, const Vec3&) noexcept;
     };
 
     using Vec3f = Vec3<float>;

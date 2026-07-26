@@ -62,7 +62,7 @@ namespace mv::math
 
     template <typename Record, typename Field>
     [[nodiscard]] StridedSpan<Field> MakeFieldView(
-        std::span<Record> records, Field Record::* member) noexcept
+        std::span<Record> records, Field Record::*member) noexcept
     {
         if (records.empty())
         {
@@ -75,7 +75,7 @@ namespace mv::math
 
     template <typename Record, typename Field>
     [[nodiscard]] StridedSpan<const Field> MakeFieldView(
-        std::span<const Record> records, Field Record::* member) noexcept
+        std::span<const Record> records, Field Record::*member) noexcept
     {
         if (records.empty())
         {
