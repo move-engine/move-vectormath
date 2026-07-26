@@ -2,7 +2,7 @@
 
 ## Current phase
 
-Comparative API prepass.
+Design checkpoint.
 
 ## Completed
 
@@ -16,12 +16,15 @@ Comparative API prepass.
 - Recorded v1 layout, compilation, and runtime baselines
 - Completed the Unity, Unreal, Source, Garry's Mod, Godot, and DirectX reviews
 - Completed the comparative feature matrix, analysis, and recommendations
+- Completed the semantic, transform, geometry, query, frustum, invariant,
+  backend, header, and proposed-call-site designs
 
-## In progress
+## Ready for review
 
-- Semantic type, geometry, query, and backend architecture proposal
+- Design-checkpoint recommendation
+- Phase A implementation authorization
 
 ## Pending checkpoint
 
-Core API implementation will not begin until the comparative reports, semantic
-type proposal, and API architecture have been presented for review.
+Core implementation has not begun and will not begin until the checkpoint has
+been reviewed.
