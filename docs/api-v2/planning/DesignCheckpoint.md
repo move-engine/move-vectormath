@@ -89,5 +89,6 @@ representations that block them.
 
 ## Current repository state
 
-This checkpoint contains documentation only. No v2 core implementation has
-started, consistent with the agreed review-before-implementation process.
+This document records the pre-implementation checkpoint. Phase A was
+subsequently authorized and its proof implementation and measurements are in
+[`../implementation/PhaseAArchitectureProof.md`](../implementation/PhaseAArchitectureProof.md).

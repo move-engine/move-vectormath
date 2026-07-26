@@ -39,3 +39,19 @@
 - Semantic and geometry proposals receive a design checkpoint.
 - Compilation cost, layouts, code generation, and runtime performance are
   evaluated alongside usability.
+
+## Provisional Phase A findings
+
+These findings guide the prototype but are not yet stable ABI commitments:
+
+- `Vec3f` privately stores the selected backend-native value. GCC and Clang
+  generate the same representative inner loop as the raw-native proof.
+- The fixed scalar-array `Vec3f` alternative is rejected for the current GCC
+  implementation because it doubles instruction count in the measured chain.
+- `Vec2f` remains an open decision: 16-byte storage wins small compute loops,
+  while 8-byte storage wins the measured large working set.
+- Compact 12-byte and compute 16-byte arrays are both first-class choices;
+  working-set behavior determines which is faster.
+- The facade should retain focused headers. The focused `Vec3` proof adds only
+  a small parse/memory increment over raw RTM, while the forced-scalar path
+  avoids parsing RTM.

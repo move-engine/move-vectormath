@@ -38,9 +38,49 @@ option(MOVE_VECTORMATH_WARNINGS_AS_ERRORS
 option(MOVE_VECTORMATH_BUILD_TESTS "Build the complete Catch2 test suite" OFF)
 option(MOVE_VECTORMATH_BUILD_STANDALONE_TESTS
        "Build dependency-light public API and numerical contract tests" OFF)
+option(MOVE_VECTORMATH_BUILD_PHASE_A_TESTS
+       "Build API-v2 Phase A scalar and RTM architecture proof tests" OFF)
 
-if(MOVE_VECTORMATH_BUILD_TESTS OR MOVE_VECTORMATH_BUILD_STANDALONE_TESTS)
+if(MOVE_VECTORMATH_BUILD_TESTS OR
+   MOVE_VECTORMATH_BUILD_STANDALONE_TESTS OR
+   MOVE_VECTORMATH_BUILD_PHASE_A_TESTS)
     enable_testing()
+endif()
+
+if(MOVE_VECTORMATH_BUILD_PHASE_A_TESTS)
+    add_executable(move-vectormath-phase-a-rtm-tests tests/phase_a.cpp)
+    target_link_libraries(move-vectormath-phase-a-rtm-tests
+                          PRIVATE move-vectormath)
+    move_vectormath_enable_strict_warnings(
+        move-vectormath-phase-a-rtm-tests)
+    add_test(NAME move-vectormath-phase-a-rtm
+             COMMAND move-vectormath-phase-a-rtm-tests)
+
+    add_executable(move-vectormath-phase-a-scalar-tests tests/phase_a.cpp)
+    target_link_libraries(move-vectormath-phase-a-scalar-tests
+                          PRIVATE move-vectormath)
+    target_compile_definitions(move-vectormath-phase-a-scalar-tests
+                               PRIVATE MV_MATH_FORCE_SCALAR=1)
+    move_vectormath_enable_strict_warnings(
+        move-vectormath-phase-a-scalar-tests)
+    add_test(NAME move-vectormath-phase-a-scalar
+             COMMAND move-vectormath-phase-a-scalar-tests)
+
+    add_library(move-vectormath-phase-a-rtm-codegen OBJECT
+                tests/phase_a_codegen.cpp)
+    target_link_libraries(move-vectormath-phase-a-rtm-codegen
+                          PRIVATE move-vectormath)
+    move_vectormath_enable_strict_warnings(
+        move-vectormath-phase-a-rtm-codegen)
+
+    add_library(move-vectormath-phase-a-scalar-codegen OBJECT
+                tests/phase_a_codegen.cpp)
+    target_link_libraries(move-vectormath-phase-a-scalar-codegen
+                          PRIVATE move-vectormath)
+    target_compile_definitions(move-vectormath-phase-a-scalar-codegen
+                               PRIVATE MV_MATH_FORCE_SCALAR=1)
+    move_vectormath_enable_strict_warnings(
+        move-vectormath-phase-a-scalar-codegen)
 endif()
 
 if(MOVE_VECTORMATH_BUILD_TESTS)
