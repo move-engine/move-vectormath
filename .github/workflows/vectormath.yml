@@ -49,7 +49,7 @@ jobs:
       CXX: ${{ matrix.compiler }}
       CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm-cache
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Configure
         run: >
           cmake -S . -B build
@@ -85,7 +85,7 @@ jobs:
       CXX: clang++-16
       CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm-cache
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Configure
         run: >
           cmake -S . -B build
@@ -111,7 +111,7 @@ jobs:
       CXX: g++-12
       CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm-cache
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Configure
         run: >
           cmake -S . -B build
@@ -129,12 +129,13 @@ jobs:
           pipx run --spec gcovr==8.3 gcovr \
             --root . \
             --filter packages/move/math/include \
+            --gcov-executable gcov-12 \
             --xml-pretty \
             --output coverage.xml \
             --print-summary \
             build
       - name: Upload coverage report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: vectormath-coverage
           path: coverage.xml
@@ -145,9 +146,11 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 2
       - name: Check patch whitespace
-        run: git show --check --oneline --no-renames HEAD
+        run: git diff --check HEAD^ HEAD
       - name: Check maintained test harness formatting
         run: >
           clang-format-16 --dry-run --Werror

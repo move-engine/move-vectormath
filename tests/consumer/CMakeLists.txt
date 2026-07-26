@@ -6,10 +6,13 @@ if(NOT MOVE_VECTORMATH_SOURCE_DIR)
     message(FATAL_ERROR "MOVE_VECTORMATH_SOURCE_DIR must name the source tree")
 endif()
 
+file(TO_CMAKE_PATH "${MOVE_VECTORMATH_SOURCE_DIR}"
+     move_vectormath_source_dir)
+
 include(FetchContent)
 FetchContent_Declare(
     move_vectormath
-    SOURCE_DIR "${MOVE_VECTORMATH_SOURCE_DIR}"
+    SOURCE_DIR "${move_vectormath_source_dir}"
 )
 FetchContent_MakeAvailable(move_vectormath)
 
