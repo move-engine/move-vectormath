@@ -47,7 +47,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       CXX: ${{ matrix.compiler }}
-      CPM_SOURCE_CACHE: ${{ runner.temp }}/cpm
+      CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm-cache
     steps:
       - uses: actions/checkout@v4
       - name: Configure
@@ -83,7 +83,7 @@ jobs:
     timeout-minutes: 20
     env:
       CXX: clang++-16
-      CPM_SOURCE_CACHE: ${{ runner.temp }}/cpm
+      CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm-cache
     steps:
       - uses: actions/checkout@v4
       - name: Configure
@@ -109,7 +109,7 @@ jobs:
     timeout-minutes: 20
     env:
       CXX: g++-12
-      CPM_SOURCE_CACHE: ${{ runner.temp }}/cpm
+      CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm-cache
     steps:
       - uses: actions/checkout@v4
       - name: Configure
