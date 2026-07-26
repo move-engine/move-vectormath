@@ -4,6 +4,8 @@
 #include <move/math/common.hpp>
 #include <move/math/vec2.hpp>
 
+#include "mm_test_common.hpp"
+
 template <typename vec2>
 inline void test_vec2()
 {
@@ -193,38 +195,20 @@ inline void test_vec2()
     }
 }
 
+REPEAT_FOR_EACH_TYPE_WRAPPER(test_vec2, move::math::vec2);
+
 SCENARIO("Vec2 tests")
 {
     using namespace move::math;
     using Accel = move::math::Acceleration;
 
     // Scalar tests
-    test_vec2<vec2<float, Accel::Scalar>>();
-    test_vec2<vec2<double, Accel::Scalar>>();
-
-    test_vec2<vec2<int8_t, Accel::Scalar>>();
-    test_vec2<vec2<int16_t, Accel::Scalar>>();
-    test_vec2<vec2<int32_t, Accel::Scalar>>();
-    test_vec2<vec2<int64_t, Accel::Scalar>>();
-
-    test_vec2<vec2<uint8_t, Accel::Scalar>>();
-    test_vec2<vec2<uint16_t, Accel::Scalar>>();
-    test_vec2<vec2<uint32_t, Accel::Scalar>>();
-    test_vec2<vec2<uint64_t, Accel::Scalar>>();
+    test_vec2_multi<Accel::Scalar, float, double, int8_t, int16_t, int32_t,
+                    int64_t, uint8_t, uint16_t, uint32_t, uint64_t>();
 
     // Vec2 RTM requests currently resolve to the scalar backend.
-    test_vec2<vec2<float, Accel::RTM>>();
-    test_vec2<vec2<double, Accel::RTM>>();
-
-    test_vec2<vec2<int8_t, Accel::RTM>>();
-    test_vec2<vec2<int16_t, Accel::RTM>>();
-    test_vec2<vec2<int32_t, Accel::RTM>>();
-    test_vec2<vec2<int64_t, Accel::RTM>>();
-
-    test_vec2<vec2<uint8_t, Accel::RTM>>();
-    test_vec2<vec2<uint16_t, Accel::RTM>>();
-    test_vec2<vec2<uint32_t, Accel::RTM>>();
-    test_vec2<vec2<uint64_t, Accel::RTM>>();
+    test_vec2_multi<Accel::RTM, float, double, int8_t, int16_t, int32_t,
+                    int64_t, uint8_t, uint16_t, uint32_t, uint64_t>();
 }
 
 TEST_CASE("vec2 wrapper compound assignments return self")

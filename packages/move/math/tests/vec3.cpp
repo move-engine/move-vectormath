@@ -224,23 +224,27 @@ inline void test_vec3()
     WHEN("A vec3's lengths are computed")
     {
         vec3 test = {3, 4, 5};
+        using length_type = decltype(test.length());
 
         REQUIRE(test.length_squared() == component_type(50));
         REQUIRE(move::math::approx_equal(test.length(),
-                                         component_type(std::sqrt(50))));
+                                         length_type(std::sqrt(50))));
         REQUIRE(move::math::approx_equal(
             test.reciprocal_length(),
-            component_type(1) / component_type(std::sqrt(50))));
+            length_type(1) / std::sqrt(length_type(50))));
     }
 
-    WHEN("A vec3 is normalized")
+    if constexpr (std::is_floating_point_v<component_type>)
     {
-        vec3 test = {3, 4, 5};
-        test.normalize();
-
-        THEN("The length is correct")
+        WHEN("A vec3 is normalized")
         {
-            REQUIRE(move::math::safe_equal(test.length(), 1));
+            vec3 test = {3, 4, 5};
+            test.normalize();
+
+            THEN("The length is correct")
+            {
+                REQUIRE(move::math::safe_equal(test.length(), 1));
+            }
         }
     }
 
@@ -370,9 +374,10 @@ inline void test_vec3()
 
         THEN("The distances are correct")
         {
+            using distance_type = decltype(test1.distance(test2));
             REQUIRE(test1.distance_squared(test2) == Catch::Approx(11));
             REQUIRE(test1.distance(test2) ==
-                    Catch::Approx(component_type(std::sqrt(11))));
+                    Catch::Approx(distance_type(std::sqrt(11))));
         }
     }
 
@@ -403,13 +408,16 @@ inline void test_vec3()
         }
     }
 
-    WHEN("Computing the angle between two vectors")
+    if constexpr (std::is_floating_point_v<component_type>)
     {
-        REQUIRE(vec3::angle_between_vectors({1, 0, 0}, {0, 1, 0}) ==
-                Catch::Approx(component_type(1.5707964)));
+        WHEN("Computing the angle between two vectors")
+        {
+            REQUIRE(vec3::angle_between_vectors({1, 0, 0}, {0, 1, 0}) ==
+                    Catch::Approx(component_type(1.5707964)));
 
-        REQUIRE(vec3::angle_between_vectors({1, 0, 1}, {0, 1, 0}) ==
-                Catch::Approx(component_type(1.5707964)));
+            REQUIRE(vec3::angle_between_vectors({1, 0, 1}, {0, 1, 0}) ==
+                    Catch::Approx(component_type(1.5707964)));
+        }
     }
 
     if constexpr (std::is_floating_point_v<component_type>)
@@ -432,7 +440,8 @@ inline void test_vec3()
             vec3 incident = {1, -1, 0};
             incident = incident.normalized();
             vec3 normal = {0, 1, 0};  // Upward normal
-            component_type ior = component_type(1.2);  // More realistic IOR for testing
+            component_type ior =
+                component_type(1.2);  // More realistic IOR for testing
             vec3 refracted = vec3::refract(incident, normal, ior);
 
             THEN("The refracted vector is valid")
@@ -442,7 +451,8 @@ inline void test_vec3()
                 REQUIRE(!std::isnan(refracted.get_y()));
                 REQUIRE(!std::isnan(refracted.get_z()));
 
-                // For this configuration, we shouldn't get total internal reflection
+                // For this configuration, we shouldn't get total internal
+                // reflection
                 REQUIRE(refracted.length() > component_type(0.01));
                 // Entering a denser material bends the ray toward the normal.
                 REQUIRE(refracted.get_y() < incident.get_y());
@@ -457,14 +467,16 @@ inline void test_vec3()
             vec3 refracted =
                 vec3::refract(incident, normal, component_type(1.5));
 
-            THEN("The refracted vector is finite, non-zero, and bends toward the normal")
+            THEN(
+                "The refracted vector is finite, non-zero, and bends toward "
+                "the normal")
             {
                 REQUIRE(!std::isnan(refracted.get_x()));
                 REQUIRE(!std::isnan(refracted.get_y()));
                 REQUIRE(!std::isnan(refracted.get_z()));
                 REQUIRE(refracted.length() ==
-                        Catch::Approx(component_type(1)).epsilon(
-                            component_type(0.001)));
+                        Catch::Approx(component_type(1))
+                            .epsilon(component_type(0.001)));
                 REQUIRE(refracted.get_y() < incident.get_y());
             }
         }
@@ -489,9 +501,11 @@ inline void test_vec3()
     {
         if constexpr (std::is_signed_v<component_type>)
         {
-            vec3 test = {component_type(-1), component_type(2), component_type(-3)};
+            vec3 test = {component_type(-1), component_type(2),
+                         component_type(-3)};
             vec3 result = vec3::abs(test);
-            vec3 expected = {component_type(1), component_type(2), component_type(3)};
+            vec3 expected = {component_type(1), component_type(2),
+                             component_type(3)};
 
             THEN("The absolute values are correct")
             {
@@ -501,7 +515,8 @@ inline void test_vec3()
         else
         {
             // For unsigned types, abs should return the same value
-            vec3 test = {component_type(1), component_type(2), component_type(3)};
+            vec3 test = {component_type(1), component_type(2),
+                         component_type(3)};
             vec3 result = vec3::abs(test);
 
             THEN("The absolute values are correct (unsigned)")
@@ -515,9 +530,11 @@ inline void test_vec3()
     {
         if constexpr (std::is_signed_v<component_type>)
         {
-            vec3 test = {component_type(-2), component_type(0), component_type(3)};
+            vec3 test = {component_type(-2), component_type(0),
+                         component_type(3)};
             vec3 result = vec3::sign(test);
-            vec3 expected = {component_type(-1), component_type(0), component_type(1)};
+            vec3 expected = {component_type(-1), component_type(0),
+                             component_type(1)};
 
             THEN("The signs are correct")
             {
@@ -527,9 +544,11 @@ inline void test_vec3()
         else
         {
             // For unsigned types, zero stays zero and positive values return 1.
-            vec3 test = {component_type(2), component_type(0), component_type(3)};
+            vec3 test = {component_type(2), component_type(0),
+                         component_type(3)};
             vec3 result = vec3::sign(test);
-            vec3 expected = {component_type(1), component_type(0), component_type(1)};
+            vec3 expected = {component_type(1), component_type(0),
+                             component_type(1)};
 
             THEN("The signs are correct (unsigned)")
             {
@@ -547,7 +566,8 @@ inline void test_vec3()
             REQUIRE(test[0] == 1);
             REQUIRE(test[1] == 2);
             REQUIRE(test[2] == 3);
-            if constexpr (vec3::acceleration == move::math::Acceleration::Scalar)
+            if constexpr (vec3::acceleration ==
+                          move::math::Acceleration::Scalar)
             {
                 test[0] = 4;
                 test[1] = 5;
@@ -582,8 +602,10 @@ inline void test_vec3()
             THEN("The projected vector lies on the plane")
             {
                 // The projected vector should be perpendicular to the normal
-                component_type dot_with_normal = vec3::dot(projected, plane_normal);
-                REQUIRE(move::math::approx_equal(dot_with_normal, component_type(0), component_type(0.001)));
+                component_type dot_with_normal =
+                    vec3::dot(projected, plane_normal);
+                REQUIRE(move::math::approx_equal(
+                    dot_with_normal, component_type(0), component_type(0.001)));
             }
         }
 
@@ -618,9 +640,21 @@ inline void test_vec3()
         vec3 test1 = {0, 0, 0};
         vec3 test2 = {5, 5, 5};
 
+        if constexpr (std::is_floating_point_v<component_type>)
+        {
+            REQUIRE(vec3::lerp_unclamped(test1, test2, component_type(0.5)) ==
+                    vec3::filled(component_type(2.5)));
+            REQUIRE(vec3::lerp(test1, test2, component_type(0.5)) ==
+                    vec3::filled(component_type(2.5)));
+        }
+        else
+        {
+            REQUIRE(vec3::lerp_unclamped(test1, test2, component_type(0)) ==
+                    test1);
+            REQUIRE(vec3::lerp(test1, test2, component_type(1)) == test2);
+        }
+
         // lerp unclamped (scalar factor)
-        REQUIRE(vec3::lerp_unclamped(test1, test2, component_type(0.5)) ==
-                vec3::filled(component_type(2.5)));
         REQUIRE(vec3::lerp_unclamped(test1, test2, 2) == vec3(10, 10, 10));
 
         // lerp unclamped (vector factor)
@@ -629,8 +663,6 @@ inline void test_vec3()
                 vec3(5, 10, 5));
 
         // lerp (scalar factor)
-        REQUIRE(vec3::lerp(test1, test2, component_type(0.5)) ==
-                vec3::filled(component_type(2.5)));
         REQUIRE(vec3::lerp(test1, test2, 2) == vec3(5, 5, 5));
 
         // lerp (vector factor)

@@ -3,13 +3,15 @@
 #include <type_traits>
 
 #include <rtm/impl/vector_common.h>
+#include <rtm/matrix3x3d.h>
+#include <rtm/matrix3x3f.h>
 #include <rtm/quatd.h>
 #include <rtm/quatf.h>
 
 #include <move/math/common.hpp>
 #include <move/math/macros.hpp>
-#include <move/math/vec4.hpp>
 #include <move/math/rtm/rtm_ext.hpp>
+#include <move/math/vec4.hpp>
 
 namespace move::math
 {
@@ -23,7 +25,7 @@ namespace move::math
     }  // namespace simd_rtm::detail
 
     template <typename T, typename wrapper_type = simd_rtm::detail::quat<T>>
-    requires std::is_floating_point_v<T>
+        requires std::is_floating_point_v<T>
     struct quat
     {
     public:
@@ -141,12 +143,13 @@ namespace move::math
     public:
         MVM_INLINE_NODISCARD bool operator==(const quat& other) const
         {
-            return rtm::quat_near_equal(_value, other._value);
+            return get_x() == other.get_x() && get_y() == other.get_y() &&
+                   get_z() == other.get_z() && get_w() == other.get_w();
         }
 
         MVM_INLINE_NODISCARD bool operator!=(const quat& other) const
         {
-            return !rtm::quat_near_equal(_value, other._value);
+            return !(*this == other);
         }
 
         // Element access
@@ -227,7 +230,9 @@ namespace move::math
         MVM_INLINE_NODISCARD quat normalized() const
         {
             using namespace rtm;
-            return quat::from_rtm(quat_normalize(_value));
+            return length_squared() == T(0)
+                       ? zero()
+                       : quat::from_rtm(quat_normalize(_value));
         }
 
         MVM_INLINE_NODISCARD T length() const
@@ -270,7 +275,7 @@ namespace move::math
 
         MVM_INLINE quat& normalize()
         {
-            _value = rtm::quat_normalize(_value);
+            *this = normalized();
             return *this;
         }
 
@@ -321,9 +326,40 @@ namespace move::math
         MVM_INLINE_NODISCARD static quat look_rotation(const vec3_t& forward,
                                                        const vec3_t& up)
         {
-            using namespace rtm;
-            return quat::from_rtm(
-                quat_look_rotation(forward.to_rtm(), up.to_rtm()));
+            if (forward.length_squared() == T(0))
+            {
+                return identity();
+            }
+
+            const vec3_t normalized_forward = forward.normalized();
+            vec3_t right = vec3_t::cross(up, normalized_forward);
+            if (right.length_squared() <= std::numeric_limits<T>::epsilon())
+            {
+                const vec3_t fallback_up =
+                    math::abs(normalized_forward.get_y()) < T(0.999)
+                        ? vec3_t::up()
+                        : vec3_t::right();
+                right = vec3_t::cross(fallback_up, normalized_forward);
+            }
+
+            right.normalize();
+            const vec3_t corrected_up =
+                vec3_t::cross(normalized_forward, right);
+
+            if constexpr (std::is_same_v<T, float>)
+            {
+                const rtm::matrix3x3f rotation{right.to_rtm(),
+                                               corrected_up.to_rtm(),
+                                               normalized_forward.to_rtm()};
+                return quat::from_rtm(rtm::quat_from_matrix(rotation));
+            }
+            else
+            {
+                const rtm::matrix3x3d rotation{right.to_rtm(),
+                                               corrected_up.to_rtm(),
+                                               normalized_forward.to_rtm()};
+                return quat::from_rtm(rtm::quat_from_matrix(rotation));
+            }
         }
 
         MVM_INLINE_NODISCARD static quat rotation_x(const T& angle)
@@ -363,7 +399,6 @@ namespace move::math
         const vec3<component_type, OtherAccel>& vec,
         const quat<component_type>& quat)
     {
-        using Accel = move::math::Acceleration;
         using vector_type = typename simd_rtm::detail::v4<component_type>::type;
 
         vector_type result = rtm::quat_mul_vector3(vec.to_rtm(), quat._value);
@@ -382,14 +417,30 @@ namespace move::math
         const quat<T>& b,
         const T& epsilon = std::numeric_limits<T>::epsilon())
     {
-        const auto lane_equal = [&](T lhs, T rhs) {
-            return (std::isnan(lhs) && std::isnan(rhs)) ||
-                   approx_equal(lhs, rhs, epsilon);
+        const auto lane_equal = [&](T lhs, T rhs)
+        {
+            return approx_equal(lhs, rhs, epsilon);
         };
 
         return lane_equal(a.get_x(), b.get_x()) &&
                lane_equal(a.get_y(), b.get_y()) &&
                lane_equal(a.get_z(), b.get_z()) &&
                lane_equal(a.get_w(), b.get_w());
+    }
+
+    template <typename T>
+    MVM_INLINE_NODISCARD bool same_rotation(
+        const quat<T>& a,
+        const quat<T>& b,
+        const T& epsilon = std::numeric_limits<T>::epsilon())
+    {
+        if (approx_equal(a, b, epsilon))
+        {
+            return true;
+        }
+        return approx_equal(a.get_x(), -b.get_x(), epsilon) &&
+               approx_equal(a.get_y(), -b.get_y(), epsilon) &&
+               approx_equal(a.get_z(), -b.get_z(), epsilon) &&
+               approx_equal(a.get_w(), -b.get_w(), epsilon);
     }
 }  // namespace move::math

@@ -301,41 +301,61 @@ namespace move::math::scalar
 
         // Mathematical operations
     public:
-        MVM_INLINE_NODISCARD T length() const
+        MVM_INLINE_NODISCARD geometry_scalar_t<T> length() const
         {
-            return math::sqrt(length_squared());
+            using result_type = geometry_scalar_t<T>;
+            const result_type px = static_cast<result_type>(x);
+            const result_type py = static_cast<result_type>(y);
+            const result_type pz = static_cast<result_type>(z);
+            return math::sqrt(px * px + py * py + pz * pz);
         }
 
-        MVM_INLINE_NODISCARD T length_squared() const
+        MVM_INLINE_NODISCARD geometry_scalar_t<T> length_squared() const
         {
-            return x * x + y * y + z * z;
+            using result_type = geometry_scalar_t<T>;
+            const result_type px = static_cast<result_type>(x);
+            const result_type py = static_cast<result_type>(y);
+            const result_type pz = static_cast<result_type>(z);
+            return px * px + py * py + pz * pz;
         }
 
-        MVM_INLINE_NODISCARD T reciprocal_length() const
+        MVM_INLINE_NODISCARD geometry_scalar_t<T> reciprocal_length() const
         {
-            return math::sqrt_reciprocal(length_squared());
+            return geometry_scalar_t<T>(1) / length();
         }
 
         MVM_INLINE_NODISCARD base_vec3 normalized() const
+            requires std::is_floating_point_v<T>
         {
-            return *this / length();
+            const T vector_length = length();
+            return vector_length == T(0) ? base_vec3() : *this / vector_length;
         }
 
-        MVM_INLINE_NODISCARD T distance(const base_vec3& other) const
+        MVM_INLINE_NODISCARD geometry_scalar_t<T> distance_squared(
+            const base_vec3& other) const
         {
-            return (*this - other).length();
+            using result_type = geometry_scalar_t<T>;
+            const result_type dx =
+                static_cast<result_type>(x) - static_cast<result_type>(other.x);
+            const result_type dy =
+                static_cast<result_type>(y) - static_cast<result_type>(other.y);
+            const result_type dz =
+                static_cast<result_type>(z) - static_cast<result_type>(other.z);
+            return dx * dx + dy * dy + dz * dz;
         }
 
-        MVM_INLINE_NODISCARD T distance_squared(const base_vec3& other) const
+        MVM_INLINE_NODISCARD geometry_scalar_t<T> distance(
+            const base_vec3& other) const
         {
-            return (*this - other).length_squared();
+            return math::sqrt(distance_squared(other));
         }
 
         // Mutators
     public:
         MVM_INLINE base_vec3& normalize()
+            requires std::is_floating_point_v<T>
         {
-            *this /= length();
+            *this = normalized();
             return *this;
         }
 
@@ -396,10 +416,11 @@ namespace move::math::scalar
          * @param p2 The second point
          * @return T The distance between the two points
          */
-        MVM_INLINE_NODISCARD static T distance_between_points(
-            const base_vec3& p1, const base_vec3& p2) noexcept
+        MVM_INLINE_NODISCARD static geometry_scalar_t<T>
+        distance_between_points(const base_vec3& p1,
+                                const base_vec3& p2) noexcept
         {
-            return (p1 - p2).length();
+            return p1.distance(p2);
         }
 
         /*
@@ -408,10 +429,11 @@ namespace move::math::scalar
          * @param p1 The first point
          * @param p2 The second point
          */
-        MVM_INLINE_NODISCARD static T distance_between_points_squared(
-            const base_vec3& p1, const base_vec3& p2) noexcept
+        MVM_INLINE_NODISCARD static geometry_scalar_t<T>
+        distance_between_points_squared(const base_vec3& p1,
+                                        const base_vec3& p2) noexcept
         {
-            return (p1 - p2).length_squared();
+            return p1.distance_squared(p2);
         }
 
         /**
@@ -423,8 +445,9 @@ namespace move::math::scalar
          */
         MVM_INLINE_NODISCARD static T angle_between_normalized_vectors(
             const base_vec3& v1, const base_vec3& v2) noexcept
+            requires std::is_floating_point_v<T>
         {
-            return math::acos(dot(v1, v2));
+            return math::acos(math::clamp(dot(v1, v2), T(-1), T(1)));
         }
 
         /**
@@ -436,7 +459,12 @@ namespace move::math::scalar
          */
         MVM_INLINE_NODISCARD static T angle_between_vectors(
             const base_vec3& v1, const base_vec3& v2) noexcept
+            requires std::is_floating_point_v<T>
         {
+            if (v1.length_squared() == T(0) || v2.length_squared() == T(0))
+            {
+                return T(0);
+            }
             auto v1norm = v1.normalized();
             auto v2norm = v2.normalized();
             return angle_between_normalized_vectors(v1norm, v2norm);
@@ -473,8 +501,8 @@ namespace move::math::scalar
                                                       const base_vec3& normal,
                                                       T ior) noexcept
         {
-            return move::math::detail::refract_ior_relative_to_air(
-                incident, normal, ior);
+            return move::math::detail::refract_ior_relative_to_air(incident,
+                                                                   normal, ior);
         }
 
         /**
@@ -810,14 +838,15 @@ namespace move::math::scalar
          * @brief Projects a vector onto a plane defined by its normal
          *
          * @param v The vector to project
-         * @param plane_normal The normal vector of the plane (should be normalized)
+         * @param plane_normal The normal vector of the plane (should be
+         * normalized)
          * @return base_vec3 The projection of v onto the plane
          */
         MVM_INLINE_NODISCARD static base_vec3 project_onto_plane(
             const base_vec3& v, const base_vec3& plane_normal) noexcept
         {
-            // Project v onto the plane by subtracting the component parallel to the normal
-            // projection = v - (v · n) * n
+            // Project v onto the plane by subtracting the component parallel to
+            // the normal projection = v - (v · n) * n
             auto dot_vn = dot(v, plane_normal);
             auto parallel_component = plane_normal * dot_vn;
             return v - parallel_component;

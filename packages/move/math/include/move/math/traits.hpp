@@ -13,10 +13,23 @@ namespace move::math::traits
     template <typename T>
     constexpr uint32_t component_count_v = 1;
 
-    // if this is a vector type, use T::component_type, otherwise use T
+    namespace detail
+    {
+        template <typename T, typename = void>
+        struct component_type
+        {
+            using type = T;
+        };
+
+        template <typename T>
+        struct component_type<T, std::void_t<typename T::component_type>>
+        {
+            using type = typename T::component_type;
+        };
+    }  // namespace detail
+
+    // Use a math type's declared component type, or the type itself for
+    // scalars.
     template <typename T>
-    using component_type_t =
-        std::conditional_t<is_vector_type_v<T> || is_matrix_type_v<T>,
-                           typename T::component_type,
-                           T>;
+    using component_type_t = typename detail::component_type<T>::type;
 }  // namespace move::math::traits

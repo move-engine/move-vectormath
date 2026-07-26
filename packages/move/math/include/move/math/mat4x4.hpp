@@ -479,7 +479,6 @@ namespace move::math
         const mat4x4<component_type>& mat)
     {
         using namespace rtm;
-        using Accel = move::math::Acceleration;
         using vector_type = typename simd_rtm::detail::v4<component_type>::type;
 
         vector_type v = vec.to_rtm();
@@ -491,6 +490,8 @@ namespace move::math
     struct storage_mat4x4
     {
     public:
+        using component_type = T;
+
         union
         {
             T data[16];
@@ -563,6 +564,21 @@ namespace move::math
     using float4x4 = fast_float4x4;
     using double4x4 = fast_double4x4;
 
+    namespace traits
+    {
+        template <typename T, typename Wrapper>
+        constexpr bool is_matrix_type_v<mat4x4<T, Wrapper>> = true;
+
+        template <typename T, typename Wrapper>
+        constexpr uint32_t component_count_v<mat4x4<T, Wrapper>> = 16;
+
+        template <typename T>
+        constexpr bool is_matrix_type_v<storage_mat4x4<T>> = true;
+
+        template <typename T>
+        constexpr uint32_t component_count_v<storage_mat4x4<T>> = 16;
+    }  // namespace traits
+
     using mat4x4f = float4x4;
     using mat4x4d = double4x4;
     using storage_float4x4 = storage_mat4x4<float>;
@@ -576,29 +592,25 @@ namespace move::math
     {
         using fast_vec4_t = typename mat4x4<T>::fast_vec4_t;
 
-        return approx_equal(
-                   fast_vec4_t::from_rtm(
-                       rtm::matrix_get_axis(a.to_rtm(), rtm::axis4::x)),
-                   fast_vec4_t::from_rtm(
-                       rtm::matrix_get_axis(b.to_rtm(), rtm::axis4::x)),
-                   epsilon) &&
-               approx_equal(
-                   fast_vec4_t::from_rtm(
-                       rtm::matrix_get_axis(a.to_rtm(), rtm::axis4::y)),
-                   fast_vec4_t::from_rtm(
-                       rtm::matrix_get_axis(b.to_rtm(), rtm::axis4::y)),
-                   epsilon) &&
-               approx_equal(
-                   fast_vec4_t::from_rtm(
-                       rtm::matrix_get_axis(a.to_rtm(), rtm::axis4::z)),
-                   fast_vec4_t::from_rtm(
-                       rtm::matrix_get_axis(b.to_rtm(), rtm::axis4::z)),
-                   epsilon) &&
-               approx_equal(
-                   fast_vec4_t::from_rtm(
-                       rtm::matrix_get_axis(a.to_rtm(), rtm::axis4::w)),
-                   fast_vec4_t::from_rtm(
-                       rtm::matrix_get_axis(b.to_rtm(), rtm::axis4::w)),
-                   epsilon);
+        return approx_equal(fast_vec4_t::from_rtm(rtm::matrix_get_axis(
+                                a.to_rtm(), rtm::axis4::x)),
+                            fast_vec4_t::from_rtm(rtm::matrix_get_axis(
+                                b.to_rtm(), rtm::axis4::x)),
+                            epsilon) &&
+               approx_equal(fast_vec4_t::from_rtm(rtm::matrix_get_axis(
+                                a.to_rtm(), rtm::axis4::y)),
+                            fast_vec4_t::from_rtm(rtm::matrix_get_axis(
+                                b.to_rtm(), rtm::axis4::y)),
+                            epsilon) &&
+               approx_equal(fast_vec4_t::from_rtm(rtm::matrix_get_axis(
+                                a.to_rtm(), rtm::axis4::z)),
+                            fast_vec4_t::from_rtm(rtm::matrix_get_axis(
+                                b.to_rtm(), rtm::axis4::z)),
+                            epsilon) &&
+               approx_equal(fast_vec4_t::from_rtm(rtm::matrix_get_axis(
+                                a.to_rtm(), rtm::axis4::w)),
+                            fast_vec4_t::from_rtm(rtm::matrix_get_axis(
+                                b.to_rtm(), rtm::axis4::w)),
+                            epsilon);
     }
 }  // namespace move::math

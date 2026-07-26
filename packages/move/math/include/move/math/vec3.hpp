@@ -60,13 +60,27 @@ namespace move::math
         {
         }
 
-        MVM_INLINE vec3(const scalar::base_vec3<T>& rhs) :
-            base_t(rhs.x, rhs.y, rhs.z)
+        MVM_INLINE vec3(const scalar::base_vec3<T>& rhs)
+            requires std::is_same_v<base_t, scalar::base_vec3<T>>
+            : base_t(rhs)
         {
         }
 
-        MVM_INLINE vec3(const simd_rtm::base_vec3<T>& rhs) :
-            base_t(rhs.get_x(), rhs.get_y(), rhs.get_z())
+        MVM_INLINE vec3(const scalar::base_vec3<T>& rhs)
+            requires(!std::is_same_v<base_t, scalar::base_vec3<T>>)
+            : base_t(rhs.x, rhs.y, rhs.z)
+        {
+        }
+
+        MVM_INLINE vec3(const simd_rtm::base_vec3<T>& rhs)
+            requires std::is_same_v<base_t, simd_rtm::base_vec3<T>>
+            : base_t(rhs)
+        {
+        }
+
+        MVM_INLINE vec3(const simd_rtm::base_vec3<T>& rhs)
+            requires(!std::is_same_v<base_t, simd_rtm::base_vec3<T>>)
+            : base_t(rhs.get_x(), rhs.get_y(), rhs.get_z())
         {
         }
 
@@ -91,6 +105,259 @@ namespace move::math
         MVM_INLINE vec3(const vec2<OtherT, OtherAccel>& vec, const T& z = 0) :
             base_t(vec.get_x(), vec.get_y(), z)
         {
+        }
+
+        // Public operations return the public wrapper, never the backend type.
+    public:
+        MVM_INLINE_NODISCARD static vec3 from_array(const T* src)
+        {
+            return vec3(base_t::from_array(src));
+        }
+
+        MVM_INLINE vec3& load_array(const T* src)
+        {
+            base_t::load_array(src);
+            return *this;
+        }
+
+        MVM_INLINE_NODISCARD vec3 operator+(const vec3& rhs) const
+        {
+            return vec3(base_t::operator+(rhs));
+        }
+
+        MVM_INLINE_NODISCARD vec3 operator-(const vec3& rhs) const
+        {
+            return vec3(base_t::operator-(rhs));
+        }
+
+        MVM_INLINE_NODISCARD vec3 operator*(const vec3& rhs) const
+        {
+            return vec3(base_t::operator*(rhs));
+        }
+
+        MVM_INLINE_NODISCARD vec3 operator/(const vec3& rhs) const
+        {
+            return vec3(base_t::operator/(rhs));
+        }
+
+        MVM_INLINE_NODISCARD vec3 operator+(const T& rhs) const
+        {
+            return vec3(base_t::operator+(rhs));
+        }
+
+        MVM_INLINE_NODISCARD vec3 operator-(const T& rhs) const
+        {
+            return vec3(base_t::operator-(rhs));
+        }
+
+        MVM_INLINE_NODISCARD vec3 operator*(const T& rhs) const
+        {
+            return vec3(base_t::operator*(rhs));
+        }
+
+        MVM_INLINE_NODISCARD vec3 operator/(const T& rhs) const
+        {
+            return vec3(base_t::operator/(rhs));
+        }
+
+        MVM_INLINE_NODISCARD vec3 operator-() const
+        {
+            return vec3(base_t::operator-());
+        }
+
+        MVM_INLINE_NODISCARD vec3 normalized() const
+            requires std::is_floating_point_v<T>
+        {
+            return vec3(base_t::normalized());
+        }
+
+        MVM_INLINE vec3& normalize()
+            requires std::is_floating_point_v<T>
+        {
+            base_t::normalize();
+            return *this;
+        }
+
+        MVM_INLINE vec3& fill(const T& value)
+        {
+            base_t::fill(value);
+            return *this;
+        }
+
+        MVM_INLINE vec3& set(const T& x, const T& y, const T& z)
+        {
+            base_t::set(x, y, z);
+            return *this;
+        }
+
+        MVM_INLINE vec3& set_zero()
+        {
+            base_t::set_zero();
+            return *this;
+        }
+
+        MVM_INLINE_NODISCARD static vec3 cross(const vec3& a,
+                                               const vec3& b) noexcept
+        {
+            return vec3(base_t::cross(a, b));
+        }
+
+        MVM_INLINE_NODISCARD static vec3 reflect(const vec3& incident,
+                                                 const vec3& normal) noexcept
+        {
+            return vec3(base_t::reflect(incident, normal));
+        }
+
+        MVM_INLINE_NODISCARD static vec3 refract(const vec3& incident,
+                                                 const vec3& normal,
+                                                 T ior) noexcept
+        {
+            return vec3(base_t::refract(incident, normal, ior));
+        }
+
+        MVM_INLINE_NODISCARD static vec3 lerp_unclamped(const vec3& a,
+                                                        const vec3& b,
+                                                        T t) noexcept
+        {
+            return vec3(base_t::lerp_unclamped(a, b, t));
+        }
+
+        MVM_INLINE_NODISCARD static vec3 lerp_unclamped(const vec3& a,
+                                                        const vec3& b,
+                                                        const vec3& t) noexcept
+        {
+            return vec3(base_t::lerp_unclamped(a, b, t));
+        }
+
+        MVM_INLINE_NODISCARD static vec3 lerp(const vec3& a,
+                                              const vec3& b,
+                                              T t) noexcept
+        {
+            return vec3(base_t::lerp(a, b, t));
+        }
+
+        MVM_INLINE_NODISCARD static vec3 lerp(const vec3& a,
+                                              const vec3& b,
+                                              const vec3& t) noexcept
+        {
+            return vec3(base_t::lerp(a, b, t));
+        }
+
+        MVM_INLINE_NODISCARD static vec3 min(const vec3& a,
+                                             const vec3& b) noexcept
+        {
+            return vec3(base_t::min(a, b));
+        }
+
+        MVM_INLINE_NODISCARD static vec3 max(const vec3& a,
+                                             const vec3& b) noexcept
+        {
+            return vec3(base_t::max(a, b));
+        }
+
+        MVM_INLINE_NODISCARD static vec3 clamp(const vec3& value,
+                                               const vec3& minimum,
+                                               const vec3& maximum) noexcept
+        {
+            return vec3(base_t::clamp(value, minimum, maximum));
+        }
+
+        MVM_INLINE_NODISCARD static vec3 clamp(const vec3& value,
+                                               const T& minimum,
+                                               const T& maximum) noexcept
+        {
+            return vec3(base_t::clamp(value, minimum, maximum));
+        }
+
+        MVM_INLINE_NODISCARD static vec3 filled(T value) noexcept
+        {
+            return vec3(base_t::filled(value));
+        }
+
+        MVM_INLINE_NODISCARD static vec3 infinity() noexcept
+        {
+            return vec3(base_t::infinity());
+        }
+
+        MVM_INLINE_NODISCARD static vec3 negative_infinity() noexcept
+        {
+            return vec3(base_t::negative_infinity());
+        }
+
+        MVM_INLINE_NODISCARD static vec3 nan() noexcept
+        {
+            return vec3(base_t::nan());
+        }
+
+        MVM_INLINE_NODISCARD static vec3 zero() noexcept
+        {
+            return vec3(base_t::zero());
+        }
+
+        MVM_INLINE_NODISCARD static vec3 one() noexcept
+        {
+            return vec3(base_t::one());
+        }
+
+        MVM_INLINE_NODISCARD static vec3 x_axis() noexcept
+        {
+            return vec3(base_t::x_axis());
+        }
+
+        MVM_INLINE_NODISCARD static vec3 y_axis() noexcept
+        {
+            return vec3(base_t::y_axis());
+        }
+
+        MVM_INLINE_NODISCARD static vec3 z_axis() noexcept
+        {
+            return vec3(base_t::z_axis());
+        }
+
+        MVM_INLINE_NODISCARD static vec3 left() noexcept
+        {
+            return vec3(base_t::left());
+        }
+
+        MVM_INLINE_NODISCARD static vec3 right() noexcept
+        {
+            return vec3(base_t::right());
+        }
+
+        MVM_INLINE_NODISCARD static vec3 down() noexcept
+        {
+            return vec3(base_t::down());
+        }
+
+        MVM_INLINE_NODISCARD static vec3 up() noexcept
+        {
+            return vec3(base_t::up());
+        }
+
+        MVM_INLINE_NODISCARD static vec3 backward() noexcept
+        {
+            return vec3(base_t::backward());
+        }
+
+        MVM_INLINE_NODISCARD static vec3 forward() noexcept
+        {
+            return vec3(base_t::forward());
+        }
+
+        MVM_INLINE_NODISCARD static vec3 abs(const vec3& value) noexcept
+        {
+            return vec3(base_t::abs(value));
+        }
+
+        MVM_INLINE_NODISCARD static vec3 sign(const vec3& value) noexcept
+        {
+            return vec3(base_t::sign(value));
+        }
+
+        MVM_INLINE_NODISCARD static vec3 project_onto_plane(
+            const vec3& value, const vec3& plane_normal) noexcept
+        {
+            return vec3(base_t::project_onto_plane(value, plane_normal));
         }
 
         // Acceleration conversions
@@ -141,7 +408,7 @@ namespace move::math
 
         // Swizzles
     public:
-        using vec2_t = vec2<T, Accel>;
+        using vec2_t = vec2<T, Acceleration::Scalar>;
         MVM_INLINE_NODISCARD vec2_t xy() const
         {
             return vec2_t(base_t::get_x(), base_t::get_y());
@@ -318,23 +585,9 @@ namespace move::math
         const vec3<T, Accel>& b,
         const T& epsilon = std::numeric_limits<T>::epsilon())
     {
-        if constexpr (vec3<T, Accel>::acceleration == Acceleration::RTM)
-        {
-            return rtm::vector_all_near_equal3(a.to_rtm(), b.to_rtm(),
-                                               epsilon);
-        }
-        else
-        {
-            T aloaded[3];
-            T bloaded[3];
-
-            a.store_array(aloaded);
-            b.store_array(bloaded);
-
-            return approx_equal(aloaded[0], bloaded[0], epsilon) &&
-                   approx_equal(aloaded[1], bloaded[1], epsilon) &&
-                   approx_equal(aloaded[2], bloaded[2], epsilon);
-        }
+        return approx_equal(a.get_x(), b.get_x(), epsilon) &&
+               approx_equal(a.get_y(), b.get_y(), epsilon) &&
+               approx_equal(a.get_z(), b.get_z(), epsilon);
     }
 
     namespace traits

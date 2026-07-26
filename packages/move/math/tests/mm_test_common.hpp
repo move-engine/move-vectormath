@@ -2,21 +2,40 @@
 
 #include <cstddef>
 #include <cstring>
+#include <move/meta/type_utils.hpp>
 #include <type_traits>
 #include <vector>
 #include "move/string.hpp"
 #define REPEAT_FOR_EACH_TYPE_WRAPPER(op, vectype)                \
+    template <move::math::Acceleration Accel, typename Type>     \
+    inline void op##_one()                                       \
+    {                                                            \
+        using tested_type = vectype<Type, Accel>;                \
+        DYNAMIC_SECTION(move::meta::type_name<tested_type>())    \
+        {                                                        \
+            op<tested_type>();                                   \
+        }                                                        \
+    }                                                            \
     template <move::math::Acceleration Accel, typename... Types> \
     inline void op##_multi()                                     \
     {                                                            \
-        (op<vectype<Types, Accel>>(), ...);                      \
+        (op##_one<Accel, Types>(), ...);                         \
     }
 
-#define REPEAT_FOR_EACH_TYPE_WRAPPER_NOACCEL(op, tgtype) \
-    template <typename... Types>                         \
-    inline void op##_multi()                             \
-    {                                                    \
-        (op<tgtype<Types>>(), ...);                      \
+#define REPEAT_FOR_EACH_TYPE_WRAPPER_NOACCEL(op, tgtype)      \
+    template <typename Type>                                  \
+    inline void op##_one()                                    \
+    {                                                         \
+        using tested_type = tgtype<Type>;                     \
+        DYNAMIC_SECTION(move::meta::type_name<tested_type>()) \
+        {                                                     \
+            op<tested_type>();                                \
+        }                                                     \
+    }                                                         \
+    template <typename... Types>                              \
+    inline void op##_multi()                                  \
+    {                                                         \
+        (op##_one<Types>(), ...);                             \
     }
 
 inline const char* alloc_appended_name(move::string_view lhs,
@@ -75,8 +94,8 @@ struct replay_archive
     void operator()(Args&... args)
     {
         std::size_t index = 0;
-        ((args = static_cast<std::remove_reference_t<Args>>(
-              values.at(index++))),
+        ((args =
+              static_cast<std::remove_reference_t<Args>>(values.at(index++))),
          ...);
     }
 };

@@ -1,5 +1,6 @@
 #pragma once
 #include <cmath>
+#include <cstdint>
 #include <limits>
 #include <type_traits>
 
@@ -24,15 +25,19 @@ namespace move::math
     };
 
     template <typename T>
-    MVM_INLINE_NODISCARD T sqrt(const T& value)
+    using geometry_scalar_t =
+        std::conditional_t<std::is_integral_v<T>, double, T>;
+
+    template <typename T>
+    MVM_INLINE_NODISCARD geometry_scalar_t<T> sqrt(const T& value)
     {
-        return std::sqrt(value);
+        return std::sqrt(static_cast<geometry_scalar_t<T>>(value));
     }
 
     template <typename T>
-    MVM_INLINE_NODISCARD T sqrt_reciprocal(const T& value)
+    MVM_INLINE_NODISCARD geometry_scalar_t<T> sqrt_reciprocal(const T& value)
     {
-        return T(1) / std::sqrt(value);
+        return geometry_scalar_t<T>(1) / math::sqrt(value);
     }
 
     template <typename T>
@@ -86,14 +91,7 @@ namespace move::math
     template <typename T>
     MVM_INLINE_NODISCARD constexpr T saturate(T value)
     {
-        if constexpr (std::is_integral_v<T>)
-        {
-            return value == 0 ? 0 : 1;
-        }
-        else
-        {
-            return clamp(value, T(0), T(1));
-        }
+        return clamp(value, T(0), T(1));
     }
 
     template <typename T>
@@ -335,9 +333,7 @@ namespace move::math
     {
         template <typename Vec, typename Scalar>
         MVM_INLINE_NODISCARD Vec refract_ior_relative_to_air(
-            const Vec& incident,
-            const Vec& normal,
-            Scalar ior) noexcept
+            const Vec& incident, const Vec& normal, Scalar ior) noexcept
         {
             if (ior <= Scalar(0))
             {
@@ -358,8 +354,7 @@ namespace move::math
                 return Vec::zero();
             }
 
-            return incident * eta +
-                   working_normal * (eta * cos_i - sqrt(k));
+            return incident * eta + working_normal * (eta * cos_i - sqrt(k));
         }
     }  // namespace detail
 
@@ -381,8 +376,17 @@ namespace move::math
         requires std::is_floating_point_v<T1> || std::is_floating_point_v<T2>
     {
         using type_to_compare = EpsilonT;
-        return abs(static_cast<type_to_compare>(a) -
-                   static_cast<type_to_compare>(b)) <= epsilon;
+        const type_to_compare lhs = static_cast<type_to_compare>(a);
+        const type_to_compare rhs = static_cast<type_to_compare>(b);
+        if (lhs == rhs)
+        {
+            return true;
+        }
+        if (!std::isfinite(lhs) || !std::isfinite(rhs))
+        {
+            return false;
+        }
+        return abs(lhs - rhs) <= epsilon;
     }
 
     template <typename T1, typename T2>
@@ -399,21 +403,76 @@ namespace move::math
         const T1& a,
         const T2& b,
         const EpsilonT& epsilon = std::numeric_limits<EpsilonT>::epsilon())
+        requires std::is_arithmetic_v<T1> && std::is_arithmetic_v<T2> &&
+                 std::is_arithmetic_v<EpsilonT>
     {
-        using type_to_compare = EpsilonT;
-        if constexpr (std::is_unsigned_v<type_to_compare>)
+        if constexpr (std::is_integral_v<T1> && std::is_integral_v<T2> &&
+                      std::is_integral_v<EpsilonT>)
         {
-            type_to_compare min;
-            type_to_compare max;
-            minmax(static_cast<type_to_compare>(a),
-                   static_cast<type_to_compare>(b), min, max);
-            return max - min <= epsilon;
+            if constexpr (std::is_signed_v<EpsilonT>)
+            {
+                if (epsilon < EpsilonT(0))
+                {
+                    return false;
+                }
+            }
+
+            const auto magnitude = [](auto value) -> std::uintmax_t
+            {
+                using value_type = decltype(value);
+                if constexpr (std::is_signed_v<value_type>)
+                {
+                    return value < value_type(0)
+                               ? std::uintmax_t(-(value + value_type(1))) + 1
+                               : std::uintmax_t(value);
+                }
+                else
+                {
+                    return std::uintmax_t(value);
+                }
+            };
+
+            const bool a_negative =
+                std::is_signed_v<T1> && a < static_cast<T1>(0);
+            const bool b_negative =
+                std::is_signed_v<T2> && b < static_cast<T2>(0);
+            const std::uintmax_t a_magnitude = magnitude(a);
+            const std::uintmax_t b_magnitude = magnitude(b);
+            const std::uintmax_t allowed = std::uintmax_t(epsilon);
+
+            if (a_negative != b_negative)
+            {
+                return a_magnitude <= allowed &&
+                       b_magnitude <= allowed - a_magnitude;
+            }
+
+            const std::uintmax_t difference = a_magnitude > b_magnitude
+                                                  ? a_magnitude - b_magnitude
+                                                  : b_magnitude - a_magnitude;
+            return difference <= allowed;
         }
         else
         {
-            return abs<type_to_compare>(static_cast<type_to_compare>(a) -
-                                        static_cast<type_to_compare>(b)) <=
-                   epsilon;
+            using type_to_compare = std::common_type_t<T1, T2, EpsilonT>;
+            const type_to_compare lhs = static_cast<type_to_compare>(a);
+            const type_to_compare rhs = static_cast<type_to_compare>(b);
+            const type_to_compare tolerance =
+                static_cast<type_to_compare>(epsilon);
+
+            if (lhs == rhs)
+            {
+                return true;
+            }
+            if (tolerance < type_to_compare(0) || !std::isfinite(lhs) ||
+                !std::isfinite(rhs))
+            {
+                return false;
+            }
+
+            const type_to_compare difference = math::abs(lhs - rhs);
+            const type_to_compare scale = math::max(
+                type_to_compare(1), math::max(math::abs(lhs), math::abs(rhs)));
+            return difference <= tolerance || difference <= tolerance * scale;
         }
     }
 }  // namespace move::math

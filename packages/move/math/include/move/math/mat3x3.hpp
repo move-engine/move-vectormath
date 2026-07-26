@@ -99,36 +99,18 @@ namespace move::math
         MVM_INLINE void store_array(T* out) const
         {
             using namespace rtm;
-
-            T temp[4 * 4];
             for (uint8_t i = 0; i < 3; i++)
             {
-                vector_store(matrix_get_axis(_value, (axis3)i), temp + i * 4);
-            }
-
-            for (uint8_t i = 0; i < 3; i++)
-            {
-                out[i * 3] = temp[i * 4];
-                out[i * 3 + 1] = temp[i * 4 + 1];
-                out[i * 3 + 2] = temp[i * 4 + 2];
+                vector_store3(matrix_get_axis(_value, (axis3)i), out + i * 3);
             }
         }
 
         MVM_INLINE void load_array(const T* in)
         {
-            T temp[3 * 4];
-            for (uint8_t i = 0; i < 3; i++)
-            {
-                temp[i * 4] = in[i * 3];
-                temp[i * 4 + 1] = in[i * 3 + 1];
-                temp[i * 4 + 2] = in[i * 3 + 2];
-                temp[i * 4 + 3] = T(0);
-            }
-
             using namespace rtm;
-            rtm_vec4_t x = vector_load(temp);
-            rtm_vec4_t y = vector_load(temp + 4);
-            rtm_vec4_t z = vector_load(temp + 8);
+            rtm_vec4_t x = vector_load3(in);
+            rtm_vec4_t y = vector_load3(in + 3);
+            rtm_vec4_t z = vector_load3(in + 6);
             _value = matrix_set(x, y, z);
         }
 
@@ -369,7 +351,6 @@ namespace move::math
         const mat3x3<component_type>& mat)
     {
         using namespace rtm;
-        using Accel = move::math::Acceleration;
         using vector_type = typename simd_rtm::detail::v3<component_type>::type;
 
         vector_type v = vec.to_rtm();
@@ -381,6 +362,8 @@ namespace move::math
     struct storage_mat3x3
     {
     public:
+        using component_type = T;
+
         union
         {
             T data[9];
@@ -440,6 +423,13 @@ namespace move::math
         {
             archive(data);
         }
+
+        inline operator mat3x3<T>() const
+        {
+            mat3x3<T> result;
+            result.load_array(data);
+            return result;
+        }
     };
 
     using fast_float3x3 = mat3x3<float>;
@@ -453,6 +443,21 @@ namespace move::math
 
     using float3x3 = mat3x3<float>;
     using double3x3 = mat3x3<double>;
+
+    namespace traits
+    {
+        template <typename T, typename Wrapper>
+        constexpr bool is_matrix_type_v<mat3x3<T, Wrapper>> = true;
+
+        template <typename T, typename Wrapper>
+        constexpr uint32_t component_count_v<mat3x3<T, Wrapper>> = 9;
+
+        template <typename T>
+        constexpr bool is_matrix_type_v<storage_mat3x3<T>> = true;
+
+        template <typename T>
+        constexpr uint32_t component_count_v<storage_mat3x3<T>> = 9;
+    }  // namespace traits
     using storage_float3x3 = storage_mat3x3<float>;
     using storage_double3x3 = storage_mat3x3<double>;
 
@@ -464,23 +469,20 @@ namespace move::math
     {
         using fast_vec3_t = typename mat3x3<T>::fast_vec3_t;
 
-        return approx_equal(
-                   fast_vec3_t::from_rtm(
-                       rtm::matrix_get_axis(a.to_rtm(), rtm::axis3::x)),
-                   fast_vec3_t::from_rtm(
-                       rtm::matrix_get_axis(b.to_rtm(), rtm::axis3::x)),
-                   epsilon) &&
-               approx_equal(
-                   fast_vec3_t::from_rtm(
-                       rtm::matrix_get_axis(a.to_rtm(), rtm::axis3::y)),
-                   fast_vec3_t::from_rtm(
-                       rtm::matrix_get_axis(b.to_rtm(), rtm::axis3::y)),
-                   epsilon) &&
-               approx_equal(
-                   fast_vec3_t::from_rtm(
-                       rtm::matrix_get_axis(a.to_rtm(), rtm::axis3::z)),
-                   fast_vec3_t::from_rtm(
-                       rtm::matrix_get_axis(b.to_rtm(), rtm::axis3::z)),
-                   epsilon);
+        return approx_equal(fast_vec3_t::from_rtm(rtm::matrix_get_axis(
+                                a.to_rtm(), rtm::axis3::x)),
+                            fast_vec3_t::from_rtm(rtm::matrix_get_axis(
+                                b.to_rtm(), rtm::axis3::x)),
+                            epsilon) &&
+               approx_equal(fast_vec3_t::from_rtm(rtm::matrix_get_axis(
+                                a.to_rtm(), rtm::axis3::y)),
+                            fast_vec3_t::from_rtm(rtm::matrix_get_axis(
+                                b.to_rtm(), rtm::axis3::y)),
+                            epsilon) &&
+               approx_equal(fast_vec3_t::from_rtm(rtm::matrix_get_axis(
+                                a.to_rtm(), rtm::axis3::z)),
+                            fast_vec3_t::from_rtm(rtm::matrix_get_axis(
+                                b.to_rtm(), rtm::axis3::z)),
+                            epsilon);
     }
 }  // namespace move::math

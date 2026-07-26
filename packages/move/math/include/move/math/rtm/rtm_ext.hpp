@@ -27,7 +27,8 @@ namespace rtm::ext
         // Largely taken from GLM's implementation
         using namespace rtm;
         const vec_type look_dir(vector_normalize3(vector_sub(eye, center)));
-        const vec_type right_dir(vector_normalize3(vector_cross3(up, look_dir)));
+        const vec_type right_dir(
+            vector_normalize3(vector_cross3(up, look_dir)));
         const vec_type actual_up_dir(vector_cross3(look_dir, right_dir));
 
         mat_type result = matrix_identity();
@@ -62,7 +63,8 @@ namespace rtm::ext
         // Largely taken from GLM's implementation
         using namespace rtm;
         const vec_type look_dir(vector_normalize3(vector_sub(center, eye)));
-        const vec_type right_dir(vector_normalize3(vector_cross3(up, look_dir)));
+        const vec_type right_dir(
+            vector_normalize3(vector_cross3(up, look_dir)));
         const vec_type actual_up_dir(vector_cross3(look_dir, right_dir));
 
         mat_type result = matrix_identity();
@@ -468,15 +470,13 @@ namespace rtm::ext
     MVM_INLINE_NODISCARD quatf quat_inverse(const quatf& input)
     {
         // Based on DXM's implementation
-        using quat_t = quatf;
         using vector_t = vector4f;
         using value_t = float;
-        using mask_t = mask4f;
 
         vector_t conj = quat_to_vector(quat_conjugate(input));
         value_t lsq = quat_length_squared(input);
         vector_t lsqv = vector_set(lsq);
-        if (lsq <= std::numeric_limits<value_t>::epsilon())
+        if (lsq == value_t(0))
         {
             return quat_set(value_t(0), value_t(0), value_t(0), value_t(0));
         }
@@ -488,15 +488,13 @@ namespace rtm::ext
     MVM_INLINE_NODISCARD quatd quat_inverse(const quatd& input)
     {
         // Based on DXM's implementation
-        using quat_t = quatd;
         using vector_t = vector4d;
         using value_t = double;
-        using mask_t = mask4d;
 
         vector_t conj = quat_to_vector(quat_conjugate(input));
         value_t lsq = quat_length_squared(input);
         vector_t lsqv = vector_set(lsq);
-        if (lsq <= std::numeric_limits<value_t>::epsilon())
+        if (lsq == value_t(0))
         {
             return quat_set(value_t(0), value_t(0), value_t(0), value_t(0));
         }
@@ -587,156 +585,108 @@ namespace rtm::ext
     RTM_DISABLE_SECURITY_COOKIE_CHECK
     MVM_INLINE_NODISCARD quatf quat_ln(const quatf& input)
     {
-        // Based on DirectXMath implementation
-        // For a unit quaternion q = [cos(θ/2), sin(θ/2)*n], ln(q) = [0, θ*n]
         using namespace rtm;
-        
         using value_t = float;
-        static constexpr value_t epsilon = value_t(0.00001);
-        
-        vector4f q = quat_to_vector(input);
-        value_t qw = vector_get_w(q);
-        
-        // Clamp qw to [-1, 1] to avoid numerical issues with acos
-        qw = move::math::clamp(qw, value_t(-1), value_t(1));
-        
-        // If quaternion is close to identity, return zero
-        if (abs(qw) >= value_t(1) - epsilon)
+        const vector4f q = quat_to_vector(input);
+        const value_t qx = vector_get_x(q);
+        const value_t qy = vector_get_y(q);
+        const value_t qz = vector_get_z(q);
+        const value_t qw = vector_get_w(q);
+        const value_t vector_length =
+            move::math::sqrt(qx * qx + qy * qy + qz * qz);
+        const value_t quaternion_length =
+            move::math::sqrt(vector_length * vector_length + qw * qw);
+
+        if (quaternion_length == value_t(0))
         {
             return quat_set(value_t(0), value_t(0), value_t(0), value_t(0));
         }
-        
-        // Calculate theta = acos(|qw|)
-        value_t theta = acos(abs(qw));
-        value_t sin_theta = sin(theta);
-        
-        // If sin(theta) is too small, return zero to avoid division by zero
-        if (abs(sin_theta) < epsilon)
+
+        const value_t scalar = move::math::log(quaternion_length);
+        if (vector_length == value_t(0))
         {
-            return quat_set(value_t(0), value_t(0), value_t(0), value_t(0));
+            // The logarithm of a negative real quaternion has an arbitrary
+            // axis. Choose +X to keep exp(ln(q)) equal to q.
+            return qw < value_t(0)
+                       ? quat_set(move::math::pi<value_t>(), value_t(0),
+                                  value_t(0), scalar)
+                       : quat_set(value_t(0), value_t(0), value_t(0), scalar);
         }
-        
-        // Calculate scale factor: theta / sin(theta)
-        value_t scale = theta / sin_theta;
-        
-        // Apply scale to xyz components, set w to zero
-        value_t qx = vector_get_x(q) * scale;
-        value_t qy = vector_get_y(q) * scale;
-        value_t qz = vector_get_z(q) * scale;
-        
-        return quat_set(qx, qy, qz, value_t(0));
+
+        const value_t angle = move::math::atan2(vector_length, qw);
+        const value_t scale = angle / vector_length;
+        return quat_set(qx * scale, qy * scale, qz * scale, scalar);
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
     MVM_INLINE_NODISCARD quatd quat_ln(const quatd& input)
     {
-        // Based on DirectXMath implementation
-        // For a unit quaternion q = [cos(θ/2), sin(θ/2)*n], ln(q) = [0, θ*n]
         using namespace rtm;
-        
         using value_t = double;
-        static constexpr value_t epsilon = value_t(0.00001);
-        
-        vector4d q = quat_to_vector(input);
-        value_t qw = vector_get_w(q);
-        
-        // Clamp qw to [-1, 1] to avoid numerical issues with acos
-        qw = move::math::clamp(qw, value_t(-1), value_t(1));
-        
-        // If quaternion is close to identity, return zero
-        if (abs(qw) >= value_t(1) - epsilon)
+        const vector4d q = quat_to_vector(input);
+        const value_t qx = vector_get_x(q);
+        const value_t qy = vector_get_y(q);
+        const value_t qz = vector_get_z(q);
+        const value_t qw = vector_get_w(q);
+        const value_t vector_length =
+            move::math::sqrt(qx * qx + qy * qy + qz * qz);
+        const value_t quaternion_length =
+            move::math::sqrt(vector_length * vector_length + qw * qw);
+
+        if (quaternion_length == value_t(0))
         {
             return quat_set(value_t(0), value_t(0), value_t(0), value_t(0));
         }
-        
-        // Calculate theta = acos(|qw|)
-        value_t theta = acos(abs(qw));
-        value_t sin_theta = sin(theta);
-        
-        // If sin(theta) is too small, return zero to avoid division by zero
-        if (abs(sin_theta) < epsilon)
+
+        const value_t scalar = move::math::log(quaternion_length);
+        if (vector_length == value_t(0))
         {
-            return quat_set(value_t(0), value_t(0), value_t(0), value_t(0));
+            return qw < value_t(0)
+                       ? quat_set(move::math::pi<value_t>(), value_t(0),
+                                  value_t(0), scalar)
+                       : quat_set(value_t(0), value_t(0), value_t(0), scalar);
         }
-        
-        // Calculate scale factor: theta / sin(theta)
-        value_t scale = theta / sin_theta;
-        
-        // Apply scale to xyz components, set w to zero
-        value_t qx = vector_get_x(q) * scale;
-        value_t qy = vector_get_y(q) * scale;
-        value_t qz = vector_get_z(q) * scale;
-        
-        return quat_set(qx, qy, qz, value_t(0));
+
+        const value_t angle = move::math::atan2(vector_length, qw);
+        const value_t scale = angle / vector_length;
+        return quat_set(qx * scale, qy * scale, qz * scale, scalar);
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
     MVM_INLINE_NODISCARD quatf quat_exp(const quatf& input)
     {
-        // Based on DirectXMath implementation
-        // For a pure quaternion q = [0, θ*n], exp(q) = [cos(θ), sin(θ)*n]
         using namespace rtm;
-        
         using value_t = float;
-        static constexpr value_t epsilon = value_t(0.00001);
-        
-        vector4f q = quat_to_vector(input);
-        value_t qx = vector_get_x(q);
-        value_t qy = vector_get_y(q);
-        value_t qz = vector_get_z(q);
-        
-        // Calculate the magnitude of the vector part (theta)
-        value_t theta = sqrt(qx * qx + qy * qy + qz * qz);
-        
-        // If theta is very small, return identity quaternion
-        if (theta < epsilon)
-        {
-            return quat_set(value_t(0), value_t(0), value_t(0), value_t(1));
-        }
-        
-        // Calculate sin(theta) and cos(theta)
-        value_t sin_theta = sin(theta);
-        value_t cos_theta = cos(theta);
-        
-        // Calculate scale factor: sin(theta) / theta
-        value_t scale = sin_theta / theta;
-        
-        // Result: [sin(theta)/theta * xyz, cos(theta)]
-        return quat_set(qx * scale, qy * scale, qz * scale, cos_theta);
+        const vector4f q = quat_to_vector(input);
+        const value_t qx = vector_get_x(q);
+        const value_t qy = vector_get_y(q);
+        const value_t qz = vector_get_z(q);
+        const value_t qw = vector_get_w(q);
+        const value_t angle = move::math::sqrt(qx * qx + qy * qy + qz * qz);
+        const value_t exponential = move::math::exp(qw);
+        const value_t scale =
+            angle == value_t(0) ? exponential
+                                : exponential * move::math::sin(angle) / angle;
+        return quat_set(qx * scale, qy * scale, qz * scale,
+                        exponential * move::math::cos(angle));
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
     MVM_INLINE_NODISCARD quatd quat_exp(const quatd& input)
     {
-        // Based on DirectXMath implementation
-        // For a pure quaternion q = [0, θ*n], exp(q) = [cos(θ), sin(θ)*n]
         using namespace rtm;
-        
         using value_t = double;
-        static constexpr value_t epsilon = value_t(0.00001);
-        
-        vector4d q = quat_to_vector(input);
-        value_t qx = vector_get_x(q);
-        value_t qy = vector_get_y(q);
-        value_t qz = vector_get_z(q);
-        
-        // Calculate the magnitude of the vector part (theta)
-        value_t theta = sqrt(qx * qx + qy * qy + qz * qz);
-        
-        // If theta is very small, return identity quaternion
-        if (theta < epsilon)
-        {
-            return quat_set(value_t(0), value_t(0), value_t(0), value_t(1));
-        }
-        
-        // Calculate sin(theta) and cos(theta)
-        value_t sin_theta = sin(theta);
-        value_t cos_theta = cos(theta);
-        
-        // Calculate scale factor: sin(theta) / theta
-        value_t scale = sin_theta / theta;
-        
-        // Result: [sin(theta)/theta * xyz, cos(theta)]
-        return quat_set(qx * scale, qy * scale, qz * scale, cos_theta);
+        const vector4d q = quat_to_vector(input);
+        const value_t qx = vector_get_x(q);
+        const value_t qy = vector_get_y(q);
+        const value_t qz = vector_get_z(q);
+        const value_t qw = vector_get_w(q);
+        const value_t angle = move::math::sqrt(qx * qx + qy * qy + qz * qz);
+        const value_t exponential = move::math::exp(qw);
+        const value_t scale =
+            angle == value_t(0) ? exponential
+                                : exponential * move::math::sin(angle) / angle;
+        return quat_set(qx * scale, qy * scale, qz * scale,
+                        exponential * move::math::cos(angle));
     }
 }  // namespace rtm::ext

@@ -1,9 +1,9 @@
 #pragma once
-#include <cassert>
 #include <rtm/mask4d.h>
 #include <rtm/mask4f.h>
 #include <rtm/vector4d.h>
 #include <rtm/vector4f.h>
+#include <cassert>
 
 #include <move/math/common.hpp>
 #include <move/math/macros.hpp>
@@ -40,6 +40,17 @@ namespace move::math::simd_rtm
     private:
         using rtm_vec3_t = typename wrapper_type::type;
         rtm_vec3_t _value;
+
+        MVM_INLINE_NODISCARD static rtm_vec3_t normalize3(
+            const rtm_vec3_t& value)
+        {
+            const T length_squared = rtm::vector_length_squared3(value);
+            if (length_squared == T(0))
+            {
+                return rtm::vector_zero();
+            }
+            return rtm::vector_mul(value, T(1) / math::sqrt(length_squared));
+        }
 
         // Constructors
     public:
@@ -323,7 +334,7 @@ namespace move::math::simd_rtm
 
         MVM_INLINE_NODISCARD base_vec3 normalized() const
         {
-            return base_vec3(rtm::vector_normalize3(_value));
+            return base_vec3(normalize3(_value));
         }
 
         MVM_INLINE_NODISCARD T distance(const base_vec3& other) const
@@ -341,7 +352,7 @@ namespace move::math::simd_rtm
     public:
         MVM_INLINE base_vec3& normalize()
         {
-            _value = rtm::vector_normalize3(_value);
+            _value = normalize3(_value);
             return *this;
         }
 
@@ -428,7 +439,8 @@ namespace move::math::simd_rtm
         MVM_INLINE_NODISCARD static T angle_between_normalized_vectors(
             const base_vec3& v1, const base_vec3& v2) noexcept
         {
-            return math::acos(T(rtm::vector_dot3(v1._value, v2._value)));
+            return math::acos(math::clamp(
+                T(rtm::vector_dot3(v1._value, v2._value)), T(-1), T(1)));
         }
 
         /**
@@ -441,9 +453,14 @@ namespace move::math::simd_rtm
         MVM_INLINE_NODISCARD static T angle_between_vectors(
             const base_vec3& v1, const base_vec3& v2) noexcept
         {
-            auto v1norm = rtm::vector_normalize3(v1._value);
-            auto v2norm = rtm::vector_normalize3(v2._value);
-            return math::acos(T(rtm::vector_dot3(v1norm, v2norm)));
+            if (v1.length_squared() == T(0) || v2.length_squared() == T(0))
+            {
+                return T(0);
+            }
+            auto v1norm = normalize3(v1._value);
+            auto v2norm = normalize3(v2._value);
+            return math::acos(
+                math::clamp(T(rtm::vector_dot3(v1norm, v2norm)), T(-1), T(1)));
         }
 
         /**
@@ -477,8 +494,8 @@ namespace move::math::simd_rtm
                                                       const base_vec3& normal,
                                                       T ior) noexcept
         {
-            return move::math::detail::refract_ior_relative_to_air(
-                incident, normal, ior);
+            return move::math::detail::refract_ior_relative_to_air(incident,
+                                                                   normal, ior);
         }
 
         /**
@@ -806,14 +823,15 @@ namespace move::math::simd_rtm
          * @brief Projects a vector onto a plane defined by its normal
          *
          * @param v The vector to project
-         * @param plane_normal The normal vector of the plane (should be normalized)
+         * @param plane_normal The normal vector of the plane (should be
+         * normalized)
          * @return base_vec3 The projection of v onto the plane
          */
         MVM_INLINE_NODISCARD static base_vec3 project_onto_plane(
             const base_vec3& v, const base_vec3& plane_normal) noexcept
         {
-            // Project v onto the plane by subtracting the component parallel to the normal
-            // projection = v - (v · n) * n
+            // Project v onto the plane by subtracting the component parallel to
+            // the normal projection = v - (v · n) * n
             auto dot_vn = dot(v, plane_normal);
             auto parallel_component = plane_normal * dot_vn;
             return v - parallel_component;

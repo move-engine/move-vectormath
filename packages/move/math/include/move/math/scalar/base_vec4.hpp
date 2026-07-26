@@ -325,41 +325,65 @@ namespace move::math::scalar
 
         // Mathematical operations
     public:
-        MVM_INLINE_NODISCARD T length() const
+        MVM_INLINE_NODISCARD geometry_scalar_t<T> length() const
         {
-            return math::sqrt(length_squared());
+            using result_type = geometry_scalar_t<T>;
+            const result_type px = static_cast<result_type>(x);
+            const result_type py = static_cast<result_type>(y);
+            const result_type pz = static_cast<result_type>(z);
+            const result_type pw = static_cast<result_type>(w);
+            return math::sqrt(px * px + py * py + pz * pz + pw * pw);
         }
 
-        MVM_INLINE_NODISCARD T length_squared() const
+        MVM_INLINE_NODISCARD geometry_scalar_t<T> length_squared() const
         {
-            return x * x + y * y + z * z + w * w;
+            using result_type = geometry_scalar_t<T>;
+            const result_type px = static_cast<result_type>(x);
+            const result_type py = static_cast<result_type>(y);
+            const result_type pz = static_cast<result_type>(z);
+            const result_type pw = static_cast<result_type>(w);
+            return px * px + py * py + pz * pz + pw * pw;
         }
 
-        MVM_INLINE_NODISCARD T reciprocal_length() const
+        MVM_INLINE_NODISCARD geometry_scalar_t<T> reciprocal_length() const
         {
-            return math::sqrt_reciprocal(length_squared());
+            return geometry_scalar_t<T>(1) / length();
         }
 
         MVM_INLINE_NODISCARD base_vec4 normalized() const
+            requires std::is_floating_point_v<T>
         {
-            return *this / length();
+            const T vector_length = length();
+            return vector_length == T(0) ? base_vec4() : *this / vector_length;
         }
 
-        MVM_INLINE_NODISCARD T distance(const base_vec4& other) const
+        MVM_INLINE_NODISCARD geometry_scalar_t<T> distance_squared(
+            const base_vec4& other) const
         {
-            return (*this - other).length();
+            using result_type = geometry_scalar_t<T>;
+            const result_type dx =
+                static_cast<result_type>(x) - static_cast<result_type>(other.x);
+            const result_type dy =
+                static_cast<result_type>(y) - static_cast<result_type>(other.y);
+            const result_type dz =
+                static_cast<result_type>(z) - static_cast<result_type>(other.z);
+            const result_type dw =
+                static_cast<result_type>(w) - static_cast<result_type>(other.w);
+            return dx * dx + dy * dy + dz * dz + dw * dw;
         }
 
-        MVM_INLINE_NODISCARD T distance_squared(const base_vec4& other) const
+        MVM_INLINE_NODISCARD geometry_scalar_t<T> distance(
+            const base_vec4& other) const
         {
-            return (*this - other).length_squared();
+            return math::sqrt(distance_squared(other));
         }
 
         // Mutators
     public:
         MVM_INLINE base_vec4& normalize()
+            requires std::is_floating_point_v<T>
         {
-            *this /= length();
+            *this = normalized();
             return *this;
         }
 
@@ -479,10 +503,11 @@ namespace move::math::scalar
          * @param p2 The second point
          * @return T The distance between the two points
          */
-        MVM_INLINE_NODISCARD static T distance_between_points(
-            const base_vec4& p1, const base_vec4& p2) noexcept
+        MVM_INLINE_NODISCARD static geometry_scalar_t<T>
+        distance_between_points(const base_vec4& p1,
+                                const base_vec4& p2) noexcept
         {
-            return (p1 - p2).length();
+            return p1.distance(p2);
         }
 
         /*
@@ -491,10 +516,11 @@ namespace move::math::scalar
          * @param p1 The first point
          * @param p2 The second point
          */
-        MVM_INLINE_NODISCARD static T distance_between_points_squared(
-            const base_vec4& p1, const base_vec4& p2) noexcept
+        MVM_INLINE_NODISCARD static geometry_scalar_t<T>
+        distance_between_points_squared(const base_vec4& p1,
+                                        const base_vec4& p2) noexcept
         {
-            return (p1 - p2).length_squared();
+            return p1.distance_squared(p2);
         }
 
         /**
@@ -506,8 +532,9 @@ namespace move::math::scalar
          */
         MVM_INLINE_NODISCARD static T angle_between_normalized_vectors(
             const base_vec4& v1, const base_vec4& v2) noexcept
+            requires std::is_floating_point_v<T>
         {
-            return math::acos(dot(v1, v2));
+            return math::acos(math::clamp(dot(v1, v2), T(-1), T(1)));
         }
 
         /**
@@ -519,7 +546,12 @@ namespace move::math::scalar
          */
         MVM_INLINE_NODISCARD static T angle_between_vectors(
             const base_vec4& v1, const base_vec4& v2) noexcept
+            requires std::is_floating_point_v<T>
         {
+            if (v1.length_squared() == T(0) || v2.length_squared() == T(0))
+            {
+                return T(0);
+            }
             auto v1norm = v1.normalized();
             auto v2norm = v2.normalized();
             return angle_between_normalized_vectors(v1norm, v2norm);
@@ -609,10 +641,9 @@ namespace move::math::scalar
                                                    const base_vec4& v2,
                                                    T t) noexcept
         {
-            return base_vec4(math::lerp(v1.x, v2.x, t),
-                             math::lerp(v1.y, v2.y, t),
-                             math::lerp(v1.z, v2.z, t),
-                             math::lerp(v1.w, v2.w, t));
+            return base_vec4(
+                math::lerp(v1.x, v2.x, t), math::lerp(v1.y, v2.y, t),
+                math::lerp(v1.z, v2.z, t), math::lerp(v1.w, v2.w, t));
         }
 
         /**
@@ -774,7 +805,7 @@ namespace move::math::scalar
          */
         MVM_INLINE_NODISCARD static base_vec4 x_axis() noexcept
         {
-            return base_vec4(1, 0, 0);
+            return base_vec4(1, 0, 0, 0);
         }
 
         /**
@@ -785,7 +816,7 @@ namespace move::math::scalar
          */
         MVM_INLINE_NODISCARD static base_vec4 y_axis() noexcept
         {
-            return base_vec4(0, 1, 0);
+            return base_vec4(0, 1, 0, 0);
         }
 
         /**
@@ -796,7 +827,7 @@ namespace move::math::scalar
          */
         MVM_INLINE_NODISCARD static base_vec4 z_axis() noexcept
         {
-            return base_vec4(0, 0, 1);
+            return base_vec4(0, 0, 1, 0);
         }
 
         /**

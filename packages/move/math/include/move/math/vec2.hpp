@@ -62,10 +62,96 @@ namespace move::math
             return *this;
         }
 
-        // Conversions
+        // Public operations return the public wrapper, never the backend type.
     public:
+        MVM_INLINE_NODISCARD static vec2 from_array(const T* src)
+        {
+            return vec2(base_t::from_array(src));
+        }
+
+        MVM_INLINE vec2& load_array(const T* src)
+        {
+            base_t::load_array(src);
+            return *this;
+        }
+
+        MVM_INLINE_NODISCARD vec2 operator+(const vec2& other) const
+        {
+            return vec2(base_t::operator+(other));
+        }
+
+        MVM_INLINE_NODISCARD vec2 operator-(const vec2& other) const
+        {
+            return vec2(base_t::operator-(other));
+        }
+
+        MVM_INLINE_NODISCARD vec2 operator*(const vec2& other) const
+        {
+            return vec2(base_t::operator*(other));
+        }
+
+        MVM_INLINE_NODISCARD vec2 operator/(const vec2& other) const
+        {
+            return vec2(base_t::operator/(other));
+        }
+
+        MVM_INLINE_NODISCARD vec2 operator+(const T& scalar) const
+        {
+            return vec2(base_t::operator+(scalar));
+        }
+
+        MVM_INLINE_NODISCARD vec2 operator-(const T& scalar) const
+        {
+            return vec2(base_t::operator-(scalar));
+        }
+
+        MVM_INLINE_NODISCARD vec2 operator*(const T& scalar) const
+        {
+            return vec2(base_t::operator*(scalar));
+        }
+
+        MVM_INLINE_NODISCARD vec2 operator/(const T& scalar) const
+        {
+            return vec2(base_t::operator/(scalar));
+        }
+
+        MVM_INLINE_NODISCARD vec2 operator-() const
+        {
+            return vec2(base_t::operator-());
+        }
+
+        MVM_INLINE_NODISCARD vec2 normalized() const
+            requires std::is_floating_point_v<T>
+        {
+            return vec2(base_t::normalized());
+        }
+
+        MVM_INLINE vec2& normalize()
+            requires std::is_floating_point_v<T>
+        {
+            base_t::normalize();
+            return *this;
+        }
+
+        MVM_INLINE vec2& fill(const T& value)
+        {
+            base_t::fill(value);
+            return *this;
+        }
+
+        MVM_INLINE vec2& set(const T& x, const T& y)
+        {
+            base_t::set(x, y);
+            return *this;
+        }
+
+        MVM_INLINE vec2& set_zero()
+        {
+            base_t::set_zero();
+            return *this;
+        }
+
         // Assignment operators
-    public:
         MVM_INLINE vec2& operator+=(const vec2& other)
         {
             base_t::operator+=(other);
@@ -174,6 +260,16 @@ namespace move::math
 
     using vec2b = storage_byte2;
     using vec2sb = storage_sbyte2;
+
+    template <typename T, move::math::Acceleration Accel>
+    MVM_INLINE_NODISCARD bool approx_equal(
+        const vec2<T, Accel>& a,
+        const vec2<T, Accel>& b,
+        const T& epsilon = std::numeric_limits<T>::epsilon())
+    {
+        return approx_equal(a.get_x(), b.get_x(), epsilon) &&
+               approx_equal(a.get_y(), b.get_y(), epsilon);
+    }
 
     namespace traits
     {

@@ -62,13 +62,27 @@ namespace move::math
         }
 
         // implicit conversion from base_vec4_t
-        MVM_INLINE vec4(const scalar::base_vec4<T>& rhs) :
-            base_t(rhs.x, rhs.y, rhs.z, rhs.w)
+        MVM_INLINE vec4(const scalar::base_vec4<T>& rhs)
+            requires std::is_same_v<base_t, scalar::base_vec4<T>>
+            : base_t(rhs)
         {
         }
 
-        MVM_INLINE vec4(const simd_rtm::base_vec4<T>& rhs) :
-            base_t(rhs.get_x(), rhs.get_y(), rhs.get_z(), rhs.get_w())
+        MVM_INLINE vec4(const scalar::base_vec4<T>& rhs)
+            requires(!std::is_same_v<base_t, scalar::base_vec4<T>>)
+            : base_t(rhs.x, rhs.y, rhs.z, rhs.w)
+        {
+        }
+
+        MVM_INLINE vec4(const simd_rtm::base_vec4<T>& rhs)
+            requires std::is_same_v<base_t, simd_rtm::base_vec4<T>>
+            : base_t(rhs)
+        {
+        }
+
+        MVM_INLINE vec4(const simd_rtm::base_vec4<T>& rhs)
+            requires(!std::is_same_v<base_t, simd_rtm::base_vec4<T>>)
+            : base_t(rhs.get_x(), rhs.get_y(), rhs.get_z(), rhs.get_w())
         {
         }
 
@@ -106,6 +120,249 @@ namespace move::math
         {
         }
 
+        // Public operations return the public wrapper, never the backend type.
+    public:
+        MVM_INLINE_NODISCARD static vec4 from_array(const T* src)
+        {
+            return vec4(base_t::from_array(src));
+        }
+
+        MVM_INLINE vec4& load_array(const T* src)
+        {
+            base_t::load_array(src);
+            return *this;
+        }
+
+        MVM_INLINE_NODISCARD vec4 operator+(const vec4& rhs) const
+        {
+            return vec4(base_t::operator+(rhs));
+        }
+
+        MVM_INLINE_NODISCARD vec4 operator-(const vec4& rhs) const
+        {
+            return vec4(base_t::operator-(rhs));
+        }
+
+        MVM_INLINE_NODISCARD vec4 operator*(const vec4& rhs) const
+        {
+            return vec4(base_t::operator*(rhs));
+        }
+
+        MVM_INLINE_NODISCARD vec4 operator/(const vec4& rhs) const
+        {
+            return vec4(base_t::operator/(rhs));
+        }
+
+        MVM_INLINE_NODISCARD vec4 operator+(const T& rhs) const
+        {
+            return vec4(base_t::operator+(rhs));
+        }
+
+        MVM_INLINE_NODISCARD vec4 operator-(const T& rhs) const
+        {
+            return vec4(base_t::operator-(rhs));
+        }
+
+        MVM_INLINE_NODISCARD vec4 operator*(const T& rhs) const
+        {
+            return vec4(base_t::operator*(rhs));
+        }
+
+        MVM_INLINE_NODISCARD vec4 operator/(const T& rhs) const
+        {
+            return vec4(base_t::operator/(rhs));
+        }
+
+        MVM_INLINE_NODISCARD vec4 operator-() const
+        {
+            return vec4(base_t::operator-());
+        }
+
+        MVM_INLINE_NODISCARD vec4 normalized() const
+            requires std::is_floating_point_v<T>
+        {
+            return vec4(base_t::normalized());
+        }
+
+        MVM_INLINE vec4& normalize()
+            requires std::is_floating_point_v<T>
+        {
+            base_t::normalize();
+            return *this;
+        }
+
+        MVM_INLINE vec4& fill(const T& value)
+        {
+            base_t::fill(value);
+            return *this;
+        }
+
+        MVM_INLINE vec4& set(const T& x, const T& y, const T& z, const T& w)
+        {
+            base_t::set(x, y, z, w);
+            return *this;
+        }
+
+        MVM_INLINE vec4& set_zero()
+        {
+            base_t::set_zero();
+            return *this;
+        }
+
+        MVM_INLINE_NODISCARD static vec4 cross(const vec4& a,
+                                               const vec4& b,
+                                               const vec4& c) noexcept
+        {
+            return vec4(base_t::cross(a, b, c));
+        }
+
+        MVM_INLINE_NODISCARD static vec4 reflect(const vec4& incident,
+                                                 const vec4& normal) noexcept
+        {
+            return vec4(base_t::reflect(incident, normal));
+        }
+
+        MVM_INLINE_NODISCARD static vec4 refract(const vec4& incident,
+                                                 const vec4& normal,
+                                                 T ior) noexcept
+        {
+            return vec4(base_t::refract(incident, normal, ior));
+        }
+
+        MVM_INLINE_NODISCARD static vec4 lerp_unclamped(const vec4& a,
+                                                        const vec4& b,
+                                                        T t) noexcept
+        {
+            return vec4(base_t::lerp_unclamped(a, b, t));
+        }
+
+        MVM_INLINE_NODISCARD static vec4 lerp_unclamped(const vec4& a,
+                                                        const vec4& b,
+                                                        const vec4& t) noexcept
+        {
+            return vec4(base_t::lerp_unclamped(a, b, t));
+        }
+
+        MVM_INLINE_NODISCARD static vec4 lerp(const vec4& a,
+                                              const vec4& b,
+                                              T t) noexcept
+        {
+            return vec4(base_t::lerp(a, b, t));
+        }
+
+        MVM_INLINE_NODISCARD static vec4 lerp(const vec4& a,
+                                              const vec4& b,
+                                              const vec4& t) noexcept
+        {
+            return vec4(base_t::lerp(a, b, t));
+        }
+
+        MVM_INLINE_NODISCARD static vec4 min(const vec4& a,
+                                             const vec4& b) noexcept
+        {
+            return vec4(base_t::min(a, b));
+        }
+
+        MVM_INLINE_NODISCARD static vec4 max(const vec4& a,
+                                             const vec4& b) noexcept
+        {
+            return vec4(base_t::max(a, b));
+        }
+
+        MVM_INLINE_NODISCARD static vec4 clamp(const vec4& value,
+                                               const vec4& minimum,
+                                               const vec4& maximum) noexcept
+        {
+            return vec4(base_t::clamp(value, minimum, maximum));
+        }
+
+        MVM_INLINE_NODISCARD static vec4 clamp(const vec4& value,
+                                               const T& minimum,
+                                               const T& maximum) noexcept
+        {
+            return vec4(base_t::clamp(value, minimum, maximum));
+        }
+
+        MVM_INLINE_NODISCARD static vec4 filled(T value) noexcept
+        {
+            return vec4(base_t::filled(value));
+        }
+
+        MVM_INLINE_NODISCARD static vec4 infinity() noexcept
+        {
+            return vec4(base_t::infinity());
+        }
+
+        MVM_INLINE_NODISCARD static vec4 negative_infinity() noexcept
+        {
+            return vec4(base_t::negative_infinity());
+        }
+
+        MVM_INLINE_NODISCARD static vec4 nan() noexcept
+        {
+            return vec4(base_t::nan());
+        }
+
+        MVM_INLINE_NODISCARD static vec4 zero() noexcept
+        {
+            return vec4(base_t::zero());
+        }
+
+        MVM_INLINE_NODISCARD static vec4 one() noexcept
+        {
+            return vec4(base_t::one());
+        }
+
+        MVM_INLINE_NODISCARD static vec4 x_axis() noexcept
+        {
+            return vec4(base_t::x_axis());
+        }
+
+        MVM_INLINE_NODISCARD static vec4 y_axis() noexcept
+        {
+            return vec4(base_t::y_axis());
+        }
+
+        MVM_INLINE_NODISCARD static vec4 z_axis() noexcept
+        {
+            return vec4(base_t::z_axis());
+        }
+
+        MVM_INLINE_NODISCARD static vec4 w_axis() noexcept
+        {
+            return vec4(base_t::w_axis());
+        }
+
+        MVM_INLINE_NODISCARD static vec4 left() noexcept
+        {
+            return vec4(base_t::left());
+        }
+
+        MVM_INLINE_NODISCARD static vec4 right() noexcept
+        {
+            return vec4(base_t::right());
+        }
+
+        MVM_INLINE_NODISCARD static vec4 down() noexcept
+        {
+            return vec4(base_t::down());
+        }
+
+        MVM_INLINE_NODISCARD static vec4 up() noexcept
+        {
+            return vec4(base_t::up());
+        }
+
+        MVM_INLINE_NODISCARD static vec4 backward() noexcept
+        {
+            return vec4(base_t::backward());
+        }
+
+        MVM_INLINE_NODISCARD static vec4 forward() noexcept
+        {
+            return vec4(base_t::forward());
+        }
+
         // Acceleration conversions
     public:
         template <Acceleration TargetAccel>
@@ -140,7 +397,7 @@ namespace move::math
         // Swizzles
     public:
         // Vec2 swizzles
-        using vec2_t = vec2<T, Accel>;
+        using vec2_t = vec2<T, Acceleration::Scalar>;
         MVM_INLINE_NODISCARD vec2_t xy() const
         {
             return vec2_t(base_t::get_x(), base_t::get_y());
@@ -205,7 +462,15 @@ namespace move::math
         using vec3_t = vec3<T, Accel>;
         MVM_INLINE_NODISCARD vec3_t xyz() const
         {
-            return vec3_t(base_t::get_x(), base_t::get_y(), base_t::get_z());
+            if constexpr (acceleration == Acceleration::RTM)
+            {
+                return vec3_t::from_rtm(base_t::to_rtm());
+            }
+            else
+            {
+                return vec3_t(base_t::get_x(), base_t::get_y(),
+                              base_t::get_z());
+            }
         }
 
         MVM_INLINE_NODISCARD vec3_t xyw() const
@@ -502,23 +767,10 @@ namespace move::math
         const vec4<T, Accel>& b,
         const T& epsilon = std::numeric_limits<T>::epsilon())
     {
-        if constexpr (vec4<T, Accel>::acceleration == Acceleration::RTM)
-        {
-            return rtm::vector_all_near_equal(a.to_rtm(), b.to_rtm(), epsilon);
-        }
-        else
-        {
-            T aloaded[4];
-            T bloaded[4];
-
-            a.store_array(aloaded);
-            b.store_array(bloaded);
-
-            return approx_equal(aloaded[0], bloaded[0], epsilon) &&
-                   approx_equal(aloaded[1], bloaded[1], epsilon) &&
-                   approx_equal(aloaded[2], bloaded[2], epsilon) &&
-                   approx_equal(aloaded[3], bloaded[3], epsilon);
-        }
+        return approx_equal(a.get_x(), b.get_x(), epsilon) &&
+               approx_equal(a.get_y(), b.get_y(), epsilon) &&
+               approx_equal(a.get_z(), b.get_z(), epsilon) &&
+               approx_equal(a.get_w(), b.get_w(), epsilon);
     }
 
     namespace traits

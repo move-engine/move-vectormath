@@ -287,23 +287,27 @@ inline void test_vec4()
     WHEN("A vec4's lengths are computed")
     {
         vec4 test = {3, 4, 5, 6};
+        using length_type = decltype(test.length());
 
         REQUIRE(test.length_squared() == component_type(86));
         REQUIRE(move::math::approx_equal(test.length(),
-                                         component_type(std::sqrt(86))));
+                                         length_type(std::sqrt(86))));
         REQUIRE(move::math::approx_equal(
             test.reciprocal_length(),
-            component_type(1) / component_type(std::sqrt(86))));
+            length_type(1) / std::sqrt(length_type(86))));
     }
 
-    WHEN("A vec4 is normalized")
+    if constexpr (std::is_floating_point_v<component_type>)
     {
-        vec4 test = {3, 4, 5, 6};
-        test.normalize();
-
-        THEN("The length is correct")
+        WHEN("A vec4 is normalized")
         {
-            REQUIRE(move::math::safe_equal(test.length(), 1));
+            vec4 test = {3, 4, 5, 6};
+            test.normalize();
+
+            THEN("The length is correct")
+            {
+                REQUIRE(move::math::safe_equal(test.length(), 1));
+            }
         }
     }
 
@@ -423,9 +427,10 @@ inline void test_vec4()
 
         THEN("The distances are correct")
         {
+            using distance_type = decltype(test1.distance(test2));
             REQUIRE(test1.distance_squared(test2) == Catch::Approx(20));
             REQUIRE(test1.distance(test2) ==
-                    Catch::Approx(component_type(std::sqrt(20))));
+                    Catch::Approx(distance_type(std::sqrt(20))));
         }
     }
 
@@ -457,13 +462,16 @@ inline void test_vec4()
         }
     }
 
-    WHEN("Computing the angle between two vectors")
+    if constexpr (std::is_floating_point_v<component_type>)
     {
-        REQUIRE(vec4::angle_between_vectors({1, 0, 0, 0}, {0, 1, 0, 0}) ==
-                Catch::Approx(component_type(1.5707964)));
+        WHEN("Computing the angle between two vectors")
+        {
+            REQUIRE(vec4::angle_between_vectors({1, 0, 0, 0}, {0, 1, 0, 0}) ==
+                    Catch::Approx(component_type(1.5707964)));
 
-        REQUIRE(vec4::angle_between_vectors({1, 0, 1, 0}, {0, 1, 0, 0}) ==
-                Catch::Approx(component_type(1.5707964)));
+            REQUIRE(vec4::angle_between_vectors({1, 0, 1, 0}, {0, 1, 0, 0}) ==
+                    Catch::Approx(component_type(1.5707964)));
+        }
     }
 
     if constexpr (std::is_floating_point_v<component_type>)
@@ -490,15 +498,17 @@ inline void test_vec4()
             vec4 refracted =
                 vec4::refract(incident, normal, component_type(1.5));
 
-            THEN("The refracted vector is finite, non-zero, and bends toward the normal")
+            THEN(
+                "The refracted vector is finite, non-zero, and bends toward "
+                "the normal")
             {
                 REQUIRE(!std::isnan(refracted.get_x()));
                 REQUIRE(!std::isnan(refracted.get_y()));
                 REQUIRE(!std::isnan(refracted.get_z()));
                 REQUIRE(!std::isnan(refracted.get_w()));
                 REQUIRE(refracted.length() ==
-                        Catch::Approx(component_type(1)).epsilon(
-                            component_type(0.001)));
+                        Catch::Approx(component_type(1))
+                            .epsilon(component_type(0.001)));
                 REQUIRE(refracted.get_y() < incident.get_y());
             }
         }
@@ -524,9 +534,21 @@ inline void test_vec4()
         vec4 test1 = {0, 0, 0, 0};
         vec4 test2 = {5, 5, 5, 5};
 
+        if constexpr (std::is_floating_point_v<component_type>)
+        {
+            REQUIRE(vec4::lerp_unclamped(test1, test2, component_type(0.5)) ==
+                    vec4::filled(component_type(2.5)));
+            REQUIRE(vec4::lerp(test1, test2, component_type(0.5)) ==
+                    vec4::filled(component_type(2.5)));
+        }
+        else
+        {
+            REQUIRE(vec4::lerp_unclamped(test1, test2, component_type(0)) ==
+                    test1);
+            REQUIRE(vec4::lerp(test1, test2, component_type(1)) == test2);
+        }
+
         // lerp unclamped (scalar factor)
-        REQUIRE(vec4::lerp_unclamped(test1, test2, component_type(0.5)) ==
-                vec4::filled(component_type(2.5)));
         REQUIRE(vec4::lerp_unclamped(test1, test2, 2) == vec4(10, 10, 10, 10));
 
         // lerp unclamped (vector factor)
@@ -536,8 +558,6 @@ inline void test_vec4()
                 vec4(5, 10, 5, 0));
 
         // lerp (scalar factor)
-        REQUIRE(vec4::lerp(test1, test2, component_type(0.5)) ==
-                vec4::filled(component_type(2.5)));
         REQUIRE(vec4::lerp(test1, test2, 2) == vec4(5, 5, 5, 5));
 
         // lerp (vector factor)
@@ -555,7 +575,8 @@ inline void test_vec4()
             REQUIRE(test[1] == 2);
             REQUIRE(test[2] == 3);
             REQUIRE(test[3] == 4);
-            if constexpr (vec4::acceleration == move::math::Acceleration::Scalar)
+            if constexpr (vec4::acceleration ==
+                          move::math::Acceleration::Scalar)
             {
                 test[0] = 5;
                 test[1] = 6;

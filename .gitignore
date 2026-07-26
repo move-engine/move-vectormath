@@ -12,6 +12,7 @@ releases/
 !.vscode/*.code-snippets
 .clangd
 .cache/
+.local/
 compile_commands.json
 
 # gitignored so that users can opt in/out by simply adding the files

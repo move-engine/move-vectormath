@@ -48,7 +48,7 @@ namespace move::math::simd_rtm
             const rtm_vec4_t& value)
         {
             const T len_sq = rtm::vector_length_squared(value);
-            if (len_sq <= std::numeric_limits<T>::epsilon())
+            if (len_sq == T(0))
             {
                 return rtm::vector_zero();
             }
@@ -491,7 +491,7 @@ namespace move::math::simd_rtm
         MVM_INLINE_NODISCARD static T angle_between_normalized_vectors(
             const base_vec4& v1, const base_vec4& v2) noexcept
         {
-            return math::acos(dot(v1, v2));
+            return math::acos(math::clamp(dot(v1, v2), T(-1), T(1)));
         }
 
         /**
@@ -504,9 +504,14 @@ namespace move::math::simd_rtm
         MVM_INLINE_NODISCARD static T angle_between_vectors(
             const base_vec4& v1, const base_vec4& v2) noexcept
         {
+            if (v1.length_squared() == T(0) || v2.length_squared() == T(0))
+            {
+                return T(0);
+            }
             auto v1norm = normalize4(v1._value);
             auto v2norm = normalize4(v2._value);
-            return math::acos(T(rtm::vector_dot(v1norm, v2norm)));
+            return math::acos(
+                math::clamp(T(rtm::vector_dot(v1norm, v2norm)), T(-1), T(1)));
         }
 
         /**
@@ -522,9 +527,8 @@ namespace move::math::simd_rtm
             const rtm_vec4_t& inc = incident._value;
             const rtm_vec4_t& nrm = normal._value;
 
-            auto dot = vector_dot(inc, nrm);
-            auto dot2 = vector_add(dot, dot);
-            auto mul = vector_mul(nrm, dot2);
+            const T dot = T(vector_dot(inc, nrm));
+            auto mul = vector_mul(nrm, dot + dot);
             auto res = vector_sub(inc, mul);
             return res;
         }
@@ -540,8 +544,8 @@ namespace move::math::simd_rtm
                                                       const base_vec4& normal,
                                                       T ior) noexcept
         {
-            return move::math::detail::refract_ior_relative_to_air(
-                incident, normal, ior);
+            return move::math::detail::refract_ior_relative_to_air(incident,
+                                                                   normal, ior);
         }
 
         /**
@@ -751,7 +755,7 @@ namespace move::math::simd_rtm
          */
         MVM_INLINE_NODISCARD static base_vec4 x_axis() noexcept
         {
-            return base_vec4(1, 0, 0);
+            return base_vec4(1, 0, 0, 0);
         }
 
         /**
@@ -762,7 +766,7 @@ namespace move::math::simd_rtm
          */
         MVM_INLINE_NODISCARD static base_vec4 y_axis() noexcept
         {
-            return base_vec4(0, 1, 0);
+            return base_vec4(0, 1, 0, 0);
         }
 
         /**
@@ -773,7 +777,7 @@ namespace move::math::simd_rtm
          */
         MVM_INLINE_NODISCARD static base_vec4 z_axis() noexcept
         {
-            return base_vec4(0, 0, 1);
+            return base_vec4(0, 0, 1, 0);
         }
 
         /**

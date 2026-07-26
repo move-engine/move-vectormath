@@ -294,24 +294,32 @@ namespace move::math::scalar
 
         // Mathematical operations
     public:
-        MVM_INLINE_NODISCARD T length() const
+        MVM_INLINE_NODISCARD geometry_scalar_t<T> length() const
         {
-            return sqrt<T>(length_squared());
+            using result_type = geometry_scalar_t<T>;
+            const result_type px = static_cast<result_type>(x);
+            const result_type py = static_cast<result_type>(y);
+            return math::sqrt(px * px + py * py);
         }
 
-        MVM_INLINE_NODISCARD T length_squared() const
+        MVM_INLINE_NODISCARD geometry_scalar_t<T> length_squared() const
         {
-            return x * x + y * y;
+            using result_type = geometry_scalar_t<T>;
+            const result_type px = static_cast<result_type>(x);
+            const result_type py = static_cast<result_type>(y);
+            return px * px + py * py;
         }
 
-        MVM_INLINE_NODISCARD T reciprocal_length() const
+        MVM_INLINE_NODISCARD geometry_scalar_t<T> reciprocal_length() const
         {
-            return sqrt_reciprocal<T>(length_squared());
+            return geometry_scalar_t<T>(1) / length();
         }
 
         MVM_INLINE_NODISCARD base_vec2 normalized() const
+            requires std::is_floating_point_v<T>
         {
-            return *this / length();
+            const T vector_length = length();
+            return vector_length == T(0) ? base_vec2() : *this / vector_length;
         }
 
         MVM_INLINE_NODISCARD T aspect_ratio() const
@@ -330,8 +338,9 @@ namespace move::math::scalar
         // Mutators
     public:
         MVM_INLINE base_vec2& normalize()
+            requires std::is_floating_point_v<T>
         {
-            *this /= length();
+            *this = normalized();
             return *this;
         }
 

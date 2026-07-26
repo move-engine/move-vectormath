@@ -4,15 +4,20 @@
     "move::math",
     "move-math"
   ],
-  "Description": "A new Move package",
-  "Version": "0.0.1",
+  "Description": "Header-only vector, matrix, and quaternion math",
+  "Version": "0.2.0",
   "Type": "CppLibrary",
   "Dependencies": [
     "rtm"
   ],
   "TestDependencies": [],
-  "License": "Unspecified",
-  "Keywords": [],
+  "License": "MIT",
+  "Keywords": [
+    "math",
+    "matrix",
+    "quaternion",
+    "vector"
+  ],
   "TargetOptions": {
     "$type": "CppLibrary"
   }
