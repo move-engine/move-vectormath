@@ -2,7 +2,7 @@
 
 ## Current phase
 
-Phase A architectural proof and evidence review.
+Phase A accepted; Phase B spatial semantics and transforms beginning.
 
 ## Completed
 
@@ -32,18 +32,32 @@ Phase A architectural proof and evidence review.
   benchmark repository
 - Added Phase A coverage to the library's compiler, sanitizer, and coverage CI
   jobs
+- Verified the Phase A surface on GCC, Clang, MSVC, and AppleClang/ARM, plus
+  sanitizer, coverage, source-hygiene, Linux benchmark, and Windows benchmark
+  jobs
+- Accepted private selected-native storage as the `Vec3f` implementation
+  direction while keeping its ABI provisional
+- Authorized the Phase B semantic-transform vertical slice
 
-## Ready for review
+## Accepted evidence
 
-- Phase A representation and code-generation findings
-- Preliminary storage/working-set benchmark findings
-- The provisional native-backed `Vec3f` choice
+- The public `Vec3f` facade and raw RTM proof generate equivalent
+  representative loops under GCC and Clang.
+- The fixed scalar-array `Vec3f` proof is rejected because its GCC code
+  generation is materially worse.
+- Compact storage, compute-resident values, and explicit GPU transfer layouts
+  remain separate first-class representations.
+- Focused headers keep the facade's incremental compile cost small.
+- Hosted-runner timings are useful diagnostic artifacts but are not regression
+  gates.
 
 ## Pending evidence
 
-- CI results for MSVC and AppleClang/ARM
-- controlled performance-governor benchmark rerun
-- shader compiler/reflection validation
-- final `Vec2f` representation choice
-- authorization to proceed from the architecture proof into the full semantic,
-  transform, geometry, query, and frustum implementation
+- Controlled performance-governor `Vec2f` benchmark runs using representative
+  2D game and graphics workloads
+- Shader compiler/reflection validation for the HLSL, GLSL, and WGSL transfer
+  fixtures
+- Final `Vec2f` representation choice
+- Generated-code inspection on MSVC and AppleClang/ARM before making a stable
+  `Vec3f` ABI commitment
+- Phase B semantic-transform implementation and evidence

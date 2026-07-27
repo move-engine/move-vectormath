@@ -148,14 +148,23 @@ portable performance claims.
 - GitHub workflow coverage for Phase A tests in the existing GCC, Clang,
   AppleClang/ARM, MSVC, sanitizer, and coverage jobs
 
-## Decisions still gated
+## Checkpoint decision
+
+Phase A is accepted as the architecture for the next implementation slice.
+Private selected-native `Vec3f` storage, focused headers, explicit compact and
+GPU representations, invariant semantic wrappers, and fused strided
+processing proceed into Phase B. This accepts an implementation direction, not
+a stable ABI.
+
+## Evidence still required
 
 - Do not finalize 8-byte versus 16-byte `Vec2f` before a controlled benchmark
   rerun and representative 2D workloads.
-- Do not declare a stable `Vec3f` ABI until MSVC, AppleClang/ARM, and target
-  configuration consistency have passed CI.
+- Do not declare a stable `Vec3f` ABI until MSVC and AppleClang/ARM generated
+  code has been inspected; their Phase A builds and behavioral tests now pass
+  CI.
 - Add actual shader compilation and reflection validation where toolchains are
   available.
 - Expand backend primitives only when a shared algorithm needs them.
-- Do not begin the full point/normal, matrix, transform, geometry, query, or
-  frustum implementation until this Phase A evidence is reviewed.
+- Complete the point/normal and transform evidence slice before beginning the
+  full geometry, query, or frustum implementation.

@@ -7,7 +7,8 @@ reject architectural choices.
   first backend, representation, storage, GPU-layout, semantic-type, codegen,
   compile-cost, and runtime proof.
 
-The Phase A code is intentionally a proof surface rather than a complete
-replacement for v1. Geometry, matrices, production transforms, and the final
-public header organization remain deferred until the representation findings
-have been reviewed.
+The Phase A architecture has been accepted as the basis for Phase B, but its
+code remains a proof surface rather than a complete replacement for v1.
+Production semantic transforms are the next vertical slice. Geometry,
+intersections, frustum facilities, and the final public header organization
+remain deferred until that slice has equivalent evidence.

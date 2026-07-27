@@ -40,14 +40,26 @@
 - Compilation cost, layouts, code generation, and runtime performance are
   evaluated alongside usability.
 
-## Provisional Phase A findings
+## Accepted Phase A architecture
 
-These findings guide the prototype but are not yet stable ABI commitments:
+These decisions authorize Phase B but are not stable ABI commitments:
 
 - `Vec3f` privately stores the selected backend-native value. GCC and Clang
   generate the same representative inner loop as the raw-native proof.
 - The fixed scalar-array `Vec3f` alternative is rejected for the current GCC
   implementation because it doubles instruction count in the measured chain.
+- Native storage is an implementation technique, not public backend identity:
+  RTM types remain absent from public template arguments, return types, base
+  classes, and conversions.
+- Compact CPU storage, compute values, and exact GPU transfer layouts remain
+  distinct first-class representations.
+- The scalar backend remains independently compilable without parsing RTM.
+- Phase A passing GCC, Clang, MSVC, AppleClang/ARM, sanitizers, coverage, and
+  benchmark parity is sufficient to proceed with semantic vectors and
+  transforms.
+
+## Decisions still provisional
+
 - `Vec2f` remains an open decision: 16-byte storage wins small compute loops,
   while 8-byte storage wins the measured large working set.
 - Compact 12-byte and compute 16-byte arrays are both first-class choices;
@@ -55,3 +67,6 @@ These findings guide the prototype but are not yet stable ABI commitments:
 - The facade should retain focused headers. The focused `Vec3` proof adds only
   a small parse/memory increment over raw RTM, while the forced-scalar path
   avoids parsing RTM.
+- `Vec3f` size and alignment remain guarded implementation contracts rather
+  than a stable cross-version ABI until MSVC and AppleClang generated code is
+  inspected.

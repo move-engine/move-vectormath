@@ -92,3 +92,22 @@ representations that block them.
 This document records the pre-implementation checkpoint. Phase A was
 subsequently authorized and its proof implementation and measurements are in
 [`../implementation/PhaseAArchitectureProof.md`](../implementation/PhaseAArchitectureProof.md).
+
+## Post-Phase-A checkpoint
+
+Phase A passed the supported GCC, Clang, MSVC, and AppleClang/ARM builds,
+sanitizer and coverage jobs, source hygiene, and Linux/Windows benchmark
+parity. Its evidence supports the thin-facade architecture:
+
+- retain private selected-native `Vec3f` storage without exposing backend
+  identity;
+- reject the fixed scalar-array `Vec3f` alternative;
+- retain explicit compute, compact storage, and GPU transfer boundaries;
+- keep focused headers and expand backend primitives only for shared
+  algorithms;
+- keep `Vec2f` and stable ABI decisions open pending their targeted evidence.
+
+The architecture proof is accepted and Phase B spatial semantics and
+transforms are authorized. Geometry, intersections, and frustum work should
+follow only after the semantic-transform slice has equivalent behavioral,
+layout, compilation, and code-generation evidence.
