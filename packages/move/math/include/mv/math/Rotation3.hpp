@@ -65,6 +65,13 @@ namespace mv::math
             return Value_;
         }
 
+        [[nodiscard]] constexpr Rotation3f Inverse() const noexcept
+        {
+            return Rotation3f(
+                Quatf(-Value_.X(), -Value_.Y(), -Value_.Z(), Value_.W()),
+                UncheckedTag{});
+        }
+
         [[nodiscard]] Rotation3f operator*(
             const Rotation3f& right) const noexcept
         {

@@ -56,6 +56,7 @@ jobs:
           -DMOVE_VECTORMATH_BUILD_TESTS=ON
           -DMOVE_VECTORMATH_BUILD_STANDALONE_TESTS=ON
           -DMOVE_VECTORMATH_BUILD_PHASE_A_TESTS=ON
+          -DMOVE_VECTORMATH_BUILD_PHASE_B_TESTS=ON
           -DMOVE_VECTORMATH_WARNINGS_AS_ERRORS=${{ matrix.warnings_as_errors }}
           -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
       - name: Build
@@ -93,6 +94,7 @@ jobs:
           -DMOVE_VECTORMATH_BUILD_TESTS=ON
           -DMOVE_VECTORMATH_BUILD_STANDALONE_TESTS=ON
           -DMOVE_VECTORMATH_BUILD_PHASE_A_TESTS=ON
+          -DMOVE_VECTORMATH_BUILD_PHASE_B_TESTS=ON
           -DMOVE_VECTORMATH_WARNINGS_AS_ERRORS=ON
           -DCMAKE_BUILD_TYPE=Debug
           -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer"
@@ -120,6 +122,7 @@ jobs:
           -DMOVE_VECTORMATH_BUILD_TESTS=ON
           -DMOVE_VECTORMATH_BUILD_STANDALONE_TESTS=ON
           -DMOVE_VECTORMATH_BUILD_PHASE_A_TESTS=ON
+          -DMOVE_VECTORMATH_BUILD_PHASE_B_TESTS=ON
           -DCMAKE_BUILD_TYPE=Debug
           -DCMAKE_CXX_FLAGS="--coverage -O0 -g"
           -DCMAKE_EXE_LINKER_FLAGS="--coverage"
@@ -139,13 +142,34 @@ jobs:
             build/CMakeFiles/move-vectormath-tests.dir \
             build/CMakeFiles/move-vectormath-standalone-tests.dir \
             build/CMakeFiles/move-vectormath-phase-a-rtm-tests.dir \
-            build/CMakeFiles/move-vectormath-phase-a-scalar-tests.dir
+            build/CMakeFiles/move-vectormath-phase-a-scalar-tests.dir \
+            build/CMakeFiles/move-vectormath-phase-b-rtm-tests.dir \
+            build/CMakeFiles/move-vectormath-phase-b-scalar-tests.dir
       - name: Upload coverage report
         uses: actions/upload-artifact@v6
         with:
           name: vectormath-coverage
           path: coverage.xml
           if-no-files-found: error
+
+  shader-layouts:
+    name: Shader layout reflection
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install shader tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes glslang-tools spirv-tools
+      - name: Compile and reflect HLSL and GLSL layouts
+        run: |
+          python3 tests/shaders/validate_spirv_layouts.py \
+            --glslang "$(command -v glslangValidator)" \
+            --spirv-val "$(command -v spirv-val)" \
+            --spirv-dis "$(command -v spirv-dis)" \
+            --source-dir tests/shaders \
+            --output-dir build/shader-layouts
 
   source-hygiene:
     name: Source hygiene
@@ -164,7 +188,9 @@ jobs:
             tests/standalone.cpp \
             tests/consumer/main.cpp \
             tests/phase_a.cpp \
-            tests/phase_a_codegen.cpp
+            tests/phase_a_codegen.cpp \
+            tests/phase_b.cpp \
+            tests/phase_b_codegen.cpp
           find packages/move/math/include/mv tests/compile \
             -type f \( -name '*.hpp' -o -name '*.cpp' \) -print0 |
             xargs -0 clang-format-16 --dry-run --Werror

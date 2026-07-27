@@ -40,10 +40,13 @@ option(MOVE_VECTORMATH_BUILD_STANDALONE_TESTS
        "Build dependency-light public API and numerical contract tests" OFF)
 option(MOVE_VECTORMATH_BUILD_PHASE_A_TESTS
        "Build API-v2 Phase A scalar and RTM architecture proof tests" OFF)
+option(MOVE_VECTORMATH_BUILD_PHASE_B_TESTS
+       "Build API-v2 Phase B semantic transform tests" OFF)
 
 if(MOVE_VECTORMATH_BUILD_TESTS OR
    MOVE_VECTORMATH_BUILD_STANDALONE_TESTS OR
-   MOVE_VECTORMATH_BUILD_PHASE_A_TESTS)
+   MOVE_VECTORMATH_BUILD_PHASE_A_TESTS OR
+   MOVE_VECTORMATH_BUILD_PHASE_B_TESTS)
     enable_testing()
 endif()
 
@@ -81,6 +84,42 @@ if(MOVE_VECTORMATH_BUILD_PHASE_A_TESTS)
                                PRIVATE MV_MATH_FORCE_SCALAR=1)
     move_vectormath_enable_strict_warnings(
         move-vectormath-phase-a-scalar-codegen)
+endif()
+
+if(MOVE_VECTORMATH_BUILD_PHASE_B_TESTS)
+    add_executable(move-vectormath-phase-b-rtm-tests tests/phase_b.cpp)
+    target_link_libraries(move-vectormath-phase-b-rtm-tests
+                          PRIVATE move-vectormath)
+    move_vectormath_enable_strict_warnings(
+        move-vectormath-phase-b-rtm-tests)
+    add_test(NAME move-vectormath-phase-b-rtm
+             COMMAND move-vectormath-phase-b-rtm-tests)
+
+    add_executable(move-vectormath-phase-b-scalar-tests tests/phase_b.cpp)
+    target_link_libraries(move-vectormath-phase-b-scalar-tests
+                          PRIVATE move-vectormath)
+    target_compile_definitions(move-vectormath-phase-b-scalar-tests
+                               PRIVATE MV_MATH_FORCE_SCALAR=1)
+    move_vectormath_enable_strict_warnings(
+        move-vectormath-phase-b-scalar-tests)
+    add_test(NAME move-vectormath-phase-b-scalar
+             COMMAND move-vectormath-phase-b-scalar-tests)
+
+    add_library(move-vectormath-phase-b-rtm-codegen OBJECT
+                tests/phase_b_codegen.cpp)
+    target_link_libraries(move-vectormath-phase-b-rtm-codegen
+                          PRIVATE move-vectormath)
+    move_vectormath_enable_strict_warnings(
+        move-vectormath-phase-b-rtm-codegen)
+
+    add_library(move-vectormath-phase-b-scalar-codegen OBJECT
+                tests/phase_b_codegen.cpp)
+    target_link_libraries(move-vectormath-phase-b-scalar-codegen
+                          PRIVATE move-vectormath)
+    target_compile_definitions(move-vectormath-phase-b-scalar-codegen
+                               PRIVATE MV_MATH_FORCE_SCALAR=1)
+    move_vectormath_enable_strict_warnings(
+        move-vectormath-phase-b-scalar-codegen)
 endif()
 
 if(MOVE_VECTORMATH_BUILD_TESTS)

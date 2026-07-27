@@ -1,15 +1,14 @@
 #pragma once
 
-#include <algorithm>
-#include <cmath>
 #include <optional>
 #include <type_traits>
 
-#include <mv/math/Vec3.hpp>
+#include <mv/math/detail/Normalization.hpp>
 
 namespace mv::math
 {
     class Rotation3f;
+    class Normal3f;
 
     class Direction3f
     {
@@ -21,24 +20,12 @@ namespace mv::math
         [[nodiscard]] static std::optional<Direction3f> TryFrom(
             const Vec3f& value) noexcept
         {
-            const float maximum =
-                std::max({std::abs(value.X()), std::abs(value.Y()),
-                          std::abs(value.Z())});
-            if (!(maximum > 0.0F) || !std::isfinite(maximum))
+            const auto normalized = detail::TryNormalizeVector(value);
+            if (!normalized)
             {
                 return std::nullopt;
             }
-
-            const Vec3f scaled = value * (1.0F / maximum);
-            const float scaledLengthSquared = LengthSquared(scaled);
-            if (!(scaledLengthSquared > 0.0F) ||
-                !std::isfinite(scaledLengthSquared))
-            {
-                return std::nullopt;
-            }
-
-            return Direction3f(scaled * (1.0F / std::sqrt(scaledLengthSquared)),
-                               UncheckedTag{});
+            return Direction3f(*normalized, UncheckedTag{});
         }
 
         [[nodiscard]] static Direction3f FromOr(const Vec3f& value,
@@ -95,6 +82,7 @@ namespace mv::math
 
         Vec3f Value_;
 
+        friend class Normal3f;
         friend class Rotation3f;
         friend Direction3f Rotate(const Rotation3f&, Direction3f) noexcept;
     };

@@ -38,6 +38,16 @@ Phase A accepted; Phase B spatial semantics and transforms beginning.
 - Accepted private selected-native storage as the `Vec3f` implementation
   direction while keeping its ABI provisional
 - Authorized the Phase B semantic-transform vertical slice
+- Implemented the initial `Point3f`, `Normal3f`, and `RigidTransform3f`
+  semantic-transform slice
+- Added named rigid composition/inverse and explicit affine point, direction,
+  and inverse-transpose normal operations
+- Verified identical local GCC generated loops for semantic and raw rigid
+  point transformation
+- Added HLSL and GLSL SPIR-V compilation, validation, and reflected layout
+  checks
+- Added representative sprite, UI, point-transform, and direction-invariant
+  benchmark workloads
 
 ## Accepted evidence
 
@@ -55,9 +65,8 @@ Phase A accepted; Phase B spatial semantics and transforms beginning.
 
 - Controlled performance-governor `Vec2f` benchmark runs using representative
   2D game and graphics workloads
-- Shader compiler/reflection validation for the HLSL, GLSL, and WGSL transfer
-  fixtures
+- WGSL compiler/reflection validation for the retained transfer fixture
 - Final `Vec2f` representation choice
 - Generated-code inspection on MSVC and AppleClang/ARM before making a stable
   `Vec3f` ABI commitment
-- Phase B semantic-transform implementation and evidence
+- Full Phase B compiler/ISA CI results and controlled benchmark evidence
