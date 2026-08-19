@@ -31,8 +31,11 @@ All subsequent nontrivial algorithms are source-first under
 | `P-QUAT-SHOEMAKE` | Ken Shoemake, “Animating Rotation with Quaternion Curves,” SIGGRAPH 1985, [DOI 10.1145/325165.325242](https://doi.org/10.1145/325165.325242) | Original graphics paper for quaternion interpolation/calculus |
 | `P-RAY-TRIANGLE` | Tomas Möller and Ben Trumbore, “Fast, Minimum Storage Ray-Triangle Intersection,” JGT 2(1), 1997, [DOI 10.1080/10867651.1997.10487468](https://doi.org/10.1080/10867651.1997.10487468) | Original algorithm paper |
 | `P-RAY-BOX` | Amy Williams, Steve Barrus, R. Keith Morley, and Peter Shirley, “An Efficient and Robust Ray-Box Intersection Algorithm,” JGT 10(1), 2005, [DOI 10.1080/10867651.2005.10487503](https://doi.org/10.1080/10867651.2005.10487503), [author-hosted PDF](https://perso.univ-lyon1.fr/jean-claude.iehl/Public/educ/M1IMAGE/williams_box.pdf) | Original robustness/optimization paper |
+| `A-POINT-TRIANGLE-EBERLY` | David Eberly, [“Distance Between Point and Triangle in 3D”](https://www.geometrictools.com/Documentation/DistancePoint3Triangle3.pdf), created 1999, revised 2020 | Author algorithm paper; CC BY 4.0 |
+| `B-RTCD-ERICSON` | Christer Ericson, *Real-Time Collision Detection*, 2005, sections 5.1.1, 5.1.2, and 5.1.5; [author site](https://realtimecollisiondetection.net/) | Authoritative game-oriented textbook |
 | `A-NORMAL-LENGYEL` | Eric Lengyel, [“Transforming Normals”](https://terathon.com/blog/transforming-normals.html), 2024 | Author derivation of adjugate-transpose normal transformation |
 | `L-RTM-231` | RTM v2.3.1 at [`745bd25673d93b46941eda55e0993327dbc12b53`](https://github.com/nfrechette/rtm/tree/745bd25673d93b46941eda55e0993327dbc12b53), particularly `vector4f.h`, `quatf.h`, and `qvf.h` | MIT; exact production dependency |
+| `L-GTE-2026` | David Eberly's Geometric Tools at [`d29e7758ae2615e5e37da3eb573b7bf90ee94e9b`](https://github.com/davideberly/GeometricTools/tree/d29e7758ae2615e5e37da3eb573b7bf90ee94e9b), particularly `GTE/Mathematics/DistPointLine.h`, `DistPointRay.h`, `DistPointSegment.h`, and `DistPointTriangle.h` | Boost Software License 1.0; author-maintained implementation cross-check |
 | `L-DXM-2026` | DirectXMath at [`d33ba2f150aeb6d3cf62d10f454652ee83672200`](https://github.com/microsoft/DirectXMath/tree/d33ba2f150aeb6d3cf62d10f454652ee83672200), particularly [`Inc/DirectXCollision.inl`](https://github.com/microsoft/DirectXMath/blob/d33ba2f150aeb6d3cf62d10f454652ee83672200/Inc/DirectXCollision.inl) and [`Inc/DirectXMathMisc.inl`](https://github.com/microsoft/DirectXMath/blob/d33ba2f150aeb6d3cf62d10f454652ee83672200/Inc/DirectXMathMisc.inl) | MIT; production-library cross-check |
 | `L-GLM-2026` | GLM at [`6f14f4792a0cde5d0cf2c910506724d61cb95834`](https://github.com/g-truc/glm/tree/6f14f4792a0cde5d0cf2c910506724d61cb95834), particularly [`glm/gtx/intersect.inl`](https://github.com/g-truc/glm/blob/6f14f4792a0cde5d0cf2c910506724d61cb95834/glm/gtx/intersect.inl) and [`glm/ext/quaternion_exponential.inl`](https://github.com/g-truc/glm/blob/6f14f4792a0cde5d0cf2c910506724d61cb95834/glm/ext/quaternion_exponential.inl) | Dual Modified-MIT/MIT; production-library cross-check |
 | `L-BOOST-189` | Boost.Test 1.89.0 [floating-point comparison rationale](https://www.boost.org/doc/libs/1_89_0/libs/test/doc/html/boost_test/testing_tools/extended_comparison/floating_point.html) | Boost Software License 1.0; conceptual cross-check only |
@@ -220,6 +223,50 @@ branch conditions, conventions, and edge handling.
   `BoundingBox::Intersects`/`Contains` implementations.
 - **Differences:** Move's float API uses double intermediates for squared
   distances and defines touching as intersection.
+
+### Phase C line and segment primitives
+
+- **Coverage:** `geometry/Line3.hpp` and `geometry/Segment3.hpp`.
+- **Classification:** elementary definitions and Move-specific semantic facade,
+  source-validated against a compatible implementation.
+- **Sources:** `L-GTE-2026` `Line.h`, `Segment.h`, and the point-distance query
+  files; `B-RTCD-ERICSON` section 5.1.2.
+- **Differences:** Move stores a normalized `Direction3f` for lines, making the
+  signed parameter physical distance. Segments store endpoints, expose an
+  explicitly named fraction parameter, allow degeneracy, and do not silently
+  clamp `PointAtFraction`.
+
+### Phase C point/linear closest queries
+
+- **Coverage:** point/line, point/ray, point/segment, and point/plane detailed,
+  closest-point, distance, and squared-distance overloads in
+  `queries/ClosestPointQueries.hpp`.
+- **Classification:** paper/book-derived implementation, cross-checked against
+  a compatible author-maintained library.
+- **Sources:** `L-GTE-2026` `DistPointLine.h`, `DistPointRay.h`, and
+  `DistPointSegment.h`; `B-RTCD-ERICSON` sections 5.1.1 and 5.1.2.
+- **Differences:** unit line/ray directions remove the upstream direction-length
+  division; returned parameters preserve signed line distance, nonnegative ray
+  distance, and segment fraction as distinct fields. A degenerate segment
+  deterministically returns its start with fraction zero.
+
+### Phase C point/triangle closest query
+
+- **Coverage:** point/triangle detailed closest-point, barycentric, distance,
+  and squared-distance overloads in `queries/ClosestPointQueries.hpp`.
+- **Classification:** book-derived independent expression, cross-checked
+  against the original author paper and compatible reference implementation.
+- **Sources:** `B-RTCD-ERICSON` section 5.1.5 for the Voronoi-region tests,
+  `A-POINT-TRIANGLE-EBERLY` for the constrained quadratic formulation, and
+  `L-GTE-2026` `DistPointTriangle.h` for result conventions.
+- **Differences:** unlike the cited nondegenerate formulations, Move explicitly
+  handles degenerate triangles by evaluating all three segment edges. Ties are
+  deterministic in edge order 01, 02, 12, and barycentrics describe the chosen
+  representative point.
+- **Validation:** fixed face, vertex, edge, collinear, and point-degenerate
+  cases run on scalar and RTM backends. A 1,024-case double-precision oracle
+  independently uses plane projection followed by exhaustive edge tests rather
+  than the production Voronoi-region decision tree.
 
 ## Non-algorithmic generated code
 

@@ -12,6 +12,8 @@ reject architectural choices.
 - [`PhaseCInitialGeometry.md`](PhaseCInitialGeometry.md) records the initial
   CPU ray, plane, triangle, sphere, AABB, typed-query, prepared-ray, layout,
   compile-cost, and correctness evidence.
+- [`PhaseCClosestPoint.md`](PhaseCClosestPoint.md) records the line, segment,
+  closest-point, distance, degeneracy, provenance, and verification slice.
 - [`AlgorithmProvenance.md`](AlgorithmProvenance.md) records the exact papers,
   compatible-licensed implementations, deliberate deviations, and historical
   source status of Codex-generated algorithms.

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include <optional>
 #include <type_traits>
 
@@ -12,6 +13,86 @@ namespace mv::math
     {
         Front,
         Back
+    };
+
+    struct PointLineClosest3f
+    {
+        Point3f PointOnLine;
+        float LineDistance;
+        float SquaredDistance;
+
+        [[nodiscard]] float Distance() const noexcept
+        {
+            return std::sqrt(SquaredDistance);
+        }
+
+        [[nodiscard]] friend bool operator==(
+            const PointLineClosest3f&,
+            const PointLineClosest3f&) noexcept = default;
+    };
+
+    struct PointRayClosest3f
+    {
+        Point3f PointOnRay;
+        float RayDistance;
+        float SquaredDistance;
+
+        [[nodiscard]] float Distance() const noexcept
+        {
+            return std::sqrt(SquaredDistance);
+        }
+
+        [[nodiscard]] friend bool operator==(
+            const PointRayClosest3f&,
+            const PointRayClosest3f&) noexcept = default;
+    };
+
+    struct PointSegmentClosest3f
+    {
+        Point3f PointOnSegment;
+        float SegmentFraction;
+        float SquaredDistance;
+
+        [[nodiscard]] float Distance() const noexcept
+        {
+            return std::sqrt(SquaredDistance);
+        }
+
+        [[nodiscard]] friend bool operator==(
+            const PointSegmentClosest3f&,
+            const PointSegmentClosest3f&) noexcept = default;
+    };
+
+    struct PointPlaneClosest3f
+    {
+        Point3f PointOnPlane;
+        float SignedDistance;
+        float SquaredDistance;
+
+        [[nodiscard]] float Distance() const noexcept
+        {
+            return std::sqrt(SquaredDistance);
+        }
+
+        [[nodiscard]] friend bool operator==(
+            const PointPlaneClosest3f&,
+            const PointPlaneClosest3f&) noexcept = default;
+    };
+
+    struct PointTriangleClosest3f
+    {
+        Point3f PointOnTriangle;
+        Vec3f Barycentric;
+        float SquaredDistance;
+
+        [[nodiscard]] float Distance() const noexcept
+        {
+            return std::sqrt(SquaredDistance);
+        }
+
+        [[nodiscard]] friend bool operator==(
+            const PointTriangleClosest3f&,
+            const PointTriangleClosest3f&) noexcept = default;
     };
 
     struct RayPlaneHit3f
@@ -67,3 +148,8 @@ static_assert(std::is_trivially_copyable_v<mv::math::RayPlaneHit3f>);
 static_assert(std::is_trivially_copyable_v<mv::math::RayTriangleHit3f>);
 static_assert(std::is_trivially_copyable_v<mv::math::RaySphereHit3f>);
 static_assert(std::is_trivially_copyable_v<mv::math::RayAabbHit3f>);
+static_assert(std::is_trivially_copyable_v<mv::math::PointLineClosest3f>);
+static_assert(std::is_trivially_copyable_v<mv::math::PointRayClosest3f>);
+static_assert(std::is_trivially_copyable_v<mv::math::PointSegmentClosest3f>);
+static_assert(std::is_trivially_copyable_v<mv::math::PointPlaneClosest3f>);
+static_assert(std::is_trivially_copyable_v<mv::math::PointTriangleClosest3f>);

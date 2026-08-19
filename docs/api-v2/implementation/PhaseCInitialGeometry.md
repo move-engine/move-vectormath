@@ -100,8 +100,9 @@ These are local directional measurements, not stable regression gates.
 
 ## Remaining Phase C work
 
-- Add line and segment primitives and their parameter conventions.
-- Add closest-point and distance operations.
+- Add the remaining point/bounds and primitive-pair closest-point and distance
+  operations; line, ray, segment, plane, and triangle point queries are now
+  implemented.
 - Add capsule and OBB values, transforms, and queries.
 - Add ray/segment variants and broader primitive-pair coverage.
 - Add packed AABB storage and batch traversal evidence.

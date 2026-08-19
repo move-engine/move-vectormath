@@ -28,3 +28,15 @@ extern "C" void mv_phase_c_intersect_triangles(
             mv::math::Intersects(rays[index], triangles[index]));
     }
 }
+
+extern "C" void mv_phase_c_closest_points_on_segments(
+    const mv::math::Point3f* points,
+    const mv::math::Segment3f* segments,
+    mv::math::Point3f* output,
+    std::size_t count)
+{
+    for (std::size_t index = 0; index < count; ++index)
+    {
+        output[index] = mv::math::ClosestPoint(points[index], segments[index]);
+    }
+}

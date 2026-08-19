@@ -70,6 +70,12 @@ locally and on the hosted compiler/OS matrix.
 - Verified the Phase C library matrix and the separate SSE4.2, AVX, and AVX2
   geometry benchmark build, parity, and diagnostic performance workflow on
   Linux and Windows
+- Implemented `Line3f` and `Segment3f` with explicit physical-distance versus
+  fraction parameter conventions
+- Implemented detailed and concise point/line, point/ray, point/segment,
+  point/plane, and point/triangle closest-point and distance queries
+- Added deterministic lower-dimensional triangle handling and an independent
+  1,024-case double-precision triangle closest-point oracle
 
 ## Accepted evidence
 

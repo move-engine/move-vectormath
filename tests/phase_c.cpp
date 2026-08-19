@@ -46,6 +46,119 @@ namespace
         return axis == 0U ? vector.X() : axis == 1U ? vector.Y() : vector.Z();
     }
 
+    struct Double3
+    {
+        double X;
+        double Y;
+        double Z;
+    };
+
+    [[nodiscard]] Double3 ToDouble(const mv::math::Point3f& point)
+    {
+        return Double3{point.X(), point.Y(), point.Z()};
+    }
+
+    [[nodiscard]] Double3 operator+(Double3 left, Double3 right)
+    {
+        return Double3{left.X + right.X, left.Y + right.Y, left.Z + right.Z};
+    }
+
+    [[nodiscard]] Double3 operator-(Double3 left, Double3 right)
+    {
+        return Double3{left.X - right.X, left.Y - right.Y, left.Z - right.Z};
+    }
+
+    [[nodiscard]] Double3 operator*(Double3 value, double scale)
+    {
+        return Double3{value.X * scale, value.Y * scale, value.Z * scale};
+    }
+
+    [[nodiscard]] double Dot(Double3 left, Double3 right)
+    {
+        return left.X * right.X + left.Y * right.Y + left.Z * right.Z;
+    }
+
+    [[nodiscard]] Double3 Cross(Double3 left, Double3 right)
+    {
+        return Double3{left.Y * right.Z - left.Z * right.Y,
+                       left.Z * right.X - left.X * right.Z,
+                       left.X * right.Y - left.Y * right.X};
+    }
+
+    [[nodiscard]] Double3 ReferencePointSegment(Double3 point,
+                                                Double3 start,
+                                                Double3 end)
+    {
+        const Double3 displacement = end - start;
+        const double lengthSquared = Dot(displacement, displacement);
+        const double fraction =
+            lengthSquared > 0.0
+                ? std::clamp(Dot(point - start, displacement) / lengthSquared,
+                             0.0, 1.0)
+                : 0.0;
+        return start + displacement * fraction;
+    }
+
+    // Independent projection-plus-three-edges construction described as the
+    // straightforward baseline in Ericson, RTCD (2005), section 5.1.5.
+    [[nodiscard]] Double3 ReferencePointTriangle(
+        const mv::math::Point3f& point, const mv::math::Triangle3f& triangle)
+    {
+        const Double3 query = ToDouble(point);
+        const Double3 first = ToDouble(triangle.First());
+        const Double3 second = ToDouble(triangle.Second());
+        const Double3 third = ToDouble(triangle.Third());
+        const Double3 edge01 = second - first;
+        const Double3 edge02 = third - first;
+        const Double3 normal = Cross(edge01, edge02);
+        const double normalLengthSquared = Dot(normal, normal);
+
+        if (normalLengthSquared > 0.0)
+        {
+            const Double3 projected =
+                query -
+                normal * (Dot(query - first, normal) / normalLengthSquared);
+            const Double3 fromFirst = projected - first;
+            const double edge01Squared = Dot(edge01, edge01);
+            const double edge02Squared = Dot(edge02, edge02);
+            const double edgesDot = Dot(edge01, edge02);
+            const double pointDot01 = Dot(fromFirst, edge01);
+            const double pointDot02 = Dot(fromFirst, edge02);
+            const double denominator =
+                edge01Squared * edge02Squared - edgesDot * edgesDot;
+            const double secondWeight =
+                (edge02Squared * pointDot01 - edgesDot * pointDot02) /
+                denominator;
+            const double thirdWeight =
+                (edge01Squared * pointDot02 - edgesDot * pointDot01) /
+                denominator;
+            const double firstWeight = 1.0 - secondWeight - thirdWeight;
+            if (firstWeight >= 0.0 && secondWeight >= 0.0 && thirdWeight >= 0.0)
+            {
+                return projected;
+            }
+        }
+
+        Double3 closest = ReferencePointSegment(query, first, second);
+        double closestSquared = Dot(query - closest, query - closest);
+        const Double3 edge02Closest =
+            ReferencePointSegment(query, first, third);
+        const double edge02Squared =
+            Dot(query - edge02Closest, query - edge02Closest);
+        if (edge02Squared < closestSquared)
+        {
+            closest = edge02Closest;
+            closestSquared = edge02Squared;
+        }
+        const Double3 edge12Closest =
+            ReferencePointSegment(query, second, third);
+        if (Dot(query - edge12Closest, query - edge12Closest) < closestSquared)
+        {
+            closest = edge12Closest;
+        }
+        return closest;
+    }
+
     [[nodiscard]] bool ReferenceRayAabb(const mv::math::Ray3f& ray,
                                         const mv::math::Aabb3f& box)
     {
@@ -129,6 +242,35 @@ namespace
         Require(!Plane3f::TryFromPoints(Point3f(), Point3f(), Point3f()));
         Require(!Plane3f::TryFromNormalAndOffset(
             Normal3f::AxisX(), std::numeric_limits<float>::infinity()));
+    }
+
+    void CheckLineAndSegment()
+    {
+        using namespace mv::math;
+
+        const Line3f line(Point3f(1.0F, 2.0F, 3.0F), Direction3f::AxisX());
+        Require(line.Origin() == Point3f(1.0F, 2.0F, 3.0F));
+        Require(line.Direction() == Direction3f::AxisX());
+        Require(line.PointAt(-2.0F) == Point3f(-1.0F, 2.0F, 3.0F));
+        Require(line.IsFinite());
+
+        const Segment3f segment(Point3f(), Point3f(0.0F, 0.0F, 4.0F));
+        Require(segment.Start() == Point3f());
+        Require(segment.End() == Point3f(0.0F, 0.0F, 4.0F));
+        Require(segment.Displacement() == Vec3f(0.0F, 0.0F, 4.0F));
+        Require(segment.LengthSquared() == 16.0F);
+        Require(segment.Length() == 4.0F);
+        Require(!segment.IsDegenerate());
+        Require(segment.TryDirection() == Direction3f::AxisZ());
+        Require(segment.PointAtFraction(0.25F) == Point3f(0.0F, 0.0F, 1.0F));
+        Require(segment.PointAtFraction(2.0F) == Point3f(0.0F, 0.0F, 8.0F));
+        Require(segment.IsFinite());
+
+        const Segment3f degenerate(Point3f(1.0F, 2.0F, 3.0F),
+                                   Point3f(1.0F, 2.0F, 3.0F));
+        Require(degenerate.IsDegenerate());
+        Require(!degenerate.TryDirection());
+        Require(degenerate.PointAtFraction(0.75F) == degenerate.Start());
     }
 
     void CheckTriangleAndSphere()
@@ -274,6 +416,106 @@ namespace
                            Triangle3f(Point3f(), Point3f(), Point3f())));
     }
 
+    void CheckClosestPointQueries()
+    {
+        using namespace mv::math;
+
+        const Point3f point(2.0F, 3.0F, 0.0F);
+        const Line3f line(Point3f(), Direction3f::AxisX());
+        const PointLineClosest3f lineClosest = ClosestPoints(point, line);
+        Require(lineClosest.PointOnLine == Point3f(2.0F, 0.0F, 0.0F));
+        Require(lineClosest.LineDistance == 2.0F);
+        Require(lineClosest.SquaredDistance == 9.0F);
+        Require(lineClosest.Distance() == 3.0F);
+        Require(ClosestPoint(point, line) == lineClosest.PointOnLine);
+        Require(DistanceSquared(point, line) == 9.0F);
+        Require(Distance(point, line) == 3.0F);
+
+        const PointLineClosest3f negativeLineClosest =
+            ClosestPoints(Point3f(-2.0F, 1.0F, 0.0F), line);
+        Require(negativeLineClosest.LineDistance == -2.0F);
+        Require(negativeLineClosest.PointOnLine == Point3f(-2.0F, 0.0F, 0.0F));
+
+        const Ray3f ray(Point3f(), Direction3f::AxisX());
+        const PointRayClosest3f rayClosest =
+            ClosestPoints(Point3f(-2.0F, 1.0F, 0.0F), ray);
+        Require(rayClosest.RayDistance == 0.0F);
+        Require(rayClosest.PointOnRay == Point3f());
+        Require(rayClosest.SquaredDistance == 5.0F);
+
+        const Segment3f segment(Point3f(), Point3f(4.0F, 0.0F, 0.0F));
+        const PointSegmentClosest3f segmentClosest =
+            ClosestPoints(point, segment);
+        Require(segmentClosest.PointOnSegment == Point3f(2.0F, 0.0F, 0.0F));
+        Require(segmentClosest.SegmentFraction == 0.5F);
+        Require(segmentClosest.SquaredDistance == 9.0F);
+        Require(
+            ClosestPoints(Point3f(6.0F, 1.0F, 0.0F), segment).SegmentFraction ==
+            1.0F);
+
+        const Segment3f pointSegment(Point3f(1.0F, 2.0F, 3.0F),
+                                     Point3f(1.0F, 2.0F, 3.0F));
+        const PointSegmentClosest3f pointSegmentClosest =
+            ClosestPoints(Point3f(4.0F, 6.0F, 3.0F), pointSegment);
+        Require(pointSegmentClosest.PointOnSegment == pointSegment.Start());
+        Require(pointSegmentClosest.SegmentFraction == 0.0F);
+        Require(pointSegmentClosest.SquaredDistance == 25.0F);
+
+        const auto plane =
+            Plane3f::TryFromPointNormal(Point3f(), Normal3f::AxisZ());
+        Require(plane.has_value());
+        const PointPlaneClosest3f planeClosest =
+            ClosestPoints(Point3f(1.0F, 2.0F, -3.0F), *plane);
+        Require(planeClosest.PointOnPlane == Point3f(1.0F, 2.0F, 0.0F));
+        Require(planeClosest.SignedDistance == -3.0F);
+        Require(planeClosest.SquaredDistance == 9.0F);
+
+        const Triangle3f triangle(Point3f(0.0F, 0.0F, 0.0F),
+                                  Point3f(2.0F, 0.0F, 0.0F),
+                                  Point3f(0.0F, 2.0F, 0.0F));
+        const PointTriangleClosest3f faceClosest =
+            ClosestPoints(Point3f(0.5F, 0.5F, 2.0F), triangle);
+        Require(faceClosest.PointOnTriangle == Point3f(0.5F, 0.5F, 0.0F));
+        Require(
+            NearlyEqual(faceClosest.Barycentric, Vec3f(0.5F, 0.25F, 0.25F)));
+        Require(faceClosest.SquaredDistance == 4.0F);
+
+        const PointTriangleClosest3f firstClosest =
+            ClosestPoints(Point3f(-1.0F, -1.0F, 0.0F), triangle);
+        Require(firstClosest.PointOnTriangle == triangle.First());
+        Require(firstClosest.Barycentric == Vec3f(1.0F, 0.0F, 0.0F));
+
+        const PointTriangleClosest3f edge01Closest =
+            ClosestPoints(Point3f(0.5F, -1.0F, 0.0F), triangle);
+        Require(edge01Closest.PointOnTriangle == Point3f(0.5F, 0.0F, 0.0F));
+        Require(
+            NearlyEqual(edge01Closest.Barycentric, Vec3f(0.75F, 0.25F, 0.0F)));
+
+        const PointTriangleClosest3f edge12Closest =
+            ClosestPoints(Point3f(2.0F, 2.0F, 0.0F), triangle);
+        Require(edge12Closest.PointOnTriangle == Point3f(1.0F, 1.0F, 0.0F));
+        Require(
+            NearlyEqual(edge12Closest.Barycentric, Vec3f(0.0F, 0.5F, 0.5F)));
+
+        const Triangle3f lineTriangle(Point3f(), Point3f(2.0F, 0.0F, 0.0F),
+                                      Point3f(1.0F, 0.0F, 0.0F));
+        const PointTriangleClosest3f lineTriangleClosest =
+            ClosestPoints(Point3f(1.0F, 2.0F, 0.0F), lineTriangle);
+        Require(lineTriangleClosest.PointOnTriangle ==
+                Point3f(1.0F, 0.0F, 0.0F));
+        Require(NearlyEqual(lineTriangleClosest.Barycentric,
+                            Vec3f(0.5F, 0.5F, 0.0F)));
+
+        const Triangle3f pointTriangle(Point3f(3.0F, 4.0F, 5.0F),
+                                       Point3f(3.0F, 4.0F, 5.0F),
+                                       Point3f(3.0F, 4.0F, 5.0F));
+        const PointTriangleClosest3f pointTriangleClosest =
+            ClosestPoints(Point3f(), pointTriangle);
+        Require(pointTriangleClosest.PointOnTriangle == pointTriangle.First());
+        Require(pointTriangleClosest.Barycentric == Vec3f(1.0F, 0.0F, 0.0F));
+        Require(pointTriangleClosest.SquaredDistance == 50.0F);
+    }
+
     void CheckBoundsQueries()
     {
         using namespace mv::math;
@@ -389,10 +631,46 @@ namespace
         }
     }
 
+    void CheckTriangleClosestReferenceParity()
+    {
+        using namespace mv::math;
+
+        std::uint32_t state = 0x51A7C105U;
+        for (std::size_t index = 0U; index < 1024U; ++index)
+        {
+            const Triangle3f triangle(
+                Point3f(NextValue(state), NextValue(state), NextValue(state)),
+                Point3f(NextValue(state), NextValue(state), NextValue(state)),
+                Point3f(NextValue(state), NextValue(state), NextValue(state)));
+            const Point3f point(NextValue(state), NextValue(state),
+                                NextValue(state));
+            const PointTriangleClosest3f result =
+                ClosestPoints(point, triangle);
+            const Double3 reference = ReferencePointTriangle(point, triangle);
+            Require(NearlyEqual(result.PointOnTriangle.Vector(),
+                                Vec3f(static_cast<float>(reference.X),
+                                      static_cast<float>(reference.Y),
+                                      static_cast<float>(reference.Z)),
+                                2.0e-4F));
+            Require(NearlyEqual(result.Barycentric.X() +
+                                    result.Barycentric.Y() +
+                                    result.Barycentric.Z(),
+                                1.0F, 2.0e-4F));
+            const Point3f reconstructed = Point3f::FromVector(
+                triangle.First().Vector() * result.Barycentric.X() +
+                triangle.Second().Vector() * result.Barycentric.Y() +
+                triangle.Third().Vector() * result.Barycentric.Z());
+            Require(NearlyEqual(reconstructed.Vector(),
+                                result.PointOnTriangle.Vector(), 2.0e-4F));
+        }
+    }
+
     void CheckLayouts()
     {
         using namespace mv::math;
         static_assert(sizeof(Ray3f) == 32);
+        static_assert(sizeof(Line3f) == 32);
+        static_assert(sizeof(Segment3f) == 32);
         static_assert(sizeof(Plane3f) == 16);
         static_assert(sizeof(Triangle3f) == 48);
         static_assert(sizeof(Sphere3f) == 16);
@@ -404,11 +682,14 @@ namespace
 int main()
 {
     CheckRayAndPlane();
+    CheckLineAndSegment();
     CheckTriangleAndSphere();
     CheckAabb();
     CheckLinearQueries();
+    CheckClosestPointQueries();
     CheckBoundsQueries();
     CheckAabbReferenceParity();
+    CheckTriangleClosestReferenceParity();
     CheckLayouts();
     return 0;
 }
