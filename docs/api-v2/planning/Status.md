@@ -3,7 +3,8 @@
 ## Current phase
 
 Phase A and the initial Phase B semantic-transform slice are accepted. The
-next implementation priority is CPU geometry and spatial queries for Move 1.x.
+first Phase C CPU geometry/query slice for Move 1.x is implemented and under
+verification.
 
 ## Completed
 
@@ -55,6 +56,13 @@ next implementation priority is CPU geometry and spatial queries for Move 1.x.
   begin CPU geometry
 - Documented an opt-in future Slang companion and explicitly deferred its
   implementation behind the CPU surface needed by Move 1.x
+- Implemented `Ray3f`, `Plane3f`, `Triangle3f`, `Sphere3f`, `Aabb3f`, and
+  `PreparedRay3f`
+- Implemented distinct predicate and detailed ray/plane, ray/triangle,
+  ray/sphere, and ray/AABB query paths with typed results
+- Added sphere/sphere, sphere/AABB, and AABB/AABB predicates
+- Added Phase C scalar/RTM behavior, layout, focused-compile, generated-code,
+  sanitizer, downstream-consumer, and independent ray/AABB reference coverage
 
 ## Accepted evidence
 
@@ -78,3 +86,4 @@ next implementation priority is CPU geometry and spatial queries for Move 1.x.
   `Vec3f` ABI commitment
 - Controlled Phase B benchmark evidence on stable hardware; hosted reports
   remain diagnostic rather than regression gates
+- Hosted Phase C compiler/OS results and focused runtime benchmark evidence

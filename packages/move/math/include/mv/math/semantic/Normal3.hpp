@@ -8,6 +8,8 @@
 
 namespace mv::math
 {
+    class Plane3f;
+
     class Normal3f
     {
     public:
@@ -86,6 +88,7 @@ namespace mv::math
 
         Vec3f Value_;
 
+        friend class Plane3f;
         friend Normal3f Rotate(const Rotation3f&, Normal3f) noexcept;
     };
 

@@ -42,12 +42,51 @@ option(MOVE_VECTORMATH_BUILD_PHASE_A_TESTS
        "Build API-v2 Phase A scalar and RTM architecture proof tests" OFF)
 option(MOVE_VECTORMATH_BUILD_PHASE_B_TESTS
        "Build API-v2 Phase B semantic transform tests" OFF)
+option(MOVE_VECTORMATH_BUILD_PHASE_C_TESTS
+       "Build API-v2 Phase C geometry and query tests" OFF)
 
 if(MOVE_VECTORMATH_BUILD_TESTS OR
    MOVE_VECTORMATH_BUILD_STANDALONE_TESTS OR
    MOVE_VECTORMATH_BUILD_PHASE_A_TESTS OR
-   MOVE_VECTORMATH_BUILD_PHASE_B_TESTS)
+   MOVE_VECTORMATH_BUILD_PHASE_B_TESTS OR
+   MOVE_VECTORMATH_BUILD_PHASE_C_TESTS)
     enable_testing()
+endif()
+
+if(MOVE_VECTORMATH_BUILD_PHASE_C_TESTS)
+    add_executable(move-vectormath-phase-c-rtm-tests tests/phase_c.cpp)
+    target_link_libraries(move-vectormath-phase-c-rtm-tests
+                          PRIVATE move-vectormath)
+    move_vectormath_enable_strict_warnings(
+        move-vectormath-phase-c-rtm-tests)
+    add_test(NAME move-vectormath-phase-c-rtm
+             COMMAND move-vectormath-phase-c-rtm-tests)
+
+    add_executable(move-vectormath-phase-c-scalar-tests tests/phase_c.cpp)
+    target_link_libraries(move-vectormath-phase-c-scalar-tests
+                          PRIVATE move-vectormath)
+    target_compile_definitions(move-vectormath-phase-c-scalar-tests
+                               PRIVATE MV_MATH_FORCE_SCALAR=1)
+    move_vectormath_enable_strict_warnings(
+        move-vectormath-phase-c-scalar-tests)
+    add_test(NAME move-vectormath-phase-c-scalar
+             COMMAND move-vectormath-phase-c-scalar-tests)
+
+    add_library(move-vectormath-phase-c-rtm-codegen OBJECT
+                tests/phase_c_codegen.cpp)
+    target_link_libraries(move-vectormath-phase-c-rtm-codegen
+                          PRIVATE move-vectormath)
+    move_vectormath_enable_strict_warnings(
+        move-vectormath-phase-c-rtm-codegen)
+
+    add_library(move-vectormath-phase-c-scalar-codegen OBJECT
+                tests/phase_c_codegen.cpp)
+    target_link_libraries(move-vectormath-phase-c-scalar-codegen
+                          PRIVATE move-vectormath)
+    target_compile_definitions(move-vectormath-phase-c-scalar-codegen
+                               PRIVATE MV_MATH_FORCE_SCALAR=1)
+    move_vectormath_enable_strict_warnings(
+        move-vectormath-phase-c-scalar-codegen)
 endif()
 
 if(MOVE_VECTORMATH_BUILD_PHASE_A_TESTS)

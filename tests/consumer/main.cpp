@@ -1,5 +1,5 @@
 #include <move/vectormath.hpp>
-#include <mv/math/PhaseB.hpp>
+#include <mv/math/PhaseC.hpp>
 
 int main()
 {
@@ -21,5 +21,20 @@ int main()
     const mv::math::Point3f semanticResult =
         mv::math::TransformPoint(rigid, semanticPoint);
 
-    return semanticResult == mv::math::Point3f(5.0F, 7.0F, 9.0F) ? 0 : 1;
+    if (semanticResult != mv::math::Point3f(5.0F, 7.0F, 9.0F))
+    {
+        return 1;
+    }
+
+    const auto bounds =
+        mv::math::Aabb3f::TryFromMinMax(mv::math::Point3f(-1.0F, -1.0F, -1.0F),
+                                        mv::math::Point3f(1.0F, 1.0F, 1.0F));
+    if (!bounds)
+    {
+        return 1;
+    }
+
+    const mv::math::Ray3f ray(mv::math::Point3f(-3.0F, 0.0F, 0.0F),
+                              mv::math::Direction3f::AxisX());
+    return mv::math::Intersects(ray, *bounds) ? 0 : 1;
 }
