@@ -8,6 +8,7 @@
 
 namespace mv::math
 {
+    // Provenance: MVM-PROV-B-RIGID-AFFINE.
     class RigidTransform3f
     {
     public:

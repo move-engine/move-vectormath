@@ -4,6 +4,7 @@
 
 namespace mv::math
 {
+    // Provenance: MVM-PROV-B-RIGID-AFFINE.
     class AffineTransform3f
     {
     public:

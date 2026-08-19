@@ -8,6 +8,7 @@
 
 namespace mv::math::detail
 {
+    // Provenance: MVM-PROV-A-SAFE-NORMALIZE.
     [[nodiscard]] inline std::optional<Vec3f> TryNormalizeVector(
         const Vec3f& value) noexcept
     {

@@ -8,6 +8,7 @@
 
 namespace mv::math
 {
+    // Provenance: MVM-PROV-C-PRIMITIVES.
     class Ray3f
     {
     public:

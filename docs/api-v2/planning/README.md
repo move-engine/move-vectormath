@@ -5,6 +5,8 @@
 - [`Status.md`](Status.md) records current progress.
 - [`DesignCheckpoint.md`](DesignCheckpoint.md) summarizes the proposed
   direction and recommended first implementation authorization.
+- [`ProvenancePolicy.md`](ProvenancePolicy.md) defines the source-first
+  acceptance gate for Codex-generated algorithms.
 
 The plan intentionally places a review gate between design and core
 implementation.

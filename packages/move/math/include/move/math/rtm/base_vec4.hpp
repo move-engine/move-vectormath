@@ -44,6 +44,7 @@ namespace move::math::simd_rtm
         using rtm_vec4_t = typename wrapper_type::type;
         rtm_vec4_t _value;
 
+        // Provenance: MVM-PROV-LEGACY-RTM-NORMALIZE.
         MVM_INLINE_NODISCARD static rtm_vec4_t normalize4(
             const rtm_vec4_t& value)
         {
@@ -53,8 +54,7 @@ namespace move::math::simd_rtm
                 return rtm::vector_zero();
             }
 
-            return rtm::vector_mul(
-                value, rtm::scalar_sqrt_reciprocal(len_sq));
+            return rtm::vector_mul(value, rtm::scalar_sqrt_reciprocal(len_sq));
         }
 
         // Constructors

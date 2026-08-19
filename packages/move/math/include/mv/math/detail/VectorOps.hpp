@@ -11,6 +11,7 @@
 
 namespace mv::math::detail
 {
+    // Provenance: MVM-PROV-A-VECTOR-OPS.
     template <typename T>
     struct ScalarNative4
     {

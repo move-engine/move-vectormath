@@ -12,6 +12,7 @@
 
 namespace mv::math
 {
+    // Provenance: MVM-PROV-C-PRIMITIVES.
     class Aabb3f
     {
     public:

@@ -323,6 +323,7 @@ namespace move::math
             return quat::from_rtm(quat_from_euler(data[0], data[1], data[2]));
         }
 
+        // Provenance: MVM-PROV-LEGACY-QUATERNION-AUDIT.
         MVM_INLINE_NODISCARD static quat look_rotation(const vec3_t& forward,
                                                        const vec3_t& up)
         {
@@ -429,6 +430,7 @@ namespace move::math
     }
 
     template <typename T>
+    // Provenance: MVM-PROV-LEGACY-QUATERNION-AUDIT.
     MVM_INLINE_NODISCARD bool same_rotation(
         const quat<T>& a,
         const quat<T>& b,

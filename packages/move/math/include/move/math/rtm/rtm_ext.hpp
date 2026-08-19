@@ -467,6 +467,7 @@ namespace rtm::ext
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
+    // Provenance: MVM-PROV-LEGACY-QUATERNION-AUDIT.
     MVM_INLINE_NODISCARD quatf quat_inverse(const quatf& input)
     {
         // Based on DXM's implementation
@@ -485,6 +486,7 @@ namespace rtm::ext
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
+    // Provenance: MVM-PROV-LEGACY-QUATERNION-AUDIT.
     MVM_INLINE_NODISCARD quatd quat_inverse(const quatd& input)
     {
         // Based on DXM's implementation
@@ -583,6 +585,7 @@ namespace rtm::ext
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
+    // Provenance: MVM-PROV-LEGACY-QUATERNION-AUDIT.
     MVM_INLINE_NODISCARD quatf quat_ln(const quatf& input)
     {
         using namespace rtm;
@@ -619,6 +622,7 @@ namespace rtm::ext
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
+    // Provenance: MVM-PROV-LEGACY-QUATERNION-AUDIT.
     MVM_INLINE_NODISCARD quatd quat_ln(const quatd& input)
     {
         using namespace rtm;
@@ -653,6 +657,7 @@ namespace rtm::ext
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
+    // Provenance: MVM-PROV-LEGACY-QUATERNION-AUDIT.
     MVM_INLINE_NODISCARD quatf quat_exp(const quatf& input)
     {
         using namespace rtm;
@@ -672,6 +677,7 @@ namespace rtm::ext
     }
 
     RTM_DISABLE_SECURITY_COOKIE_CHECK
+    // Provenance: MVM-PROV-LEGACY-QUATERNION-AUDIT.
     MVM_INLINE_NODISCARD quatd quat_exp(const quatd& input)
     {
         using namespace rtm;

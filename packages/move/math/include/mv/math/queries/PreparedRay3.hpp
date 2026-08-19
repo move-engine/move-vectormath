@@ -9,6 +9,7 @@
 
 namespace mv::math
 {
+    // Provenance: MVM-PROV-C-RAY-AABB.
     class PreparedRay3f
     {
     public:

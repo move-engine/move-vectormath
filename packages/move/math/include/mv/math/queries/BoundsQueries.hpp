@@ -68,6 +68,7 @@ namespace mv::math
             bool HasEntryAxis;
         };
 
+        // Provenance: MVM-PROV-C-RAY-AABB.
         [[nodiscard]] inline std::optional<RayAabbSlabSolution>
         TryIntersectPreparedAabbSlabs(const PreparedRay3f& prepared,
                                       const Aabb3f& box) noexcept
@@ -156,6 +157,7 @@ namespace mv::math
             bool StartsInside;
         };
 
+        // Provenance: MVM-PROV-C-RAY-SPHERE.
         [[nodiscard]] inline std::optional<RaySphereSolution>
         TryIntersectRaySphere(const Ray3f& ray, const Sphere3f& sphere) noexcept
         {
@@ -272,6 +274,7 @@ namespace mv::math
         return Intersects(PreparedRay3f(ray), box);
     }
 
+    // Provenance: MVM-PROV-C-BOUNDS-PAIRS.
     [[nodiscard]] inline bool Intersects(const Sphere3f& left,
                                          const Sphere3f& right) noexcept
     {

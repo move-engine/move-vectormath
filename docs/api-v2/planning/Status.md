@@ -3,8 +3,8 @@
 ## Current phase
 
 Phase A and the initial Phase B semantic-transform slice are accepted. The
-first Phase C CPU geometry/query slice for Move 1.x is implemented and under
-verification.
+first Phase C CPU geometry/query slice for Move 1.x is implemented and verified
+locally and on the hosted compiler/OS matrix.
 
 ## Completed
 
@@ -56,6 +56,10 @@ verification.
   begin CPU geometry
 - Documented an opt-in future Slang companion and explicitly deferred its
   implementation behind the CPU surface needed by Move 1.x
+- Established a source-first provenance gate for Codex-generated algorithms
+  and retrospectively audited the legacy Codex changes and Phase A/B/C
+  implementation against original papers and exact compatible-licensed
+  library revisions
 - Implemented `Ray3f`, `Plane3f`, `Triangle3f`, `Sphere3f`, `Aabb3f`, and
   `PreparedRay3f`
 - Implemented distinct predicate and detailed ray/plane, ray/triangle,
@@ -63,6 +67,9 @@ verification.
 - Added sphere/sphere, sphere/AABB, and AABB/AABB predicates
 - Added Phase C scalar/RTM behavior, layout, focused-compile, generated-code,
   sanitizer, downstream-consumer, and independent ray/AABB reference coverage
+- Verified the Phase C library matrix and the separate SSE4.2, AVX, and AVX2
+  geometry benchmark build, parity, and diagnostic performance workflow on
+  Linux and Windows
 
 ## Accepted evidence
 
@@ -86,4 +93,5 @@ verification.
   `Vec3f` ABI commitment
 - Controlled Phase B benchmark evidence on stable hardware; hosted reports
   remain diagnostic rather than regression gates
-- Hosted Phase C compiler/OS results and focused runtime benchmark evidence
+- Resolve inverse-transpose direction versus oriented-surface/adjugate
+  semantics for `Normal3f` under negative-determinant transforms

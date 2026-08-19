@@ -11,6 +11,7 @@
 
 namespace mv::math
 {
+    // Provenance: MVM-PROV-A-ROTATION.
     class Rotation3f
     {
     public:

@@ -30,6 +30,7 @@ namespace mv::math
             float Denominator;
         };
 
+        // Provenance: MVM-PROV-C-RAY-PLANE.
         [[nodiscard]] inline std::optional<RayPlaneSolution>
         TryIntersectRayPlane(const Ray3f& ray,
                              const Plane3f& plane,
@@ -66,6 +67,7 @@ namespace mv::math
             float Determinant;
         };
 
+        // Provenance: MVM-PROV-C-RAY-TRIANGLE.
         [[nodiscard]] inline std::optional<RayTriangleSolution>
         TryIntersectRayTriangle(const Ray3f& ray,
                                 const Triangle3f& triangle,

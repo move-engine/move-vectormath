@@ -399,6 +399,7 @@ namespace move::math
     template <typename T1,
               typename T2,
               typename EpsilonT = most_detailed_t<T1, T2>>
+    // Provenance: MVM-PROV-LEGACY-NUMERIC-AUDIT.
     MVM_INLINE_NODISCARD bool approx_equal(
         const T1& a,
         const T2& b,

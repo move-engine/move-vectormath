@@ -10,6 +10,9 @@ waiting for the complete primitive cross-product.
 This slice deliberately takes priority over the deferred Slang companion. C++
 remains the authoritative implementation.
 
+Algorithm sources, exact upstream revisions, and Move-specific deviations are
+recorded in [`AlgorithmProvenance.md`](AlgorithmProvenance.md).
+
 ## Implemented surface
 
 | Area | Types and facilities |
@@ -81,6 +84,9 @@ Local verification completed with:
   double-precision slab reference;
 - dedicated code-generation fixtures for prepared ray/AABB batches and
   ray/triangle batches.
+- the hosted GCC, Clang, AppleClang/ARM, and MSVC matrix;
+- the separate Linux/Windows SSE4.2, AVX, and AVX2 benchmark build and parity
+  jobs, plus its diagnostic performance-report job.
 
 Warmed local GCC 16 focused-header measurements used C++20 and `-O2`:
 
@@ -94,8 +100,6 @@ These are local directional measurements, not stable regression gates.
 
 ## Remaining Phase C work
 
-- Run the hosted compiler/OS CI matrix and add focused Phase C runtime
-  benchmarks.
 - Add line and segment primitives and their parameter conventions.
 - Add closest-point and distance operations.
 - Add capsule and OBB values, transforms, and queries.

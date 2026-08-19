@@ -9,6 +9,7 @@
 
 namespace mv::math
 {
+    // Provenance: MVM-PROV-C-PRIMITIVES.
     enum class PlaneSide
     {
         Back,

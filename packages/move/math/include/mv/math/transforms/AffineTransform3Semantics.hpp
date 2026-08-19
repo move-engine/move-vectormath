@@ -24,6 +24,7 @@ namespace mv::math
             TransformVector(transform, direction.Vector()));
     }
 
+    // Provenance: MVM-PROV-B-NORMAL-TRANSFORM.
     [[nodiscard]] inline std::optional<Normal3f> TryTransformNormal(
         const AffineTransform3f& transform, Normal3f normal) noexcept
     {
