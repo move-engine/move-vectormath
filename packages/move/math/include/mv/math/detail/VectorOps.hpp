@@ -11,7 +11,8 @@
 
 namespace mv::math::detail
 {
-    // Provenance: MVM-PROV-A-VECTOR-OPS.
+    // Standard componentwise/dot/cross operations; the SIMD backend delegates
+    // to RTM 2.3.1 vector primitives (MIT).
     template <typename T>
     struct ScalarNative4
     {

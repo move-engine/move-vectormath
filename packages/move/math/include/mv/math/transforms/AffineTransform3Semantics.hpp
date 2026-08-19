@@ -24,7 +24,8 @@ namespace mv::math
             TransformVector(transform, direction.Vector()));
     }
 
-    // Provenance: MVM-PROV-B-NORMAL-TRANSFORM.
+    // Cofactor/inverse-transpose derivation: Eric Lengyel, "Transforming
+    // Normals" (2024). Reflection semantics remain an explicit Move decision.
     [[nodiscard]] inline std::optional<Normal3f> TryTransformNormal(
         const AffineTransform3f& transform, Normal3f normal) noexcept
     {

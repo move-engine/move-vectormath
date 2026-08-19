@@ -12,7 +12,8 @@
 
 namespace mv::math
 {
-    // Provenance: MVM-PROV-C-PRIMITIVES.
+    // Move-owned AABB contract; operations cross-checked against DirectXMath
+    // DirectXCollision.inl (MIT).
     class Aabb3f
     {
     public:

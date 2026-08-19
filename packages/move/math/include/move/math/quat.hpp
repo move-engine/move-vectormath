@@ -323,7 +323,8 @@ namespace move::math
             return quat::from_rtm(quat_from_euler(data[0], data[1], data[2]));
         }
 
-        // Provenance: MVM-PROV-LEGACY-QUATERNION-AUDIT.
+        // Move look-frame policy; matrix/quaternion conversion cross-checked
+        // against RTM 2.3.1 quatf.h (MIT).
         MVM_INLINE_NODISCARD static quat look_rotation(const vec3_t& forward,
                                                        const vec3_t& up)
         {
@@ -430,7 +431,8 @@ namespace move::math
     }
 
     template <typename T>
-    // Provenance: MVM-PROV-LEGACY-QUATERNION-AUDIT.
+    // Quaternion double-cover equivalence (q and -q); see Shoemake,
+    // "Animating Rotation with Quaternion Curves" (SIGGRAPH 1985).
     MVM_INLINE_NODISCARD bool same_rotation(
         const quat<T>& a,
         const quat<T>& b,

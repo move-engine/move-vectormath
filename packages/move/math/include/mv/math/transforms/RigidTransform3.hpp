@@ -8,7 +8,8 @@
 
 namespace mv::math
 {
-    // Provenance: MVM-PROV-B-RIGID-AFFINE.
+    // Transform/composition equations cross-checked against RTM 2.3.1 qvf.h
+    // (MIT); Compose uses Move's explicit application-order contract.
     class RigidTransform3f
     {
     public:

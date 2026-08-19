@@ -19,16 +19,15 @@ definitions may share a file-level entry instead of one entry per function.
 Each implementation entry in
 [`AlgorithmProvenance.md`](../implementation/AlgorithmProvenance.md) records:
 
-1. a stable `MVM-PROV-*` identifier referenced from the source;
-2. the functions and files covered;
-3. whether the code is paper-derived, library-adapted, source-validated
+1. the functions and files covered;
+2. whether the code is paper-derived, library-adapted, source-validated
    independent work, a Move-specific derivation, or an elementary definition;
-4. paper title, authors, publication, DOI, equation/section when useful, or an
+3. paper title, authors, publication, DOI, equation/section when useful, or an
    immutable repository commit and file path;
-5. the upstream license for any source-code implementation consulted;
-6. deliberate differences in conventions, domains, tolerances, degeneracy,
+4. the upstream license for any source-code implementation consulted;
+5. deliberate differences in conventions, domains, tolerances, degeneracy,
    precision, and returned data;
-7. validation and tests, including whether a purported oracle is genuinely
+6. validation and tests, including whether a purported oracle is genuinely
    independent of the production algorithm.
 
 An entry must not claim that code was derived from a source merely because a
@@ -53,21 +52,25 @@ algorithm against the paper and use library code only for cross-checking.
 
 ## Source comments
 
-Nontrivial implementation sites use a short comment such as:
+Nontrivial implementation sites carry a short, self-contained citation. A
+reader must be able to identify the source without decoding an internal ID or
+opening the provenance register. For example:
 
 ```cpp
-// Provenance: MVM-PROV-C-RAY-TRIANGLE.
+// Moller-Trumbore ray/triangle test (JGT 1997, doi:10.1080/10867651.1997.10487468);
+// Move adds explicit culling, finite-input, and boundary policy.
 ```
 
-The detailed record remains centralized so installed headers are not filled
-with long URLs and bibliographies. The identifier must be searchable and may
-not be removed while the algorithm remains.
+Prefer an author/algorithm or library/version and file, plus a terse note about
+important Move-specific differences. The detailed register supplements these
+comments with immutable revisions, licenses, and longer rationale; it is not a
+lookup table required to understand the header.
 
 ## Review gate
 
 Before a CPU feature is accepted:
 
-- its provenance entry and source marker exist;
+- its inline source comment and detailed provenance entry exist;
 - the cited material was actually inspected during the implementation work;
 - license compatibility has been recorded;
 - deviations from the cited algorithm are tested;

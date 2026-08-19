@@ -9,7 +9,8 @@
 
 namespace mv::math
 {
-    // Provenance: MVM-PROV-C-PRIMITIVES.
+    // Standard three-point triangle; degeneracy and optional-normal policy are
+    // Move-specific.
     class Triangle3f
     {
     public:

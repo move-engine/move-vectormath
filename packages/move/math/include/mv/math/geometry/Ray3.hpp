@@ -8,7 +8,8 @@
 
 namespace mv::math
 {
-    // Provenance: MVM-PROV-C-PRIMITIVES.
+    // Standard half-line origin + unit direction; invariant enforcement and
+    // semantic Point3f/Direction3f storage are Move-specific.
     class Ray3f
     {
     public:

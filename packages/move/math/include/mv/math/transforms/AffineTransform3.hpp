@@ -4,7 +4,8 @@
 
 namespace mv::math
 {
-    // Provenance: MVM-PROV-B-RIGID-AFFINE.
+    // Standard affine point/vector transform; storage and semantic separation
+    // are Move-specific.
     class AffineTransform3f
     {
     public:

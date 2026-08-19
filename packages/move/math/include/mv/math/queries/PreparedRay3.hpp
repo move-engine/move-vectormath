@@ -9,7 +9,8 @@
 
 namespace mv::math
 {
-    // Provenance: MVM-PROV-C-RAY-AABB.
+    // Reciprocal direction/sign preparation follows Williams et al., "An
+    // Efficient and Robust Ray-Box Intersection Algorithm" (JGT 2005).
     class PreparedRay3f
     {
     public:

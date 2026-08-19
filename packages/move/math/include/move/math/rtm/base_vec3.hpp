@@ -41,7 +41,8 @@ namespace move::math::simd_rtm
         using rtm_vec3_t = typename wrapper_type::type;
         rtm_vec3_t _value;
 
-        // Provenance: MVM-PROV-LEGACY-RTM-NORMALIZE.
+        // Uses RTM 2.3.1 scalar_sqrt_reciprocal + vector_mul (MIT); Move
+        // preserves its legacy zero-vector-to-zero policy.
         MVM_INLINE_NODISCARD static rtm_vec3_t normalize3(
             const rtm_vec3_t& value)
         {

@@ -9,7 +9,8 @@
 
 namespace mv::math
 {
-    // Provenance: MVM-PROV-C-PRIMITIVES.
+    // Move-owned sphere contract; operations cross-checked against DirectXMath
+    // DirectXCollision.inl (MIT).
     class Sphere3f
     {
     public:

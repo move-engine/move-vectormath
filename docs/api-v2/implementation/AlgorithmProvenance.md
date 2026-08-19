@@ -43,7 +43,7 @@ branch conditions, conventions, and edge handling.
 
 ## Register
 
-### `MVM-PROV-LEGACY-NUMERIC-AUDIT`
+### Legacy numerical audit
 
 - **Coverage:** Codex changes in `ba96600` to `common.hpp`, scalar vector
   length/distance/normalization, angle clamping, mixed numeric comparisons, and
@@ -60,7 +60,7 @@ branch conditions, conventions, and edge handling.
   fixes, not copied source implementations, and API v2 does not automatically
   inherit that global approximate-equality policy.
 
-### `MVM-PROV-LEGACY-QUATERNION-AUDIT`
+### Legacy quaternion audit
 
 - **Coverage:** Codex changes in `ba96600` to `quat::look_rotation`,
   `same_rotation`, quaternion inverse, logarithm, and exponential.
@@ -74,7 +74,7 @@ branch conditions, conventions, and edge handling.
   for the undefined logarithm of the zero quaternion. Those domain policies are
   Move decisions and must not be inferred from the comparison sources.
 
-### `MVM-PROV-LEGACY-RTM-NORMALIZE`
+### Legacy RTM normalization
 
 - **Coverage:** `0c939fe` changes to SIMD `base_vec3` and `base_vec4`
   normalization.
@@ -83,7 +83,7 @@ branch conditions, conventions, and edge handling.
 - **Differences:** Move preserves its legacy zero-vector-to-zero policy before
   invoking RTM's reciprocal square root.
 
-### `MVM-PROV-LEGACY-AUDIT-GLUE`
+### Legacy audit glue
 
 - **Coverage:** all remaining Codex changes in `ba96600` that repair return
   types, storage loading, traits, constraints, wrapper forwarding, equality,
@@ -94,7 +94,7 @@ branch conditions, conventions, and edge handling.
   routines that predate `ba96600` are outside the Codex-generated audit scope,
   even when that commit reformatted them.
 
-### `MVM-PROV-A-VECTOR-OPS`
+### Phase A vector operations
 
 - **Coverage:** `detail/VectorOps.hpp`, `Vec2.hpp`, `Vec3.hpp`, and `Vec4.hpp`.
 - **Classification:** elementary definitions plus thin backend adaptation.
@@ -104,7 +104,7 @@ branch conditions, conventions, and edge handling.
   primitives. Public storage and zeroed spare-lane policy are Move API/ABI
   decisions, not taken from RTM.
 
-### `MVM-PROV-A-SAFE-NORMALIZE`
+### Phase A safe normalization
 
 - **Coverage:** `detail/Normalization.hpp`, semantic direction/normal
   construction, and quaternion normalization in `Rotation3.hpp`.
@@ -117,7 +117,7 @@ branch conditions, conventions, and edge handling.
 - **Validation:** extreme finite magnitudes, subnormal-scale inputs, zero, NaN,
   and infinity are exercised in Phase A/B tests.
 
-### `MVM-PROV-A-ROTATION`
+### Phase A rotation
 
 - **Coverage:** `Rotation3f` axis-angle construction, Hamilton product,
   conjugate inverse, and vector rotation.
@@ -128,7 +128,7 @@ branch conditions, conventions, and edge handling.
   semantic rotation type, and fixes composition meaning through tests rather
   than inheriting RTM's public types.
 
-### `MVM-PROV-B-RIGID-AFFINE`
+### Phase B rigid and affine transforms
 
 - **Coverage:** affine point/vector transforms and rigid transform composition,
   inverse, and application.
@@ -139,7 +139,7 @@ branch conditions, conventions, and edge handling.
 - **Differences:** Move names `Compose(first, second)` by application order and
   separates points, vectors, directions, and normals at the type level.
 
-### `MVM-PROV-B-NORMAL-TRANSFORM`
+### Phase B normal transformation
 
 - **Coverage:** `TryTransformNormal` in
   `transforms/AffineTransform3Semantics.hpp`.
@@ -154,7 +154,7 @@ branch conditions, conventions, and edge handling.
   example. This semantic distinction must be resolved before the Move 1.x API
   is frozen; the two formulations must not be documented as interchangeable.
 
-### `MVM-PROV-C-PRIMITIVES`
+### Phase C primitives
 
 - **Coverage:** `Ray3f`, `Plane3f`, `Triangle3f`, `Sphere3f`, and `Aabb3f`
   construction and elementary measurements/containment.
@@ -165,7 +165,7 @@ branch conditions, conventions, and edge handling.
   point/direction/normal members, double intermediates for wide float spans,
   and explicit optional empty-derived values are Move decisions.
 
-### `MVM-PROV-C-RAY-PLANE`
+### Phase C ray/plane intersection
 
 - **Coverage:** ray/plane predicate and detailed hit.
 - **Classification:** source-validated independent derivation.
@@ -174,7 +174,7 @@ branch conditions, conventions, and edge handling.
   tolerance, rejects non-finite inputs/results, and returns point, normal, and
   face orientation.
 
-### `MVM-PROV-C-RAY-TRIANGLE`
+### Phase C ray/triangle intersection
 
 - **Coverage:** ray/triangle predicate and detailed hit.
 - **Classification:** source-validated independent derivation.
@@ -185,7 +185,7 @@ branch conditions, conventions, and edge handling.
   inclusive distance-zero/barycentric boundaries, finite rejection, full XYZ
   barycentric weights, semantic normal, and face orientation.
 
-### `MVM-PROV-C-RAY-AABB`
+### Phase C ray/AABB intersection
 
 - **Coverage:** `PreparedRay3f` and ray/AABB predicate and detailed interval.
 - **Classification:** source-validated independent derivation.
@@ -201,7 +201,7 @@ branch conditions, conventions, and edge handling.
   written double-precision division implementation, but it remains the same
   slab algorithm and is not an algorithmically independent oracle.
 
-### `MVM-PROV-C-RAY-SPHERE`
+### Phase C ray/sphere intersection
 
 - **Coverage:** ray/sphere predicate and detailed interval.
 - **Classification:** source-validated independent derivation.
@@ -211,7 +211,7 @@ branch conditions, conventions, and edge handling.
   returns both clipped entry and exit distances, distinguishes strict interior
   starts from boundary starts, and makes a zero-radius center normal absent.
 
-### `MVM-PROV-C-BOUNDS-PAIRS`
+### Phase C bounds-pair predicates
 
 - **Coverage:** sphere/sphere, sphere/AABB, and AABB/AABB predicates.
 - **Classification:** elementary definitions, source-validated independent

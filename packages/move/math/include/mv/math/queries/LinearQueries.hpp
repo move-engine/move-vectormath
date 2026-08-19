@@ -30,7 +30,9 @@ namespace mv::math
             float Denominator;
         };
 
-        // Provenance: MVM-PROV-C-RAY-PLANE.
+        // Standard plane-equation solve; cross-checked against GLM
+        // intersectRayPlane (MIT). Move accepts t=0 and rejects non-finite
+        // hits.
         [[nodiscard]] inline std::optional<RayPlaneSolution>
         TryIntersectRayPlane(const Ray3f& ray,
                              const Plane3f& plane,
@@ -67,7 +69,9 @@ namespace mv::math
             float Determinant;
         };
 
-        // Provenance: MVM-PROV-C-RAY-TRIANGLE.
+        // Moller-Trumbore ray/triangle test (JGT 1997,
+        // doi:10.1080/10867651.1997.10487468); Move adds explicit culling,
+        // finite-input, tolerance, and boundary policy.
         [[nodiscard]] inline std::optional<RayTriangleSolution>
         TryIntersectRayTriangle(const Ray3f& ray,
                                 const Triangle3f& triangle,

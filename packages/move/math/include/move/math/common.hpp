@@ -399,7 +399,8 @@ namespace move::math
     template <typename T1,
               typename T2,
               typename EpsilonT = most_detailed_t<T1, T2>>
-    // Provenance: MVM-PROV-LEGACY-NUMERIC-AUDIT.
+    // Move absolute/relative comparison; cross-checked against Boost.Test 1.89
+    // floating-point guidance (BSL-1.0).
     MVM_INLINE_NODISCARD bool approx_equal(
         const T1& a,
         const T2& b,

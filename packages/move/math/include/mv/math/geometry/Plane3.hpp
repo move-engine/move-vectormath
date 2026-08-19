@@ -9,7 +9,8 @@
 
 namespace mv::math
 {
-    // Provenance: MVM-PROV-C-PRIMITIVES.
+    // Standard Hessian-normal plane form; finite construction and semantic
+    // Normal3f storage are Move-specific.
     enum class PlaneSide
     {
         Back,

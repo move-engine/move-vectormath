@@ -8,7 +8,8 @@
 
 namespace mv::math::detail
 {
-    // Provenance: MVM-PROV-A-SAFE-NORMALIZE.
+    // Safe scaling follows Blue (ACM TOMS 1978, doi:10.1145/355769.355771),
+    // specialized here for fixed 3-component vectors.
     [[nodiscard]] inline std::optional<Vec3f> TryNormalizeVector(
         const Vec3f& value) noexcept
     {

@@ -68,7 +68,8 @@ namespace mv::math
             bool HasEntryAxis;
         };
 
-        // Provenance: MVM-PROV-C-RAY-AABB.
+        // Williams et al. ray/box slab test (JGT 2005); Move explicitly handles
+        // parallel axes and returns a clipped interval with surface normals.
         [[nodiscard]] inline std::optional<RayAabbSlabSolution>
         TryIntersectPreparedAabbSlabs(const PreparedRay3f& prepared,
                                       const Aabb3f& box) noexcept
@@ -157,7 +158,8 @@ namespace mv::math
             bool StartsInside;
         };
 
-        // Provenance: MVM-PROV-C-RAY-SPHERE.
+        // Ray/sphere quadratic cross-checked against DirectXMath
+        // BoundingSphere::Intersects and GLM intersectRaySphere (both MIT).
         [[nodiscard]] inline std::optional<RaySphereSolution>
         TryIntersectRaySphere(const Ray3f& ray, const Sphere3f& sphere) noexcept
         {
@@ -274,7 +276,8 @@ namespace mv::math
         return Intersects(PreparedRay3f(ray), box);
     }
 
-    // Provenance: MVM-PROV-C-BOUNDS-PAIRS.
+    // Standard squared-distance bounds tests; cross-checked against DirectXMath
+    // BoundingSphere/BoundingBox intersections (MIT). Touching intersects.
     [[nodiscard]] inline bool Intersects(const Sphere3f& left,
                                          const Sphere3f& right) noexcept
     {

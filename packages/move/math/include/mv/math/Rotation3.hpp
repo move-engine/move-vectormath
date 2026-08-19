@@ -11,7 +11,8 @@
 
 namespace mv::math
 {
-    // Provenance: MVM-PROV-A-ROTATION.
+    // Quaternion equations follow Szeliski, MSR-TR-2004-92, eqs. 22/26/28;
+    // conventions and results are cross-checked against RTM 2.3.1 (MIT).
     class Rotation3f
     {
     public:
