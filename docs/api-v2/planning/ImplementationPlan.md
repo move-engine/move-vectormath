@@ -47,3 +47,12 @@ After approval:
 11. Compare v2 against the retained v1 baseline.
 
 There will be no legacy compatibility surface.
+
+## Deferred companion track
+
+After the CPU functionality needed by the first Move 1.x releases is usable,
+add an opt-in Slang companion for shader-side semantic types, geometry,
+queries, culling, and transfer-layout reflection. It mirrors portable
+contracts and shares conformance data; it does not generate or replace the
+production C++ implementation. See
+[`../design/SlangCompanion.md`](../design/SlangCompanion.md).

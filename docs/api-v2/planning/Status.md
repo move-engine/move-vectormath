@@ -2,7 +2,8 @@
 
 ## Current phase
 
-Phase A accepted; Phase B spatial semantics and transforms beginning.
+Phase A and the initial Phase B semantic-transform slice are accepted. The
+next implementation priority is CPU geometry and spatial queries for Move 1.x.
 
 ## Completed
 
@@ -48,6 +49,12 @@ Phase A accepted; Phase B spatial semantics and transforms beginning.
   checks
 - Added representative sprite, UI, point-transform, and direction-invariant
   benchmark workloads
+- Verified the full Phase B compiler/ISA CI matrix and the benchmark build,
+  parity, and diagnostic performance workflow on Linux and Windows
+- Accepted the initial Phase B semantic-transform evidence as sufficient to
+  begin CPU geometry
+- Documented an opt-in future Slang companion and explicitly deferred its
+  implementation behind the CPU surface needed by Move 1.x
 
 ## Accepted evidence
 
@@ -69,4 +76,5 @@ Phase A accepted; Phase B spatial semantics and transforms beginning.
 - Final `Vec2f` representation choice
 - Generated-code inspection on MSVC and AppleClang/ARM before making a stable
   `Vec3f` ABI commitment
-- Full Phase B compiler/ISA CI results and controlled benchmark evidence
+- Controlled Phase B benchmark evidence on stable hardware; hosted reports
+  remain diagnostic rather than regression gates

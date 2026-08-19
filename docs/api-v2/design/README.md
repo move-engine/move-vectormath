@@ -7,6 +7,7 @@ This directory contains the proposed public surface and its rationale:
 - [`BackendArchitecture.md`](BackendArchitecture.md)
 - [`CoreTypes.md`](CoreTypes.md)
 - [`DataLayoutAndGpuInterop.md`](DataLayoutAndGpuInterop.md)
+- [`SlangCompanion.md`](SlangCompanion.md)
 - [`SemanticTypes.md`](SemanticTypes.md)
 - [`TransformTypes.md`](TransformTypes.md)
 - [`GeometryPrimitives.md`](GeometryPrimitives.md)

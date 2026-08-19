@@ -112,5 +112,8 @@ pending a controlled run; hosted reports are diagnostic only.
 - Inspect Phase B code generation on MSVC and AppleClang/ARM.
 - Add general `Mat3f`/`Mat4f`, then extend affine inverse and projective
   behavior without broadening ambiguous transform helpers.
-- Do not begin geometry queries until the semantic-transform slice passes its
-  full CI and benchmark build matrix.
+
+The semantic-transform slice subsequently passed its full compiler/ISA CI and
+benchmark build/parity matrix. Phase B is accepted as the foundation for the
+initial CPU geometry vertical slice. Controlled timings remain desirable but
+are not a correctness gate for geometry implementation.

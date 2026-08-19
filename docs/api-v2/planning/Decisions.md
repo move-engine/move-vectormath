@@ -21,6 +21,10 @@
   universally GPU-blittable.
 - Packed/interleaved data must support fused and strided processing without an
   intermediate compute array.
+- A future Slang companion may mirror portable math and geometry contracts,
+  but C++ remains the primary CPU implementation and source of truth.
+- Slang implementation work is deferred until the initial Move 1.x CPU math
+  surface is usable; it must not delay CPU geometry, queries, or culling.
 
 ## Approachability
 
@@ -70,3 +74,16 @@ These decisions authorize Phase B but are not stable ABI commitments:
 - `Vec3f` size and alignment remain guarded implementation contracts rather
   than a stable cross-version ABI until MSVC and AppleClang generated code is
   inspected.
+
+## Accepted Phase B checkpoint
+
+- `Point3f`, `Direction3f`, and `Normal3f` preserve their semantic contracts
+  without storage overhead over `Vec3f`.
+- `RigidTransform3f` provides explicit point, vector, direction, and normal
+  operations plus named application-order composition and inverse.
+- Affine direction and inverse-transpose normal operations expose failure
+  rather than silently repairing singular or non-finite transforms.
+- The representative semantic rigid-point loop matches the raw-vector loop
+  under the measured GCC configuration.
+- The supported compiler, scalar/RTM, sanitizer, layout, and downstream
+  consumer evidence is sufficient to begin the CPU geometry vertical slice.
