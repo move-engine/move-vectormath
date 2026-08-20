@@ -122,6 +122,8 @@ and packaging checkpoints have passed hosted CI.
 - Added C++20-backed PascalCase constants, saturation, fallible overflow-safe
   inverse lerp, and explicitly clamped smoothing helpers while documenting
   standard-library guidance for ordinary scalar math
+- Added typed robust angle-between and signed-angle operations for invariant
+  3D directions with explicit positive-axis semantics
 
 ## Accepted evidence
 

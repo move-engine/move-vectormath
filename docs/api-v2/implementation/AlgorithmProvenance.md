@@ -29,6 +29,8 @@ All subsequent nontrivial algorithms are source-first under
 | `P-NORM-ANDERSON` | Edward Anderson, “Algorithm 978: Safe Scaling in the Level 1 BLAS,” ACM TOMS 44(1), 2017, [DOI 10.1145/3061665](https://doi.org/10.1145/3061665) | Original numerical-method paper |
 | `P-QUAT-SZELISKI` | Richard Szeliski, “Image Alignment and Stitching: A Tutorial,” Microsoft Research Technical Report MSR-TR-2004-92, 2005, [report PDF](https://robots.stanford.edu/cs223b05/MSR-TR-2004-92-Jan26.pdf), especially equations 22, 26, and 28 | Authoritative mathematical derivation |
 | `P-QUAT-SHOEMAKE` | Ken Shoemake, “Animating Rotation with Quaternion Curves,” SIGGRAPH 1985, [DOI 10.1145/325165.325242](https://doi.org/10.1145/325165.325242) | Original graphics paper for quaternion interpolation/calculus |
+| `P-FLOAT-GOLDBERG` | David Goldberg, “What Every Computer Scientist Should Know About Floating-Point Arithmetic,” ACM CSUR 23(1), 1991, [DOI 10.1145/103162.103163](https://doi.org/10.1145/103162.103163) | Original floating-point survey and scaling rationale |
+| `P-NOISE-PERLIN` | Ken Perlin, “Improving Noise,” SIGGRAPH 2002, [DOI 10.1145/566570.566636](https://doi.org/10.1145/566570.566636) | Original quintic fade-polynomial paper |
 | `P-RAY-TRIANGLE` | Tomas Möller and Ben Trumbore, “Fast, Minimum Storage Ray-Triangle Intersection,” JGT 2(1), 1997, [DOI 10.1080/10867651.1997.10487468](https://doi.org/10.1080/10867651.1997.10487468) | Original algorithm paper |
 | `P-RAY-BOX` | Amy Williams, Steve Barrus, R. Keith Morley, and Peter Shirley, “An Efficient and Robust Ray-Box Intersection Algorithm,” JGT 10(1), 2005, [DOI 10.1080/10867651.2005.10487503](https://doi.org/10.1080/10867651.2005.10487503), [author-hosted PDF](https://perso.univ-lyon1.fr/jean-claude.iehl/Public/educ/M1IMAGE/williams_box.pdf) | Original robustness/optimization paper |
 | `A-POINT-TRIANGLE-EBERLY` | David Eberly, [“Distance Between Point and Triangle in 3D”](https://www.geometrictools.com/Documentation/DistancePoint3Triangle3.pdf), created 1999, revised 2020 | Author algorithm paper; CC BY 4.0 |
@@ -40,6 +42,8 @@ All subsequent nontrivial algorithms are source-first under
 | `L-DXM-2026` | DirectXMath at [`d33ba2f150aeb6d3cf62d10f454652ee83672200`](https://github.com/microsoft/DirectXMath/tree/d33ba2f150aeb6d3cf62d10f454652ee83672200), particularly [`Inc/DirectXCollision.inl`](https://github.com/microsoft/DirectXMath/blob/d33ba2f150aeb6d3cf62d10f454652ee83672200/Inc/DirectXCollision.inl) and [`Inc/DirectXMathMisc.inl`](https://github.com/microsoft/DirectXMath/blob/d33ba2f150aeb6d3cf62d10f454652ee83672200/Inc/DirectXMathMisc.inl) | MIT; production-library cross-check |
 | `L-GLM-2026` | GLM at [`6f14f4792a0cde5d0cf2c910506724d61cb95834`](https://github.com/g-truc/glm/tree/6f14f4792a0cde5d0cf2c910506724d61cb95834), particularly [`glm/gtx/intersect.inl`](https://github.com/g-truc/glm/blob/6f14f4792a0cde5d0cf2c910506724d61cb95834/glm/gtx/intersect.inl) and [`glm/ext/quaternion_exponential.inl`](https://github.com/g-truc/glm/blob/6f14f4792a0cde5d0cf2c910506724d61cb95834/glm/ext/quaternion_exponential.inl) | Dual Modified-MIT/MIT; production-library cross-check |
 | `L-BOOST-189` | Boost.Test 1.89.0 [floating-point comparison rationale](https://www.boost.org/doc/libs/1_89_0/libs/test/doc/html/boost_test/testing_tools/extended_comparison/floating_point.html) | Boost Software License 1.0; conceptual cross-check only |
+| `L-GODOT-45` | Godot 4.5-stable at [`876b290332ec6f2e6d173d08162a02aa7e6ca46d`](https://github.com/godotengine/godot/tree/876b290332ec6f2e6d173d08162a02aa7e6ca46d), particularly `core/math/vector3.h` | MIT; production-library angle cross-check |
+| `S-GLSL-460` | Khronos OpenGL Shading Language 4.60 specification, section 8.3 | Open standard defining cubic `smoothstep` |
 
 No source code from the papers or comparison libraries is copied into the
 API-v2 implementation. The listed libraries were read to compare equations,
@@ -166,13 +170,12 @@ branch conditions, conventions, and edge handling.
 - **Classification:** source-validated independent derivation.
 - **Sources:** `A-NORMAL-LENGYEL` for the column-cross-product/cofactor
   derivation; standard inverse-transpose identity.
-- **Differences:** the accepted Phase B contract currently requests normalized
-  inverse-transpose behavior. The code multiplies the cofactor result by the
-  determinant sign before normalization, so a negative-X reflection maps an
-  X normal to negative X. An oriented surface normal treated as an antivector
-  instead uses the adjugate transpose and would retain positive X in that
-  example. This semantic distinction must be resolved before the Move 1.x API
-  is frozen; the two formulations must not be documented as interchangeable.
+- **Differences:** `TryTransformNormal` preserves the half-space covector
+  convention by applying determinant sign before normalization.
+  `TryTransformOrientedSurfaceNormal` separately preserves ordered tangent
+  winding through the adjugate-transpose convention. The public names keep
+  these reflection behaviors explicit rather than treating them as
+  interchangeable.
 
 ### Phase C primitives
 
@@ -322,6 +325,31 @@ branch conditions, conventions, and edge handling.
   and degenerate-sphere cases run on scalar and RTM backends, with layout,
   focused-compile, and generated-loop coverage.
 
+### Scalar interpolation utilities
+
+- **Coverage:** `TryInverseLerp`, `TryInverseLerpClamped`, `SmoothStep`,
+  and `SmootherStep` in `Scalar.hpp`.
+- **Classification:** elementary interpolation identities with paper- and
+  standard-derived numerical policy.
+- **Sources:** `P-FLOAT-GOLDBERG` for overflow-avoidance by scaling,
+  `S-GLSL-460` for cubic Hermite smoothstep, and `P-NOISE-PERLIN` for the
+  quintic fade polynomial.
+- **Differences:** equal endpoints and non-finite inverse-lerp inputs fail
+  explicitly. Smoothing consumes a normalized amount rather than combining
+  endpoint interpolation with the weighting polynomial.
+
+### Invariant direction angles
+
+- **Coverage:** `AngleBetween` and `SignedAngle` in
+  `semantic/Direction3.hpp`.
+- **Classification:** compatible-library cross-check specialized to
+  invariant-bearing unit directions.
+- **Source:** `L-GODOT-45` `Vector3::angle_to` and
+  `Vector3::signed_angle_to`.
+- **Differences:** Move returns `Radians<T>` and requires a normalized
+  `Direction3<T>` positive axis, eliminating implicit units and raw-vector
+  normalization preconditions.
+
 ## Non-algorithmic generated code
 
 The packed/GPU transfer structs, layout traits, focused umbrella headers,
@@ -330,11 +358,3 @@ code. Their provenance is the API-v2 design record and the shader layout
 fixtures, not an external algorithm. Generated tests and benchmarks are also
 Move-owned; where they duplicate the production algorithm, the relevant entry
 states that they are not independent evidence.
-
-## Audit finding to resolve
-
-Before Phase B/C is presented as the Move 1.x surface, decide whether
-`Normal3f` represents an ordinary inverse-transpose normal direction or an
-oriented surface normal/antivector under reflections. The current code and
-tests implement the former. `A-NORMAL-LENGYEL` demonstrates why the latter
-uses an adjugate transpose and differs for negative determinants.

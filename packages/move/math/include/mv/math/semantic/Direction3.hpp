@@ -1,8 +1,10 @@
 #pragma once
 
+#include <cmath>
 #include <optional>
 #include <type_traits>
 
+#include <mv/math/Angles.hpp>
 #include <mv/math/detail/Normalization.hpp>
 
 namespace mv::math
@@ -126,6 +128,35 @@ namespace mv::math
         // Unit-direction projection follows Ericson, Real-Time Collision
         // Detection (2005), section 5.1.2.
         return direction.Vector() * Dot(value, direction.Vector());
+    }
+
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    [[nodiscard]] inline Radians<T> AngleBetween(
+        const Direction3<T>& from, const Direction3<T>& to) noexcept
+    {
+        // atan2(|cross|, dot) follows Godot 4.5-stable Vector3::angle_to
+        // (MIT, commit 876b290332ec6f2e6d173d08162a02aa7e6ca46d).
+        return Radians<T>(std::atan2(Length(Cross(from.Vector(), to.Vector())),
+                                     Dot(from.Vector(), to.Vector())));
+    }
+
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    [[nodiscard]] inline Radians<T> SignedAngle(
+        const Direction3<T>& from,
+        const Direction3<T>& to,
+        const Direction3<T>& positiveAxis) noexcept
+    {
+        // Sign selection follows Godot 4.5-stable
+        // Vector3::signed_angle_to (MIT, commit
+        // 876b290332ec6f2e6d173d08162a02aa7e6ca46d).
+        const Vec3<T> cross = Cross(from.Vector(), to.Vector());
+        const T unsignedAngle =
+            std::atan2(Length(cross), Dot(from.Vector(), to.Vector()));
+        return Radians<T>(Dot(cross, positiveAxis.Vector()) < T(0)
+                              ? -unsignedAngle
+                              : unsignedAngle);
     }
 }  // namespace mv::math
 

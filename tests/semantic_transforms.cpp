@@ -55,6 +55,33 @@ namespace
         static_assert(!HasScalarMultiply<Point3f>);
     }
 
+    void CheckDirectionAngles()
+    {
+        using namespace mv::math;
+
+        REQUIRE(NearlyEqual(
+            AngleBetween(Direction3f::AxisX(), Direction3f::AxisY()).Value(),
+            HalfPi<float>));
+        REQUIRE(NearlyEqual(
+            AngleBetween(Direction3f::AxisX(), -Direction3f::AxisX()).Value(),
+            Pi<float>));
+        REQUIRE(
+            NearlyEqual(SignedAngle(Direction3f::AxisX(), Direction3f::AxisY(),
+                                    Direction3f::AxisZ())
+                            .Value(),
+                        HalfPi<float>));
+        REQUIRE(
+            NearlyEqual(SignedAngle(Direction3f::AxisY(), Direction3f::AxisX(),
+                                    Direction3f::AxisZ())
+                            .Value(),
+                        -HalfPi<float>));
+
+        REQUIRE(
+            std::abs(AngleBetween(Direction3d::AxisX(), Direction3d::AxisZ())
+                         .Value() -
+                     HalfPi<double>) < 1.0e-12);
+    }
+
     void CheckNormalInvariant()
     {
         using namespace mv::math;
@@ -342,6 +369,11 @@ namespace
 TEST_CASE("mv::math point algebra", "[mv][semantic][point]")
 {
     CheckPointAlgebra();
+}
+
+TEST_CASE("mv::math direction angles", "[mv][semantic][direction][angle]")
+{
+    CheckDirectionAngles();
 }
 
 TEST_CASE("mv::math normal invariants", "[mv][semantic][normal]")
