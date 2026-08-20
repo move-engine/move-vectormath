@@ -6,9 +6,8 @@ Phase A and Phase B are accepted. Phase C now includes generic float/double
 semantic transforms and geometry/query kernels, discrete integer bounds,
 practical vector parity, complete transform conversion and TRS facilities,
 `Mat4<T>`, OBBs, frustum culling, and explicit projection/view/viewport
-operations. The generic-math and graphics-matrix checkpoint passed hosted CI;
-the newest transform, culling, and packaging slice is locally verified and
-awaits hosted CI evidence.
+operations. The generic-math, graphics-matrix, transform, culling, graphics,
+and packaging checkpoints have passed hosted CI.
 
 ## Completed
 
@@ -115,6 +114,8 @@ awaits hosted CI evidence.
   viewport-ray construction
 - Added first-class XMake consumption with RTM and forced-scalar smoke tests,
   the canonical `mv::math` CMake target, and current public usage documentation
+- Verified the transform, culling, graphics, CMake, and XMake packaging
+  checkpoint across the hosted compiler and operating-system matrix
 
 ## Accepted evidence
 
@@ -138,7 +139,5 @@ awaits hosted CI evidence.
   `Vec3f` ABI commitment
 - Controlled Phase B benchmark evidence on stable hardware; hosted reports
   remain diagnostic rather than regression gates
-- Hosted compiler/OS evidence for the newest transform, culling, graphics, and
-  XMake packaging slice
 - Migrate the retained legacy correctness suite to Catch2 and all benchmark
   capabilities before beginning the `mv.math` module wrapper
