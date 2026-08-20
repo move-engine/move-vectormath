@@ -56,6 +56,10 @@
 - Semantic and geometry proposals receive a design checkpoint.
 - Compilation cost, layouts, code generation, and runtime performance are
   evaluated alongside usability.
+- CMake and XMake header consumption are stabilized before module work. The
+  `mv.math` wrapper begins only after legacy correctness tests and
+  cross-library benchmarks migrate, so BMI/toolchain work cannot obscure API
+  or performance regressions during cutover.
 
 ## Accepted Phase A architecture
 

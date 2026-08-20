@@ -12,6 +12,7 @@ releases/
 !.vscode/*.code-snippets
 .clangd
 .cache/
+.xmake/
 .local/
 compile_commands.json
 

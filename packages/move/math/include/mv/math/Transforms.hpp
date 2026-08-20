@@ -7,4 +7,6 @@
 #include <mv/math/transforms/AffineTransform3Semantics.hpp>
 #include <mv/math/transforms/Projection.hpp>
 #include <mv/math/transforms/RigidTransform3.hpp>
+#include <mv/math/transforms/TransformConversions.hpp>
+#include <mv/math/transforms/TrsTransform3.hpp>
 #include <mv/math/transforms/View.hpp>

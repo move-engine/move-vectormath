@@ -1,80 +1,85 @@
-# Math Conventions
+# Math conventions
 
-## TL;DR
-* Left-handed coordinate system: +X right, +Y up, +Z forward
-* Matrices are row-major
-* `Vector * Matrix` transforms the vector by the matrix
-* Rotation helpers use radians
-* Quaternions are counter-clockwise
-* `vec3 * quat` rotates the vector by the quaternion
+## Coordinate and matrix conventions
 
-## Coordinate System
+- `+X` is right, `+Y` is up, and `+Z` is the conventional forward axis.
+- The core does not force every camera or projection to be left-handed.
+  Projection and view builders require an explicit `Handedness`.
+- Matrices are stored and presented by rows.
+- `Vector * Matrix` applies a matrix using Move's row-vector convention.
+- `Compose(first, second)` applies `first` and then `second`.
+- Affine translation occupies the fourth row of `Mat4` and the homogeneous
+  fourth column is `(0, 0, 0, 1)`.
 
-- The library uses a left-handed coordinate system.
-- Positive X is right.
-- Positive Y is up.
-- Positive Z is forward.
+## Semantic values
 
-## Matrix Conventions
+- `Point3` is a location. Point minus point is a displacement; adding two
+  points is unavailable.
+- `Direction3` is always finite, unit length, and nonzero.
+- `Normal3` is a unit surface/plane covector and is distinct from direction.
+- `Rotation3` stores a unit quaternion. General, possibly non-unit quaternion
+  algebra uses `Quat`.
+- Construction that cannot preserve an invariant uses `Try...` and reports
+  failure.
 
-- Matrices are row-major.
-- `Vector * Matrix` applies the matrix transform to the vector.
-- `transform_point(...)` uses homogeneous `w = 1`.
-- `transform_vector(...)` uses homogeneous `w = 0`, so translation does not
-  affect the result.
+## Transforms
 
-## Quaternion Conventions
+- `RigidTransform3` is rotation plus translation and is closed under
+  composition and inversion.
+- `TrsTransform3` is an authoring/decomposition value. Arbitrary TRS
+  composition can create shear, so its general composition result is affine.
+- `AffineTransform3` represents a linear transformation plus translation and
+  is closed under composition. Inversion can fail for singular inputs.
+- `TransformPoint` applies translation. `TransformVector` does not.
+- A general affine direction transformation is fallible because it must
+  restore unit length.
+- `TryTransformNormal` uses inverse-transpose/covector semantics and preserves
+  the transformed positive half-space under reflections.
+- `TryTransformOrientedSurfaceNormal` transforms the cross product of an
+  ordered tangent pair and therefore differs by a sign under reflection.
 
-- Quaternion rotation helpers use radians. Use `deg2rad(...)` when working from
-  degree values.
-- Positive rotation is counter-clockwise under the library's handedness rules.
-- The supported vector rotation operator is `vec3 * quat`.
-- Quaternion `operator==` compares components exactly. Use
-  `approx_equal(...)` for approximate component equality and
-  `same_rotation(...)` when `q` and `-q` should be considered equivalent.
-- Quaternion `ln()` and `exp()` implement the general quaternion logarithm and
-  exponential. The zero quaternion logarithm returns zero as a finite fallback.
-- Normalizing or inverting a zero quaternion returns zero.
-- `look_rotation(forward, up)` returns identity for a zero forward vector and
-  chooses a fallback up axis when the supplied directions are collinear.
+## Rotations and angles
 
-## Comparison Semantics
+- Angles use `Radians<T>` and `Degrees<T>` wrappers.
+- Euler construction requires an explicit `EulerOrder`; the order names the
+  sequence applied to a local vector.
+- `Nlerp` and `Slerp` take the shortest quaternion arc and clamp the amount to
+  `[0,1]`. Their `Unclamped` variants expose extrapolation.
+- Quaternion component equality is exact. `IsNearlyEquivalent(Rotation3,
+  Rotation3)` treats `q` and `-q` as the same rotation.
 
-- Vector comparison operators are component-wise "all lanes must satisfy the
-  relation" checks.
-- Those comparison operators are not a total ordering and should not be treated
-  as one.
-- Approximate equality is provided separately through `approx_equal(...)`.
-- NaNs are never approximately equal. Identically signed infinities compare
-  equal.
+## Projection, depth, and viewport conventions
 
-## Numeric Domains
+- Perspective and orthographic constructors require `Handedness`,
+  `ClipDepth`, and `DepthDirection`.
+- Both `[0,1]` and `[-1,1]` normalized-device depth are supported.
+- Forward and reverse Z, finite and infinite far perspective, and intentional
+  orthographic axis reversal are explicit.
+- `TryProjectPoint` returns normalized-device coordinates and exposes invalid
+  homogeneous division.
+- Viewport conversion requires an explicit clip-depth convention; screen Y can
+  be declared up or down.
+- `TryMakeViewportRay` begins at the near plane and works for perspective or
+  orthographic projections. `TryMakePerspectiveViewportRay` accepts the camera
+  origin when an eye-origin ray is desired.
 
-- Integral vectors support component arithmetic, dot/cross products, and
-  squared-length operations.
-- Integral `length()` and `distance()` results are promoted to `double`.
-- Normalization and angle operations are available only for floating-point
-  vectors.
-- Normalizing a zero floating-point vector returns zero. Tiny non-zero vectors
-  are normalized rather than discarded.
-- The angle between a zero vector and any vector returns zero as a finite
-  fallback.
+## Geometry and culling
 
-## Scalar Helper Semantics
+- Linear primitive parameters use physical distance when their direction is a
+  `Direction3`.
+- AABB and OBB half-extents are nonnegative. Touching boundaries intersect.
+- Frustum planes point inward. Infinite-far frusta deactivate the far plane
+  rather than storing an invalid sentinel.
+- Culling is conservative. Plane-mask propagation retains only planes that
+  intersected a parent bound.
 
-- `sign(x)` returns `-1` for negative values, `0` for zero, and `1` for
-  positive values.
-- `refract(incident, normal, ior)` treats `ior` as the material index of
-  refraction relative to air and returns the zero vector on total internal
-  reflection.
+## Representations and backends
 
-## Backend Notes
-
-- `vec2` is currently scalar-only.
-- Floating-point `vec3`, `vec4`, matrices, and quaternions use the RTM-backed
-  implementation where applicable.
-- Integral vector types use the scalar implementation.
-- The scalar field aliases (`x`, `y`, `z`, `w`) and contiguous `data` views use
-  anonymous unions supported by MSVC, GCC, and Clang. Builds that reject all
-  compiler extensions with strict pedantic errors are not supported without a
-  field-access compatibility break.
+- Compute types select scalar or RTM primitives privately; backend identity is
+  not part of ordinary public type names.
+- `Vec2f` stays compact and scalar-backed so array loops can vectorize across
+  values. `Vec3f` and `Vec4f` may retain SIMD-native storage.
+- Packed CPU and GPU transfer representations name their exact byte layout.
+  A compute vector is not described as universally GPU-blittable.
+- Define `MV_MATH_FORCE_SCALAR=1`, or use XMake's `force_scalar` option, to
+  select the portable scalar backend consistently for a target graph.

@@ -18,5 +18,5 @@ FetchContent_MakeAvailable(move_vectormath)
 
 enable_testing()
 add_executable(move-vectormath-consumer main.cpp)
-target_link_libraries(move-vectormath-consumer PRIVATE move::vectormath)
+target_link_libraries(move-vectormath-consumer PRIVATE mv::math)
 add_test(NAME move-vectormath-consumer COMMAND move-vectormath-consumer)

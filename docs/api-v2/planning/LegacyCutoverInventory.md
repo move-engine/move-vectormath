@@ -36,13 +36,13 @@ construction costs are measured separately from prevalidated hot paths.
 
 | Capability | Status | Cutover requirement |
 | --- | --- | --- |
-| General quaternion value | Partial | `Quatf` storage exists; multiplication, inverse, normalization, interpolation, and general quaternion functions remain. |
-| Valid rotation value | Partial | Axis-angle, composition, inverse, and vector/direction rotation exist; look/euler/interpolation facilities remain. |
-| Rigid transform | Ready | Float/double semantic operations exist; add conversion to matrices and retain direct migration benchmarks. |
-| Affine transform | Partial | Point/vector/normal operations exist; composition, fallible inverse, and matrix conversion remain. |
-| TRS authoring/decomposition | Missing | Add typed TRS and decomposition results if required by Move 1.x authoring/scene workflows. |
+| General quaternion value | Partial | Multiplication, scaling-safe normalization/inverse, and comparison exist; add only workload-driven exponential/logarithmic functions. |
+| Valid rotation value | Ready | Axis-angle, explicit-order Euler construction, look-towards, composition, inverse, shortest-arc Nlerp/Slerp, and vector/direction rotation exist. |
+| Rigid transform | Ready | Float/double semantic operations and matrix/affine conversions exist; retain direct migration benchmarks. |
+| Affine transform | Ready | Point/vector/normal operations, application-order composition, fallible inverse, and matrix conversion exist. |
+| TRS authoring/decomposition | Ready | Typed float/double TRS, reflection-aware decomposition status, shear rejection, and affine/matrix conversion exist. |
 | General `Mat3f` | Partial | Identity, access, multiplication, vector transform, transpose, determinant, fallible inverse, scale, and rotation conversion exist; add packed/GPU transfer and finish direct legacy performance rows. |
-| General `Mat4f` | Partial | Identity, access, multiplication, homogeneous transform, transpose, determinant, fallible inverse, and direct legacy benchmarks exist; affine conversion remains. |
+| General `Mat4f` | Ready | Identity, access, multiplication, homogeneous transform, transpose, determinant, fallible inverse, affine/rigid/TRS conversion, and direct legacy benchmarks exist. |
 | View/projection construction | Ready | Fallible look-at, finite/infinite perspective, orthographic, handedness, clip-depth, and forward/reverse-Z policies are explicit and tested. |
 
 ## Geometry and queries
@@ -54,9 +54,9 @@ construction costs are measured separately from prevalidated hot paths.
 | Sphere, capsule, AABB | Ready | Float/double continuous geometry and integer discrete AABBs exist; add utilities only when workloads require them. |
 | Ray/plane, ray/triangle, ray/sphere, ray/AABB | Ready | Float/double kernels exist; retain matching-semantic external benchmark rows. |
 | Closest-point queries | Ready | Float/double kernels exist; split broad result declarations if focused-header measurements justify it. |
-| OBB and OBB queries | Missing | Required before high-level geometry parity. |
-| Frustum extraction and culling | Missing | Required after `Mat4f` and explicit clip conventions. |
-| Project/unproject and camera rays | Missing | Required after projective matrix policy is implemented. |
+| OBB and OBB queries | Ready | Float/double OBBs, ray/sphere/AABB/OBB tests, SAT, support/corners/closest point, and conservative affine AABB conversion exist. |
+| Frustum extraction and culling | Ready | Explicit clip-depth/reverse-Z extraction, infinite-far masks, prepared point/sphere/AABB/OBB classification, and hierarchical plane masks exist. |
+| Project/unproject and camera rays | Ready | NDC/viewport projection, inverse-aware unprojection, explicit Y/depth conventions, and near-plane/perspective camera rays exist. |
 
 ## Packaging and public surface
 
@@ -64,10 +64,10 @@ construction costs are measured separately from prevalidated hot paths.
 | --- | --- | --- |
 | Capability-oriented headers | Ready | Keep focused headers as the implementation source of truth. |
 | `Math.hpp` umbrella | Ready | Track focused and umbrella compilation cost. |
-| CMake consumption | Partial | Choose the canonical target name and remove legacy aliases at cutover. |
-| XMake header consumption | Missing | Add first-class upstream XMake support at the next stable API checkpoint. |
-| `mv.math` C++20 module | Missing | Wrap the header-defined API; validate GCC, Clang, MSVC, BMI configuration, and fan-out builds. |
-| User documentation | Missing | README and conventions still teach `<move/vectormath.hpp>` and `move::math`. |
+| CMake consumption | Ready | `mv::math` is canonical for new consumers; remove transitional legacy aliases at final cutover. |
+| XMake header consumption | Ready | The upstream XMake target installs headers, pins RTM 2.3.1, and tests RTM/scalar consumers. |
+| `mv.math` C++20 module | Missing | Deliberately scheduled after legacy tests and cross-library benchmarks migrate (item 7); headers remain the source of truth. |
+| User documentation | Ready | README and conventions teach the current namespace, semantic contracts, focused headers, and CMake/XMake usage. |
 | Legacy test migration | Missing | Existing Catch2 and standalone tests primarily certify the old surface. |
 | Cross-library benchmark migration | Partial | New capability suites exist, but the main suite still benchmarks the old surface. |
 

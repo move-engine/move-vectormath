@@ -1,148 +1,122 @@
 # move-vectormath
 
-`move-vectormath` is the Move math library for vectors, matrices, quaternions,
-and scalar math helpers.
+`move-vectormath` is Move's C++20 game and graphics math library. The current
+API lives in `mv::math` and provides arithmetic vectors, invariant-bearing
+semantic values, transforms, matrices, geometry, spatial queries, culling, and
+explicit graphics-convention helpers.
 
-It can be consumed either:
+The old `<move/vectormath.hpp>` / `move::math` API remains temporarily for the
+measured migration and will be removed once the cutover inventory is complete.
+New code should not use it.
 
-- as a Move package (`move/math`)
-- as a plain CMake dependency via `add_subdirectory`, `FetchContent`, `CPM`,
-  or similar workflows
+## Use the API
 
-## Layout
-
-- Public umbrella header: [packages/move/math/include/move/vectormath.hpp](packages/move/math/include/move/vectormath.hpp)
-- Core public headers: [packages/move/math/include/move/math](packages/move/math/include/move/math)
-- Tests: [packages/move/math/tests](packages/move/math/tests)
-- Math conventions: [CONVENTIONS.md](CONVENTIONS.md)
-
-## Public Surface
-
-The umbrella header exports:
-
-- `vec2`, `vec3`, `vec4`
-- `quat`
-- `mat3x3`, `mat4x4`
-- common math helpers from `move::math`
-
-Backend behavior is intentionally mixed:
-
-- `vec2` is currently scalar-only.
-- Floating-point `vec3`, `vec4`, matrices, and quaternions use the RTM-backed
-  path where applicable.
-- Integral vector types use the scalar path.
-
-## Usage
+Include the full public surface:
 
 ```cpp
-#include <move/vectormath.hpp>
-
-using namespace move::math;
-
-float3 a(1.0f, 2.0f, 3.0f);
-float3 b(4.0f, 5.0f, 6.0f);
-float3 sum = a + b;
-
-quatf rotation = quatf::rotation_y(deg2rad(90.0f));
-float3 rotated = float3::forward() * rotation;
+#include <mv/math/Math.hpp>
 ```
 
-See [CONVENTIONS.md](CONVENTIONS.md)
-for coordinate-system, transform, and rotation semantics.
-
-## Integration
-
-### Move Package
-
-In a Move project, depend on `move/math` and include the umbrella header:
+or focused capability headers such as:
 
 ```cpp
-#include <move/vectormath.hpp>
+#include <mv/math/Core.hpp>
+#include <mv/math/Transforms.hpp>
+#include <mv/math/Geometry.hpp>
+#include <mv/math/Queries.hpp>
+#include <mv/math/Culling.hpp>
+#include <mv/math/Graphics.hpp>
 ```
 
-Typical Move CLI workflows from the repository root are:
+Example:
 
-```bash
-move-cli build move/math
-move-cli test move/math
+```cpp
+using namespace mv::math;
+
+const auto direction = Direction3f::TryFrom(target - position);
+if (!direction)
+{
+    return;
+}
+
+const RigidTransform3f localToWorld(rotation, translation);
+const Point3f world = TransformPoint(localToWorld, local);
+
+const auto bounds = Obb3f::TryFromCenterHalfExtents(
+    world, Vec3f(1.0F, 2.0F, 1.0F), rotation);
 ```
 
-### CMake
+Fallible construction is deliberate: normalized directions, normals, finite
+geometry, singular inverses, projective homogeneous division, and invalid
+camera bases do not silently manufacture fallback values.
 
-The top-level CMake project exports an interface target named
-`move-vectormath` with aliases:
+## Conventions
 
-- `move::vectormath`
-- `move::math`
-- `move-math`
+- `+X` is right, `+Y` is up, and `+Z` is the conventional forward axis.
+- Matrices use row-vector application: `value * matrix`.
+- Composition functions read in application order: `Compose(first, second)`
+  applies `first`, then `second`.
+- Angle arguments use `Radians<T>` or `Degrees<T>` rather than untyped scalars.
+- Projection construction requires explicit handedness, clip-depth range, and
+  forward/reverse depth direction.
+- `Point3`, `Direction3`, and `Normal3` are different semantic values.
+- Packed CPU storage and exact GPU transfer layouts are explicit types rather
+  than accidental properties of compute vectors.
 
-The recommended link target for consumers is `move::vectormath`.
+See [CONVENTIONS.md](CONVENTIONS.md) and the organized
+[API-v2 documentation](docs/api-v2/README.md).
 
-#### `add_subdirectory`
+## CMake
+
+The canonical target for new consumers is `mv::math`:
 
 ```cmake
 add_subdirectory(path/to/move-vectormath)
-
-target_link_libraries(your_target
-  PRIVATE
-    move::vectormath
-)
+target_link_libraries(your_target PRIVATE mv::math)
 ```
 
-#### `FetchContent`
+The target publishes the C++20 requirement, public include directory, and the
+pinned RTM dependency. `FetchContent` and CPM can add the repository in the
+same way before linking `mv::math`.
 
-```cmake
-include(FetchContent)
+## XMake
 
-FetchContent_Declare(
-  move_vectormath
-  GIT_REPOSITORY https://github.com/move-engine/move-vectormath.git
-  GIT_TAG main
-)
+The repository owns a first-class header-only XMake target:
 
-FetchContent_MakeAvailable(move_vectormath)
+```lua
+includes("path/to/move-vectormath")
 
-target_link_libraries(your_target
-  PRIVATE
-    move::vectormath
-)
+target("your-game")
+    add_deps("move-vectormath")
 ```
 
-#### `CPM`
+The upstream project pins the official `rtm v2.3.1` package and installs the
+complete public include tree. A package repository can delegate installation
+to this project and expose it through `add_requires("move-vectormath")`.
 
-```cmake
-include(cmake/CPM.cmake)
+Validate the XMake consumption surface with:
 
-CPMAddPackage(
-  NAME move-vectormath
-  GITHUB_REPOSITORY move-engine/move-vectormath
-  GIT_TAG main
-)
-
-target_link_libraries(your_target
-  PRIVATE
-    move::vectormath
-)
+```sh
+xmake f -c --build_tests=y -m release -y
+xmake build
+xmake test -v
 ```
 
-After linking, include the public umbrella header:
+The `force_scalar` XMake option publishes `MV_MATH_FORCE_SCALAR=1` when a
+portable scalar build is required.
 
-```cpp
-#include <move/vectormath.hpp>
-```
+C++ named-module work is intentionally deferred until the legacy correctness
+tests and cross-library benchmarks have migrated to this API. Headers remain
+the source of truth and supported public interface.
 
-or the specific headers under `move/math` if you prefer.
+## Verification
 
-## Testing
-
-From the repository root:
-
-```bash
-move-cli test
-```
-
-The test sources live under
-[packages/move/math/tests](packages/move/math/tests).
+The CMake suite exercises GCC, Clang, AppleClang, and MSVC; scalar and RTM
+backends; sanitizers; generated-code fixtures; shader transfer layouts; and a
+downstream consumer. XMake has independent RTM and forced-scalar header
+consumer tests. Runtime benchmarks live in the separate `vectormathbench`
+repository and are diagnostic rather than noisy hosted-runner regression
+gates.
 
 ## License
 

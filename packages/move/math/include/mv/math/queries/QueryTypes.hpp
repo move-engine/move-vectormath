@@ -232,6 +232,20 @@ namespace mv::math
             const RayAabbHit3&, const RayAabbHit3&) noexcept = default;
     };
 
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    struct RayObbHit3
+    {
+        T EntryDistance;
+        T ExitDistance;
+        bool StartsInside;
+        std::optional<Normal3<T>> EntryNormal;
+        Normal3<T> ExitNormal;
+
+        [[nodiscard]] friend bool operator==(
+            const RayObbHit3&, const RayObbHit3&) noexcept = default;
+    };
+
     using PointLineClosest3f = PointLineClosest3<float>;
     using PointLineClosest3d = PointLineClosest3<double>;
     using PointRayClosest3f = PointRayClosest3<float>;
@@ -258,6 +272,8 @@ namespace mv::math
     using RaySphereHit3d = RaySphereHit3<double>;
     using RayAabbHit3f = RayAabbHit3<float>;
     using RayAabbHit3d = RayAabbHit3<double>;
+    using RayObbHit3f = RayObbHit3<float>;
+    using RayObbHit3d = RayObbHit3<double>;
 }  // namespace mv::math
 
 static_assert(std::is_trivially_copyable_v<mv::math::RayPlaneHit3f>);
@@ -277,3 +293,5 @@ static_assert(std::is_trivially_copyable_v<mv::math::RayPlaneHit3d>);
 static_assert(std::is_trivially_copyable_v<mv::math::RayTriangleHit3d>);
 static_assert(std::is_trivially_copyable_v<mv::math::RaySphereHit3d>);
 static_assert(std::is_trivially_copyable_v<mv::math::RayAabbHit3d>);
+static_assert(std::is_trivially_copyable_v<mv::math::RayObbHit3f>);
+static_assert(std::is_trivially_copyable_v<mv::math::RayObbHit3d>);

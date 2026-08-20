@@ -3,6 +3,7 @@
 #include <mv/math/geometry/Aabb3.hpp>
 #include <mv/math/geometry/Capsule3.hpp>
 #include <mv/math/geometry/Line3.hpp>
+#include <mv/math/geometry/Obb3.hpp>
 #include <mv/math/geometry/Plane3.hpp>
 #include <mv/math/geometry/Ray3.hpp>
 #include <mv/math/geometry/Segment3.hpp>

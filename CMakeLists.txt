@@ -125,6 +125,26 @@ if(MOVE_VECTORMATH_BUILD_GEOMETRY_QUERY_TESTS)
                                PRIVATE MV_MATH_FORCE_SCALAR=1)
     move_vectormath_enable_strict_warnings(
         move-vectormath-geometry-query-scalar-codegen)
+
+    add_executable(move-vectormath-culling-graphics-rtm-tests
+                   tests/culling_graphics.cpp)
+    target_link_libraries(move-vectormath-culling-graphics-rtm-tests
+                          PRIVATE move-vectormath)
+    move_vectormath_enable_strict_warnings(
+        move-vectormath-culling-graphics-rtm-tests)
+    add_test(NAME move-vectormath-culling-graphics-rtm
+             COMMAND move-vectormath-culling-graphics-rtm-tests)
+
+    add_executable(move-vectormath-culling-graphics-scalar-tests
+                   tests/culling_graphics.cpp)
+    target_link_libraries(move-vectormath-culling-graphics-scalar-tests
+                          PRIVATE move-vectormath)
+    target_compile_definitions(move-vectormath-culling-graphics-scalar-tests
+                               PRIVATE MV_MATH_FORCE_SCALAR=1)
+    move_vectormath_enable_strict_warnings(
+        move-vectormath-culling-graphics-scalar-tests)
+    add_test(NAME move-vectormath-culling-graphics-scalar
+             COMMAND move-vectormath-culling-graphics-scalar-tests)
 endif()
 
 if(MOVE_VECTORMATH_BUILD_REPRESENTATION_TESTS)
@@ -254,3 +274,4 @@ endif()
 add_library(move::vectormath ALIAS move-vectormath)
 add_library(move::math ALIAS move-vectormath)
 add_library(move-math ALIAS move-vectormath)
+add_library(mv::math ALIAS move-vectormath)

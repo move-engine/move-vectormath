@@ -63,10 +63,9 @@ namespace mv::math
         }
 
         [[nodiscard]] static Mat3 FromRotation(
-            const Rotation3f& rotation) noexcept
-            requires std::is_same_v<T, float>
+            const Rotation3<T>& rotation) noexcept
         {
-            const Quatf& quaternion = rotation.Quaternion();
+            const Quat<T>& quaternion = rotation.Quaternion();
             using Ops = detail::Matrix3Ops<T>;
             if constexpr (Ops::HasNativeFromQuaternion)
             {
@@ -76,27 +75,27 @@ namespace mv::math
                             RowVector(rows.Row2));
             }
 
-            const float x = quaternion.X();
-            const float y = quaternion.Y();
-            const float z = quaternion.Z();
-            const float w = quaternion.W();
-            const float xx = x * x;
-            const float yy = y * y;
-            const float zz = z * z;
-            const float xy = x * y;
-            const float xz = x * z;
-            const float yz = y * z;
-            const float xw = x * w;
-            const float yw = y * w;
-            const float zw = z * w;
+            const T x = quaternion.X();
+            const T y = quaternion.Y();
+            const T z = quaternion.Z();
+            const T w = quaternion.W();
+            const T xx = x * x;
+            const T yy = y * y;
+            const T zz = z * z;
+            const T xy = x * y;
+            const T xz = x * z;
+            const T yz = y * z;
+            const T xw = x * w;
+            const T yw = y * w;
+            const T zw = z * w;
 
             // Quaternion-to-matrix equation follows Szeliski,
             // MSR-TR-2004-92 eq. 22, transposed for Move's row vectors;
             // cross-checked against RTM 2.3.1 matrix_from_quat (MIT).
             return Mat3(
-                1.0F - 2.0F * (yy + zz), 2.0F * (xy + zw), 2.0F * (xz - yw),
-                2.0F * (xy - zw), 1.0F - 2.0F * (xx + zz), 2.0F * (yz + xw),
-                2.0F * (xz + yw), 2.0F * (yz - xw), 1.0F - 2.0F * (xx + yy));
+                T(1) - T(2) * (yy + zz), T(2) * (xy + zw), T(2) * (xz - yw),
+                T(2) * (xy - zw), T(1) - T(2) * (xx + zz), T(2) * (yz + xw),
+                T(2) * (xz + yw), T(2) * (yz - xw), T(1) - T(2) * (xx + yy));
         }
 
         [[nodiscard]] const RowVector& Row(std::size_t index) const noexcept

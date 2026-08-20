@@ -161,6 +161,10 @@ namespace
             TryTransformNormal(reflection, Normal3f::AxisX());
         Require(reflected.has_value());
         Require(reflected->Vector() == Vec3f(-1.0F, 0.0F, 0.0F));
+        const auto orientedSurface =
+            TryTransformOrientedSurfaceNormal(reflection, Normal3f::AxisX());
+        Require(orientedSurface.has_value());
+        Require(orientedSurface->Vector() == Vec3f(1.0F, 0.0F, 0.0F));
 
         const AffineTransform3f singular(Vec3f(1.0F, 0.0F, 0.0F),
                                          Vec3f(0.0F, 0.0F, 0.0F),
@@ -214,6 +218,133 @@ namespace
         Require(IsNearlyEqual(TransformPoint(ToAffine(rigid), point).Vector(),
                               TransformPoint(rigid, point).Vector()));
     }
+
+    void CheckRotationCompletion()
+    {
+        using namespace mv::math;
+        using namespace mv::math::literals;
+
+        const Quatf arbitrary(2.0F, -3.0F, 4.0F, 5.0F);
+        const auto normalized = TryNormalize(arbitrary);
+        const auto inverse = TryInverse(arbitrary);
+        Require(normalized.has_value());
+        Require(inverse.has_value());
+        Require(NearlyEqual(Length(*normalized), 1.0F));
+        Require(IsNearlyEqual(
+            arbitrary * *inverse, Quatf(),
+            Tolerance<float>{1.0e-5F, 1.0e-5F, 1.0e-5F, 1.0e-5F}));
+        Require(!TryNormalize(Quatf(0.0F, 0.0F, 0.0F, 0.0F)));
+
+        const double large = std::numeric_limits<double>::max() * 0.25;
+        const Quatd largeQuaternion(large, -large, large, large);
+        const auto largeInverse = TryInverse(largeQuaternion);
+        Require(largeInverse.has_value());
+        Require(IsNearlyEqual(
+            largeQuaternion * *largeInverse, Quatd(),
+            Tolerance<double>{1.0e-12, 1.0e-12, 1.0e-12, 1.0e-12}));
+
+        const double tiny = std::numeric_limits<double>::min();
+        const Quatd tinyQuaternion(tiny, 0.0, 0.0, 0.0);
+        const auto tinyInverse = TryInverse(tinyQuaternion);
+        Require(tinyInverse.has_value());
+        Require(IsNearlyEqual(
+            tinyQuaternion * *tinyInverse, Quatd(),
+            Tolerance<double>{1.0e-12, 1.0e-12, 1.0e-12, 1.0e-12}));
+
+        const EulerAngles3f angles{ToRadians(20.0_deg),
+                                   ToRadians(Degreesf(-35.0F)),
+                                   ToRadians(15.0_deg), EulerOrder::ZXY};
+        const Rotation3f euler = Rotation3f::FromEuler(angles);
+        const Vec3f input(0.25F, -1.0F, 2.0F);
+        const Rotation3f z =
+            Rotation3f::FromAxisAngle(Direction3f::AxisZ(), angles.Z);
+        const Rotation3f x =
+            Rotation3f::FromAxisAngle(Direction3f::AxisX(), angles.X);
+        const Rotation3f y =
+            Rotation3f::FromAxisAngle(Direction3f::AxisY(), angles.Y);
+        Require(NearlyEqual(Rotate(euler, input),
+                            Rotate(y, Rotate(x, Rotate(z, input)))));
+
+        const auto look = Rotation3f::TryLookTowards(Direction3f::AxisX(),
+                                                     Direction3f::AxisY());
+        Require(look.has_value());
+        Require(NearlyEqual(Rotate(*look, Direction3f::AxisZ()).Vector(),
+                            Vec3f(1.0F, 0.0F, 0.0F)));
+        Require(!Rotation3f::TryLookTowards(Direction3f::AxisY(),
+                                            Direction3f::AxisY()));
+
+        const Rotation3f half =
+            Slerp(Rotation3f::Identity(),
+                  Rotation3f::FromAxisAngle(Direction3f::AxisY(),
+                                            ToRadians(90.0_deg)),
+                  0.5F);
+        Require(NearlyEqual(Rotate(half, Direction3f::AxisZ()).Vector(),
+                            Vec3f(0.7071068F, 0.0F, 0.7071068F)));
+        Require(IsNearlyEquivalent(
+            Nlerp(Rotation3f::Identity(), Rotation3f::Identity(), 0.25F),
+            Rotation3f::Identity()));
+    }
+
+    void CheckAffineAndTrsCompletion()
+    {
+        using namespace mv::math;
+        using namespace mv::math::literals;
+
+        const TrsTransform3f authored(
+            Vec3f(3.0F, -2.0F, 5.0F),
+            Rotation3f::FromEuler(
+                EulerAngles3f{ToRadians(15.0_deg), ToRadians(25.0_deg),
+                              ToRadians(Degreesf(-10.0F)), EulerOrder::XYZ}),
+            Vec3f(-2.0F, 3.0F, 4.0F));
+        const AffineTransform3f affine = authored.ToAffine();
+        const auto decomposition = DecomposeTrs(affine);
+        Require(decomposition.Status == TrsDecompositionStatus::Success);
+        Require(decomposition.Transform.has_value());
+        Require(NearlyEqual(
+            TransformPoint(decomposition.Transform->ToAffine(),
+                           Point3f(0.5F, -1.0F, 2.0F))
+                .Vector(),
+            TransformPoint(affine, Point3f(0.5F, -1.0F, 2.0F)).Vector(),
+            5.0e-5F));
+
+        const auto affineInverse = affine.TryInverse();
+        Require(affineInverse.has_value());
+        const Point3f point(2.0F, 1.0F, -3.0F);
+        Require(NearlyEqual(
+            TransformPoint(*affineInverse, TransformPoint(affine, point))
+                .Vector(),
+            point.Vector(), 5.0e-5F));
+
+        const AffineTransform3f second(
+            Vec3f(1.0F, 0.0F, 0.0F), Vec3f(0.0F, 2.0F, 0.0F),
+            Vec3f(0.0F, 0.0F, 1.0F), Vec3f(-1.0F, 2.0F, 0.5F));
+        const AffineTransform3f composed = Compose(affine, second);
+        Require(NearlyEqual(
+            TransformPoint(composed, point).Vector(),
+            TransformPoint(second, TransformPoint(affine, point)).Vector(),
+            5.0e-5F));
+
+        const Mat4f matrix = ToMat4(affine);
+        const auto restoredAffine = TryToAffine(matrix);
+        Require(restoredAffine.has_value());
+        Require(NearlyEqual(TransformPoint(*restoredAffine, point).Vector(),
+                            TransformPoint(affine, point).Vector()));
+        Require(!TryToRigid(affine));
+
+        const RigidTransform3f rigid(
+            Rotation3f::FromAxisAngle(Direction3f::AxisY(),
+                                      ToRadians(30.0_deg)),
+            Vec3f(1.0F, 2.0F, 3.0F));
+        const auto restoredRigid = TryToRigid(ToMat4(rigid));
+        Require(restoredRigid.has_value());
+        Require(NearlyEqual(TransformPoint(*restoredRigid, point).Vector(),
+                            TransformPoint(rigid, point).Vector()));
+
+        const AffineTransform3f shear(Vec3f(1.0F, 0.0F, 0.0F),
+                                      Vec3f(0.5F, 1.0F, 0.0F),
+                                      Vec3f(0.0F, 0.0F, 1.0F), Vec3f::Zero());
+        Require(DecomposeTrs(shear).Status == TrsDecompositionStatus::Sheared);
+    }
 }  // namespace
 
 int main()
@@ -224,5 +355,7 @@ int main()
     CheckAffineSemantics();
     CheckRigidToAffine();
     CheckDoubleTransforms();
+    CheckRotationCompletion();
+    CheckAffineAndTrsCompletion();
     return 0;
 }

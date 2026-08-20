@@ -19,14 +19,15 @@ reject architectural choices.
 - [`PhaseCGenericMathAndGraphicsMatrices.md`](PhaseCGenericMathAndGraphicsMatrices.md)
   records vector parity, float/double geometry and queries, integer bounds,
   Mat4, projection/view policy, benchmark evidence, and the inlining audit.
+- [`PhaseCTransformsGeometryAndPackaging.md`](PhaseCTransformsGeometryAndPackaging.md)
+  records rotation/transform completion, reflected-normal policy, OBB and
+  frustum facilities, viewport operations, and first-class XMake packaging.
 - [`AlgorithmProvenance.md`](AlgorithmProvenance.md) records the exact papers,
   compatible-licensed implementations, deliberate deviations, and historical
   source status of Codex-generated algorithms.
 
 The Phase A architecture and initial Phase B semantic-transform slice are
-accepted, but their code remains a proof surface rather than a complete
-replacement for v1. CPU geometry and spatial queries are the next vertical
-slice. The initial geometry slice has passed local and hosted compiler, OS,
-parity, and diagnostic benchmark verification. Broader geometry, frustum
-facilities, final public header organization, and the deferred Slang companion
-remain subsequent work.
+accepted. The current Phase C surface covers the initial Move 1.x transform,
+geometry, culling, and graphics needs. Legacy correctness/benchmark migration,
+final public-header cutover, the post-migration module wrapper, and the
+deferred Slang companion remain subsequent work.

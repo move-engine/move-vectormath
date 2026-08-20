@@ -4,10 +4,11 @@
 
 Phase A and Phase B are accepted. Phase C now includes generic float/double
 semantic transforms and geometry/query kernels, discrete integer bounds,
-practical vector parity, `Mat4<T>`, and explicit projection/view construction.
-The earlier geometry slices are verified locally and on the hosted compiler/OS
-matrix; the newest generic-math and graphics-matrix checkpoint is locally
-verified and awaits hosted CI evidence.
+practical vector parity, complete transform conversion and TRS facilities,
+`Mat4<T>`, OBBs, frustum culling, and explicit projection/view/viewport
+operations. The generic-math and graphics-matrix checkpoint passed hosted CI;
+the newest transform, culling, and packaging slice is locally verified and
+awaits hosted CI evidence.
 
 ## Completed
 
@@ -101,6 +102,19 @@ verified and awaits hosted CI evidence.
   coincident-eye/target and parallel-up failure
 - Extended the separate migration benchmark suite with Mat4, perspective,
   orthographic, and view parity and performance rows
+- Added quaternion algebra, explicit-order Euler construction, look-towards,
+  and shortest-arc rotation interpolation
+- Added affine composition/inversion, rigid/affine/TRS matrix conversions, and
+  typed reflection-aware TRS decomposition with explicit shear failure
+- Resolved reflected-normal policy with distinct half-space covector and
+  ordered-surface-winding operations
+- Added float/double OBBs and ray, sphere, AABB, and full 15-axis OBB queries
+- Added explicit clip-depth/reverse-Z frustum extraction, infinite-far plane
+  masks, prepared point/sphere/AABB/OBB culling, and hierarchical plane masks
+- Added NDC and viewport project/unproject plus near-plane and perspective
+  viewport-ray construction
+- Added first-class XMake consumption with RTM and forced-scalar smoke tests,
+  the canonical `mv::math` CMake target, and current public usage documentation
 
 ## Accepted evidence
 
@@ -124,5 +138,7 @@ verified and awaits hosted CI evidence.
   `Vec3f` ABI commitment
 - Controlled Phase B benchmark evidence on stable hardware; hosted reports
   remain diagnostic rather than regression gates
-- Resolve inverse-transpose direction versus oriented-surface/adjugate
-  semantics for `Normal3f` under negative-determinant transforms
+- Hosted compiler/OS evidence for the newest transform, culling, graphics, and
+  XMake packaging slice
+- Migrate the retained legacy correctness suite to Catch2 and all benchmark
+  capabilities before beginning the `mv.math` module wrapper
