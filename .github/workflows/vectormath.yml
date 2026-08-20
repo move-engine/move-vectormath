@@ -13,8 +13,21 @@ concurrency:
 
 jobs:
   xmake:
-    name: XMake header consumers
-    runs-on: ubuntu-24.04
+    name: XMake ${{ matrix.name }} consumers
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: GCC
+            os: ubuntu-24.04
+            toolchain: gcc
+          - name: Clang
+            os: ubuntu-24.04
+            toolchain: clang
+          - name: MSVC
+            os: windows-2022
+            toolchain: msvc
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v6
@@ -22,7 +35,9 @@ jobs:
         with:
           xmake-version: latest
       - name: Configure
-        run: xmake f -c --build_tests=y -m release -y
+        run: >
+          xmake f -c --toolchain=${{ matrix.toolchain }}
+          --build_tests=y --build_modules=y -m release -y
       - name: Build
         run: xmake build
       - name: Test
@@ -227,8 +242,13 @@ jobs:
             tests/geometry_queries_codegen.cpp \
             tests/culling_graphics.cpp \
             tests/xmake/header_consumer.cpp \
+            tests/xmake/module_consumer.cpp \
+            tests/xmake/module_bridge.cppm \
+            tests/xmake/module_bridge_consumer.cpp \
             tests/matrices.cpp \
             tests/matrices_codegen.cpp
-          find packages/move/math/include/mv tests/compile \
-            -type f \( -name '*.hpp' -o -name '*.cpp' \) -print0 |
+          find packages/move/math/include/mv packages/move/math/modules \
+            tests/compile tests/compile_time \
+            -type f \( -name '*.hpp' -o -name '*.cpp' -o -name '*.cppm' \) \
+            -print0 |
             xargs -0 clang-format-16 --dry-run --Werror

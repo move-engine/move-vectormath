@@ -149,6 +149,9 @@ removed; `mv::math` is the sole public C++ API.
   disabled artifacts, and compatibility target aliases
 - Verified the legacy-free tree with strict GCC, Clang ASan/UBSan, RTM and
   forced-scalar behavior suites, CMake and XMake consumers, and example builds
+- Added the opt-in `mv.math` C++20 module, direct and downstream-module XMake
+  consumers, content-safe BMI invalidation, install metadata, and a measured
+  12-translation-unit game/graphics compile fixture
 
 ## Accepted evidence
 
@@ -179,5 +182,6 @@ removed; `mv::math` is the sole public C++ API.
   `Vec3f` ABI commitment
 - Controlled Phase B benchmark evidence on stable hardware; hosted reports
   remain diagnostic rather than regression gates
-- Implement and measure the post-cutover `mv.math` C++20 module wrapper while
-  retaining the focused headers as the implementation source of truth
+- Integrate the now-implemented `mv.math` module target into next-generation
+  Move's package recipe and repeat the fan-out compile study at application
+  scale before considering broad re-export

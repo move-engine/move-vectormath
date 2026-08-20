@@ -101,18 +101,32 @@ xmake test -v
 The `force_scalar` XMake option publishes `MV_MATH_FORCE_SCALAR=1` when a
 portable scalar build is required.
 
-C++ named-module work is intentionally deferred until the legacy correctness
-tests and cross-library benchmarks have migrated to this API. Headers remain
-the source of truth and supported public interface.
+An opt-in C++20 named module exports the same API:
+
+```lua
+includes("path/to/move-vectormath")
+
+target("your-game")
+    add_deps("move-vectormath-module")
+```
+
+```cpp
+import mv.math;
+```
+
+Configure it with `--build_modules=y`. XMake compiles the BMI locally for the
+active compiler and flags; installation publishes the module source and
+metadata, never a nonportable precompiled BMI. The headers remain the canonical
+implementation and an equal public consumption surface.
 
 ## Verification
 
 The CMake suite exercises GCC, Clang, AppleClang, and MSVC; scalar and RTM
 backends; sanitizers; generated-code fixtures; shader transfer layouts; and a
 downstream consumer. XMake has independent RTM and forced-scalar header
-consumer tests. Runtime benchmarks live in the separate `vectormathbench`
-repository and are diagnostic rather than noisy hosted-runner regression
-gates.
+consumer tests plus direct and downstream named-module consumers. Runtime
+benchmarks live in the separate `vectormathbench` repository and are diagnostic
+rather than noisy hosted-runner regression gates.
 
 ## License
 
