@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <mv/math/Config.hpp>
 #include <mv/math/detail/VectorOps.hpp>
 
@@ -55,10 +57,24 @@ namespace mv::math::detail
                                               const float* row2,
                                               const float* row3) noexcept
         {
-            // Direct delegation to RTM 2.3.1 matrix_mul_vector (MIT,
-            // commit 745bd25673d93b46941eda55e0993327dbc12b53b).
-            return rtm::matrix_mul_vector(rtm::vector_load(vector),
-                                          Load(row0, row1, row2, row3));
+            // Expanded directly from RTM 2.3.1 matrix_mul_vector (MIT,
+            // commit 745bd25673d93b46941eda55e0993327dbc12b53b). Keeping the
+            // row loads adjacent to their arithmetic lets compilers fold them
+            // into memory operands instead of first materializing a matrix.
+            vector = std::assume_aligned<16>(vector);
+            row0 = std::assume_aligned<16>(row0);
+            row1 = std::assume_aligned<16>(row1);
+            row2 = std::assume_aligned<16>(row2);
+            row3 = std::assume_aligned<16>(row3);
+            const Native input = rtm::vector_load(vector);
+            Native result = rtm::vector_mul(rtm::vector_dup_x(input),
+                                            rtm::vector_load(row0));
+            result = rtm::vector_mul_add(rtm::vector_dup_y(input),
+                                         rtm::vector_load(row1), result);
+            result = rtm::vector_mul_add(rtm::vector_dup_z(input),
+                                         rtm::vector_load(row2), result);
+            return rtm::vector_mul_add(rtm::vector_dup_w(input),
+                                       rtm::vector_load(row3), result);
         }
 
         [[nodiscard]] static Rows Multiply(const float* left0,

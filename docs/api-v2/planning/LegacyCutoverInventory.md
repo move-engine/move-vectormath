@@ -42,7 +42,7 @@ construction costs are measured separately from prevalidated hot paths.
 | Affine transform | Ready | Point/vector/normal operations, application-order composition, fallible inverse, and matrix conversion exist. |
 | TRS authoring/decomposition | Ready | Typed float/double TRS, reflection-aware decomposition status, shear rejection, and affine/matrix conversion exist. |
 | General `Mat3f` | Partial | Identity, access, multiplication, vector transform, transpose, determinant, fallible inverse, scale, and rotation conversion exist; add packed/GPU transfer and finish direct legacy performance rows. |
-| General `Mat4f` | Ready | Identity, access, multiplication, homogeneous transform, transpose, determinant, fallible inverse, affine/rigid/TRS conversion, and direct legacy benchmarks exist. |
+| General `Mat4f` | Ready | Identity, access, multiplication, homogeneous transform, transpose, determinant, fallible inverse, affine/rigid/TRS conversion, and direct legacy benchmarks exist; the hot homogeneous operation has identical isolated generated code and no measured runtime regression. |
 | View/projection construction | Ready | Fallible look-at, finite/infinite perspective, orthographic, handedness, clip-depth, and forward/reverse-Z policies are explicit and tested. |
 
 ## Geometry and queries
@@ -69,7 +69,7 @@ construction costs are measured separately from prevalidated hot paths.
 | `mv.math` C++20 module | Missing | Deliberately scheduled after legacy tests and cross-library benchmarks migrate (item 7); headers remain the source of truth. |
 | User documentation | Ready | README and conventions teach the current namespace, semantic contracts, focused headers, and CMake/XMake usage. |
 | Legacy test migration | Partial | Current behavior suites run under Catch2 for RTM and forced-scalar backends; audit remaining legacy-only contracts before deleting the old tests. |
-| Cross-library benchmark migration | Partial | New capability suites exist, but the main suite still benchmarks the old surface. |
+| Cross-library benchmark migration | Partial | The main ranking suite now measures `mv::math` and has no legacy dependency; temporary direct old/new migration executables remain until their evidence is archived and the remaining differences are explained. |
 
 ## Intentionally removed legacy design
 

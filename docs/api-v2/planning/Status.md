@@ -124,6 +124,13 @@ and packaging checkpoints have passed hosted CI.
   standard-library guidance for ordinary scalar math
 - Added typed robust angle-between and signed-angle operations for invariant
   3D directions with explicit positive-axis semantics
+- Migrated the benchmark repository's capability rankings to the current
+  `mv::math` surface and removed dormant legacy capability workloads; legacy
+  headers now remain only in the temporary direct old/new migration gates
+- Restored `Mat4f` homogeneous-transform code generation after the adapter's
+  eager matrix materialization introduced a regression: the isolated current
+  and legacy operations now compile identically, and correctness-checked
+  working-set measurements show current runtime at parity or slightly faster
 
 ## Accepted evidence
 
@@ -134,6 +141,9 @@ and packaging checkpoints have passed hosted CI.
 - Compact storage, compute-resident values, and explicit GPU transfer layouts
   remain separate first-class representations.
 - Focused headers keep the facade's incremental compile cost small.
+- The main cross-library capability ranking measures `mv::math`; direct
+  `move::math` measurements are isolated in explicitly labeled migration
+  executables.
 - Hosted-runner timings are useful diagnostic artifacts but are not regression
   gates.
 
@@ -147,5 +157,7 @@ and packaging checkpoints have passed hosted CI.
   `Vec3f` ABI commitment
 - Controlled Phase B benchmark evidence on stable hardware; hosted reports
   remain diagnostic rather than regression gates
-- Audit the remaining legacy-only correctness contracts and migrate all
-  benchmark capabilities before beginning the `mv.math` module wrapper
+- Audit the remaining legacy-only correctness contracts, explain or resolve
+  the remaining checked-boundary and ray/AABB performance differences, and
+  archive the temporary direct old/new migration evidence before beginning the
+  `mv.math` module wrapper
