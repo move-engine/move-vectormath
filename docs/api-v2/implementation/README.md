@@ -16,6 +16,9 @@ reject architectural choices.
   closest-point, distance, degeneracy, provenance, and verification slice.
 - [`PhaseCCapsule.md`](PhaseCCapsule.md) records the compact sphere-swept
   segment representation and its first proximity and overlap queries.
+- [`PhaseCGenericMathAndGraphicsMatrices.md`](PhaseCGenericMathAndGraphicsMatrices.md)
+  records vector parity, float/double geometry and queries, integer bounds,
+  Mat4, projection/view policy, benchmark evidence, and the inlining audit.
 - [`AlgorithmProvenance.md`](AlgorithmProvenance.md) records the exact papers,
   compatible-licensed implementations, deliberate deviations, and historical
   source status of Codex-generated algorithms.

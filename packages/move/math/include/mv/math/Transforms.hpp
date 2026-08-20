@@ -5,4 +5,6 @@
 #include <mv/math/semantic/Point3.hpp>
 #include <mv/math/transforms/AffineTransform3.hpp>
 #include <mv/math/transforms/AffineTransform3Semantics.hpp>
+#include <mv/math/transforms/Projection.hpp>
 #include <mv/math/transforms/RigidTransform3.hpp>
+#include <mv/math/transforms/View.hpp>

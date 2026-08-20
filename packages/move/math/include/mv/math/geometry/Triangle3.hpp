@@ -11,76 +11,82 @@ namespace mv::math
 {
     // Standard three-finite-point triangle; degeneracy and optional-normal
     // policy are Move-specific.
-    class Triangle3f
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    class Triangle3
     {
     public:
-        Triangle3f() noexcept = default;
+        using Component = T;
 
-        [[nodiscard]] static std::optional<Triangle3f> TryFromPoints(
-            Point3f first, Point3f second, Point3f third) noexcept
+        Triangle3() noexcept = default;
+
+        [[nodiscard]] static std::optional<Triangle3> TryFromPoints(
+            const Point3<T>& first,
+            const Point3<T>& second,
+            const Point3<T>& third) noexcept
         {
             if (!IsFinitePoint(first) || !IsFinitePoint(second) ||
                 !IsFinitePoint(third))
             {
                 return std::nullopt;
             }
-            return Triangle3f(first, second, third, UncheckedTag{});
+            return Triangle3(first, second, third, UncheckedTag{});
         }
 
-        [[nodiscard]] const Point3f& First() const noexcept
+        [[nodiscard]] const Point3<T>& First() const noexcept
         {
             return Vertices_[0];
         }
 
-        [[nodiscard]] const Point3f& Second() const noexcept
+        [[nodiscard]] const Point3<T>& Second() const noexcept
         {
             return Vertices_[1];
         }
 
-        [[nodiscard]] const Point3f& Third() const noexcept
+        [[nodiscard]] const Point3<T>& Third() const noexcept
         {
             return Vertices_[2];
         }
 
-        [[nodiscard]] Vec3f Edge01() const noexcept
+        [[nodiscard]] Vec3<T> Edge01() const noexcept
         {
             return Second() - First();
         }
 
-        [[nodiscard]] Vec3f Edge02() const noexcept
+        [[nodiscard]] Vec3<T> Edge02() const noexcept
         {
             return Third() - First();
         }
 
-        [[nodiscard]] Vec3f Edge12() const noexcept
+        [[nodiscard]] Vec3<T> Edge12() const noexcept
         {
             return Third() - Second();
         }
 
-        [[nodiscard]] Point3f Centroid() const noexcept
+        [[nodiscard]] Point3<T> Centroid() const noexcept
         {
-            return Point3f::FromVector(
+            return Point3<T>::FromVector(
                 (First().Vector() + Second().Vector() + Third().Vector()) *
-                (1.0F / 3.0F));
+                (T(1) / T(3)));
         }
 
-        [[nodiscard]] float DoubleArea() const noexcept
+        [[nodiscard]] T DoubleArea() const noexcept
         {
             return std::sqrt(LengthSquared(Cross(Edge01(), Edge02())));
         }
 
-        [[nodiscard]] float Area() const noexcept
+        [[nodiscard]] T Area() const noexcept
         {
-            return DoubleArea() * 0.5F;
+            return DoubleArea() * T(0.5);
         }
 
-        [[nodiscard]] std::optional<Normal3f> TryNormal() const noexcept
+        [[nodiscard]] std::optional<Normal3<T>> TryNormal() const noexcept
         {
-            return Normal3f::TryFrom(Cross(Edge01(), Edge02()));
+            return Normal3<T>::TryFrom(Cross(Edge01(), Edge02()));
         }
 
-        [[nodiscard]] friend bool operator==(const Triangle3f& left,
-                                             const Triangle3f& right) noexcept
+        [[nodiscard]] friend bool operator==(const Triangle3& left,
+                                             const Triangle3& right) noexcept
         {
             return left.Vertices_[0] == right.Vertices_[0] &&
                    left.Vertices_[1] == right.Vertices_[1] &&
@@ -92,25 +98,32 @@ namespace mv::math
         {
         };
 
-        Triangle3f(Point3f first,
-                   Point3f second,
-                   Point3f third,
-                   UncheckedTag) noexcept :
+        Triangle3(const Point3<T>& first,
+                  const Point3<T>& second,
+                  const Point3<T>& third,
+                  UncheckedTag) noexcept :
             Vertices_{first, second, third}
         {
         }
 
-        [[nodiscard]] static bool IsFinitePoint(const Point3f& point) noexcept
+        [[nodiscard]] static bool IsFinitePoint(const Point3<T>& point) noexcept
         {
             return std::isfinite(point.X()) && std::isfinite(point.Y()) &&
                    std::isfinite(point.Z());
         }
 
-        Point3f Vertices_[3];
+        Point3<T> Vertices_[3];
     };
+
+    using Triangle3f = Triangle3<float>;
+    using Triangle3d = Triangle3<double>;
 }  // namespace mv::math
 
 static_assert(sizeof(mv::math::Triangle3f) == 48);
 static_assert(alignof(mv::math::Triangle3f) == 16);
 static_assert(std::is_trivially_copyable_v<mv::math::Triangle3f>);
 static_assert(std::is_standard_layout_v<mv::math::Triangle3f>);
+static_assert(sizeof(mv::math::Triangle3d) == 96);
+static_assert(alignof(mv::math::Triangle3d) == 32);
+static_assert(std::is_trivially_copyable_v<mv::math::Triangle3d>);
+static_assert(std::is_standard_layout_v<mv::math::Triangle3d>);

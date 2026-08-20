@@ -15,197 +15,249 @@ namespace mv::math
         Back
     };
 
-    struct PointLineClosest3f
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    struct PointLineClosest3
     {
-        Point3f PointOnLine;
-        float LineDistance;
-        float SquaredDistance;
+        Point3<T> PointOnLine;
+        T LineDistance;
+        T SquaredDistance;
 
-        [[nodiscard]] float Distance() const noexcept
+        [[nodiscard]] T Distance() const noexcept
         {
             return std::sqrt(SquaredDistance);
         }
 
         [[nodiscard]] friend bool operator==(
-            const PointLineClosest3f&,
-            const PointLineClosest3f&) noexcept = default;
+            const PointLineClosest3&,
+            const PointLineClosest3&) noexcept = default;
     };
 
-    struct PointRayClosest3f
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    struct PointRayClosest3
     {
-        Point3f PointOnRay;
-        float RayDistance;
-        float SquaredDistance;
+        Point3<T> PointOnRay;
+        T RayDistance;
+        T SquaredDistance;
 
-        [[nodiscard]] float Distance() const noexcept
+        [[nodiscard]] T Distance() const noexcept
         {
             return std::sqrt(SquaredDistance);
         }
 
-        [[nodiscard]] friend bool operator==(
-            const PointRayClosest3f&,
-            const PointRayClosest3f&) noexcept = default;
-    };
-
-    struct PointSegmentClosest3f
-    {
-        Point3f PointOnSegment;
-        float SegmentFraction;
-        float SquaredDistance;
-
-        [[nodiscard]] float Distance() const noexcept
-        {
-            return std::sqrt(SquaredDistance);
-        }
-
-        [[nodiscard]] friend bool operator==(
-            const PointSegmentClosest3f&,
-            const PointSegmentClosest3f&) noexcept = default;
-    };
-
-    struct PointPlaneClosest3f
-    {
-        Point3f PointOnPlane;
-        float SignedDistance;
-        float SquaredDistance;
-
-        [[nodiscard]] float Distance() const noexcept
-        {
-            return std::sqrt(SquaredDistance);
-        }
-
-        [[nodiscard]] friend bool operator==(
-            const PointPlaneClosest3f&,
-            const PointPlaneClosest3f&) noexcept = default;
-    };
-
-    struct PointTriangleClosest3f
-    {
-        Point3f PointOnTriangle;
-        Vec3f Barycentric;
-        float SquaredDistance;
-
-        [[nodiscard]] float Distance() const noexcept
-        {
-            return std::sqrt(SquaredDistance);
-        }
-
-        [[nodiscard]] friend bool operator==(
-            const PointTriangleClosest3f&,
-            const PointTriangleClosest3f&) noexcept = default;
-    };
-
-    struct PointAabbClosest3f
-    {
-        Point3f PointInAabb;
-        float SquaredDistance;
-
-        [[nodiscard]] float Distance() const noexcept
-        {
-            return std::sqrt(SquaredDistance);
-        }
-
-        [[nodiscard]] friend bool operator==(
-            const PointAabbClosest3f&,
-            const PointAabbClosest3f&) noexcept = default;
-    };
-
-    struct PointSphereClosest3f
-    {
-        Point3f PointInSphere;
-        float SquaredDistance;
-
-        [[nodiscard]] float Distance() const noexcept
-        {
-            return std::sqrt(SquaredDistance);
-        }
-
-        [[nodiscard]] friend bool operator==(
-            const PointSphereClosest3f&,
-            const PointSphereClosest3f&) noexcept = default;
-    };
-
-    struct PointCapsuleClosest3f
-    {
-        Point3f PointInCapsule;
-        float CenterLineFraction;
-        float SquaredDistance;
-
-        [[nodiscard]] float Distance() const noexcept
-        {
-            return std::sqrt(SquaredDistance);
-        }
-
-        [[nodiscard]] friend bool operator==(
-            const PointCapsuleClosest3f&,
-            const PointCapsuleClosest3f&) noexcept = default;
-    };
-
-    struct SegmentSegmentClosest3f
-    {
-        Point3f PointOnFirst;
-        Point3f PointOnSecond;
-        float FirstFraction;
-        float SecondFraction;
-        float SquaredDistance;
-
-        [[nodiscard]] float Distance() const noexcept
-        {
-            return std::sqrt(SquaredDistance);
-        }
-
-        [[nodiscard]] friend bool operator==(
-            const SegmentSegmentClosest3f&,
-            const SegmentSegmentClosest3f&) noexcept = default;
-    };
-
-    struct RayPlaneHit3f
-    {
-        float Distance;
-        Point3f Point;
-        Normal3f Normal;
-        FaceOrientation Face;
-
-        [[nodiscard]] friend bool operator==(
-            const RayPlaneHit3f&, const RayPlaneHit3f&) noexcept = default;
-    };
-
-    struct RayTriangleHit3f
-    {
-        float Distance;
-        Point3f Point;
-        Normal3f GeometricNormal;
-        Vec3f Barycentric;
-        FaceOrientation Face;
-
-        [[nodiscard]] friend bool operator==(const RayTriangleHit3f&,
-                                             const RayTriangleHit3f&) noexcept =
+        [[nodiscard]] friend bool operator==(const PointRayClosest3&,
+                                             const PointRayClosest3&) noexcept =
             default;
     };
 
-    struct RaySphereHit3f
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    struct PointSegmentClosest3
     {
-        float EntryDistance;
-        float ExitDistance;
-        bool StartsInside;
-        std::optional<Normal3f> EntryNormal;
-        std::optional<Normal3f> ExitNormal;
+        Point3<T> PointOnSegment;
+        T SegmentFraction;
+        T SquaredDistance;
+
+        [[nodiscard]] T Distance() const noexcept
+        {
+            return std::sqrt(SquaredDistance);
+        }
 
         [[nodiscard]] friend bool operator==(
-            const RaySphereHit3f&, const RaySphereHit3f&) noexcept = default;
+            const PointSegmentClosest3&,
+            const PointSegmentClosest3&) noexcept = default;
     };
 
-    struct RayAabbHit3f
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    struct PointPlaneClosest3
     {
-        float EntryDistance;
-        float ExitDistance;
-        bool StartsInside;
-        std::optional<Normal3f> EntryNormal;
-        Normal3f ExitNormal;
+        Point3<T> PointOnPlane;
+        T SignedDistance;
+        T SquaredDistance;
+
+        [[nodiscard]] T Distance() const noexcept
+        {
+            return std::sqrt(SquaredDistance);
+        }
 
         [[nodiscard]] friend bool operator==(
-            const RayAabbHit3f&, const RayAabbHit3f&) noexcept = default;
+            const PointPlaneClosest3&,
+            const PointPlaneClosest3&) noexcept = default;
     };
+
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    struct PointTriangleClosest3
+    {
+        Point3<T> PointOnTriangle;
+        Vec3<T> Barycentric;
+        T SquaredDistance;
+
+        [[nodiscard]] T Distance() const noexcept
+        {
+            return std::sqrt(SquaredDistance);
+        }
+
+        [[nodiscard]] friend bool operator==(
+            const PointTriangleClosest3&,
+            const PointTriangleClosest3&) noexcept = default;
+    };
+
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    struct PointAabbClosest3
+    {
+        Point3<T> PointInAabb;
+        T SquaredDistance;
+
+        [[nodiscard]] T Distance() const noexcept
+        {
+            return std::sqrt(SquaredDistance);
+        }
+
+        [[nodiscard]] friend bool operator==(
+            const PointAabbClosest3&,
+            const PointAabbClosest3&) noexcept = default;
+    };
+
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    struct PointSphereClosest3
+    {
+        Point3<T> PointInSphere;
+        T SquaredDistance;
+
+        [[nodiscard]] T Distance() const noexcept
+        {
+            return std::sqrt(SquaredDistance);
+        }
+
+        [[nodiscard]] friend bool operator==(
+            const PointSphereClosest3&,
+            const PointSphereClosest3&) noexcept = default;
+    };
+
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    struct PointCapsuleClosest3
+    {
+        Point3<T> PointInCapsule;
+        T CenterLineFraction;
+        T SquaredDistance;
+
+        [[nodiscard]] T Distance() const noexcept
+        {
+            return std::sqrt(SquaredDistance);
+        }
+
+        [[nodiscard]] friend bool operator==(
+            const PointCapsuleClosest3&,
+            const PointCapsuleClosest3&) noexcept = default;
+    };
+
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    struct SegmentSegmentClosest3
+    {
+        Point3<T> PointOnFirst;
+        Point3<T> PointOnSecond;
+        T FirstFraction;
+        T SecondFraction;
+        T SquaredDistance;
+
+        [[nodiscard]] T Distance() const noexcept
+        {
+            return std::sqrt(SquaredDistance);
+        }
+
+        [[nodiscard]] friend bool operator==(
+            const SegmentSegmentClosest3&,
+            const SegmentSegmentClosest3&) noexcept = default;
+    };
+
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    struct RayPlaneHit3
+    {
+        T Distance;
+        Point3<T> Point;
+        Normal3<T> Normal;
+        FaceOrientation Face;
+
+        [[nodiscard]] friend bool operator==(
+            const RayPlaneHit3&, const RayPlaneHit3&) noexcept = default;
+    };
+
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    struct RayTriangleHit3
+    {
+        T Distance;
+        Point3<T> Point;
+        Normal3<T> GeometricNormal;
+        Vec3<T> Barycentric;
+        FaceOrientation Face;
+
+        [[nodiscard]] friend bool operator==(
+            const RayTriangleHit3&, const RayTriangleHit3&) noexcept = default;
+    };
+
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    struct RaySphereHit3
+    {
+        T EntryDistance;
+        T ExitDistance;
+        bool StartsInside;
+        std::optional<Normal3<T>> EntryNormal;
+        std::optional<Normal3<T>> ExitNormal;
+
+        [[nodiscard]] friend bool operator==(
+            const RaySphereHit3&, const RaySphereHit3&) noexcept = default;
+    };
+
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    struct RayAabbHit3
+    {
+        T EntryDistance;
+        T ExitDistance;
+        bool StartsInside;
+        std::optional<Normal3<T>> EntryNormal;
+        Normal3<T> ExitNormal;
+
+        [[nodiscard]] friend bool operator==(
+            const RayAabbHit3&, const RayAabbHit3&) noexcept = default;
+    };
+
+    using PointLineClosest3f = PointLineClosest3<float>;
+    using PointLineClosest3d = PointLineClosest3<double>;
+    using PointRayClosest3f = PointRayClosest3<float>;
+    using PointRayClosest3d = PointRayClosest3<double>;
+    using PointSegmentClosest3f = PointSegmentClosest3<float>;
+    using PointSegmentClosest3d = PointSegmentClosest3<double>;
+    using PointPlaneClosest3f = PointPlaneClosest3<float>;
+    using PointPlaneClosest3d = PointPlaneClosest3<double>;
+    using PointTriangleClosest3f = PointTriangleClosest3<float>;
+    using PointTriangleClosest3d = PointTriangleClosest3<double>;
+    using PointAabbClosest3f = PointAabbClosest3<float>;
+    using PointAabbClosest3d = PointAabbClosest3<double>;
+    using PointSphereClosest3f = PointSphereClosest3<float>;
+    using PointSphereClosest3d = PointSphereClosest3<double>;
+    using PointCapsuleClosest3f = PointCapsuleClosest3<float>;
+    using PointCapsuleClosest3d = PointCapsuleClosest3<double>;
+    using SegmentSegmentClosest3f = SegmentSegmentClosest3<float>;
+    using SegmentSegmentClosest3d = SegmentSegmentClosest3<double>;
+    using RayPlaneHit3f = RayPlaneHit3<float>;
+    using RayPlaneHit3d = RayPlaneHit3<double>;
+    using RayTriangleHit3f = RayTriangleHit3<float>;
+    using RayTriangleHit3d = RayTriangleHit3<double>;
+    using RaySphereHit3f = RaySphereHit3<float>;
+    using RaySphereHit3d = RaySphereHit3<double>;
+    using RayAabbHit3f = RayAabbHit3<float>;
+    using RayAabbHit3d = RayAabbHit3<double>;
 }  // namespace mv::math
 
 static_assert(std::is_trivially_copyable_v<mv::math::RayPlaneHit3f>);
@@ -221,3 +273,7 @@ static_assert(std::is_trivially_copyable_v<mv::math::PointAabbClosest3f>);
 static_assert(std::is_trivially_copyable_v<mv::math::PointSphereClosest3f>);
 static_assert(std::is_trivially_copyable_v<mv::math::PointCapsuleClosest3f>);
 static_assert(std::is_trivially_copyable_v<mv::math::SegmentSegmentClosest3f>);
+static_assert(std::is_trivially_copyable_v<mv::math::RayPlaneHit3d>);
+static_assert(std::is_trivially_copyable_v<mv::math::RayTriangleHit3d>);
+static_assert(std::is_trivially_copyable_v<mv::math::RaySphereHit3d>);
+static_assert(std::is_trivially_copyable_v<mv::math::RayAabbHit3d>);

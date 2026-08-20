@@ -113,6 +113,20 @@ namespace mv::math::detail
                     left.W - right.W};
         }
 
+        [[nodiscard]] static constexpr Native Add(Native value,
+                                                  T scalar) noexcept
+        {
+            return {value.X + scalar, value.Y + scalar, value.Z + scalar,
+                    value.W + scalar};
+        }
+
+        [[nodiscard]] static constexpr Native Subtract(Native value,
+                                                       T scalar) noexcept
+        {
+            return {value.X - scalar, value.Y - scalar, value.Z - scalar,
+                    value.W - scalar};
+        }
+
         [[nodiscard]] static constexpr Native Multiply(Native left,
                                                        Native right) noexcept
         {
@@ -125,6 +139,39 @@ namespace mv::math::detail
         {
             return {value.X * scalar, value.Y * scalar, value.Z * scalar,
                     value.W * scalar};
+        }
+
+        [[nodiscard]] static constexpr Native Divide(Native left,
+                                                     Native right) noexcept
+        {
+            return {left.X / right.X, left.Y / right.Y, left.Z / right.Z,
+                    left.W / right.W};
+        }
+
+        [[nodiscard]] static constexpr Native Divide2(Native left,
+                                                      Native right) noexcept
+        {
+            return {left.X / right.X, left.Y / right.Y, T(0), T(0)};
+        }
+
+        [[nodiscard]] static constexpr Native Divide3(Native left,
+                                                      Native right) noexcept
+        {
+            return {left.X / right.X, left.Y / right.Y, left.Z / right.Z, T(0)};
+        }
+
+        [[nodiscard]] static constexpr Native Divide(Native value,
+                                                     T scalar) noexcept
+        {
+            return {value.X / scalar, value.Y / scalar, value.Z / scalar,
+                    value.W / scalar};
+        }
+
+        [[nodiscard]] static constexpr Native Negate(Native value) noexcept
+        {
+            return {
+                static_cast<T>(T(0) - value.X), static_cast<T>(T(0) - value.Y),
+                static_cast<T>(T(0) - value.Z), static_cast<T>(T(0) - value.W)};
         }
 
         [[nodiscard]] static constexpr T Dot2(Native left,
@@ -231,6 +278,17 @@ namespace mv::math::detail
             return rtm::vector_sub(left, right);
         }
 
+        [[nodiscard]] static Native Add(Native value, float scalar) noexcept
+        {
+            return rtm::vector_add(value, rtm::vector_set(scalar));
+        }
+
+        [[nodiscard]] static Native Subtract(Native value,
+                                             float scalar) noexcept
+        {
+            return rtm::vector_sub(value, rtm::vector_set(scalar));
+        }
+
         [[nodiscard]] static Native Multiply(Native left, Native right) noexcept
         {
             return rtm::vector_mul(left, right);
@@ -240,6 +298,26 @@ namespace mv::math::detail
                                              float scalar) noexcept
         {
             return rtm::vector_mul(value, scalar);
+        }
+
+        [[nodiscard]] static Native Divide(Native left, Native right) noexcept
+        {
+            return rtm::vector_div(left, right);
+        }
+
+        [[nodiscard]] static Native Divide3(Native left, Native right) noexcept
+        {
+            return rtm::vector_div(left, rtm::vector_set_w(right, 1.0F));
+        }
+
+        [[nodiscard]] static Native Divide(Native value, float scalar) noexcept
+        {
+            return rtm::vector_div(value, rtm::vector_set(scalar));
+        }
+
+        [[nodiscard]] static Native Negate(Native value) noexcept
+        {
+            return rtm::vector_neg(value);
         }
 
         [[nodiscard]] static float Dot2(Native left, Native right) noexcept

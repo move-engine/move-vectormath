@@ -11,52 +11,58 @@ namespace mv::math
 {
     // Move-owned sphere contract; operations cross-checked against DirectXMath
     // DirectXCollision.inl (MIT).
-    class Sphere3f
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    class Sphere3
     {
     public:
-        Sphere3f() noexcept = default;
+        using Component = T;
 
-        [[nodiscard]] static std::optional<Sphere3f> TryFromCenterRadius(
-            const Point3f& center, float radius) noexcept
+        Sphere3() noexcept = default;
+
+        [[nodiscard]] static std::optional<Sphere3> TryFromCenterRadius(
+            const Point3<T>& center, T radius) noexcept
         {
             if (!std::isfinite(center.X()) || !std::isfinite(center.Y()) ||
-                !std::isfinite(center.Z()) || !(radius >= 0.0F) ||
+                !std::isfinite(center.Z()) || !(radius >= T(0)) ||
                 !std::isfinite(radius))
             {
                 return std::nullopt;
             }
-            return Sphere3f(center, radius, UncheckedTag{});
+            return Sphere3(center, radius, UncheckedTag{});
         }
 
-        [[nodiscard]] Point3f Center() const noexcept
+        [[nodiscard]] Point3<T> Center() const noexcept
         {
-            return Point3f(Value_.X(), Value_.Y(), Value_.Z());
+            return Point3<T>(Value_.X(), Value_.Y(), Value_.Z());
         }
 
-        [[nodiscard]] float Radius() const noexcept
+        [[nodiscard]] T Radius() const noexcept
         {
             return Value_.W();
         }
 
-        [[nodiscard]] float Diameter() const noexcept
+        [[nodiscard]] T Diameter() const noexcept
         {
-            return Radius() * 2.0F;
+            return Radius() * T(2);
         }
 
-        [[nodiscard]] bool Contains(const Point3f& point) const noexcept
+        [[nodiscard]] bool Contains(const Point3<T>& point) const noexcept
         {
-            const double x = static_cast<double>(point.X()) -
-                             static_cast<double>(Value_.X());
-            const double y = static_cast<double>(point.Y()) -
-                             static_cast<double>(Value_.Y());
-            const double z = static_cast<double>(point.Z()) -
-                             static_cast<double>(Value_.Z());
-            const double radius = static_cast<double>(Radius());
+            using Calculation =
+                std::conditional_t<(sizeof(T) < sizeof(double)), double, T>;
+            const Calculation x = static_cast<Calculation>(point.X()) -
+                                  static_cast<Calculation>(Value_.X());
+            const Calculation y = static_cast<Calculation>(point.Y()) -
+                                  static_cast<Calculation>(Value_.Y());
+            const Calculation z = static_cast<Calculation>(point.Z()) -
+                                  static_cast<Calculation>(Value_.Z());
+            const Calculation radius = static_cast<Calculation>(Radius());
             return x * x + y * y + z * z <= radius * radius;
         }
 
-        [[nodiscard]] friend bool operator==(const Sphere3f& left,
-                                             const Sphere3f& right) noexcept
+        [[nodiscard]] friend bool operator==(const Sphere3& left,
+                                             const Sphere3& right) noexcept
         {
             return left.Value_ == right.Value_;
         }
@@ -66,16 +72,23 @@ namespace mv::math
         {
         };
 
-        Sphere3f(const Point3f& center, float radius, UncheckedTag) noexcept :
+        Sphere3(const Point3<T>& center, T radius, UncheckedTag) noexcept :
             Value_(center.X(), center.Y(), center.Z(), radius)
         {
         }
 
-        Vec4f Value_{};
+        Vec4<T> Value_{};
     };
+
+    using Sphere3f = Sphere3<float>;
+    using Sphere3d = Sphere3<double>;
 }  // namespace mv::math
 
 static_assert(sizeof(mv::math::Sphere3f) == 16);
 static_assert(alignof(mv::math::Sphere3f) == 16);
 static_assert(std::is_trivially_copyable_v<mv::math::Sphere3f>);
 static_assert(std::is_standard_layout_v<mv::math::Sphere3f>);
+static_assert(sizeof(mv::math::Sphere3d) == 32);
+static_assert(alignof(mv::math::Sphere3d) == 32);
+static_assert(std::is_trivially_copyable_v<mv::math::Sphere3d>);
+static_assert(std::is_standard_layout_v<mv::math::Sphere3d>);

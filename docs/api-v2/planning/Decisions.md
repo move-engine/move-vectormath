@@ -32,6 +32,12 @@
   construction. Separate prepared types remain appropriate when they carry
   cached computation, and predicate kernels may differ from detailed kernels
   when generated-code evidence justifies the distinction.
+- Header-defined class members are implicitly `inline`; public function
+  templates need no additional ODR annotation. Force-inline attributes are
+  reserved for hot leaf operations whose generated-code tests demonstrate a
+  missed inline and a measurable regression. Legacy's widely used
+  `MVM_INLINE` macro was ordinary `inline`; its unused `MVM_FORCE_INLINE`
+  definition did not impose a stronger optimizer contract.
 
 ## Approachability
 
@@ -71,8 +77,14 @@ These decisions authorize Phase B but are not stable ABI commitments:
 
 ## Decisions still provisional
 
-- `Vec2f` remains an open decision: 16-byte storage wins small compute loops,
-  while 8-byte storage wins the measured large working set.
+- `Vec2f` remains compact and uses scalar per-value primitives. Direct
+  component-chain benchmarks showed that expanding each 8-byte value into an
+  RTM register inhibited loop vectorization; scalar primitives let the compiler
+  vectorize across adjacent values instead.
+- Semantic wrappers are scalar-parametric where their contracts are coherent:
+  `Point3<T>` supports arithmetic scalars, while `Direction3<T>`, `Normal3<T>`,
+  and `Rotation3<T>` require floating-point scalars. Aliases do not imply
+  invalid integer normalization or rotation APIs.
 - Compact 12-byte and compute 16-byte arrays are both first-class choices;
   working-set behavior determines which is faster.
 - The facade should retain focused headers. The focused `Vec3` proof adds only

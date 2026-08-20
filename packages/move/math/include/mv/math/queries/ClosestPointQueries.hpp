@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 #include <optional>
+#include <type_traits>
 
 #include <mv/math/geometry/Aabb3.hpp>
 #include <mv/math/geometry/Capsule3.hpp>
@@ -18,29 +19,37 @@ namespace mv::math
 {
     namespace detail
     {
-        [[nodiscard]] inline float PointDistanceSquared(
-            const Point3f& first, const Point3f& second) noexcept
+        template <typename T>
+        [[nodiscard]] inline T PointDistanceSquared(
+            const Point3<T>& first, const Point3<T>& second) noexcept
         {
             return LengthSquared(first - second);
         }
 
-        [[nodiscard]] inline double DotDouble(const Vec3f& first,
-                                              const Vec3f& second) noexcept
+        template <typename T>
+        using QueryCalculation =
+            std::conditional_t<std::is_same_v<T, float>, double, long double>;
+
+        template <typename T>
+        [[nodiscard]] inline QueryCalculation<T> DotPrecise(
+            const Vec3<T>& first, const Vec3<T>& second) noexcept
         {
-            return static_cast<double>(first.X()) *
-                       static_cast<double>(second.X()) +
-                   static_cast<double>(first.Y()) *
-                       static_cast<double>(second.Y()) +
-                   static_cast<double>(first.Z()) *
-                       static_cast<double>(second.Z());
+            using Calculation = QueryCalculation<T>;
+            return static_cast<Calculation>(first.X()) *
+                       static_cast<Calculation>(second.X()) +
+                   static_cast<Calculation>(first.Y()) *
+                       static_cast<Calculation>(second.Y()) +
+                   static_cast<Calculation>(first.Z()) *
+                       static_cast<Calculation>(second.Z());
         }
 
-        [[nodiscard]] inline PointTriangleClosest3f MakePointTriangleClosest(
-            const Point3f& point,
-            const Point3f& pointOnTriangle,
-            const Vec3f& barycentric) noexcept
+        template <typename T>
+        [[nodiscard]] inline PointTriangleClosest3<T> MakePointTriangleClosest(
+            const Point3<T>& point,
+            const Point3<T>& pointOnTriangle,
+            const Vec3<T>& barycentric) noexcept
         {
-            return PointTriangleClosest3f{
+            return PointTriangleClosest3<T>{
                 pointOnTriangle, barycentric,
                 PointDistanceSquared(point, pointOnTriangle)};
         }
@@ -48,57 +57,61 @@ namespace mv::math
 
     // Orthogonal projection specialized for a unit direction; equations and
     // parameter semantics follow Geometric Tools DistPointLine.h (BSL-1.0).
-    [[nodiscard]] inline PointLineClosest3f ClosestPoints(
-        const Point3f& point, const Line3f& line) noexcept
+    template <typename T>
+    [[nodiscard]] inline PointLineClosest3<T> ClosestPoints(
+        const Point3<T>& point, const Line3<T>& line) noexcept
     {
-        const float parameter =
+        const T parameter =
             Dot(line.Direction().Vector(), point - line.Origin());
-        const Point3f pointOnLine = line.PointAt(parameter);
-        return PointLineClosest3f{
+        const Point3<T> pointOnLine = line.PointAt(parameter);
+        return PointLineClosest3<T>{
             pointOnLine, parameter,
             detail::PointDistanceSquared(point, pointOnLine)};
     }
 
     // The line projection above, clamped to the ray domain [0,+infinity),
     // follows Geometric Tools DistPointRay.h (BSL-1.0).
-    [[nodiscard]] inline PointRayClosest3f ClosestPoints(
-        const Point3f& point, const Ray3f& ray) noexcept
+    template <typename T>
+    [[nodiscard]] inline PointRayClosest3<T> ClosestPoints(
+        const Point3<T>& point, const Ray3<T>& ray) noexcept
     {
-        const float parameter =
-            std::max(Dot(ray.Direction().Vector(), point - ray.Origin()), 0.0F);
-        const Point3f pointOnRay = ray.PointAt(parameter);
-        return PointRayClosest3f{
+        const T parameter =
+            std::max(Dot(ray.Direction().Vector(), point - ray.Origin()), T(0));
+        const Point3<T> pointOnRay = ray.PointAt(parameter);
+        return PointRayClosest3<T>{
             pointOnRay, parameter,
             detail::PointDistanceSquared(point, pointOnRay)};
     }
 
     // Endpoint tests and the interior projection follow Geometric Tools
     // DistPointSegment.h (BSL-1.0); a zero-length segment returns its start.
-    [[nodiscard]] inline PointSegmentClosest3f ClosestPoints(
-        const Point3f& point, const Segment3f& segment) noexcept
+    template <typename T>
+    [[nodiscard]] inline PointSegmentClosest3<T> ClosestPoints(
+        const Point3<T>& point, const Segment3<T>& segment) noexcept
     {
-        const Vec3f displacement = segment.Displacement();
-        const float lengthSquared = LengthSquared(displacement);
-        float fraction = 0.0F;
-        if (lengthSquared > 0.0F)
+        const Vec3<T> displacement = segment.Displacement();
+        const T lengthSquared = LengthSquared(displacement);
+        T fraction = T(0);
+        if (lengthSquared > T(0))
         {
             fraction = std::clamp(
                 Dot(point - segment.Start(), displacement) / lengthSquared,
-                0.0F, 1.0F);
+                T(0), T(1));
         }
-        const Point3f pointOnSegment = segment.PointAtFraction(fraction);
-        return PointSegmentClosest3f{
+        const Point3<T> pointOnSegment = segment.PointAtFraction(fraction);
+        return PointSegmentClosest3<T>{
             pointOnSegment, fraction,
             detail::PointDistanceSquared(point, pointOnSegment)};
     }
 
     // Unit-normal orthogonal projection; see Ericson, Real-Time Collision
     // Detection (2005), section 5.1.1.
-    [[nodiscard]] inline PointPlaneClosest3f ClosestPoints(
-        const Point3f& point, const Plane3f& plane) noexcept
+    template <typename T>
+    [[nodiscard]] inline PointPlaneClosest3<T> ClosestPoints(
+        const Point3<T>& point, const Plane3<T>& plane) noexcept
     {
-        const float signedDistance = plane.SignedDistance(point);
-        return PointPlaneClosest3f{
+        const T signedDistance = plane.SignedDistance(point);
+        return PointPlaneClosest3<T>{
             point - plane.Normal().Vector() * signedDistance, signedDistance,
             signedDistance * signedDistance};
     }
@@ -107,424 +120,459 @@ namespace mv::math
     // Detection (2005), section 5.1.5, cross-checked against Eberly,
     // "Distance Between Point and Triangle in 3D" (1999, CC BY 4.0).
     // Move resolves degenerate triangles by testing their three edges.
-    [[nodiscard]] inline PointTriangleClosest3f ClosestPoints(
-        const Point3f& point, const Triangle3f& triangle) noexcept
+    template <typename T>
+    [[nodiscard]] inline PointTriangleClosest3<T> ClosestPoints(
+        const Point3<T>& point, const Triangle3<T>& triangle) noexcept
     {
-        const Point3f& first = triangle.First();
-        const Point3f& second = triangle.Second();
-        const Point3f& third = triangle.Third();
-        const Vec3f edge01 = second - first;
-        const Vec3f edge02 = third - first;
+        const Point3<T>& first = triangle.First();
+        const Point3<T>& second = triangle.Second();
+        const Point3<T>& third = triangle.Third();
+        const Vec3<T> edge01 = second - first;
+        const Vec3<T> edge02 = third - first;
 
-        if (!(LengthSquared(Cross(edge01, edge02)) > 0.0F))
+        if (!(LengthSquared(Cross(edge01, edge02)) > T(0)))
         {
-            const PointSegmentClosest3f edge01Closest =
-                ClosestPoints(point, Segment3f(first, second));
-            PointTriangleClosest3f closest = detail::MakePointTriangleClosest(
+            const PointSegmentClosest3<T> edge01Closest =
+                ClosestPoints(point, Segment3<T>(first, second));
+            PointTriangleClosest3<T> closest = detail::MakePointTriangleClosest(
                 point, edge01Closest.PointOnSegment,
-                Vec3f(1.0F - edge01Closest.SegmentFraction,
-                      edge01Closest.SegmentFraction, 0.0F));
+                Vec3<T>(T(1) - edge01Closest.SegmentFraction,
+                        edge01Closest.SegmentFraction, T(0)));
 
-            const PointSegmentClosest3f edge02Closest =
-                ClosestPoints(point, Segment3f(first, third));
+            const PointSegmentClosest3<T> edge02Closest =
+                ClosestPoints(point, Segment3<T>(first, third));
             if (edge02Closest.SquaredDistance < closest.SquaredDistance)
             {
                 closest = detail::MakePointTriangleClosest(
                     point, edge02Closest.PointOnSegment,
-                    Vec3f(1.0F - edge02Closest.SegmentFraction, 0.0F,
-                          edge02Closest.SegmentFraction));
+                    Vec3<T>(T(1) - edge02Closest.SegmentFraction, T(0),
+                            edge02Closest.SegmentFraction));
             }
 
-            const PointSegmentClosest3f edge12Closest =
-                ClosestPoints(point, Segment3f(second, third));
+            const PointSegmentClosest3<T> edge12Closest =
+                ClosestPoints(point, Segment3<T>(second, third));
             if (edge12Closest.SquaredDistance < closest.SquaredDistance)
             {
                 closest = detail::MakePointTriangleClosest(
                     point, edge12Closest.PointOnSegment,
-                    Vec3f(0.0F, 1.0F - edge12Closest.SegmentFraction,
-                          edge12Closest.SegmentFraction));
+                    Vec3<T>(T(0), T(1) - edge12Closest.SegmentFraction,
+                            edge12Closest.SegmentFraction));
             }
             return closest;
         }
 
-        const Vec3f fromFirst = point - first;
-        const float firstAlong01 = Dot(edge01, fromFirst);
-        const float firstAlong02 = Dot(edge02, fromFirst);
-        if (firstAlong01 <= 0.0F && firstAlong02 <= 0.0F)
+        const Vec3<T> fromFirst = point - first;
+        const T firstAlong01 = Dot(edge01, fromFirst);
+        const T firstAlong02 = Dot(edge02, fromFirst);
+        if (firstAlong01 <= T(0) && firstAlong02 <= T(0))
         {
             return detail::MakePointTriangleClosest(point, first,
-                                                    Vec3f(1.0F, 0.0F, 0.0F));
+                                                    Vec3<T>(T(1), T(0), T(0)));
         }
 
-        const Vec3f fromSecond = point - second;
-        const float secondAlong01 = Dot(edge01, fromSecond);
-        const float secondAlong02 = Dot(edge02, fromSecond);
-        if (secondAlong01 >= 0.0F && secondAlong02 <= secondAlong01)
+        const Vec3<T> fromSecond = point - second;
+        const T secondAlong01 = Dot(edge01, fromSecond);
+        const T secondAlong02 = Dot(edge02, fromSecond);
+        if (secondAlong01 >= T(0) && secondAlong02 <= secondAlong01)
         {
             return detail::MakePointTriangleClosest(point, second,
-                                                    Vec3f(0.0F, 1.0F, 0.0F));
+                                                    Vec3<T>(T(0), T(1), T(0)));
         }
 
-        const float edge01Region =
+        const T edge01Region =
             firstAlong01 * secondAlong02 - secondAlong01 * firstAlong02;
-        if (edge01Region <= 0.0F && firstAlong01 >= 0.0F &&
-            secondAlong01 <= 0.0F)
+        if (edge01Region <= T(0) && firstAlong01 >= T(0) &&
+            secondAlong01 <= T(0))
         {
-            const float fraction =
-                firstAlong01 / (firstAlong01 - secondAlong01);
+            const T fraction = firstAlong01 / (firstAlong01 - secondAlong01);
             return detail::MakePointTriangleClosest(
                 point, first + edge01 * fraction,
-                Vec3f(1.0F - fraction, fraction, 0.0F));
+                Vec3<T>(T(1) - fraction, fraction, T(0)));
         }
 
-        const Vec3f fromThird = point - third;
-        const float thirdAlong01 = Dot(edge01, fromThird);
-        const float thirdAlong02 = Dot(edge02, fromThird);
-        if (thirdAlong02 >= 0.0F && thirdAlong01 <= thirdAlong02)
+        const Vec3<T> fromThird = point - third;
+        const T thirdAlong01 = Dot(edge01, fromThird);
+        const T thirdAlong02 = Dot(edge02, fromThird);
+        if (thirdAlong02 >= T(0) && thirdAlong01 <= thirdAlong02)
         {
             return detail::MakePointTriangleClosest(point, third,
-                                                    Vec3f(0.0F, 0.0F, 1.0F));
+                                                    Vec3<T>(T(0), T(0), T(1)));
         }
 
-        const float edge02Region =
+        const T edge02Region =
             thirdAlong01 * firstAlong02 - firstAlong01 * thirdAlong02;
-        if (edge02Region <= 0.0F && firstAlong02 >= 0.0F &&
-            thirdAlong02 <= 0.0F)
+        if (edge02Region <= T(0) && firstAlong02 >= T(0) &&
+            thirdAlong02 <= T(0))
         {
-            const float fraction = firstAlong02 / (firstAlong02 - thirdAlong02);
+            const T fraction = firstAlong02 / (firstAlong02 - thirdAlong02);
             return detail::MakePointTriangleClosest(
                 point, first + edge02 * fraction,
-                Vec3f(1.0F - fraction, 0.0F, fraction));
+                Vec3<T>(T(1) - fraction, T(0), fraction));
         }
 
-        const float edge12Region =
+        const T edge12Region =
             secondAlong01 * thirdAlong02 - thirdAlong01 * secondAlong02;
-        const float secondTowardThird = secondAlong02 - secondAlong01;
-        const float thirdTowardSecond = thirdAlong01 - thirdAlong02;
-        if (edge12Region <= 0.0F && secondTowardThird >= 0.0F &&
-            thirdTowardSecond >= 0.0F)
+        const T secondTowardThird = secondAlong02 - secondAlong01;
+        const T thirdTowardSecond = thirdAlong01 - thirdAlong02;
+        if (edge12Region <= T(0) && secondTowardThird >= T(0) &&
+            thirdTowardSecond >= T(0))
         {
-            const float fraction =
+            const T fraction =
                 secondTowardThird / (secondTowardThird + thirdTowardSecond);
             return detail::MakePointTriangleClosest(
                 point, second + (third - second) * fraction,
-                Vec3f(0.0F, 1.0F - fraction, fraction));
+                Vec3<T>(T(0), T(1) - fraction, fraction));
         }
 
-        const float reciprocalSum =
-            1.0F / (edge12Region + edge02Region + edge01Region);
-        const float secondWeight = edge02Region * reciprocalSum;
-        const float thirdWeight = edge01Region * reciprocalSum;
+        const T reciprocalSum =
+            T(1) / (edge12Region + edge02Region + edge01Region);
+        const T secondWeight = edge02Region * reciprocalSum;
+        const T thirdWeight = edge01Region * reciprocalSum;
         return detail::MakePointTriangleClosest(
             point, first + edge01 * secondWeight + edge02 * thirdWeight,
-            Vec3f(1.0F - secondWeight - thirdWeight, secondWeight,
-                  thirdWeight));
+            Vec3<T>(T(1) - secondWeight - thirdWeight, secondWeight,
+                    thirdWeight));
     }
 
     // Component clamping is the point/AABB distance construction in Ericson,
     // Real-Time Collision Detection (2005), section 5.1.3. Empty boxes and
-    // non-finite query points preserve Aabb3f's existing fallible contract.
-    [[nodiscard]] inline std::optional<PointAabbClosest3f> TryClosestPoints(
-        const Point3f& point, const Aabb3f& box) noexcept
+    // non-finite query points preserve Aabb3's existing fallible contract.
+    template <typename T>
+    [[nodiscard]] inline std::optional<PointAabbClosest3<T>> TryClosestPoints(
+        const Point3<T>& point, const Aabb3<T>& box) noexcept
     {
-        const std::optional<Point3f> closest = box.TryClosestPoint(point);
+        const std::optional<Point3<T>> closest = box.TryClosestPoint(point);
         if (!closest)
         {
             return std::nullopt;
         }
-        return PointAabbClosest3f{
+        return PointAabbClosest3<T>{
             *closest, detail::PointDistanceSquared(point, *closest)};
     }
 
     // Radial projection is the solid-sphere specialization of Ericson,
     // Real-Time Collision Detection (2005), section 5.1.4. A contained point
     // is already the nearest member of the bounding volume and has distance 0.
-    [[nodiscard]] inline PointSphereClosest3f ClosestPoints(
-        const Point3f& point, const Sphere3f& sphere) noexcept
+    template <typename T>
+    [[nodiscard]] inline PointSphereClosest3<T> ClosestPoints(
+        const Point3<T>& point, const Sphere3<T>& sphere) noexcept
     {
-        const Point3f center = sphere.Center();
-        const Vec3f offset = point - center;
-        const float squaredCenterDistance = LengthSquared(offset);
-        const float squaredRadius = sphere.Radius() * sphere.Radius();
+        const Point3<T> center = sphere.Center();
+        const Vec3<T> offset = point - center;
+        const T squaredCenterDistance = LengthSquared(offset);
+        const T squaredRadius = sphere.Radius() * sphere.Radius();
         if (squaredCenterDistance <= squaredRadius)
         {
-            return PointSphereClosest3f{point, 0.0F};
+            return PointSphereClosest3<T>{point, T(0)};
         }
 
-        const float scale = sphere.Radius() / std::sqrt(squaredCenterDistance);
-        const Point3f pointInSphere = center + offset * scale;
-        return PointSphereClosest3f{
+        const T scale = sphere.Radius() / std::sqrt(squaredCenterDistance);
+        const Point3<T> pointInSphere = center + offset * scale;
+        return PointSphereClosest3<T>{
             pointInSphere, detail::PointDistanceSquared(point, pointInSphere)};
     }
 
     // A capsule is a segment swept by a sphere (Ericson, Real-Time Collision
     // Detection, 2005, sections 4.5 and 4.5.1). Project to the center line,
     // then apply the same radial solid-volume rule as point/sphere.
-    [[nodiscard]] inline PointCapsuleClosest3f ClosestPoints(
-        const Point3f& point, const Capsule3f& capsule) noexcept
+    template <typename T>
+    [[nodiscard]] inline PointCapsuleClosest3<T> ClosestPoints(
+        const Point3<T>& point, const Capsule3<T>& capsule) noexcept
     {
-        const PointSegmentClosest3f centerLineClosest =
+        const PointSegmentClosest3<T> centerLineClosest =
             ClosestPoints(point, capsule.CenterLine());
         if (centerLineClosest.SquaredDistance <=
             capsule.Radius() * capsule.Radius())
         {
-            return PointCapsuleClosest3f{
-                point, centerLineClosest.SegmentFraction, 0.0F};
+            return PointCapsuleClosest3<T>{
+                point, centerLineClosest.SegmentFraction, T(0)};
         }
 
-        const Vec3f radialOffset = point - centerLineClosest.PointOnSegment;
-        const float scale =
+        const Vec3<T> radialOffset = point - centerLineClosest.PointOnSegment;
+        const T scale =
             capsule.Radius() / std::sqrt(centerLineClosest.SquaredDistance);
-        const Point3f pointInCapsule =
+        const Point3<T> pointInCapsule =
             centerLineClosest.PointOnSegment + radialOffset * scale;
-        return PointCapsuleClosest3f{
+        return PointCapsuleClosest3<T>{
             pointInCapsule, centerLineClosest.SegmentFraction,
             detail::PointDistanceSquared(point, pointInCapsule)};
     }
 
     // ClosestPtSegmentSegment from Ericson, Real-Time Collision Detection
-    // (2005), section 5.1.9. Double intermediates reduce cancellation for
-    // nearly parallel float segments; degenerate segments remain valid.
-    [[nodiscard]] inline SegmentSegmentClosest3f ClosestPoints(
-        const Segment3f& first, const Segment3f& second) noexcept
+    // (2005), section 5.1.9. Wider intermediates reduce cancellation for
+    // nearly parallel segments; degenerate segments remain valid.
+    template <typename T>
+    [[nodiscard]] inline SegmentSegmentClosest3<T> ClosestPoints(
+        const Segment3<T>& first, const Segment3<T>& second) noexcept
     {
-        const Vec3f firstDirection = first.Displacement();
-        const Vec3f secondDirection = second.Displacement();
-        const Vec3f startOffset = first.Start() - second.Start();
-        const double firstLengthSquared =
-            detail::DotDouble(firstDirection, firstDirection);
-        const double secondLengthSquared =
-            detail::DotDouble(secondDirection, secondDirection);
-        const double secondProjection =
-            detail::DotDouble(secondDirection, startOffset);
+        using Calculation = detail::QueryCalculation<T>;
+        const Vec3<T> firstDirection = first.Displacement();
+        const Vec3<T> secondDirection = second.Displacement();
+        const Vec3<T> startOffset = first.Start() - second.Start();
+        const Calculation firstLengthSquared =
+            detail::DotPrecise(firstDirection, firstDirection);
+        const Calculation secondLengthSquared =
+            detail::DotPrecise(secondDirection, secondDirection);
+        const Calculation secondProjection =
+            detail::DotPrecise(secondDirection, startOffset);
 
-        double firstFraction = 0.0;
-        double secondFraction = 0.0;
-        if (firstLengthSquared == 0.0 && secondLengthSquared == 0.0)
+        Calculation firstFraction = Calculation(0);
+        Calculation secondFraction = Calculation(0);
+        if (firstLengthSquared == Calculation(0) &&
+            secondLengthSquared == Calculation(0))
         {
             // Both segments are points; the initialized fractions are final.
         }
-        else if (firstLengthSquared == 0.0)
+        else if (firstLengthSquared == Calculation(0))
         {
-            secondFraction =
-                std::clamp(secondProjection / secondLengthSquared, 0.0, 1.0);
+            secondFraction = std::clamp(secondProjection / secondLengthSquared,
+                                        Calculation(0), Calculation(1));
         }
         else
         {
-            const double firstProjection =
-                detail::DotDouble(firstDirection, startOffset);
-            if (secondLengthSquared == 0.0)
+            const Calculation firstProjection =
+                detail::DotPrecise(firstDirection, startOffset);
+            if (secondLengthSquared == Calculation(0))
             {
                 firstFraction =
-                    std::clamp(-firstProjection / firstLengthSquared, 0.0, 1.0);
+                    std::clamp(-firstProjection / firstLengthSquared,
+                               Calculation(0), Calculation(1));
             }
             else
             {
-                const double directionsDot =
-                    detail::DotDouble(firstDirection, secondDirection);
-                const double denominator =
+                const Calculation directionsDot =
+                    detail::DotPrecise(firstDirection, secondDirection);
+                const Calculation denominator =
                     firstLengthSquared * secondLengthSquared -
                     directionsDot * directionsDot;
-                if (denominator > 0.0)
+                if (denominator > Calculation(0))
                 {
                     firstFraction =
                         std::clamp((directionsDot * secondProjection -
                                     firstProjection * secondLengthSquared) /
                                        denominator,
-                                   0.0, 1.0);
+                                   Calculation(0), Calculation(1));
                 }
 
                 secondFraction =
                     (directionsDot * firstFraction + secondProjection) /
                     secondLengthSquared;
-                if (secondFraction < 0.0)
+                if (secondFraction < Calculation(0))
                 {
-                    secondFraction = 0.0;
-                    firstFraction = std::clamp(
-                        -firstProjection / firstLengthSquared, 0.0, 1.0);
+                    secondFraction = Calculation(0);
+                    firstFraction =
+                        std::clamp(-firstProjection / firstLengthSquared,
+                                   Calculation(0), Calculation(1));
                 }
-                else if (secondFraction > 1.0)
+                else if (secondFraction > Calculation(1))
                 {
-                    secondFraction = 1.0;
+                    secondFraction = Calculation(1);
                     firstFraction = std::clamp(
                         (directionsDot - firstProjection) / firstLengthSquared,
-                        0.0, 1.0);
+                        Calculation(0), Calculation(1));
                 }
             }
         }
 
-        const float firstFloat = static_cast<float>(firstFraction);
-        const float secondFloat = static_cast<float>(secondFraction);
-        const Point3f pointOnFirst = first.PointAtFraction(firstFloat);
-        const Point3f pointOnSecond = second.PointAtFraction(secondFloat);
-        return SegmentSegmentClosest3f{
-            pointOnFirst, pointOnSecond, firstFloat, secondFloat,
+        const T firstValue = static_cast<T>(firstFraction);
+        const T secondValue = static_cast<T>(secondFraction);
+        const Point3<T> pointOnFirst = first.PointAtFraction(firstValue);
+        const Point3<T> pointOnSecond = second.PointAtFraction(secondValue);
+        return SegmentSegmentClosest3<T>{
+            pointOnFirst, pointOnSecond, firstValue, secondValue,
             detail::PointDistanceSquared(pointOnFirst, pointOnSecond)};
     }
 
-    [[nodiscard]] inline Point3f ClosestPoint(const Point3f& point,
-                                              const Line3f& line) noexcept
+    template <typename T>
+    [[nodiscard]] inline Point3<T> ClosestPoint(const Point3<T>& point,
+                                                const Line3<T>& line) noexcept
     {
         return ClosestPoints(point, line).PointOnLine;
     }
 
-    [[nodiscard]] inline Point3f ClosestPoint(const Point3f& point,
-                                              const Ray3f& ray) noexcept
+    template <typename T>
+    [[nodiscard]] inline Point3<T> ClosestPoint(const Point3<T>& point,
+                                                const Ray3<T>& ray) noexcept
     {
         return ClosestPoints(point, ray).PointOnRay;
     }
 
-    [[nodiscard]] inline Point3f ClosestPoint(const Point3f& point,
-                                              const Segment3f& segment) noexcept
+    template <typename T>
+    [[nodiscard]] inline Point3<T> ClosestPoint(
+        const Point3<T>& point, const Segment3<T>& segment) noexcept
     {
         return ClosestPoints(point, segment).PointOnSegment;
     }
 
-    [[nodiscard]] inline Point3f ClosestPoint(const Point3f& point,
-                                              const Plane3f& plane) noexcept
+    template <typename T>
+    [[nodiscard]] inline Point3<T> ClosestPoint(const Point3<T>& point,
+                                                const Plane3<T>& plane) noexcept
     {
         return ClosestPoints(point, plane).PointOnPlane;
     }
 
-    [[nodiscard]] inline Point3f ClosestPoint(
-        const Point3f& point, const Triangle3f& triangle) noexcept
+    template <typename T>
+    [[nodiscard]] inline Point3<T> ClosestPoint(
+        const Point3<T>& point, const Triangle3<T>& triangle) noexcept
     {
         return ClosestPoints(point, triangle).PointOnTriangle;
     }
 
-    [[nodiscard]] inline std::optional<Point3f> TryClosestPoint(
-        const Point3f& point, const Aabb3f& box) noexcept
+    template <typename T>
+    [[nodiscard]] inline std::optional<Point3<T>> TryClosestPoint(
+        const Point3<T>& point, const Aabb3<T>& box) noexcept
     {
         const auto result = TryClosestPoints(point, box);
-        return result ? std::optional<Point3f>(result->PointInAabb)
+        return result ? std::optional<Point3<T>>(result->PointInAabb)
                       : std::nullopt;
     }
 
-    [[nodiscard]] inline Point3f ClosestPoint(const Point3f& point,
-                                              const Sphere3f& sphere) noexcept
+    template <typename T>
+    [[nodiscard]] inline Point3<T> ClosestPoint(
+        const Point3<T>& point, const Sphere3<T>& sphere) noexcept
     {
         return ClosestPoints(point, sphere).PointInSphere;
     }
 
-    [[nodiscard]] inline Point3f ClosestPoint(const Point3f& point,
-                                              const Capsule3f& capsule) noexcept
+    template <typename T>
+    [[nodiscard]] inline Point3<T> ClosestPoint(
+        const Point3<T>& point, const Capsule3<T>& capsule) noexcept
     {
         return ClosestPoints(point, capsule).PointInCapsule;
     }
 
-    [[nodiscard]] inline float DistanceSquared(const Point3f& point,
-                                               const Line3f& line) noexcept
+    template <typename T>
+    [[nodiscard]] inline T DistanceSquared(const Point3<T>& point,
+                                           const Line3<T>& line) noexcept
     {
         return ClosestPoints(point, line).SquaredDistance;
     }
 
-    [[nodiscard]] inline float DistanceSquared(const Point3f& point,
-                                               const Ray3f& ray) noexcept
+    template <typename T>
+    [[nodiscard]] inline T DistanceSquared(const Point3<T>& point,
+                                           const Ray3<T>& ray) noexcept
     {
         return ClosestPoints(point, ray).SquaredDistance;
     }
 
-    [[nodiscard]] inline float DistanceSquared(
-        const Point3f& point, const Segment3f& segment) noexcept
+    template <typename T>
+    [[nodiscard]] inline T DistanceSquared(const Point3<T>& point,
+                                           const Segment3<T>& segment) noexcept
     {
         return ClosestPoints(point, segment).SquaredDistance;
     }
 
-    [[nodiscard]] inline float DistanceSquared(const Point3f& point,
-                                               const Plane3f& plane) noexcept
+    template <typename T>
+    [[nodiscard]] inline T DistanceSquared(const Point3<T>& point,
+                                           const Plane3<T>& plane) noexcept
     {
         return ClosestPoints(point, plane).SquaredDistance;
     }
 
-    [[nodiscard]] inline float DistanceSquared(
-        const Point3f& point, const Triangle3f& triangle) noexcept
+    template <typename T>
+    [[nodiscard]] inline T DistanceSquared(
+        const Point3<T>& point, const Triangle3<T>& triangle) noexcept
     {
         return ClosestPoints(point, triangle).SquaredDistance;
     }
 
-    [[nodiscard]] inline std::optional<float> TryDistanceSquared(
-        const Point3f& point, const Aabb3f& box) noexcept
+    template <typename T>
+    [[nodiscard]] inline std::optional<T> TryDistanceSquared(
+        const Point3<T>& point, const Aabb3<T>& box) noexcept
     {
         const auto result = TryClosestPoints(point, box);
-        return result ? std::optional<float>(result->SquaredDistance)
+        return result ? std::optional<T>(result->SquaredDistance)
                       : std::nullopt;
     }
 
-    [[nodiscard]] inline float DistanceSquared(const Point3f& point,
-                                               const Sphere3f& sphere) noexcept
+    template <typename T>
+    [[nodiscard]] inline T DistanceSquared(const Point3<T>& point,
+                                           const Sphere3<T>& sphere) noexcept
     {
         return ClosestPoints(point, sphere).SquaredDistance;
     }
 
-    [[nodiscard]] inline float DistanceSquared(
-        const Point3f& point, const Capsule3f& capsule) noexcept
+    template <typename T>
+    [[nodiscard]] inline T DistanceSquared(const Point3<T>& point,
+                                           const Capsule3<T>& capsule) noexcept
     {
         return ClosestPoints(point, capsule).SquaredDistance;
     }
 
-    [[nodiscard]] inline float DistanceSquared(const Segment3f& first,
-                                               const Segment3f& second) noexcept
+    template <typename T>
+    [[nodiscard]] inline T DistanceSquared(const Segment3<T>& first,
+                                           const Segment3<T>& second) noexcept
     {
         return ClosestPoints(first, second).SquaredDistance;
     }
 
-    [[nodiscard]] inline float Distance(const Point3f& point,
-                                        const Line3f& line) noexcept
+    template <typename T>
+    [[nodiscard]] inline T Distance(const Point3<T>& point,
+                                    const Line3<T>& line) noexcept
     {
         return ClosestPoints(point, line).Distance();
     }
 
-    [[nodiscard]] inline float Distance(const Point3f& point,
-                                        const Ray3f& ray) noexcept
+    template <typename T>
+    [[nodiscard]] inline T Distance(const Point3<T>& point,
+                                    const Ray3<T>& ray) noexcept
     {
         return ClosestPoints(point, ray).Distance();
     }
 
-    [[nodiscard]] inline float Distance(const Point3f& point,
-                                        const Segment3f& segment) noexcept
+    template <typename T>
+    [[nodiscard]] inline T Distance(const Point3<T>& point,
+                                    const Segment3<T>& segment) noexcept
     {
         return ClosestPoints(point, segment).Distance();
     }
 
-    [[nodiscard]] inline float Distance(const Point3f& point,
-                                        const Plane3f& plane) noexcept
+    template <typename T>
+    [[nodiscard]] inline T Distance(const Point3<T>& point,
+                                    const Plane3<T>& plane) noexcept
     {
         return ClosestPoints(point, plane).Distance();
     }
 
-    [[nodiscard]] inline float Distance(const Point3f& point,
-                                        const Triangle3f& triangle) noexcept
+    template <typename T>
+    [[nodiscard]] inline T Distance(const Point3<T>& point,
+                                    const Triangle3<T>& triangle) noexcept
     {
         return ClosestPoints(point, triangle).Distance();
     }
 
-    [[nodiscard]] inline std::optional<float> TryDistance(
-        const Point3f& point, const Aabb3f& box) noexcept
+    template <typename T>
+    [[nodiscard]] inline std::optional<T> TryDistance(
+        const Point3<T>& point, const Aabb3<T>& box) noexcept
     {
         const auto result = TryClosestPoints(point, box);
-        return result ? std::optional<float>(result->Distance()) : std::nullopt;
+        return result ? std::optional<T>(result->Distance()) : std::nullopt;
     }
 
-    [[nodiscard]] inline float Distance(const Point3f& point,
-                                        const Sphere3f& sphere) noexcept
+    template <typename T>
+    [[nodiscard]] inline T Distance(const Point3<T>& point,
+                                    const Sphere3<T>& sphere) noexcept
     {
         return ClosestPoints(point, sphere).Distance();
     }
 
-    [[nodiscard]] inline float Distance(const Point3f& point,
-                                        const Capsule3f& capsule) noexcept
+    template <typename T>
+    [[nodiscard]] inline T Distance(const Point3<T>& point,
+                                    const Capsule3<T>& capsule) noexcept
     {
         return ClosestPoints(point, capsule).Distance();
     }
 
-    [[nodiscard]] inline bool Contains(const Capsule3f& capsule,
-                                       const Point3f& point) noexcept
+    template <typename T>
+    [[nodiscard]] inline bool Contains(const Capsule3<T>& capsule,
+                                       const Point3<T>& point) noexcept
     {
-        return ClosestPoints(point, capsule).SquaredDistance == 0.0F;
+        return ClosestPoints(point, capsule).SquaredDistance == T(0);
     }
 
-    [[nodiscard]] inline float Distance(const Segment3f& first,
-                                        const Segment3f& second) noexcept
+    template <typename T>
+    [[nodiscard]] inline T Distance(const Segment3<T>& first,
+                                    const Segment3<T>& second) noexcept
     {
         return ClosestPoints(first, second).Distance();
     }

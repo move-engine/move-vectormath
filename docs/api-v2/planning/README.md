@@ -9,6 +9,8 @@
   acceptance gate for Codex-generated algorithms.
 - [`LegacyCutoverInventory.md`](LegacyCutoverInventory.md) is the capability,
   performance, packaging, and documentation gate for deleting `move::math`.
+- [`VectorCapabilityInventory.md`](VectorCapabilityInventory.md) records the
+  generic vector parity and scalar-domain decisions.
 
 The plan intentionally places a review gate between design and core
 implementation.

@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 #include <optional>
+#include <type_traits>
 
 #include <mv/math/semantic/Normal3.hpp>
 #include <mv/math/semantic/Point3.hpp>
@@ -11,71 +12,82 @@
 
 namespace mv::math
 {
-    [[nodiscard]] inline Point3f TransformPoint(
-        const AffineTransform3f& transform, Point3f point) noexcept
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    [[nodiscard]] inline Point3<T> TransformPoint(
+        const AffineTransform3<T>& transform, const Point3<T>& point) noexcept
     {
-        return Point3f::FromVector(TransformPoint(transform, point.Vector()));
+        return Point3<T>::FromVector(TransformPoint(transform, point.Vector()));
     }
 
-    [[nodiscard]] inline std::optional<Direction3f> TryTransformDirection(
-        const AffineTransform3f& transform, Direction3f direction) noexcept
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    [[nodiscard]] inline std::optional<Direction3<T>> TryTransformDirection(
+        const AffineTransform3<T>& transform,
+        const Direction3<T>& direction) noexcept
     {
-        return Direction3f::TryFrom(
+        return Direction3<T>::TryFrom(
             TransformVector(transform, direction.Vector()));
     }
 
     // Cofactor/inverse-transpose derivation: Eric Lengyel, "Transforming
     // Normals" (2024). Reflection semantics remain an explicit Move decision.
-    [[nodiscard]] inline std::optional<Normal3f> TryTransformNormal(
-        const AffineTransform3f& transform, Normal3f normal) noexcept
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    [[nodiscard]] inline std::optional<Normal3<T>> TryTransformNormal(
+        const AffineTransform3<T>& transform, const Normal3<T>& normal) noexcept
     {
-        const Vec3f axisX = transform.AxisX();
-        const Vec3f axisY = transform.AxisY();
-        const Vec3f axisZ = transform.AxisZ();
+        using Calculation =
+            std::conditional_t<(sizeof(T) < sizeof(double)), double, T>;
 
-        const double ax = static_cast<double>(axisX.X());
-        const double ay = static_cast<double>(axisX.Y());
-        const double az = static_cast<double>(axisX.Z());
-        const double bx = static_cast<double>(axisY.X());
-        const double by = static_cast<double>(axisY.Y());
-        const double bz = static_cast<double>(axisY.Z());
-        const double cx = static_cast<double>(axisZ.X());
-        const double cy = static_cast<double>(axisZ.Y());
-        const double cz = static_cast<double>(axisZ.Z());
+        const Vec3<T>& axisX = transform.AxisX();
+        const Vec3<T>& axisY = transform.AxisY();
+        const Vec3<T>& axisZ = transform.AxisZ();
 
-        const double cofactorXx = by * cz - bz * cy;
-        const double cofactorXy = bz * cx - bx * cz;
-        const double cofactorXz = bx * cy - by * cx;
-        const double cofactorYx = cy * az - cz * ay;
-        const double cofactorYy = cz * ax - cx * az;
-        const double cofactorYz = cx * ay - cy * ax;
-        const double cofactorZx = ay * bz - az * by;
-        const double cofactorZy = az * bx - ax * bz;
-        const double cofactorZz = ax * by - ay * bx;
-        const double determinant =
+        const Calculation ax = static_cast<Calculation>(axisX.X());
+        const Calculation ay = static_cast<Calculation>(axisX.Y());
+        const Calculation az = static_cast<Calculation>(axisX.Z());
+        const Calculation bx = static_cast<Calculation>(axisY.X());
+        const Calculation by = static_cast<Calculation>(axisY.Y());
+        const Calculation bz = static_cast<Calculation>(axisY.Z());
+        const Calculation cx = static_cast<Calculation>(axisZ.X());
+        const Calculation cy = static_cast<Calculation>(axisZ.Y());
+        const Calculation cz = static_cast<Calculation>(axisZ.Z());
+
+        const Calculation cofactorXx = by * cz - bz * cy;
+        const Calculation cofactorXy = bz * cx - bx * cz;
+        const Calculation cofactorXz = bx * cy - by * cx;
+        const Calculation cofactorYx = cy * az - cz * ay;
+        const Calculation cofactorYy = cz * ax - cx * az;
+        const Calculation cofactorYz = cx * ay - cy * ax;
+        const Calculation cofactorZx = ay * bz - az * by;
+        const Calculation cofactorZy = az * bx - ax * bz;
+        const Calculation cofactorZz = ax * by - ay * bx;
+        const Calculation determinant =
             ax * cofactorXx + ay * cofactorXy + az * cofactorXz;
 
-        if (determinant == 0.0 || !std::isfinite(determinant))
+        if (determinant == Calculation(0) || !std::isfinite(determinant))
         {
             return std::nullopt;
         }
 
-        const Vec3f& value = normal.Vector();
-        const double nx = static_cast<double>(value.X());
-        const double ny = static_cast<double>(value.Y());
-        const double nz = static_cast<double>(value.Z());
-        const double orientation = determinant < 0.0 ? -1.0 : 1.0;
-        double transformedX =
+        const Vec3<T>& value = normal.Vector();
+        const Calculation nx = static_cast<Calculation>(value.X());
+        const Calculation ny = static_cast<Calculation>(value.Y());
+        const Calculation nz = static_cast<Calculation>(value.Z());
+        const Calculation orientation =
+            determinant < Calculation(0) ? Calculation(-1) : Calculation(1);
+        Calculation transformedX =
             orientation * (cofactorXx * nx + cofactorYx * ny + cofactorZx * nz);
-        double transformedY =
+        Calculation transformedY =
             orientation * (cofactorXy * nx + cofactorYy * ny + cofactorZy * nz);
-        double transformedZ =
+        Calculation transformedZ =
             orientation * (cofactorXz * nx + cofactorYz * ny + cofactorZz * nz);
 
-        const double maximum =
+        const Calculation maximum =
             std::max({std::abs(transformedX), std::abs(transformedY),
                       std::abs(transformedZ)});
-        if (!(maximum > 0.0) || !std::isfinite(maximum))
+        if (!(maximum > Calculation(0)) || !std::isfinite(maximum))
         {
             return std::nullopt;
         }
@@ -83,27 +95,29 @@ namespace mv::math
         transformedX /= maximum;
         transformedY /= maximum;
         transformedZ /= maximum;
-        const double length = std::sqrt(transformedX * transformedX +
-                                        transformedY * transformedY +
-                                        transformedZ * transformedZ);
-        if (!(length > 0.0) || !std::isfinite(length))
+        const Calculation length = std::sqrt(transformedX * transformedX +
+                                             transformedY * transformedY +
+                                             transformedZ * transformedZ);
+        if (!(length > Calculation(0)) || !std::isfinite(length))
         {
             return std::nullopt;
         }
 
-        return Normal3f::TryFrom(
-            Vec3f(static_cast<float>(transformedX / length),
-                  static_cast<float>(transformedY / length),
-                  static_cast<float>(transformedZ / length)));
+        return Normal3<T>::TryFrom(
+            Vec3<T>(static_cast<T>(transformedX / length),
+                    static_cast<T>(transformedY / length),
+                    static_cast<T>(transformedZ / length)));
     }
 
-    [[nodiscard]] inline AffineTransform3f ToAffine(
-        const RigidTransform3f& transform) noexcept
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    [[nodiscard]] inline AffineTransform3<T> ToAffine(
+        const RigidTransform3<T>& transform) noexcept
     {
-        return AffineTransform3f(
-            Rotate(transform.Rotation(), Vec3f(1.0F, 0.0F, 0.0F)),
-            Rotate(transform.Rotation(), Vec3f(0.0F, 1.0F, 0.0F)),
-            Rotate(transform.Rotation(), Vec3f(0.0F, 0.0F, 1.0F)),
+        return AffineTransform3<T>(
+            Rotate(transform.Rotation(), Vec3<T>(T(1), T(0), T(0))),
+            Rotate(transform.Rotation(), Vec3<T>(T(0), T(1), T(0))),
+            Rotate(transform.Rotation(), Vec3<T>(T(0), T(0), T(1))),
             transform.Translation());
     }
 }  // namespace mv::math

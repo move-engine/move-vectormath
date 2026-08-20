@@ -11,10 +11,12 @@ namespace mv::math
 {
     // Reciprocal direction/sign preparation follows Williams et al., "An
     // Efficient and Robust Ray-Box Intersection Algorithm" (JGT 2005).
-    class PreparedRay3f
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    class PreparedRay3
     {
     public:
-        explicit PreparedRay3f(const Ray3f& ray) noexcept :
+        explicit PreparedRay3(const Ray3<T>& ray) noexcept :
             Ray_(ray),
             ReciprocalDirection_(Reciprocal(ray.Direction().Vector().X()),
                                  Reciprocal(ray.Direction().Vector().Y()),
@@ -23,12 +25,12 @@ namespace mv::math
         {
         }
 
-        [[nodiscard]] const Ray3f& Ray() const noexcept
+        [[nodiscard]] const Ray3<T>& Ray() const noexcept
         {
             return Ray_;
         }
 
-        [[nodiscard]] const Vec3f& ReciprocalDirection() const noexcept
+        [[nodiscard]] const Vec3<T>& ReciprocalDirection() const noexcept
         {
             return ReciprocalDirection_;
         }
@@ -39,32 +41,37 @@ namespace mv::math
         }
 
     private:
-        [[nodiscard]] static float Reciprocal(float value) noexcept
+        [[nodiscard]] static T Reciprocal(T value) noexcept
         {
-            return value == 0.0F
-                       ? std::copysign(std::numeric_limits<float>::infinity(),
+            return value == T(0)
+                       ? std::copysign(std::numeric_limits<T>::infinity(),
                                        value)
-                       : 1.0F / value;
+                       : T(1) / value;
         }
 
         [[nodiscard]] static unsigned int BuildParallelMask(
-            const Vec3f& direction) noexcept
+            const Vec3<T>& direction) noexcept
         {
             return (IsEffectivelyParallel(direction.X()) ? 1U : 0U) |
                    (IsEffectivelyParallel(direction.Y()) ? 2U : 0U) |
                    (IsEffectivelyParallel(direction.Z()) ? 4U : 0U);
         }
 
-        [[nodiscard]] static bool IsEffectivelyParallel(float value) noexcept
+        [[nodiscard]] static bool IsEffectivelyParallel(T value) noexcept
         {
-            return value == 0.0F || !std::isfinite(1.0F / value);
+            return value == T(0) || !std::isfinite(T(1) / value);
         }
 
-        Ray3f Ray_;
-        Vec3f ReciprocalDirection_;
+        Ray3<T> Ray_;
+        Vec3<T> ReciprocalDirection_;
         unsigned int ParallelMask_;
     };
+
+    using PreparedRay3f = PreparedRay3<float>;
+    using PreparedRay3d = PreparedRay3<double>;
 }  // namespace mv::math
 
 static_assert(std::is_trivially_copyable_v<mv::math::PreparedRay3f>);
 static_assert(std::is_standard_layout_v<mv::math::PreparedRay3f>);
+static_assert(std::is_trivially_copyable_v<mv::math::PreparedRay3d>);
+static_assert(std::is_standard_layout_v<mv::math::PreparedRay3d>);

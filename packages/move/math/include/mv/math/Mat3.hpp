@@ -93,15 +93,10 @@ namespace mv::math
             // Quaternion-to-matrix equation follows Szeliski,
             // MSR-TR-2004-92 eq. 22, transposed for Move's row vectors;
             // cross-checked against RTM 2.3.1 matrix_from_quat (MIT).
-            return Mat3(1.0F - 2.0F * (yy + zz),
-                        2.0F * (xy + zw),
-                        2.0F * (xz - yw),
-                        2.0F * (xy - zw),
-                        1.0F - 2.0F * (xx + zz),
-                        2.0F * (yz + xw),
-                        2.0F * (xz + yw),
-                        2.0F * (yz - xw),
-                        1.0F - 2.0F * (xx + yy));
+            return Mat3(
+                1.0F - 2.0F * (yy + zz), 2.0F * (xy + zw), 2.0F * (xz - yw),
+                2.0F * (xy - zw), 1.0F - 2.0F * (xx + zz), 2.0F * (yz + xw),
+                2.0F * (xz + yw), 2.0F * (yz - xw), 1.0F - 2.0F * (xx + yy));
         }
 
         [[nodiscard]] const RowVector& Row(std::size_t index) const noexcept
@@ -214,10 +209,10 @@ namespace mv::math
             const T inverse22 = (a * e - b * d) * reciprocalDeterminant;
 
             const bool finite =
-                std::isfinite(inverse00) & std::isfinite(inverse01) &
-                std::isfinite(inverse02) & std::isfinite(inverse10) &
-                std::isfinite(inverse11) & std::isfinite(inverse12) &
-                std::isfinite(inverse20) & std::isfinite(inverse21) &
+                std::isfinite(inverse00) && std::isfinite(inverse01) &&
+                std::isfinite(inverse02) && std::isfinite(inverse10) &&
+                std::isfinite(inverse11) && std::isfinite(inverse12) &&
+                std::isfinite(inverse20) && std::isfinite(inverse21) &&
                 std::isfinite(inverse22);
             if (!finite)
             {
@@ -232,10 +227,10 @@ namespace mv::math
         {
             // Bitwise conjunction keeps this validation branchless on common
             // optimizing compilers while still checking every component.
-            return std::isfinite(Rows_[0].X()) & std::isfinite(Rows_[0].Y()) &
-                   std::isfinite(Rows_[0].Z()) & std::isfinite(Rows_[1].X()) &
-                   std::isfinite(Rows_[1].Y()) & std::isfinite(Rows_[1].Z()) &
-                   std::isfinite(Rows_[2].X()) & std::isfinite(Rows_[2].Y()) &
+            return std::isfinite(Rows_[0].X()) && std::isfinite(Rows_[0].Y()) &&
+                   std::isfinite(Rows_[0].Z()) && std::isfinite(Rows_[1].X()) &&
+                   std::isfinite(Rows_[1].Y()) && std::isfinite(Rows_[1].Z()) &&
+                   std::isfinite(Rows_[2].X()) && std::isfinite(Rows_[2].Y()) &&
                    std::isfinite(Rows_[2].Z());
         }
 

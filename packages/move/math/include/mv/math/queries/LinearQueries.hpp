@@ -1,7 +1,9 @@
 #pragma once
 
 #include <cmath>
+#include <limits>
 #include <optional>
+#include <type_traits>
 
 #include <mv/math/geometry/Plane3.hpp>
 #include <mv/math/geometry/Ray3.hpp>
@@ -16,35 +18,42 @@ namespace mv::math
         Cull
     };
 
+    template <typename T>
+        requires std::is_floating_point_v<T>
     struct RayTriangleOptions
     {
         BackFaceMode BackFaces = BackFaceMode::Include;
-        float ParallelTolerance = 1.0e-7F;
+        T ParallelTolerance = std::numeric_limits<T>::epsilon() * T(8);
     };
+
+    using RayTriangleOptionsf = RayTriangleOptions<float>;
+    using RayTriangleOptionsd = RayTriangleOptions<double>;
 
     namespace detail
     {
+        template <typename T>
         struct RayPlaneSolution
         {
-            float Distance;
-            float Denominator;
+            T Distance;
+            T Denominator;
         };
 
         // Standard plane-equation solve; cross-checked against GLM
         // intersectRayPlane (MIT). Move accepts t=0 and rejects non-finite
         // hits.
-        [[nodiscard]] inline std::optional<RayPlaneSolution>
-        TryIntersectRayPlane(const Ray3f& ray,
-                             const Plane3f& plane,
-                             float parallelTolerance) noexcept
+        template <typename T>
+        [[nodiscard]] inline std::optional<RayPlaneSolution<T>>
+        TryIntersectRayPlane(const Ray3<T>& ray,
+                             const Plane3<T>& plane,
+                             T parallelTolerance) noexcept
         {
-            const float tolerance = std::abs(parallelTolerance);
+            const T tolerance = std::abs(parallelTolerance);
             if (!std::isfinite(tolerance))
             {
                 return std::nullopt;
             }
 
-            const float denominator =
+            const T denominator =
                 Dot(plane.Normal().Vector(), ray.Direction().Vector());
             if (!std::isfinite(denominator) ||
                 std::abs(denominator) <= tolerance)
@@ -52,42 +61,44 @@ namespace mv::math
                 return std::nullopt;
             }
 
-            const float distance =
+            const T distance =
                 -plane.SignedDistance(ray.Origin()) / denominator;
-            if (!(distance >= 0.0F) || !std::isfinite(distance))
+            if (!(distance >= T(0)) || !std::isfinite(distance))
             {
                 return std::nullopt;
             }
-            return RayPlaneSolution{distance, denominator};
+            return RayPlaneSolution<T>{distance, denominator};
         }
 
+        template <typename T>
         struct RayTriangleSolution
         {
-            float Distance;
-            float SecondWeight;
-            float ThirdWeight;
-            float Determinant;
+            T Distance;
+            T SecondWeight;
+            T ThirdWeight;
+            T Determinant;
         };
 
         // Moller-Trumbore ray/triangle test (JGT 1997,
         // doi:10.1080/10867651.1997.10487468); Move adds explicit culling,
         // finite-construction, tolerance, and boundary policy.
-        [[nodiscard]] inline std::optional<RayTriangleSolution>
-        TryIntersectRayTriangle(const Ray3f& ray,
-                                const Triangle3f& triangle,
-                                RayTriangleOptions options) noexcept
+        template <typename T>
+        [[nodiscard]] inline std::optional<RayTriangleSolution<T>>
+        TryIntersectRayTriangle(const Ray3<T>& ray,
+                                const Triangle3<T>& triangle,
+                                RayTriangleOptions<T> options) noexcept
         {
-            const float tolerance = std::abs(options.ParallelTolerance);
+            const T tolerance = std::abs(options.ParallelTolerance);
             if (!std::isfinite(tolerance))
             {
                 return std::nullopt;
             }
 
-            const Vec3f edge01 = triangle.Edge01();
-            const Vec3f edge02 = triangle.Edge02();
-            const Vec3f directionCrossEdge02 =
+            const Vec3<T> edge01 = triangle.Edge01();
+            const Vec3<T> edge02 = triangle.Edge02();
+            const Vec3<T> directionCrossEdge02 =
                 Cross(ray.Direction().Vector(), edge02);
-            const float determinant = Dot(edge01, directionCrossEdge02);
+            const T determinant = Dot(edge01, directionCrossEdge02);
             if (!std::isfinite(determinant))
             {
                 return std::nullopt;
@@ -105,40 +116,41 @@ namespace mv::math
                 return std::nullopt;
             }
 
-            const float reciprocalDeterminant = 1.0F / determinant;
-            const Vec3f fromFirst = ray.Origin() - triangle.First();
-            const float secondWeight =
+            const T reciprocalDeterminant = T(1) / determinant;
+            const Vec3<T> fromFirst = ray.Origin() - triangle.First();
+            const T secondWeight =
                 Dot(fromFirst, directionCrossEdge02) * reciprocalDeterminant;
-            if (!(secondWeight >= 0.0F && secondWeight <= 1.0F))
+            if (!(secondWeight >= T(0) && secondWeight <= T(1)))
             {
                 return std::nullopt;
             }
 
-            const Vec3f fromFirstCrossEdge01 = Cross(fromFirst, edge01);
-            const float thirdWeight =
+            const Vec3<T> fromFirstCrossEdge01 = Cross(fromFirst, edge01);
+            const T thirdWeight =
                 Dot(ray.Direction().Vector(), fromFirstCrossEdge01) *
                 reciprocalDeterminant;
-            if (!(thirdWeight >= 0.0F && secondWeight + thirdWeight <= 1.0F))
+            if (!(thirdWeight >= T(0) && secondWeight + thirdWeight <= T(1)))
             {
                 return std::nullopt;
             }
 
-            const float distance =
+            const T distance =
                 Dot(edge02, fromFirstCrossEdge01) * reciprocalDeterminant;
-            if (!(distance >= 0.0F) || !std::isfinite(distance))
+            if (!(distance >= T(0)) || !std::isfinite(distance))
             {
                 return std::nullopt;
             }
 
-            return RayTriangleSolution{distance, secondWeight, thirdWeight,
-                                       determinant};
+            return RayTriangleSolution<T>{distance, secondWeight, thirdWeight,
+                                          determinant};
         }
     }  // namespace detail
 
-    [[nodiscard]] inline std::optional<RayPlaneHit3f> Intersect(
-        const Ray3f& ray,
-        const Plane3f& plane,
-        float parallelTolerance = 1.0e-7F) noexcept
+    template <typename T>
+    [[nodiscard]] inline std::optional<RayPlaneHit3<T>> Intersect(
+        const Ray3<T>& ray,
+        const Plane3<T>& plane,
+        T parallelTolerance = std::numeric_limits<T>::epsilon() * T(8)) noexcept
     {
         const auto solution =
             detail::TryIntersectRayPlane(ray, plane, parallelTolerance);
@@ -146,25 +158,27 @@ namespace mv::math
         {
             return std::nullopt;
         }
-        return RayPlaneHit3f{
+        return RayPlaneHit3<T>{
             solution->Distance, ray.PointAt(solution->Distance), plane.Normal(),
-            solution->Denominator < 0.0F ? FaceOrientation::Front
+            solution->Denominator < T(0) ? FaceOrientation::Front
                                          : FaceOrientation::Back};
     }
 
+    template <typename T>
     [[nodiscard]] inline bool Intersects(
-        const Ray3f& ray,
-        const Plane3f& plane,
-        float parallelTolerance = 1.0e-7F) noexcept
+        const Ray3<T>& ray,
+        const Plane3<T>& plane,
+        T parallelTolerance = std::numeric_limits<T>::epsilon() * T(8)) noexcept
     {
         return detail::TryIntersectRayPlane(ray, plane, parallelTolerance)
             .has_value();
     }
 
-    [[nodiscard]] inline std::optional<RayTriangleHit3f> Intersect(
-        const Ray3f& ray,
-        const Triangle3f& triangle,
-        RayTriangleOptions options = {}) noexcept
+    template <typename T>
+    [[nodiscard]] inline std::optional<RayTriangleHit3<T>> Intersect(
+        const Ray3<T>& ray,
+        const Triangle3<T>& triangle,
+        RayTriangleOptions<T> options = {}) noexcept
     {
         const auto solution =
             detail::TryIntersectRayTriangle(ray, triangle, options);
@@ -179,18 +193,19 @@ namespace mv::math
             return std::nullopt;
         }
 
-        return RayTriangleHit3f{
+        return RayTriangleHit3<T>{
             solution->Distance, ray.PointAt(solution->Distance), *normal,
-            Vec3f(1.0F - solution->SecondWeight - solution->ThirdWeight,
-                  solution->SecondWeight, solution->ThirdWeight),
-            solution->Determinant > 0.0F ? FaceOrientation::Front
+            Vec3<T>(T(1) - solution->SecondWeight - solution->ThirdWeight,
+                    solution->SecondWeight, solution->ThirdWeight),
+            solution->Determinant > T(0) ? FaceOrientation::Front
                                          : FaceOrientation::Back};
     }
 
+    template <typename T>
     [[nodiscard]] inline bool Intersects(
-        const Ray3f& ray,
-        const Triangle3f& triangle,
-        RayTriangleOptions options = {}) noexcept
+        const Ray3<T>& ray,
+        const Triangle3<T>& triangle,
+        RayTriangleOptions<T> options = {}) noexcept
     {
         return detail::TryIntersectRayTriangle(ray, triangle, options)
             .has_value();

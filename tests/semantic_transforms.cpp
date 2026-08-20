@@ -184,6 +184,36 @@ namespace
         Require(NearlyEqual(TransformPoint(rigid, point).Vector(),
                             TransformPoint(affine, point).Vector()));
     }
+
+    void CheckDoubleTransforms()
+    {
+        using namespace mv::math;
+
+        const RigidTransform3d rigid(
+            Rotation3d::FromAxisAngle(Direction3d::AxisY(),
+                                      ToRadians(Degreesd(90.0))),
+            Vec3d(2.0, 3.0, 4.0));
+        const Point3d point(0.0, 0.0, 1.0);
+        Require(IsNearlyEqual(TransformPoint(rigid, point).Vector(),
+                              Vec3d(3.0, 3.0, 4.0)));
+        Require(IsNearlyEqual(
+            TransformPoint(rigid.Inverse(), TransformPoint(rigid, point))
+                .Vector(),
+            point.Vector()));
+
+        const AffineTransform3d affine(
+            Vec3d(2.0, 0.0, 0.0), Vec3d(0.0, 3.0, 0.0), Vec3d(0.0, 0.0, 4.0),
+            Vec3d(10.0, 20.0, 30.0));
+        Require(TransformPoint(affine, Point3d(1.0, 2.0, 3.0)) ==
+                Point3d(12.0, 26.0, 42.0));
+        const auto transformedNormal =
+            TryTransformNormal(affine, Normal3d::AxisY());
+        Require(transformedNormal.has_value());
+        Require(
+            IsNearlyEqual(transformedNormal->Vector(), Vec3d(0.0, 1.0, 0.0)));
+        Require(IsNearlyEqual(TransformPoint(ToAffine(rigid), point).Vector(),
+                              TransformPoint(rigid, point).Vector()));
+    }
 }  // namespace
 
 int main()
@@ -193,5 +223,6 @@ int main()
     CheckRigidTransforms();
     CheckAffineSemantics();
     CheckRigidToAffine();
+    CheckDoubleTransforms();
     return 0;
 }

@@ -2,9 +2,12 @@
 
 ## Current phase
 
-Phase A and the initial Phase B semantic-transform slice are accepted. The
-first Phase C CPU geometry/query slice for Move 1.x is implemented and verified
-locally and on the hosted compiler/OS matrix.
+Phase A and Phase B are accepted. Phase C now includes generic float/double
+semantic transforms and geometry/query kernels, discrete integer bounds,
+practical vector parity, `Mat4<T>`, and explicit projection/view construction.
+The earlier geometry slices are verified locally and on the hosted compiler/OS
+matrix; the newest generic-math and graphics-matrix checkpoint is locally
+verified and awaits hosted CI evidence.
 
 ## Completed
 
@@ -82,6 +85,22 @@ locally and on the hosted compiler/OS matrix.
   and a 2,048-case independent double-precision critical-point oracle
 - Added compact 32-byte `Capsule3f`, point/capsule proximity and containment,
   and sphere/capsule and capsule/capsule overlap predicates
+- Completed practical vector parity for arithmetic scalar families, including
+  approximate comparison, explicit indexing/mutation policy, constrained
+  swizzles, and status-bearing direction/normal refraction
+- Generalized semantic transforms, continuous geometry primitives, prepared
+  rays, intersection results, and query kernels across `float` and `double`
+- Added fixed-width signed and unsigned integer AABB aliases while constraining
+  continuous metrics and construction to floating-point bounds
+- Implemented and correctness-tested `Mat4<T>` construction, homogeneous
+  transform, composition, transpose, determinant, and fallible inverse
+- Added explicit handedness, clip-depth, and forward/reverse-depth projection
+  construction, including finite/infinite perspective and off-center
+  orthographic matrices
+- Added fallible left- and right-handed look-at view construction with explicit
+  coincident-eye/target and parallel-up failure
+- Extended the separate migration benchmark suite with Mat4, perspective,
+  orthographic, and view parity and performance rows
 
 ## Accepted evidence
 

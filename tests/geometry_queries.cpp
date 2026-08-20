@@ -518,7 +518,7 @@ namespace
         Require(Intersect(triangleBackRay, triangle)->Face ==
                 FaceOrientation::Back);
         Require(!Intersect(triangleBackRay, triangle,
-                           RayTriangleOptions{BackFaceMode::Cull}));
+                           RayTriangleOptionsf{BackFaceMode::Cull}));
         Require(!Intersect(
             MakeRay(Point3f(2.0F, 2.0F, 1.0F), -Direction3f::AxisZ()),
             triangle));
@@ -965,6 +965,63 @@ namespace
         static_assert(std::is_trivially_copyable_v<Triangle3f>);
         static_assert(std::is_trivially_copyable_v<PreparedRay3f>);
     }
+
+    void CheckGenericGeometry()
+    {
+        using namespace mv::math;
+
+        const auto direction = Direction3d::TryFrom(Vec3d(0.0, 0.0, 2.0));
+        Require(direction.has_value());
+        const auto ray = Ray3d::TryFromOriginDirection(Point3d(), *direction);
+        Require(ray.has_value());
+        const auto plane = Plane3d::TryFromPointNormal(Point3d(0.0, 0.0, 5.0),
+                                                       Normal3d::AxisZ());
+        Require(plane.has_value());
+        const auto planeHit = Intersect(*ray, *plane);
+        Require(planeHit.has_value());
+        Require(IsNearlyEqual(planeHit->Distance, 5.0));
+
+        const auto triangle = Triangle3d::TryFromPoints(
+            Point3d(-1.0, -1.0, 5.0), Point3d(1.0, -1.0, 5.0),
+            Point3d(0.0, 1.0, 5.0));
+        Require(triangle.has_value());
+        Require(Intersect(*ray, *triangle).has_value());
+        Require(IsNearlyEqual(
+            ClosestPoints(Point3d(0.0, 0.0, 7.0), *triangle).SquaredDistance,
+            4.0));
+
+        const auto sphere =
+            Sphere3d::TryFromCenterRadius(Point3d(0.0, 0.0, 5.0), 2.0);
+        Require(sphere.has_value());
+        const auto sphereHit = Intersect(*ray, *sphere);
+        Require(sphereHit.has_value());
+        Require(IsNearlyEqual(sphereHit->EntryDistance, 3.0));
+        Require(IsNearlyEqual(sphereHit->ExitDistance, 7.0));
+
+        const auto box = Aabb3d::TryFromMinMax(Point3d(-1.0, -1.0, 4.0),
+                                               Point3d(1.0, 1.0, 6.0));
+        Require(box.has_value());
+        Require(Intersect(PreparedRay3d(*ray), *box).has_value());
+        Require(Intersects(*sphere, *box));
+
+        const Segment3d first(Point3d(0.0, 0.0, 0.0), Point3d(2.0, 0.0, 0.0));
+        const Segment3d second(Point3d(1.0, -1.0, 1.0), Point3d(1.0, 1.0, 1.0));
+        Require(IsNearlyEqual(DistanceSquared(first, second), 1.0));
+
+        const auto integerBox =
+            Aabb3i::TryFromMinMax(Point3i(-4, -3, -2), Point3i(4, 3, 2));
+        Require(integerBox.has_value());
+        Require(integerBox->Contains(Point3i(0, 0, 0)));
+        Require(integerBox->TrySize() == Vec3i(8, 6, 4));
+        Require(integerBox->TryClosestPoint(Point3i(10, 0, -10)) ==
+                Point3i(4, 0, -2));
+        Require(integerBox->Intersection(Aabb3i::Empty()).IsEmpty());
+
+        static_assert(sizeof(Ray3d) == 64);
+        static_assert(sizeof(Aabb3d) == 64);
+        static_assert(std::is_trivially_copyable_v<PreparedRay3d>);
+        static_assert(std::is_trivially_copyable_v<Aabb3i>);
+    }
 }  // namespace
 
 int main()
@@ -982,5 +1039,6 @@ int main()
     CheckTriangleClosestReferenceParity();
     CheckSegmentPairReferenceParity();
     CheckLayouts();
+    CheckGenericGeometry();
     return 0;
 }

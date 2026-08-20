@@ -11,40 +11,44 @@ namespace mv::math
 {
     // Standard half-line with a finite origin and unit direction; invariant
     // enforcement and semantic Point3f/Direction3f storage are Move-specific.
-    class Ray3f
+    template <typename T>
+        requires std::is_floating_point_v<T>
+    class Ray3
     {
     public:
-        Ray3f() noexcept = default;
+        using Component = T;
 
-        [[nodiscard]] static std::optional<Ray3f> TryFromOriginDirection(
-            Point3f origin, Direction3f direction) noexcept
+        Ray3() noexcept = default;
+
+        [[nodiscard]] static std::optional<Ray3> TryFromOriginDirection(
+            const Point3<T>& origin, const Direction3<T>& direction) noexcept
         {
             if (!IsFinitePoint(origin))
             {
                 return std::nullopt;
             }
-            return Ray3f(origin, direction, UncheckedTag{});
+            return Ray3(origin, direction, UncheckedTag{});
         }
 
-        [[nodiscard]] const Point3f& Origin() const noexcept
+        [[nodiscard]] const Point3<T>& Origin() const noexcept
         {
             return Origin_;
         }
 
-        [[nodiscard]] const Direction3f& Direction() const noexcept
+        [[nodiscard]] const Direction3<T>& Direction() const noexcept
         {
             return Direction_;
         }
 
         // The caller supplies a distance in the ray domain [0, +infinity).
         // No implicit clamping is performed.
-        [[nodiscard]] Point3f PointAt(float distance) const noexcept
+        [[nodiscard]] Point3<T> PointAt(T distance) const noexcept
         {
             return Origin_ + Direction_.Vector() * distance;
         }
 
-        [[nodiscard]] friend bool operator==(const Ray3f& left,
-                                             const Ray3f& right) noexcept
+        [[nodiscard]] friend bool operator==(const Ray3& left,
+                                             const Ray3& right) noexcept
         {
             return left.Origin_ == right.Origin_ &&
                    left.Direction_ == right.Direction_;
@@ -55,23 +59,32 @@ namespace mv::math
         {
         };
 
-        Ray3f(Point3f origin, Direction3f direction, UncheckedTag) noexcept :
+        Ray3(const Point3<T>& origin,
+             const Direction3<T>& direction,
+             UncheckedTag) noexcept :
             Origin_(origin), Direction_(direction)
         {
         }
 
-        [[nodiscard]] static bool IsFinitePoint(const Point3f& point) noexcept
+        [[nodiscard]] static bool IsFinitePoint(const Point3<T>& point) noexcept
         {
             return std::isfinite(point.X()) && std::isfinite(point.Y()) &&
                    std::isfinite(point.Z());
         }
 
-        Point3f Origin_;
-        Direction3f Direction_;
+        Point3<T> Origin_;
+        Direction3<T> Direction_;
     };
+
+    using Ray3f = Ray3<float>;
+    using Ray3d = Ray3<double>;
 }  // namespace mv::math
 
 static_assert(sizeof(mv::math::Ray3f) == 32);
 static_assert(alignof(mv::math::Ray3f) == 16);
 static_assert(std::is_trivially_copyable_v<mv::math::Ray3f>);
 static_assert(std::is_standard_layout_v<mv::math::Ray3f>);
+static_assert(sizeof(mv::math::Ray3d) == 64);
+static_assert(alignof(mv::math::Ray3d) == 32);
+static_assert(std::is_trivially_copyable_v<mv::math::Ray3d>);
+static_assert(std::is_standard_layout_v<mv::math::Ray3d>);
