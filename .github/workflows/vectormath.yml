@@ -12,6 +12,36 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  documentation:
+    name: Documentation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install Doxygen
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes doxygen
+      - name: Build versioned documentation fixture
+        env:
+          MV_DOC_SOURCE: ${{ github.workspace }}
+          MV_DOC_OUTPUT: ${{ github.workspace }}/build/documentation/main
+          MV_DOC_VERSION: main
+        run: |
+          python3 tools/docs/versioned_site.py prepare \
+            --site build/documentation \
+            --version main
+          doxygen docs/Doxyfile
+          python3 tools/docs/versioned_site.py index \
+            --site build/documentation
+      - name: Test versioned site maintenance
+        run: python3 -m unittest discover -s tests/docs -p 'test_*.py'
+      - name: Verify documentation entry points
+        run: |
+          test -s build/documentation/index.html
+          test -s build/documentation/main/index.html
+          grep -F '"main"' build/documentation/versions.json
+
   xmake:
     name: XMake ${{ matrix.name }} consumers
     strategy:

@@ -1,0 +1,53 @@
+# Move Vectormath API documentation.
+#
+# The publishing workflow supplies these environment variables:
+#   MV_DOC_SOURCE  absolute repository checkout path
+#   MV_DOC_OUTPUT  absolute output directory for this version
+#   MV_DOC_VERSION public version label (for example, main or v1.2.0)
+
+PROJECT_NAME           = "Move Vectormath"
+PROJECT_NUMBER         = "$(MV_DOC_VERSION)"
+PROJECT_BRIEF          = "C++20 game and graphics mathematics"
+
+OUTPUT_DIRECTORY       = "$(MV_DOC_OUTPUT)"
+CREATE_SUBDIRS         = NO
+
+INPUT                  = "$(MV_DOC_SOURCE)/README.md" \
+                         "$(MV_DOC_SOURCE)/CONVENTIONS.md" \
+                         "$(MV_DOC_SOURCE)/LICENSE.md" \
+                         "$(MV_DOC_SOURCE)/packages/move/math/include/mv"
+FILE_PATTERNS          = *.hpp *.md
+RECURSIVE              = YES
+EXCLUDE_PATTERNS       = */detail/*
+USE_MDFILE_AS_MAINPAGE = "$(MV_DOC_SOURCE)/README.md"
+
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = NO
+EXTRACT_STATIC         = YES
+HIDE_UNDOC_MEMBERS     = NO
+HIDE_UNDOC_CLASSES     = NO
+HIDE_FRIEND_COMPOUNDS  = YES
+
+FULL_PATH_NAMES        = YES
+STRIP_FROM_PATH        = "$(MV_DOC_SOURCE)"
+STRIP_FROM_INC_PATH    = "$(MV_DOC_SOURCE)/packages/move/math/include"
+SOURCE_BROWSER         = YES
+INLINE_SOURCES         = NO
+
+MARKDOWN_SUPPORT       = YES
+AUTOLINK_SUPPORT       = YES
+
+GENERATE_HTML          = YES
+HTML_OUTPUT            = .
+HTML_TIMESTAMP         = NO
+GENERATE_TREEVIEW      = YES
+DISABLE_INDEX          = NO
+HAVE_DOT               = NO
+
+GENERATE_LATEX         = NO
+GENERATE_XML           = NO
+
+QUIET                  = YES
+WARNINGS               = YES
+WARN_IF_UNDOCUMENTED   = NO
+WARN_IF_DOC_ERROR      = YES

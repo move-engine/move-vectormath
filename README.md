@@ -5,6 +5,11 @@ API lives in `mv::math` and provides arithmetic vectors, invariant-bearing
 semantic values, transforms, matrices, geometry, spatial queries, culling, and
 explicit graphics-convention helpers.
 
+The generated API reference is published by version: use the
+[development documentation](https://move-engine.github.io/move-vectormath/main/)
+for `main`, or the [documentation index](https://move-engine.github.io/move-vectormath/)
+to select a release tag.
+
 ## Use the API
 
 Include the full public surface:
@@ -60,7 +65,7 @@ camera bases do not silently manufacture fallback values.
   than accidental properties of compute vectors.
 
 See [CONVENTIONS.md](CONVENTIONS.md) and the organized
-[API-v2 documentation](docs/api-v2/README.md).
+[API-v2 design archive](https://github.com/move-engine/move-vectormath/tree/main/docs/api-v2).
 
 ## CMake
 
