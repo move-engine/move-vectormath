@@ -30,11 +30,9 @@ source-compatible spellings. Move 1.x has no legacy-compatibility requirement.
 
 ## Remaining deletion blockers
 
-1. Migrate the `packages/move/math_examples` source from `move::math` to
-   `mv::math` and add a build check reachable from normal CI.
-2. Archive the temporary direct old/new benchmark evidence, then remove the
+1. Archive the temporary direct old/new benchmark evidence, then remove the
    benchmark repository's live dependency on legacy headers.
-3. Remove legacy-only test targets, headers, and CMake aliases together, then
+2. Remove legacy-only test targets, headers, and CMake aliases together, then
    validate strict GCC/Clang, forced-scalar, sanitizer, CMake consumer, XMake
    consumer, and hosted CI jobs.
 

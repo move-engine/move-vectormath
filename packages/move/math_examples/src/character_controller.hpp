@@ -1,5 +1,7 @@
 #pragma once
 
+#include <algorithm>
+#include <cmath>
 #include <cstdint>
 #include <type_traits>
 
@@ -11,12 +13,11 @@ namespace examples
         requires std::is_floating_point_v<T>
     struct CharacterSweepHit
     {
-        using vector_type =
-            move::math::vec3<T, move::math::Acceleration::Default>;
+        using vector_type = mv::math::Vec3<T>;
 
         T fraction = T(1);
-        vector_type point = vector_type::zero();
-        vector_type normal = vector_type::up();
+        vector_type point = vector_type::Zero();
+        vector_type normal = vector_type::AxisY();
         bool started_penetrating = false;
     };
 
@@ -24,8 +25,7 @@ namespace examples
         requires std::is_floating_point_v<T>
     struct CharacterPhysicsWorld
     {
-        using vector_type =
-            move::math::vec3<T, move::math::Acceleration::Default>;
+        using vector_type = mv::math::Vec3<T>;
 
         virtual ~CharacterPhysicsWorld() = default;
 
@@ -52,26 +52,26 @@ namespace examples
     struct CollideAndSlideCharacterController
     {
         using scalar_type = T;
-        using vector_type =
-            move::math::vec3<T, move::math::Acceleration::Default>;
+        using vector_type = mv::math::Vec3<T>;
         using transform_type = TransformComponent<T>;
 
         transform_type transform;
-        vector_type velocity = vector_type::zero();
+        vector_type velocity = vector_type::Zero();
 
         T radius = T(0.35);
         T height = T(1.8);
         T skin_width = T(0.02);
         T ground_probe_distance = T(0.1);
-        T max_ground_angle_radians = move::math::deg2rad(T(50));
+        mv::math::Radians<T> max_ground_angle =
+            mv::math::ToRadians(mv::math::Degrees<T>(T(50)));
         std::uint32_t max_slide_iterations = 4;
 
         bool grounded = false;
-        vector_type ground_normal = vector_type::up();
+        vector_type ground_normal = vector_type::AxisY();
 
         [[nodiscard]] T half_height() const
         {
-            return move::math::max(height * T(0.5) - radius, T(0));
+            return std::max(height * T(0.5) - radius, T(0));
         }
 
         [[nodiscard]] vector_type position() const
@@ -79,30 +79,34 @@ namespace examples
             return transform.world_position();
         }
 
-        void set_position(const vector_type& value)
+        [[nodiscard]] bool set_position(const vector_type& value)
         {
-            transform.set_world_position(value);
+            return transform.try_set_world_position(value);
         }
 
-        void move_and_slide(const CharacterPhysicsWorld<T>& world,
-                            const vector_type& desired_displacement)
+        [[nodiscard]] bool move_and_slide(
+            const CharacterPhysicsWorld<T>& world,
+            const vector_type& desired_displacement)
         {
             grounded = false;
-            ground_normal = vector_type::up();
+            ground_normal = vector_type::AxisY();
 
             resolve_penetration(world);
 
             vector_type remaining = desired_displacement;
             for (std::uint32_t iteration = 0;
                  iteration < max_slide_iterations &&
-                 remaining.length_squared() > T(1.0e-8);
+                 mv::math::LengthSquared(remaining) > T(1.0e-8);
                  ++iteration)
             {
                 CharacterSweepHit<T> hit;
-                if (!world.sweep_capsule(
-                        position(), radius, half_height(), remaining, hit))
+                if (!world.sweep_capsule(position(), radius, half_height(),
+                                         remaining, hit))
                 {
-                    set_position(position() + remaining);
+                    if (!set_position(position() + remaining))
+                    {
+                        return false;
+                    }
                     break;
                 }
 
@@ -112,9 +116,13 @@ namespace examples
                     break;
                 }
 
-                const T travel_fraction = move::math::clamp(
-                    hit.fraction - skin_fraction(remaining.length()), T(0), T(1));
-                set_position(position() + remaining * travel_fraction);
+                const T travel_fraction = std::clamp(
+                    hit.fraction - skin_fraction(mv::math::Length(remaining)),
+                    T(0), T(1));
+                if (!set_position(position() + remaining * travel_fraction))
+                {
+                    return false;
+                }
 
                 const vector_type leftover =
                     remaining * (T(1) - travel_fraction);
@@ -123,39 +131,40 @@ namespace examples
                 if (is_ground(hit.normal))
                 {
                     grounded = true;
-                    ground_normal = hit.normal.normalized();
+                    ground_normal = normalized_or_up(hit.normal);
                 }
             }
 
-            vector_type probe_normal = vector_type::up();
+            vector_type probe_normal = vector_type::AxisY();
             if (world.probe_ground(position(), radius, half_height(),
                                    ground_probe_distance, probe_normal) &&
                 is_ground(probe_normal))
             {
                 grounded = true;
-                ground_normal = probe_normal.normalized();
+                ground_normal = normalized_or_up(probe_normal);
             }
 
             if (grounded)
             {
-                const T into_ground = vector_type::dot(velocity, ground_normal);
+                const T into_ground = mv::math::Dot(velocity, ground_normal);
                 if (into_ground < T(0))
                 {
                     velocity -= ground_normal * into_ground;
                 }
             }
+            return true;
         }
 
-        void integrate(const CharacterPhysicsWorld<T>& world,
-                       T delta_time,
-                       const vector_type& gravity)
+        [[nodiscard]] bool integrate(const CharacterPhysicsWorld<T>& world,
+                                     T delta_time,
+                                     const vector_type& gravity)
         {
             if (!grounded)
             {
                 velocity += gravity * delta_time;
             }
 
-            move_and_slide(world, velocity * delta_time);
+            return move_and_slide(world, velocity * delta_time);
         }
 
     private:
@@ -166,31 +175,38 @@ namespace examples
                 return T(0);
             }
 
-            return move::math::clamp(
-                skin_width / displacement_length, T(0), T(0.25));
+            return std::clamp(skin_width / displacement_length, T(0), T(0.25));
         }
 
         [[nodiscard]] bool is_ground(const vector_type& normal) const
         {
-            const T min_ground_dot = move::math::cos(max_ground_angle_radians);
-            return vector_type::dot(normal.normalized(), vector_type::up()) >=
-                   min_ground_dot;
+            const auto direction = mv::math::Direction3<T>::TryFrom(normal);
+            return direction &&
+                   mv::math::Dot(direction->Vector(), vector_type::AxisY()) >=
+                       std::cos(max_ground_angle.Value());
         }
 
         [[nodiscard]] static vector_type project_onto_plane(
             const vector_type& value, const vector_type& plane_normal)
         {
-            const vector_type normalized = plane_normal.normalized();
-            return value - normalized * vector_type::dot(value, normalized);
+            const auto normal = mv::math::Normal3<T>::TryFrom(plane_normal);
+            return normal ? mv::math::ProjectOntoPlane(value, *normal) : value;
+        }
+
+        [[nodiscard]] static vector_type normalized_or_up(
+            const vector_type& value)
+        {
+            const auto direction = mv::math::Direction3<T>::TryFrom(value);
+            return direction ? direction->Vector() : vector_type::AxisY();
         }
 
         void resolve_penetration(const CharacterPhysicsWorld<T>& world)
         {
-            vector_type depenetration = vector_type::zero();
-            if (world.depenetrate_capsule(
-                    position(), radius, half_height(), depenetration))
+            vector_type depenetration = vector_type::Zero();
+            if (world.depenetrate_capsule(position(), radius, half_height(),
+                                          depenetration))
             {
-                set_position(position() + depenetration);
+                (void)set_position(position() + depenetration);
             }
         }
     };

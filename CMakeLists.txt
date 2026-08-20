@@ -46,14 +46,29 @@ option(MOVE_VECTORMATH_BUILD_GEOMETRY_QUERY_TESTS
        "Build geometry and spatial query tests" OFF)
 option(MOVE_VECTORMATH_BUILD_MATRIX_TESTS
        "Build general matrix tests" OFF)
+option(MOVE_VECTORMATH_BUILD_EXAMPLES
+       "Build current API examples and their smoke test" OFF)
 
 if(MOVE_VECTORMATH_BUILD_TESTS OR
    MOVE_VECTORMATH_BUILD_STANDALONE_TESTS OR
    MOVE_VECTORMATH_BUILD_REPRESENTATION_TESTS OR
    MOVE_VECTORMATH_BUILD_SEMANTIC_TRANSFORM_TESTS OR
    MOVE_VECTORMATH_BUILD_GEOMETRY_QUERY_TESTS OR
-   MOVE_VECTORMATH_BUILD_MATRIX_TESTS)
+   MOVE_VECTORMATH_BUILD_MATRIX_TESTS OR
+   MOVE_VECTORMATH_BUILD_EXAMPLES)
     enable_testing()
+endif()
+
+if(MOVE_VECTORMATH_BUILD_EXAMPLES)
+    add_executable(move-vectormath-ray-tracer
+                   packages/move/math_examples/src/simple_ray_tracer.cpp)
+    target_link_libraries(move-vectormath-ray-tracer PRIVATE move-vectormath)
+    move_vectormath_enable_strict_warnings(move-vectormath-ray-tracer)
+
+    add_executable(move-vectormath-example-tests tests/examples.cpp)
+    target_link_libraries(move-vectormath-example-tests PRIVATE move-vectormath)
+    move_vectormath_enable_strict_warnings(move-vectormath-example-tests)
+    add_test(NAME move-vectormath-examples COMMAND move-vectormath-example-tests)
 endif()
 
 if(MOVE_VECTORMATH_BUILD_TESTS OR

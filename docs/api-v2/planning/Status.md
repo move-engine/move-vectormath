@@ -139,6 +139,9 @@ and packaging checkpoints have passed hosted CI.
 - Completed the legacy correctness-contract mapping, explicitly recorded
   intentional removals, and migrated the dependency-free standalone smoke test
   to the `mv::math` umbrella
+- Migrated the transform, camera, character-controller, and ray-tracer examples
+  to explicit `mv::math` failure and semantic-type contracts; normal CI now
+  builds the application and runs an example smoke test
 
 ## Accepted evidence
 
@@ -170,6 +173,5 @@ and packaging checkpoints have passed hosted CI.
   `Vec3f` ABI commitment
 - Controlled Phase B benchmark evidence on stable hardware; hosted reports
   remain diagnostic rather than regression gates
-- Migrate the example package, archive the explained temporary direct old/new
-  benchmark evidence, and remove the legacy headers and aliases before
-  beginning the `mv.math` module wrapper
+- Archive the explained temporary direct old/new benchmark evidence and remove
+  the legacy headers and aliases before beginning the `mv.math` module wrapper

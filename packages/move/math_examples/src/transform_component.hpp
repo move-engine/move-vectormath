@@ -1,8 +1,9 @@
 #pragma once
 
+#include <optional>
 #include <type_traits>
 
-#include <move/vectormath.hpp>
+#include <mv/math/Math.hpp>
 
 namespace examples
 {
@@ -11,20 +12,20 @@ namespace examples
     struct TransformComponent
     {
         using scalar_type = T;
-        using vector_type =
-            move::math::vec3<T, move::math::Acceleration::Default>;
-        using quaternion_type = move::math::quat<T>;
-        using matrix_type = move::math::mat4x4<T>;
+        using vector_type = mv::math::Vec3<T>;
+        using point_type = mv::math::Point3<T>;
+        using rotation_type = mv::math::Rotation3<T>;
+        using matrix_type = mv::math::Mat4<T>;
 
         TransformComponent* parent = nullptr;
-        vector_type local_position = vector_type::zero();
-        quaternion_type local_rotation = quaternion_type::identity();
-        vector_type local_scale = vector_type::one();
+        vector_type local_position = vector_type::Zero();
+        rotation_type local_rotation = rotation_type::Identity();
+        vector_type local_scale = vector_type::One();
 
         [[nodiscard]] matrix_type local_matrix() const
         {
-            return matrix_type::trs(
-                local_position.fast(), local_rotation, local_scale.fast());
+            return mv::math::ToMat4(mv::math::TrsTransform3<T>(
+                local_position, local_rotation, local_scale));
         }
 
         [[nodiscard]] matrix_type world_matrix() const
@@ -33,9 +34,9 @@ namespace examples
             return parent ? local * parent->world_matrix() : local;
         }
 
-        [[nodiscard]] matrix_type inverse_world_matrix() const
+        [[nodiscard]] std::optional<matrix_type> inverse_world_matrix() const
         {
-            return world_matrix().inverse();
+            return world_matrix().TryInverse();
         }
 
         [[nodiscard]] vector_type world_position() const
@@ -44,11 +45,10 @@ namespace examples
                           : local_position;
         }
 
-        [[nodiscard]] quaternion_type world_rotation() const
+        [[nodiscard]] rotation_type world_rotation() const
         {
-            // With row-vector composition, local rotation is applied before the
-            // parent rotation.
-            return parent ? local_rotation * parent->world_rotation()
+            // Rotation multiplication composes its right operand first.
+            return parent ? parent->world_rotation() * local_rotation
                           : local_rotation;
         }
 
@@ -57,105 +57,130 @@ namespace examples
             return parent ? local_scale * parent->world_scale() : local_scale;
         }
 
-        void set_world_position(const vector_type& position)
+        [[nodiscard]] bool try_set_world_position(const vector_type& position)
         {
-            local_position = parent ? parent->inverse_transform_point(position)
-                                    : position;
-        }
-
-        void set_world_rotation(const quaternion_type& rotation)
-        {
-            local_rotation = parent ? rotation * parent->world_rotation().inverse()
-                                    : rotation;
-        }
-
-        void set_world_scale(const vector_type& scale)
-        {
-            if (parent)
+            if (!parent)
             {
-                const vector_type parent_scale = parent->world_scale();
-                local_scale = vector_type(scale.get_x() / parent_scale.get_x(),
-                                          scale.get_y() / parent_scale.get_y(),
-                                          scale.get_z() / parent_scale.get_z());
+                local_position = position;
+                return true;
             }
-            else
+
+            const auto local = parent->try_inverse_transform_point(position);
+            if (!local)
+            {
+                return false;
+            }
+            local_position = *local;
+            return true;
+        }
+
+        void set_world_rotation(const rotation_type& rotation)
+        {
+            local_rotation = parent
+                                 ? parent->world_rotation().Inverse() * rotation
+                                 : rotation;
+        }
+
+        [[nodiscard]] bool try_set_world_scale(const vector_type& scale)
+        {
+            if (!parent)
             {
                 local_scale = scale;
+                return true;
             }
+
+            const vector_type parent_scale = parent->world_scale();
+            if (parent_scale.X() == T(0) || parent_scale.Y() == T(0) ||
+                parent_scale.Z() == T(0))
+            {
+                return false;
+            }
+            local_scale = scale / parent_scale;
+            return true;
         }
 
         void translate_local(const vector_type& offset)
         {
-            local_position += offset * local_rotation;
+            local_position += mv::math::Rotate(local_rotation, offset);
         }
 
-        void translate_world(const vector_type& offset)
+        [[nodiscard]] bool translate_world(const vector_type& offset)
         {
-            set_world_position(world_position() + offset);
+            return try_set_world_position(world_position() + offset);
         }
 
-        void rotate_local(const quaternion_type& delta)
+        void rotate_local(const rotation_type& delta)
         {
             local_rotation = local_rotation * delta;
         }
 
-        void rotate_world(const quaternion_type& delta)
+        void rotate_world(const rotation_type& delta)
         {
             set_world_rotation(delta * world_rotation());
         }
 
-        [[nodiscard]] vector_type rotate_direction(
-            const vector_type& direction) const
+        [[nodiscard]] vector_type rotate_vector(const vector_type& vector) const
         {
-            return vector_type(direction * world_rotation()).normalized();
+            return mv::math::Rotate(world_rotation(), vector);
         }
 
-        [[nodiscard]] vector_type inverse_rotate_direction(
-            const vector_type& direction) const
+        [[nodiscard]] vector_type inverse_rotate_vector(
+            const vector_type& vector) const
         {
-            return vector_type(direction * world_rotation().inverse())
-                .normalized();
+            return mv::math::Rotate(world_rotation().Inverse(), vector);
         }
 
         [[nodiscard]] vector_type transform_point(
             const vector_type& point) const
         {
-            return vector_type(world_matrix().transform_point(point.fast()));
+            const mv::math::Vec4<T> homogeneous(point, T(1));
+            return (homogeneous * world_matrix()).XYZ();
         }
 
-        [[nodiscard]] vector_type inverse_transform_point(
+        [[nodiscard]] std::optional<vector_type> try_inverse_transform_point(
             const vector_type& point) const
         {
-            return vector_type(
-                inverse_world_matrix().transform_point(point.fast()));
+            const auto inverse = inverse_world_matrix();
+            if (!inverse)
+            {
+                return std::nullopt;
+            }
+            return (mv::math::Vec4<T>(point, T(1)) * *inverse).XYZ();
         }
 
         [[nodiscard]] vector_type transform_vector(
-            const vector_type& value) const
+            const vector_type& vector) const
         {
-            return vector_type(world_matrix().transform_vector(value.fast()));
+            return (mv::math::Vec4<T>(vector, T(0)) * world_matrix()).XYZ();
         }
 
-        [[nodiscard]] vector_type inverse_transform_vector(
-            const vector_type& value) const
+        [[nodiscard]] std::optional<vector_type> try_inverse_transform_vector(
+            const vector_type& vector) const
         {
-            return vector_type(
-                inverse_world_matrix().transform_vector(value.fast()));
+            const auto inverse = inverse_world_matrix();
+            if (!inverse)
+            {
+                return std::nullopt;
+            }
+            return (mv::math::Vec4<T>(vector, T(0)) * *inverse).XYZ();
         }
 
-        [[nodiscard]] vector_type right() const
+        [[nodiscard]] mv::math::Direction3<T> right() const
         {
-            return rotate_direction(vector_type::right());
+            return mv::math::Rotate(world_rotation(),
+                                    mv::math::Direction3<T>::AxisX());
         }
 
-        [[nodiscard]] vector_type up() const
+        [[nodiscard]] mv::math::Direction3<T> up() const
         {
-            return rotate_direction(vector_type::up());
+            return mv::math::Rotate(world_rotation(),
+                                    mv::math::Direction3<T>::AxisY());
         }
 
-        [[nodiscard]] vector_type forward() const
+        [[nodiscard]] mv::math::Direction3<T> forward() const
         {
-            return rotate_direction(vector_type::forward());
+            return mv::math::Rotate(world_rotation(),
+                                    mv::math::Direction3<T>::AxisZ());
         }
     };
 }  // namespace examples

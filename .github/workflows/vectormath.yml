@@ -75,6 +75,7 @@ jobs:
           -DMOVE_VECTORMATH_BUILD_SEMANTIC_TRANSFORM_TESTS=ON
           -DMOVE_VECTORMATH_BUILD_GEOMETRY_QUERY_TESTS=ON
           -DMOVE_VECTORMATH_BUILD_MATRIX_TESTS=ON
+          -DMOVE_VECTORMATH_BUILD_EXAMPLES=ON
           -DMOVE_VECTORMATH_WARNINGS_AS_ERRORS=${{ matrix.warnings_as_errors }}
           -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
       - name: Build
@@ -115,6 +116,7 @@ jobs:
           -DMOVE_VECTORMATH_BUILD_SEMANTIC_TRANSFORM_TESTS=ON
           -DMOVE_VECTORMATH_BUILD_GEOMETRY_QUERY_TESTS=ON
           -DMOVE_VECTORMATH_BUILD_MATRIX_TESTS=ON
+          -DMOVE_VECTORMATH_BUILD_EXAMPLES=ON
           -DMOVE_VECTORMATH_WARNINGS_AS_ERRORS=ON
           -DCMAKE_BUILD_TYPE=Debug
           -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer"
@@ -145,6 +147,7 @@ jobs:
           -DMOVE_VECTORMATH_BUILD_SEMANTIC_TRANSFORM_TESTS=ON
           -DMOVE_VECTORMATH_BUILD_GEOMETRY_QUERY_TESTS=ON
           -DMOVE_VECTORMATH_BUILD_MATRIX_TESTS=ON
+          -DMOVE_VECTORMATH_BUILD_EXAMPLES=ON
           -DCMAKE_BUILD_TYPE=Debug
           -DCMAKE_CXX_FLAGS="--coverage -O0 -g"
           -DCMAKE_EXE_LINKER_FLAGS="--coverage"
@@ -213,6 +216,11 @@ jobs:
         run: |
           clang-format-16 --dry-run --Werror \
             packages/move/math/tests/mm_test_common.hpp \
+            packages/move/math_examples/src/camera_component.hpp \
+            packages/move/math_examples/src/character_controller.hpp \
+            packages/move/math_examples/src/simple_ray_tracer.cpp \
+            packages/move/math_examples/src/transform_component.hpp \
+            tests/examples.cpp \
             tests/standalone.cpp \
             tests/consumer/main.cpp \
             tests/representation.cpp \

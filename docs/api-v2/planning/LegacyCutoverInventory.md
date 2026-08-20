@@ -69,7 +69,7 @@ construction costs are measured separately from prevalidated hot paths.
 | `mv.math` C++20 module | Missing | Deliberately scheduled after legacy tests and cross-library benchmarks migrate (item 7); headers remain the source of truth. |
 | User documentation | Ready | README and conventions teach the current namespace, semantic contracts, focused headers, and CMake/XMake usage. |
 | Legacy test migration | Ready | `LegacyContractAudit.md` maps replacement coverage and intentional removals; the dependency-free standalone smoke test now consumes only `mv::math`. |
-| Example package migration | Missing | Migrate transform, camera, character-controller, and ray-tracer examples to `mv::math`, then add a normal CI build check. |
+| Example package migration | Ready | Transform, camera, character-controller, and ray-tracer examples use only `mv::math`; CI builds the ray tracer and runs their dependency-free smoke test. |
 | Cross-library benchmark migration | Partial | The main ranking suite now measures `mv::math` and has no legacy dependency; temporary direct old/new migration executables remain until their evidence is archived and the remaining differences are explained. |
 
 ## Intentionally removed legacy design
