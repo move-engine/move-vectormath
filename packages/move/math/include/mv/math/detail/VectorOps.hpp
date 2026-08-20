@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <cmath>
 #include <type_traits>
 
@@ -174,6 +175,20 @@ namespace mv::math::detail
                 static_cast<T>(T(0) - value.Z), static_cast<T>(T(0) - value.W)};
         }
 
+        [[nodiscard]] static constexpr Native Min(Native left,
+                                                  Native right) noexcept
+        {
+            return {std::min(left.X, right.X), std::min(left.Y, right.Y),
+                    std::min(left.Z, right.Z), std::min(left.W, right.W)};
+        }
+
+        [[nodiscard]] static constexpr Native Max(Native left,
+                                                  Native right) noexcept
+        {
+            return {std::max(left.X, right.X), std::max(left.Y, right.Y),
+                    std::max(left.Z, right.Z), std::max(left.W, right.W)};
+        }
+
         [[nodiscard]] static constexpr T Dot2(Native left,
                                               Native right) noexcept
         {
@@ -318,6 +333,33 @@ namespace mv::math::detail
         [[nodiscard]] static Native Negate(Native value) noexcept
         {
             return rtm::vector_neg(value);
+        }
+
+        [[nodiscard]] static Native Min(Native left, Native right) noexcept
+        {
+            // The comparison order reproduces std::min exactly, including
+            // NaN and signed-zero behavior, using RTM 2.3.1's MIT-licensed
+            // primitives (commit 745bd25673d93b46941eda55e0993327dbc12b53b).
+#if defined(__SSE4_1__) && !defined(__AVX__)
+            // Intel's SSE4.1 blend intrinsic expresses the same selection in
+            // one instruction where RTM's portable SSE2 select needs three.
+            return _mm_blendv_ps(left, right, _mm_cmplt_ps(right, left));
+#else
+            return rtm::vector_select(rtm::vector_less_than(right, left), right,
+                                      left);
+#endif
+        }
+
+        [[nodiscard]] static Native Max(Native left, Native right) noexcept
+        {
+            // The comparison order reproduces std::max under the same rules
+            // and uses the same RTM source revision as Min.
+#if defined(__SSE4_1__) && !defined(__AVX__)
+            return _mm_blendv_ps(left, right, _mm_cmplt_ps(left, right));
+#else
+            return rtm::vector_select(rtm::vector_less_than(left, right), right,
+                                      left);
+#endif
         }
 
         [[nodiscard]] static float Dot2(Native left, Native right) noexcept

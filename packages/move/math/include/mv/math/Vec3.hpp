@@ -31,6 +31,16 @@ namespace mv::math
 
     template <typename T>
         requires std::is_arithmetic_v<T>
+    [[nodiscard]] Vec3<T> Min(const Vec3<T>& left,
+                              const Vec3<T>& right) noexcept;
+
+    template <typename T>
+        requires std::is_arithmetic_v<T>
+    [[nodiscard]] Vec3<T> Max(const Vec3<T>& left,
+                              const Vec3<T>& right) noexcept;
+
+    template <typename T>
+        requires std::is_arithmetic_v<T>
     class alignas(sizeof(T) * 4U) Vec3
     {
     private:
@@ -324,6 +334,8 @@ namespace mv::math
 
         friend T Dot<T>(const Vec3&, const Vec3&) noexcept;
         friend Vec3 Cross<T>(const Vec3&, const Vec3&) noexcept;
+        friend Vec3 Min<T>(const Vec3&, const Vec3&) noexcept;
+        friend Vec3 Max<T>(const Vec3&, const Vec3&) noexcept;
         template <typename U>
             requires std::is_floating_point_v<U>
         friend class Mat3;
@@ -412,21 +424,21 @@ namespace mv::math
     }
 
     template <typename T>
+        requires std::is_arithmetic_v<T>
     [[nodiscard]] Vec3<T> Min(const Vec3<T>& left,
                               const Vec3<T>& right) noexcept
     {
-        return Vec3<T>(std::min(left.X(), right.X()),
-                       std::min(left.Y(), right.Y()),
-                       std::min(left.Z(), right.Z()));
+        using Ops = detail::SelectedVectorOps<T>;
+        return Vec3<T>(Ops::Min(left.Native_, right.Native_));
     }
 
     template <typename T>
+        requires std::is_arithmetic_v<T>
     [[nodiscard]] Vec3<T> Max(const Vec3<T>& left,
                               const Vec3<T>& right) noexcept
     {
-        return Vec3<T>(std::max(left.X(), right.X()),
-                       std::max(left.Y(), right.Y()),
-                       std::max(left.Z(), right.Z()));
+        using Ops = detail::SelectedVectorOps<T>;
+        return Vec3<T>(Ops::Max(left.Native_, right.Native_));
     }
 
     template <typename T>

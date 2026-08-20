@@ -131,6 +131,11 @@ and packaging checkpoints have passed hosted CI.
   eager matrix materialization introduced a regression: the isolated current
   and legacy operations now compile identically, and correctness-checked
   working-set measurements show current runtime at parity or slightly faster
+- Replaced `Vec3f` componentwise Min/Max scalar extraction with native-lane
+  selection while preserving the existing `std::min`/`std::max` NaN and
+  signed-zero behavior under both RTM and forced-scalar backends
+- Corrected the cross-library ray/AABB workload so Sony Vectormath uses its
+  full-precision division path rather than the approximate `_mm_rcp_ps` helper
 
 ## Accepted evidence
 
@@ -144,6 +149,11 @@ and packaging checkpoints have passed hosted CI.
 - The main cross-library capability ranking measures `mv::math`; direct
   `move::math` measurements are isolated in explicitly labeled migration
   executables.
+- Prepared semantic ray/AABB queries remain within approximately 0--4% of the
+  equivalent raw robust kernel. The previously large ranking gap was a raw
+  `Vec3f` Min/Max code-generation issue, not geometry-facade overhead; after
+  the fix the isolated kernel is five instructions above RTM, with the
+  difference preserving exceptional-value and fourth-lane contracts.
 - Hosted-runner timings are useful diagnostic artifacts but are not regression
   gates.
 

@@ -107,3 +107,13 @@ extern "C" MV_REPRESENTATION_NOINLINE void RepresentationRotateVector(
 {
     mv::math::Store(*output, mv::math::Rotate(*rotation, *vector));
 }
+
+extern "C" MV_REPRESENTATION_NOINLINE void RepresentationVec3MinMax(
+    const mv::math::Vec3f* left,
+    const mv::math::Vec3f* right,
+    mv::math::Vec3f* minimum,
+    mv::math::Vec3f* maximum) noexcept
+{
+    *minimum = mv::math::Min(*left, *right);
+    *maximum = mv::math::Max(*left, *right);
+}

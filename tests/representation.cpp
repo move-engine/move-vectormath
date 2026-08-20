@@ -108,6 +108,23 @@ namespace
         REQUIRE(NearlyEqual(Length(Vec3f(2.0F, 3.0F, 6.0F)), 7.0F));
         REQUIRE(Min(Vec3i(1, 5, 3), Vec3i(3, 2, 4)) == Vec3i(1, 2, 3));
         REQUIRE(Max(Vec3i(1, 5, 3), Vec3i(3, 2, 4)) == Vec3i(3, 5, 4));
+        const float quietNaN = std::numeric_limits<float>::quiet_NaN();
+        const Vec3f exceptionalLeft(quietNaN, -0.0F, 0.0F);
+        const Vec3f exceptionalRight(1.0F, 0.0F, -0.0F);
+        const Vec3f exceptionalMinimum = Min(exceptionalLeft, exceptionalRight);
+        const Vec3f exceptionalMaximum = Max(exceptionalLeft, exceptionalRight);
+        REQUIRE(std::isnan(exceptionalMinimum.X()));
+        REQUIRE(std::isnan(exceptionalMaximum.X()));
+        REQUIRE(std::signbit(exceptionalMinimum.Y()));
+        REQUIRE(std::signbit(exceptionalMaximum.Y()));
+        REQUIRE(!std::signbit(exceptionalMinimum.Z()));
+        REQUIRE(!std::signbit(exceptionalMaximum.Z()));
+        REQUIRE(
+            Min(Vec3f(1.0F, 2.0F, 3.0F), Vec3f(quietNaN, quietNaN, quietNaN)) ==
+            Vec3f(1.0F, 2.0F, 3.0F));
+        REQUIRE(
+            Max(Vec3f(1.0F, 2.0F, 3.0F), Vec3f(quietNaN, quietNaN, quietNaN)) ==
+            Vec3f(1.0F, 2.0F, 3.0F));
         REQUIRE(Clamp(Vec3i(-2, 8, 3), Vec3i(0, 1, 4), Vec3i(4, 6, 5)) ==
                 Vec3i(0, 6, 4));
         REQUIRE(Abs(Vec3i(-2, 8, -3)) == Vec3i(2, 8, 3));
