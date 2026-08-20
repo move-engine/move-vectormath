@@ -136,6 +136,9 @@ and packaging checkpoints have passed hosted CI.
   operand-order behavior under both RTM and forced-scalar backends
 - Corrected the cross-library ray/AABB workload so Sony Vectormath uses its
   full-precision division path rather than the approximate `_mm_rcp_ps` helper
+- Completed the legacy correctness-contract mapping, explicitly recorded
+  intentional removals, and migrated the dependency-free standalone smoke test
+  to the `mv::math` umbrella
 
 ## Accepted evidence
 
@@ -167,7 +170,6 @@ and packaging checkpoints have passed hosted CI.
   `Vec3f` ABI commitment
 - Controlled Phase B benchmark evidence on stable hardware; hosted reports
   remain diagnostic rather than regression gates
-- Audit the remaining legacy-only correctness contracts, explain or resolve
-  the remaining checked-boundary and ray/AABB performance differences, and
-  archive the temporary direct old/new migration evidence before beginning the
-  `mv.math` module wrapper
+- Migrate the example package, archive the explained temporary direct old/new
+  benchmark evidence, and remove the legacy headers and aliases before
+  beginning the `mv.math` module wrapper
