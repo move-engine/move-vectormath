@@ -18,15 +18,18 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: GCC
+          - name: GCC headers
             os: ubuntu-24.04
             toolchain: gcc
-          - name: Clang
+            modules: n
+          - name: Clang modules
             os: ubuntu-24.04
             toolchain: clang
-          - name: MSVC
+            modules: y
+          - name: MSVC modules
             os: windows-2022
             toolchain: msvc
+            modules: y
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     steps:
@@ -37,7 +40,7 @@ jobs:
       - name: Configure
         run: >
           xmake f -c --toolchain=${{ matrix.toolchain }}
-          --build_tests=y --build_modules=y -m release -y
+          --build_tests=y --build_modules=${{ matrix.modules }} -m release -y
       - name: Build
         run: xmake build
       - name: Test

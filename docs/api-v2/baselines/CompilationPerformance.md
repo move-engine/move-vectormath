@@ -42,6 +42,12 @@ not distribute compiler-specific BMI artifacts. Direct import, a downstream
 named module importing `mv.math`, RTM-backed behavior, and forced-scalar
 behavior all pass locally with GCC 16 and Clang 22.
 
+Hosted module CI requires Clang and MSVC. The Ubuntu 24.04 runner's default GCC
+14 build does not complete this module wrapper, so GCC 14 remains a required
+header consumer rather than an advertised named-module compiler. GCC module
+support is currently qualified at GCC 16 instead of obscuring that toolchain
+limit behind a permanently failing job.
+
 A 12-translation-unit fixture models game/graphics consumers using vectors,
 semantic values, rotations, rigid transforms, projections, geometry queries,
 and frustum culling. Measurements used Clang 22, XMake 3.1.0-dev, C++20,

@@ -119,14 +119,20 @@ active compiler and flags; installation publishes the module source and
 metadata, never a nonportable precompiled BMI. The headers remain the canonical
 implementation and an equal public consumption surface.
 
+The named module is continuously verified with Clang and MSVC and locally
+verified with GCC 16. GCC 14 remains supported through headers, but its
+experimental named-module implementation is not part of the module support
+contract.
+
 ## Verification
 
 The CMake suite exercises GCC, Clang, AppleClang, and MSVC; scalar and RTM
 backends; sanitizers; generated-code fixtures; shader transfer layouts; and a
 downstream consumer. XMake has independent RTM and forced-scalar header
-consumer tests plus direct and downstream named-module consumers. Runtime
-benchmarks live in the separate `vectormathbench` repository and are diagnostic
-rather than noisy hosted-runner regression gates.
+consumer tests plus direct and downstream named-module consumers on the
+supported module compilers. Runtime benchmarks live in the separate
+`vectormathbench` repository and are diagnostic rather than noisy hosted-runner
+regression gates.
 
 ## License
 
