@@ -31,8 +31,9 @@ The implementation lives under `packages/move/math/include/mv/math/`.
 | Bulk processing | contiguous and `StridedSpan` transform kernels |
 | Compatibility | trait-constrained `AsGpuBytes` |
 
-`experimental/RepresentationProof.hpp` contains benchmark-only alternatives.
-It is deliberately excluded from the `PhaseA.hpp` convenience header.
+`tests/support/RepresentationFixtures.hpp` contains test-only representation
+alternatives and is not part of the public include tree.
+It is deliberately excluded from the `Core.hpp` convenience header.
 
 ## Layout results
 
@@ -100,7 +101,7 @@ scalar configuration does not parse RTM at all. Clang 22 showed the same shape:
 0.74 seconds for raw RTM, 0.76 for `Vec3`, 0.78 for rotation, and 0.83 for the
 umbrella.
 
-These fixtures must remain focused; `PhaseA.hpp` is a convenience header, not
+These fixtures must remain focused; `Core.hpp` is a convenience header, not
 the expected include for a vector-only consumer.
 
 ## Preliminary runtime result

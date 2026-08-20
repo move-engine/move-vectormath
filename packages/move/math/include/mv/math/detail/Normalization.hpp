@@ -13,6 +13,17 @@ namespace mv::math::detail
     [[nodiscard]] inline std::optional<Vec3f> TryNormalizeVector(
         const Vec3f& value) noexcept
     {
+        // Use the direct RTM-style normalization path when the squared length
+        // is representable. RTM 2.3.1's vector_normalize3 implementation
+        // (MIT) uses this reciprocal-square-root form.
+        const float lengthSquared = LengthSquared(value);
+        if (lengthSquared > 0.0F && std::isfinite(lengthSquared))
+        {
+            return value * (1.0F / std::sqrt(lengthSquared));
+        }
+
+        // Blue's scaling is the fallback for finite vectors whose direct
+        // squared length underflows to zero or overflows to infinity.
         const float maximum = std::max(
             {std::abs(value.X()), std::abs(value.Y()), std::abs(value.Z())});
         if (!(maximum > 0.0F) || !std::isfinite(maximum))

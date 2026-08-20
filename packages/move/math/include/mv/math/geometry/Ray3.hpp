@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <optional>
 #include <type_traits>
 
 #include <mv/math/semantic/Direction3.hpp>
@@ -8,16 +9,21 @@
 
 namespace mv::math
 {
-    // Standard half-line origin + unit direction; invariant enforcement and
-    // semantic Point3f/Direction3f storage are Move-specific.
+    // Standard half-line with a finite origin and unit direction; invariant
+    // enforcement and semantic Point3f/Direction3f storage are Move-specific.
     class Ray3f
     {
     public:
         Ray3f() noexcept = default;
 
-        Ray3f(Point3f origin, Direction3f direction) noexcept :
-            Origin_(origin), Direction_(direction)
+        [[nodiscard]] static std::optional<Ray3f> TryFromOriginDirection(
+            Point3f origin, Direction3f direction) noexcept
         {
+            if (!IsFinitePoint(origin))
+            {
+                return std::nullopt;
+            }
+            return Ray3f(origin, direction, UncheckedTag{});
         }
 
         [[nodiscard]] const Point3f& Origin() const noexcept
@@ -37,12 +43,6 @@ namespace mv::math
             return Origin_ + Direction_.Vector() * distance;
         }
 
-        [[nodiscard]] bool IsFinite() const noexcept
-        {
-            return std::isfinite(Origin_.X()) && std::isfinite(Origin_.Y()) &&
-                   std::isfinite(Origin_.Z());
-        }
-
         [[nodiscard]] friend bool operator==(const Ray3f& left,
                                              const Ray3f& right) noexcept
         {
@@ -51,6 +51,21 @@ namespace mv::math
         }
 
     private:
+        struct UncheckedTag
+        {
+        };
+
+        Ray3f(Point3f origin, Direction3f direction, UncheckedTag) noexcept :
+            Origin_(origin), Direction_(direction)
+        {
+        }
+
+        [[nodiscard]] static bool IsFinitePoint(const Point3f& point) noexcept
+        {
+            return std::isfinite(point.X()) && std::isfinite(point.Y()) &&
+                   std::isfinite(point.Z());
+        }
+
         Point3f Origin_;
         Direction3f Direction_;
     };

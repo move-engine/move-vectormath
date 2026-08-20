@@ -21,11 +21,19 @@ Examples:
 ```cpp
 auto direction = Direction3f::TryFrom(input);
 auto rotation = Rotation3f::TryFrom(rawQuaternion);
+auto ray = Ray3f::TryFromOriginDirection(origin, Direction3f::AxisZ());
+auto triangle = Triangle3f::TryFromPoints(first, second, third);
 auto box = Aabb3f::TryFromMinMax(minimum, maximum);
 ```
 
 Factories reject NaN/infinity unless the type explicitly supports a canonical
 empty/infinite sentinel.
+
+Once a value has been produced, its public type carries that construction
+invariant. Hot queries do not repeatedly scan private storage for conditions
+that public construction has already established. Arbitrary external bytes
+must pass through the checked construction boundary before becoming an
+invariant geometry value.
 
 ## Normalization
 
@@ -114,7 +122,7 @@ paths. Release behavior cannot depend on assertions.
 
 Optional diagnostics provide:
 
-- `IsFinite`;
+- finite-component checks on unrestricted storage and ingestion values;
 - `IsValid` on invariant/geometry types;
 - invariant error measurements;
 - status-returning construction overloads for tools.
@@ -128,4 +136,3 @@ Cross-platform bitwise determinism is not implied by ordinary SIMD math.
 If deterministic math is added later, it should be an explicit policy/module
 with separate benchmarks and contracts rather than weakening or silently
 changing the default optimized path.
-

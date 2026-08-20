@@ -7,6 +7,10 @@
 namespace mv::math
 {
     template <typename T>
+        requires std::is_floating_point_v<T>
+    class Mat3;
+
+    template <typename T>
         requires std::is_arithmetic_v<T>
     class Vec3;
 
@@ -118,6 +122,9 @@ namespace mv::math
 
         friend T Dot<T>(const Vec3&, const Vec3&) noexcept;
         friend Vec3 Cross<T>(const Vec3&, const Vec3&) noexcept;
+        template <typename U>
+            requires std::is_floating_point_v<U>
+        friend class Mat3;
     };
 
     using Vec3f = Vec3<float>;

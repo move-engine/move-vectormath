@@ -1,12 +1,11 @@
 #include <cstddef>
 
-#include <mv/math/PhaseB.hpp>
+#include <mv/math/Transforms.hpp>
 
-extern "C" void mv_phase_b_transform_points(
-    const mv::math::Point3f* input,
-    mv::math::Point3f* output,
-    std::size_t count,
-    const mv::math::RigidTransform3f* transform)
+extern "C" void mv_transform_points(const mv::math::Point3f* input,
+                                    mv::math::Point3f* output,
+                                    std::size_t count,
+                                    const mv::math::RigidTransform3f* transform)
 {
     for (std::size_t index = 0; index < count; ++index)
     {
@@ -14,7 +13,7 @@ extern "C" void mv_phase_b_transform_points(
     }
 }
 
-extern "C" void mv_phase_b_transform_raw_points(
+extern "C" void mv_transform_raw_points(
     const mv::math::Vec3f* input,
     mv::math::Vec3f* output,
     std::size_t count,
@@ -27,7 +26,7 @@ extern "C" void mv_phase_b_transform_raw_points(
     }
 }
 
-extern "C" void mv_phase_b_transform_directions(
+extern "C" void mv_transform_directions(
     const mv::math::Direction3f* input,
     mv::math::Direction3f* output,
     std::size_t count,

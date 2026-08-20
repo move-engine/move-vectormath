@@ -1,3 +1,4 @@
+// GPU transfer-layout fixture for the public mv::math storage contracts.
 struct PositionRadius16 {
     Position: vec3<f32>,
     Radius: f32,

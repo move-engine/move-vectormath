@@ -31,14 +31,16 @@ and adds only the requested result data.
 
 ## Behavioral contracts
 
-- A ray stores a semantic point and normalized direction, so `PointAt(t)` uses
+- A ray is created through `TryFromOriginDirection`; its finite origin and
+  normalized direction are construction invariants, so `PointAt(t)` uses
   physical distance. It does not silently clamp a negative caller value.
 - Touching primitive boundaries count as intersection.
 - `StartsInside` means strictly inside. A ray beginning on a boundary reports
   a distance-zero boundary hit instead.
 - A parallel or coplanar ray has no unique ray/plane point hit.
-- Triangle back faces are included by default. `BackFaceMode::Cull` is
-  explicit.
+- Triangles are created through `TryFromPoints`, which rejects non-finite
+  vertices while retaining degenerate triangles as valid values.
+- Triangle back faces are included by default. `BackFaceMode::Cull` is explicit.
 - Triangle barycentric XYZ weights correspond to the first, second, and third
   vertices respectively. Degenerate triangles do not produce a hit.
 - Sphere and AABB ray intervals are clipped to the ray domain. A strictly
@@ -52,8 +54,17 @@ and adds only the requested result data.
 - Prepared rays treat components whose reciprocal exceeds the finite float
   range as parallel for representable-distance slab queries, avoiding
   zero-times-infinity NaNs on slab boundaries.
-- Non-finite construction data and query origins are rejected. No query
-  silently repairs invalid values.
+- Non-finite ray origins and triangle vertices are rejected at construction.
+  Queries rely on those type invariants instead of repeating component scans;
+  no query silently repairs invalid values.
+
+## Hot-query organization
+
+`Intersects(PreparedRay3f, Aabb3f)` has a predicate-only Williams slab kernel.
+The detailed `Intersect` path separately tracks entry/exit axes, signs, and
+inside state. This deliberate kernel split prevents boolean traversal from
+paying for detailed-hit bookkeeping while retaining one checked construction
+boundary.
 
 ## Layout
 
@@ -97,6 +108,22 @@ Warmed local GCC 16 focused-header measurements used C++20 and `-O2`:
 | Phase C umbrella | 0.82 s | 157.7 MiB | 91,902 |
 
 These are local directional measurements, not stable regression gates.
+
+The invariant/predicate-kernel follow-up used the separate nanobench suite at
+the 4,096-element working set. Hardware-counter results show that the former
+hotspots no longer contain semantic-facade overhead:
+
+| Query | Backend | Move instructions/op | Raw `Vec3f` instructions/op |
+| --- | --- | ---: | ---: |
+| prepared ray/AABB predicate | SSE4.2 | 62.28 | 59.28 |
+| prepared ray/AABB predicate | AVX2 | 53.92 | 51.92 |
+| ray/triangle predicate | SSE4.2 | 59.44 | 62.30 |
+| ray/triangle predicate | AVX2 | 48.59 | 49.30 |
+
+The remaining prepared ray/AABB difference is the canonical-empty AABB test:
+Move supports an empty value while the raw benchmark representation does not.
+Absolute timings were collected under a variable-frequency powersave governor;
+the instruction counts are the comparison evidence.
 
 ## Remaining Phase C work
 

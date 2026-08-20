@@ -8,8 +8,8 @@
 #include <type_traits>
 #include <vector>
 
-#include <mv/math/PhaseA.hpp>
-#include <mv/math/experimental/RepresentationProof.hpp>
+#include <mv/math/Math.hpp>
+#include "support/RepresentationFixtures.hpp"
 
 namespace
 {
@@ -39,8 +39,8 @@ namespace
         Require(result == Vec2f(8.0F, 12.0F));
         Require(NearlyEqual(Dot(a, b), 11.0F));
 
-        const experimental::AlignedVec2f16 alignedA(1.0F, 2.0F);
-        const experimental::AlignedVec2f16 alignedB(3.0F, 4.0F);
+        const test::AlignedVec2f16 alignedA(1.0F, 2.0F);
+        const test::AlignedVec2f16 alignedB(3.0F, 4.0F);
         const auto alignedResult = (alignedA + alignedB) * 2.0F;
         Require(NearlyEqual(alignedResult.X(), 8.0F));
         Require(NearlyEqual(alignedResult.Y(), 12.0F));
@@ -75,8 +75,8 @@ namespace
         Require(NearlyEqual(bytes[1], 13.0F));
         Require(NearlyEqual(bytes[2], 17.0F));
 
-        const experimental::NativeVec3f nativeA(1.0F, 2.0F, 3.0F);
-        const experimental::NativeVec3f nativeB(4.0F, 5.0F, 6.0F);
+        const test::NativeVec3f nativeA(1.0F, 2.0F, 3.0F);
+        const test::NativeVec3f nativeB(4.0F, 5.0F, 6.0F);
         const auto nativeResult = (nativeA + nativeB) * 2.0F;
         Require(NearlyEqual(nativeResult.X(), 10.0F));
         Require(NearlyEqual(nativeResult.Y(), 14.0F));

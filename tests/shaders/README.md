@@ -1,4 +1,4 @@
-# Phase A shader layout fixtures
+# GPU shader layout fixtures
 
 These fixtures mirror the C++ transfer types in
 `mv/math/gpu/ShaderLayouts.hpp`.

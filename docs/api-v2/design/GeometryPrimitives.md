@@ -27,7 +27,9 @@ Point3 PointAt(T t) const;
 
 A half-infinite ray with `Point3 Origin` and `Direction3 Direction`.
 Valid parameters satisfy `t >= 0`; because direction is unit length, `t` is
-physical distance.
+physical distance. `TryFromOriginDirection` rejects a non-finite origin once;
+the resulting `Ray3` type carries both the finite-origin and normalized-
+direction invariants into repeated queries.
 
 ### Segment3
 
@@ -65,6 +67,9 @@ projection, and flip.
 Three `Point3` vertices. It may be degenerate; operations that require area or
 a normal are fallible. It exposes edges, centroid, area, barycentric
 coordinates, support point, closest point, and winding-aware normal.
+
+`TryFromPoints` rejects non-finite vertices. Finite construction is a type
+invariant, while degeneracy remains valid data.
 
 Degeneracy is data, not necessarily construction failure, because imported
 meshes can contain degenerate triangles and queries need deterministic behavior.

@@ -15,7 +15,7 @@ struct Aabb3fSlots16
 StructuredBuffer<PositionRadius16> Positions : register(t0);
 StructuredBuffer<Aabb3fSlots16> Bounds : register(t1);
 
-cbuffer PhaseAConstants : register(b0)
+cbuffer MathConstants : register(b0)
 {
     float3 CameraPosition;
     float Exposure;

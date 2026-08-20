@@ -9,16 +9,22 @@
 
 namespace mv::math
 {
-    // Standard three-point triangle; degeneracy and optional-normal policy are
-    // Move-specific.
+    // Standard three-finite-point triangle; degeneracy and optional-normal
+    // policy are Move-specific.
     class Triangle3f
     {
     public:
         Triangle3f() noexcept = default;
 
-        Triangle3f(Point3f first, Point3f second, Point3f third) noexcept :
-            Vertices_{first, second, third}
+        [[nodiscard]] static std::optional<Triangle3f> TryFromPoints(
+            Point3f first, Point3f second, Point3f third) noexcept
         {
+            if (!IsFinitePoint(first) || !IsFinitePoint(second) ||
+                !IsFinitePoint(third))
+            {
+                return std::nullopt;
+            }
+            return Triangle3f(first, second, third, UncheckedTag{});
         }
 
         [[nodiscard]] const Point3f& First() const noexcept
@@ -73,12 +79,6 @@ namespace mv::math
             return Normal3f::TryFrom(Cross(Edge01(), Edge02()));
         }
 
-        [[nodiscard]] bool IsFinite() const noexcept
-        {
-            return IsFinitePoint(First()) && IsFinitePoint(Second()) &&
-                   IsFinitePoint(Third());
-        }
-
         [[nodiscard]] friend bool operator==(const Triangle3f& left,
                                              const Triangle3f& right) noexcept
         {
@@ -88,6 +88,18 @@ namespace mv::math
         }
 
     private:
+        struct UncheckedTag
+        {
+        };
+
+        Triangle3f(Point3f first,
+                   Point3f second,
+                   Point3f third,
+                   UncheckedTag) noexcept :
+            Vertices_{first, second, third}
+        {
+        }
+
         [[nodiscard]] static bool IsFinitePoint(const Point3f& point) noexcept
         {
             return std::isfinite(point.X()) && std::isfinite(point.Y()) &&

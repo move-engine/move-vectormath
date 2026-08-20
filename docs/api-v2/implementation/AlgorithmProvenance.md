@@ -132,6 +132,22 @@ branch conditions, conventions, and edge handling.
   semantic rotation type, and fixes composition meaning through tests rather
   than inheriting RTM's public types.
 
+### Core 3x3 matrix operations
+
+- **Coverage:** `Mat3.hpp` row-vector multiplication, transpose, determinant,
+  fallible inverse, and `Rotation3f` conversion.
+- **Classification:** elementary definitions plus source-validated independent
+  derivation.
+- **Sources:** `P-QUAT-SZELISKI` equation 22 for quaternion-to-matrix
+  conversion; `L-RTM-231` `matrix_mul`, `matrix_mul_vector3`,
+  `matrix_transpose`, `matrix_determinant`, `matrix_inverse`, and
+  `matrix_from_quat` for convention/result cross-checks.
+- **Differences:** Move exposes row/column access without backend types,
+  preserves the public `value * matrix` convention, transposes the published
+  quaternion equation for row vectors, and returns no value for a singular,
+  non-finite, or non-representable inverse instead of returning a matrix
+  containing non-finite components.
+
 ### Phase B rigid and affine transforms
 
 - **Coverage:** affine point/vector transforms and rigid transform composition,
@@ -201,7 +217,7 @@ branch conditions, conventions, and edge handling.
   clips entry to the ray domain, and returns entry/exit normals and strict
   `StartsInside`. Williams et al. rely more directly on IEEE infinities and
   precomputed reciprocal signs.
-- **Validation caveat:** `tests/phase_c.cpp::ReferenceRayAabb` is a separately
+- **Validation caveat:** `tests/geometry_queries.cpp::ReferenceRayAabb` is a separately
   written double-precision division implementation, but it remains the same
   slab algorithm and is not an algorithmically independent oracle.
 

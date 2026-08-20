@@ -187,3 +187,7 @@ queries should be introduced only when generated-code evidence shows a
 meaningful cost and their precondition cannot be expressed by an existing
 type. They use explicit names/tags and validation-build assertions.
 
+`Ray3` and `Triangle3` therefore validate arbitrary construction data through
+fallible factories, not on every query. This preserves a single public query
+tier: callers handling untrusted data pay at ingestion, while game-loop queries
+consume invariant-bearing values without an unchecked overload.

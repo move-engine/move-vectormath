@@ -38,127 +38,170 @@ option(MOVE_VECTORMATH_WARNINGS_AS_ERRORS
 option(MOVE_VECTORMATH_BUILD_TESTS "Build the complete Catch2 test suite" OFF)
 option(MOVE_VECTORMATH_BUILD_STANDALONE_TESTS
        "Build dependency-light public API and numerical contract tests" OFF)
-option(MOVE_VECTORMATH_BUILD_PHASE_A_TESTS
-       "Build API-v2 Phase A scalar and RTM architecture proof tests" OFF)
-option(MOVE_VECTORMATH_BUILD_PHASE_B_TESTS
-       "Build API-v2 Phase B semantic transform tests" OFF)
-option(MOVE_VECTORMATH_BUILD_PHASE_C_TESTS
-       "Build API-v2 Phase C geometry and query tests" OFF)
+option(MOVE_VECTORMATH_BUILD_REPRESENTATION_TESTS
+       "Build scalar and RTM core math and representation tests" OFF)
+option(MOVE_VECTORMATH_BUILD_SEMANTIC_TRANSFORM_TESTS
+       "Build semantic transform tests" OFF)
+option(MOVE_VECTORMATH_BUILD_GEOMETRY_QUERY_TESTS
+       "Build geometry and spatial query tests" OFF)
+option(MOVE_VECTORMATH_BUILD_MATRIX_TESTS
+       "Build general matrix tests" OFF)
 
 if(MOVE_VECTORMATH_BUILD_TESTS OR
    MOVE_VECTORMATH_BUILD_STANDALONE_TESTS OR
-   MOVE_VECTORMATH_BUILD_PHASE_A_TESTS OR
-   MOVE_VECTORMATH_BUILD_PHASE_B_TESTS OR
-   MOVE_VECTORMATH_BUILD_PHASE_C_TESTS)
+   MOVE_VECTORMATH_BUILD_REPRESENTATION_TESTS OR
+   MOVE_VECTORMATH_BUILD_SEMANTIC_TRANSFORM_TESTS OR
+   MOVE_VECTORMATH_BUILD_GEOMETRY_QUERY_TESTS OR
+   MOVE_VECTORMATH_BUILD_MATRIX_TESTS)
     enable_testing()
 endif()
 
-if(MOVE_VECTORMATH_BUILD_PHASE_C_TESTS)
-    add_executable(move-vectormath-phase-c-rtm-tests tests/phase_c.cpp)
-    target_link_libraries(move-vectormath-phase-c-rtm-tests
+if(MOVE_VECTORMATH_BUILD_MATRIX_TESTS)
+    add_executable(move-vectormath-matrix-rtm-tests tests/matrices.cpp)
+    target_link_libraries(move-vectormath-matrix-rtm-tests
                           PRIVATE move-vectormath)
-    move_vectormath_enable_strict_warnings(
-        move-vectormath-phase-c-rtm-tests)
-    add_test(NAME move-vectormath-phase-c-rtm
-             COMMAND move-vectormath-phase-c-rtm-tests)
+    move_vectormath_enable_strict_warnings(move-vectormath-matrix-rtm-tests)
+    add_test(NAME move-vectormath-matrix-rtm
+             COMMAND move-vectormath-matrix-rtm-tests)
 
-    add_executable(move-vectormath-phase-c-scalar-tests tests/phase_c.cpp)
-    target_link_libraries(move-vectormath-phase-c-scalar-tests
+    add_executable(move-vectormath-matrix-scalar-tests tests/matrices.cpp)
+    target_link_libraries(move-vectormath-matrix-scalar-tests
                           PRIVATE move-vectormath)
-    target_compile_definitions(move-vectormath-phase-c-scalar-tests
+    target_compile_definitions(move-vectormath-matrix-scalar-tests
+                               PRIVATE MV_MATH_FORCE_SCALAR=1)
+    move_vectormath_enable_strict_warnings(move-vectormath-matrix-scalar-tests)
+    add_test(NAME move-vectormath-matrix-scalar
+             COMMAND move-vectormath-matrix-scalar-tests)
+
+    add_library(move-vectormath-matrix-rtm-codegen OBJECT
+                tests/matrices_codegen.cpp)
+    target_link_libraries(move-vectormath-matrix-rtm-codegen
+                          PRIVATE move-vectormath)
+    move_vectormath_enable_strict_warnings(move-vectormath-matrix-rtm-codegen)
+
+    add_library(move-vectormath-matrix-scalar-codegen OBJECT
+                tests/matrices_codegen.cpp)
+    target_link_libraries(move-vectormath-matrix-scalar-codegen
+                          PRIVATE move-vectormath)
+    target_compile_definitions(move-vectormath-matrix-scalar-codegen
                                PRIVATE MV_MATH_FORCE_SCALAR=1)
     move_vectormath_enable_strict_warnings(
-        move-vectormath-phase-c-scalar-tests)
-    add_test(NAME move-vectormath-phase-c-scalar
-             COMMAND move-vectormath-phase-c-scalar-tests)
-
-    add_library(move-vectormath-phase-c-rtm-codegen OBJECT
-                tests/phase_c_codegen.cpp)
-    target_link_libraries(move-vectormath-phase-c-rtm-codegen
-                          PRIVATE move-vectormath)
-    move_vectormath_enable_strict_warnings(
-        move-vectormath-phase-c-rtm-codegen)
-
-    add_library(move-vectormath-phase-c-scalar-codegen OBJECT
-                tests/phase_c_codegen.cpp)
-    target_link_libraries(move-vectormath-phase-c-scalar-codegen
-                          PRIVATE move-vectormath)
-    target_compile_definitions(move-vectormath-phase-c-scalar-codegen
-                               PRIVATE MV_MATH_FORCE_SCALAR=1)
-    move_vectormath_enable_strict_warnings(
-        move-vectormath-phase-c-scalar-codegen)
+        move-vectormath-matrix-scalar-codegen)
 endif()
 
-if(MOVE_VECTORMATH_BUILD_PHASE_A_TESTS)
-    add_executable(move-vectormath-phase-a-rtm-tests tests/phase_a.cpp)
-    target_link_libraries(move-vectormath-phase-a-rtm-tests
+if(MOVE_VECTORMATH_BUILD_GEOMETRY_QUERY_TESTS)
+    add_executable(move-vectormath-geometry-query-rtm-tests
+                   tests/geometry_queries.cpp)
+    target_link_libraries(move-vectormath-geometry-query-rtm-tests
                           PRIVATE move-vectormath)
     move_vectormath_enable_strict_warnings(
-        move-vectormath-phase-a-rtm-tests)
-    add_test(NAME move-vectormath-phase-a-rtm
-             COMMAND move-vectormath-phase-a-rtm-tests)
+        move-vectormath-geometry-query-rtm-tests)
+    add_test(NAME move-vectormath-geometry-query-rtm
+             COMMAND move-vectormath-geometry-query-rtm-tests)
 
-    add_executable(move-vectormath-phase-a-scalar-tests tests/phase_a.cpp)
-    target_link_libraries(move-vectormath-phase-a-scalar-tests
+    add_executable(move-vectormath-geometry-query-scalar-tests
+                   tests/geometry_queries.cpp)
+    target_link_libraries(move-vectormath-geometry-query-scalar-tests
                           PRIVATE move-vectormath)
-    target_compile_definitions(move-vectormath-phase-a-scalar-tests
+    target_compile_definitions(move-vectormath-geometry-query-scalar-tests
                                PRIVATE MV_MATH_FORCE_SCALAR=1)
     move_vectormath_enable_strict_warnings(
-        move-vectormath-phase-a-scalar-tests)
-    add_test(NAME move-vectormath-phase-a-scalar
-             COMMAND move-vectormath-phase-a-scalar-tests)
+        move-vectormath-geometry-query-scalar-tests)
+    add_test(NAME move-vectormath-geometry-query-scalar
+             COMMAND move-vectormath-geometry-query-scalar-tests)
 
-    add_library(move-vectormath-phase-a-rtm-codegen OBJECT
-                tests/phase_a_codegen.cpp)
-    target_link_libraries(move-vectormath-phase-a-rtm-codegen
+    add_library(move-vectormath-geometry-query-rtm-codegen OBJECT
+                tests/geometry_queries_codegen.cpp)
+    target_link_libraries(move-vectormath-geometry-query-rtm-codegen
                           PRIVATE move-vectormath)
     move_vectormath_enable_strict_warnings(
-        move-vectormath-phase-a-rtm-codegen)
+        move-vectormath-geometry-query-rtm-codegen)
 
-    add_library(move-vectormath-phase-a-scalar-codegen OBJECT
-                tests/phase_a_codegen.cpp)
-    target_link_libraries(move-vectormath-phase-a-scalar-codegen
+    add_library(move-vectormath-geometry-query-scalar-codegen OBJECT
+                tests/geometry_queries_codegen.cpp)
+    target_link_libraries(move-vectormath-geometry-query-scalar-codegen
                           PRIVATE move-vectormath)
-    target_compile_definitions(move-vectormath-phase-a-scalar-codegen
+    target_compile_definitions(move-vectormath-geometry-query-scalar-codegen
                                PRIVATE MV_MATH_FORCE_SCALAR=1)
     move_vectormath_enable_strict_warnings(
-        move-vectormath-phase-a-scalar-codegen)
+        move-vectormath-geometry-query-scalar-codegen)
 endif()
 
-if(MOVE_VECTORMATH_BUILD_PHASE_B_TESTS)
-    add_executable(move-vectormath-phase-b-rtm-tests tests/phase_b.cpp)
-    target_link_libraries(move-vectormath-phase-b-rtm-tests
+if(MOVE_VECTORMATH_BUILD_REPRESENTATION_TESTS)
+    add_executable(move-vectormath-representation-rtm-tests
+                   tests/representation.cpp)
+    target_link_libraries(move-vectormath-representation-rtm-tests
                           PRIVATE move-vectormath)
     move_vectormath_enable_strict_warnings(
-        move-vectormath-phase-b-rtm-tests)
-    add_test(NAME move-vectormath-phase-b-rtm
-             COMMAND move-vectormath-phase-b-rtm-tests)
+        move-vectormath-representation-rtm-tests)
+    add_test(NAME move-vectormath-representation-rtm
+             COMMAND move-vectormath-representation-rtm-tests)
 
-    add_executable(move-vectormath-phase-b-scalar-tests tests/phase_b.cpp)
-    target_link_libraries(move-vectormath-phase-b-scalar-tests
+    add_executable(move-vectormath-representation-scalar-tests
+                   tests/representation.cpp)
+    target_link_libraries(move-vectormath-representation-scalar-tests
                           PRIVATE move-vectormath)
-    target_compile_definitions(move-vectormath-phase-b-scalar-tests
+    target_compile_definitions(move-vectormath-representation-scalar-tests
                                PRIVATE MV_MATH_FORCE_SCALAR=1)
     move_vectormath_enable_strict_warnings(
-        move-vectormath-phase-b-scalar-tests)
-    add_test(NAME move-vectormath-phase-b-scalar
-             COMMAND move-vectormath-phase-b-scalar-tests)
+        move-vectormath-representation-scalar-tests)
+    add_test(NAME move-vectormath-representation-scalar
+             COMMAND move-vectormath-representation-scalar-tests)
 
-    add_library(move-vectormath-phase-b-rtm-codegen OBJECT
-                tests/phase_b_codegen.cpp)
-    target_link_libraries(move-vectormath-phase-b-rtm-codegen
+    add_library(move-vectormath-representation-rtm-codegen OBJECT
+                tests/representation_codegen.cpp)
+    target_link_libraries(move-vectormath-representation-rtm-codegen
                           PRIVATE move-vectormath)
     move_vectormath_enable_strict_warnings(
-        move-vectormath-phase-b-rtm-codegen)
+        move-vectormath-representation-rtm-codegen)
 
-    add_library(move-vectormath-phase-b-scalar-codegen OBJECT
-                tests/phase_b_codegen.cpp)
-    target_link_libraries(move-vectormath-phase-b-scalar-codegen
+    add_library(move-vectormath-representation-scalar-codegen OBJECT
+                tests/representation_codegen.cpp)
+    target_link_libraries(move-vectormath-representation-scalar-codegen
                           PRIVATE move-vectormath)
-    target_compile_definitions(move-vectormath-phase-b-scalar-codegen
+    target_compile_definitions(move-vectormath-representation-scalar-codegen
                                PRIVATE MV_MATH_FORCE_SCALAR=1)
     move_vectormath_enable_strict_warnings(
-        move-vectormath-phase-b-scalar-codegen)
+        move-vectormath-representation-scalar-codegen)
+endif()
+
+if(MOVE_VECTORMATH_BUILD_SEMANTIC_TRANSFORM_TESTS)
+    add_executable(move-vectormath-semantic-transform-rtm-tests
+                   tests/semantic_transforms.cpp)
+    target_link_libraries(move-vectormath-semantic-transform-rtm-tests
+                          PRIVATE move-vectormath)
+    move_vectormath_enable_strict_warnings(
+        move-vectormath-semantic-transform-rtm-tests)
+    add_test(NAME move-vectormath-semantic-transform-rtm
+             COMMAND move-vectormath-semantic-transform-rtm-tests)
+
+    add_executable(move-vectormath-semantic-transform-scalar-tests
+                   tests/semantic_transforms.cpp)
+    target_link_libraries(move-vectormath-semantic-transform-scalar-tests
+                          PRIVATE move-vectormath)
+    target_compile_definitions(move-vectormath-semantic-transform-scalar-tests
+                               PRIVATE MV_MATH_FORCE_SCALAR=1)
+    move_vectormath_enable_strict_warnings(
+        move-vectormath-semantic-transform-scalar-tests)
+    add_test(NAME move-vectormath-semantic-transform-scalar
+             COMMAND move-vectormath-semantic-transform-scalar-tests)
+
+    add_library(move-vectormath-semantic-transform-rtm-codegen OBJECT
+                tests/semantic_transforms_codegen.cpp)
+    target_link_libraries(move-vectormath-semantic-transform-rtm-codegen
+                          PRIVATE move-vectormath)
+    move_vectormath_enable_strict_warnings(
+        move-vectormath-semantic-transform-rtm-codegen)
+
+    add_library(move-vectormath-semantic-transform-scalar-codegen OBJECT
+                tests/semantic_transforms_codegen.cpp)
+    target_link_libraries(move-vectormath-semantic-transform-scalar-codegen
+                          PRIVATE move-vectormath)
+    target_compile_definitions(
+        move-vectormath-semantic-transform-scalar-codegen
+        PRIVATE MV_MATH_FORCE_SCALAR=1)
+    move_vectormath_enable_strict_warnings(
+        move-vectormath-semantic-transform-scalar-codegen)
 endif()
 
 if(MOVE_VECTORMATH_BUILD_TESTS)

@@ -7,6 +7,8 @@
   direction and recommended first implementation authorization.
 - [`ProvenancePolicy.md`](ProvenancePolicy.md) defines the source-first
   acceptance gate for Codex-generated algorithms.
+- [`LegacyCutoverInventory.md`](LegacyCutoverInventory.md) is the capability,
+  performance, packaging, and documentation gate for deleting `move::math`.
 
 The plan intentionally places a review gate between design and core
 implementation.

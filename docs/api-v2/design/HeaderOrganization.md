@@ -89,7 +89,11 @@ packages/move/math/include/mv/math/
   serialization/
     Cereal.hpp
 
-  All.hpp
+  Core.hpp
+  Transforms.hpp
+  Geometry.hpp
+  Queries.hpp
+  Math.hpp
 ```
 
 Exact aggregation may be reduced after prototype compile measurements; the
@@ -142,11 +146,16 @@ not depend on them.
 
 ## Umbrella headers
 
-Provide:
+Provide stable capability-oriented entry points:
 
 - `Core.hpp`: scalars, angles, vectors, quaternion/rotation, matrices;
-- `Spatial.hpp`: semantic types, transforms, geometry, queries, culling;
-- `All.hpp`: every first-party math facility except third-party adapters.
+- `Transforms.hpp`: semantic spatial types and transforms;
+- `Geometry.hpp`: geometry primitives;
+- `Queries.hpp`: geometry primitives and spatial queries;
+- `Math.hpp`: every first-party math facility except third-party adapters.
+
+Development milestone names must never appear in the installed header tree.
+They belong in planning and implementation-history documents only.
 
 The smallest documented examples should include focused headers. Umbrella
 headers are convenience, not the benchmark baseline.
@@ -168,7 +177,7 @@ cover:
 - GPU transfer layouts;
 - contiguous and strided batch views;
 - each adapter;
-- `Core.hpp`, `Spatial.hpp`, and `All.hpp`.
+- `Core.hpp`, `Transforms.hpp`, `Geometry.hpp`, `Queries.hpp`, and `Math.hpp`.
 
 Track preprocessed lines and peak front-end memory in CI or a reproducible
 report target.

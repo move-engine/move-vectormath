@@ -1,5 +1,7 @@
 #version 450
 
+// GPU transfer-layout fixture for the public mv::math storage contracts.
+
 struct PositionRadius16
 {
     vec3 Position;

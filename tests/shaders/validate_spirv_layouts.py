@@ -122,7 +122,7 @@ def validate_common_layouts(layout: SpirvLayout) -> None:
 
 
 def validate_hlsl_constants(layout: SpirvLayout) -> None:
-    identifier = layout.id_for_name("PhaseAConstants")
+    identifier = layout.id_for_name("MathConstants")
     members = {
         member_name: member_index
         for (member_id, member_index), member_name in layout.member_names.items()
@@ -139,7 +139,7 @@ def validate_hlsl_constants(layout: SpirvLayout) -> None:
     }
     if actual_offsets != expected_offsets:
         raise AssertionError(
-            "PhaseAConstants offsets differ: "
+            "MathConstants offsets differ: "
             f"expected {expected_offsets}, found {actual_offsets}"
         )
     matrix_index = members["NormalMatrix"]
@@ -186,16 +186,16 @@ def main() -> int:
         arguments.glslang,
         arguments.spirv_val,
         arguments.spirv_dis,
-        arguments.source_dir / "phase_a_layouts.comp.glsl",
-        arguments.output_dir / "phase_a_layouts_glsl.spv",
+        arguments.source_dir / "gpu_layouts.comp.glsl",
+        arguments.output_dir / "gpu_layouts_glsl.spv",
         hlsl=False,
     )
     hlsl = compile_layout(
         arguments.glslang,
         arguments.spirv_val,
         arguments.spirv_dis,
-        arguments.source_dir / "phase_a_layouts.hlsl",
-        arguments.output_dir / "phase_a_layouts_hlsl.spv",
+        arguments.source_dir / "gpu_layouts.hlsl",
+        arguments.output_dir / "gpu_layouts_hlsl.spv",
         hlsl=True,
     )
 

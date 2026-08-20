@@ -25,6 +25,13 @@
   but C++ remains the primary CPU implementation and source of truth.
 - Slang implementation work is deferred until the initial Move 1.x CPU math
   surface is usable; it must not delay CPU geometry, queries, or culling.
+- The CPU library remains C++20-compatible. Runtime geometric invariants are
+  encoded by fallible construction and invariant-bearing value types rather
+  than depending on C++26 contracts.
+- Hot queries do not revalidate invariants already established by public
+  construction. Separate prepared types remain appropriate when they carry
+  cached computation, and predicate kernels may differ from detailed kernels
+  when generated-code evidence justifies the distinction.
 
 ## Approachability
 

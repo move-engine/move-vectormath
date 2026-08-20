@@ -6,6 +6,10 @@ namespace mv::math
 {
     template <typename T>
         requires std::is_floating_point_v<T>
+    class Mat3;
+
+    template <typename T>
+        requires std::is_floating_point_v<T>
     class alignas(sizeof(T) * 4U) Quat
     {
     public:
@@ -39,6 +43,10 @@ namespace mv::math
 
     private:
         T Components_[4];
+
+        template <typename U>
+            requires std::is_floating_point_v<U>
+        friend class Mat3;
     };
 
     using Quatf = Quat<float>;

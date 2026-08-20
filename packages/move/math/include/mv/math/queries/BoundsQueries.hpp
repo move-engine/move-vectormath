@@ -76,7 +76,7 @@ namespace mv::math
                                       const Aabb3f& box) noexcept
         {
             const Ray3f& ray = prepared.Ray();
-            if (!ray.IsFinite() || box.IsEmpty())
+            if (box.IsEmpty())
             {
                 return std::nullopt;
             }
@@ -152,6 +152,52 @@ namespace mv::math
                                        hasEntryAxis};
         }
 
+        // Predicate-only Williams et al. slab test (JGT 2005). Keeping this
+        // separate from the detailed solver avoids tracking hit axes, signs,
+        // and inside state when the caller only needs a boolean result.
+        [[nodiscard]] inline bool IntersectsPreparedAabbSlabs(
+            const PreparedRay3f& prepared, const Aabb3f& box) noexcept
+        {
+            if (box.IsEmpty())
+            {
+                return false;
+            }
+
+            const Ray3f& ray = prepared.Ray();
+            float entryDistance = 0.0F;
+            float exitDistance = std::numeric_limits<float>::infinity();
+            for (std::size_t axis = 0U; axis < 3U; ++axis)
+            {
+                const float origin = Component(ray.Origin(), axis);
+                const float minimum = Component(box.Minimum(), axis);
+                const float maximum = Component(box.Maximum(), axis);
+                if (prepared.IsParallel(axis))
+                {
+                    if (origin < minimum || origin > maximum)
+                    {
+                        return false;
+                    }
+                    continue;
+                }
+
+                const float reciprocal =
+                    Component(prepared.ReciprocalDirection(), axis);
+                float nearDistance = (minimum - origin) * reciprocal;
+                float farDistance = (maximum - origin) * reciprocal;
+                if (nearDistance > farDistance)
+                {
+                    std::swap(nearDistance, farDistance);
+                }
+                entryDistance = std::max(entryDistance, nearDistance);
+                exitDistance = std::min(exitDistance, farDistance);
+                if (entryDistance > exitDistance)
+                {
+                    return false;
+                }
+            }
+            return exitDistance >= 0.0F && std::isfinite(exitDistance);
+        }
+
         struct RaySphereSolution
         {
             float EntryDistance;
@@ -164,11 +210,6 @@ namespace mv::math
         [[nodiscard]] inline std::optional<RaySphereSolution>
         TryIntersectRaySphere(const Ray3f& ray, const Sphere3f& sphere) noexcept
         {
-            if (!ray.IsFinite())
-            {
-                return std::nullopt;
-            }
-
             const Point3f center = sphere.Center();
             const double mx = static_cast<double>(ray.Origin().X()) -
                               static_cast<double>(center.X());
@@ -268,7 +309,7 @@ namespace mv::math
     [[nodiscard]] inline bool Intersects(const PreparedRay3f& ray,
                                          const Aabb3f& box) noexcept
     {
-        return detail::TryIntersectPreparedAabbSlabs(ray, box).has_value();
+        return detail::IntersectsPreparedAabbSlabs(ray, box);
     }
 
     [[nodiscard]] inline bool Intersects(const Ray3f& ray,

@@ -1,5 +1,5 @@
 #include <move/vectormath.hpp>
-#include <mv/math/PhaseC.hpp>
+#include <mv/math/Math.hpp>
 
 int main()
 {
@@ -34,7 +34,7 @@ int main()
         return 1;
     }
 
-    const mv::math::Ray3f ray(mv::math::Point3f(-3.0F, 0.0F, 0.0F),
-                              mv::math::Direction3f::AxisX());
-    return mv::math::Intersects(ray, *bounds) ? 0 : 1;
+    const auto ray = mv::math::Ray3f::TryFromOriginDirection(
+        mv::math::Point3f(-3.0F, 0.0F, 0.0F), mv::math::Direction3f::AxisX());
+    return ray && mv::math::Intersects(*ray, *bounds) ? 0 : 1;
 }

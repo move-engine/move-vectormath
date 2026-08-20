@@ -1,15 +1,15 @@
 #include <cstddef>
 
-#include <mv/math/PhaseA.hpp>
-#include <mv/math/experimental/RepresentationProof.hpp>
+#include <mv/math/Math.hpp>
+#include "support/RepresentationFixtures.hpp"
 
 #if defined(_MSC_VER)
-#define MV_PHASE_A_NOINLINE __declspec(noinline)
+#define MV_REPRESENTATION_NOINLINE __declspec(noinline)
 #else
-#define MV_PHASE_A_NOINLINE __attribute__((noinline))
+#define MV_REPRESENTATION_NOINLINE __attribute__((noinline))
 #endif
 
-extern "C" MV_PHASE_A_NOINLINE void PhaseAPublicVec3Chain(
+extern "C" MV_REPRESENTATION_NOINLINE void RepresentationPublicVec3Chain(
     const mv::math::PackedVec3f* left,
     const mv::math::PackedVec3f* right,
     mv::math::PackedVec3f* output,
@@ -25,14 +25,14 @@ extern "C" MV_PHASE_A_NOINLINE void PhaseAPublicVec3Chain(
     }
 }
 
-extern "C" MV_PHASE_A_NOINLINE void PhaseAFixedStorageVec3Chain(
+extern "C" MV_REPRESENTATION_NOINLINE void RepresentationFixedStorageVec3Chain(
     const mv::math::PackedVec3f* left,
     const mv::math::PackedVec3f* right,
     mv::math::PackedVec3f* output,
     std::size_t count,
     float scale) noexcept
 {
-    using mv::math::experimental::FixedStorageVec3f;
+    using mv::math::test::FixedStorageVec3f;
 
     for (std::size_t index = 0; index < count; ++index)
     {
@@ -45,14 +45,14 @@ extern "C" MV_PHASE_A_NOINLINE void PhaseAFixedStorageVec3Chain(
     }
 }
 
-extern "C" MV_PHASE_A_NOINLINE void PhaseANativeVec3Chain(
+extern "C" MV_REPRESENTATION_NOINLINE void RepresentationNativeVec3Chain(
     const mv::math::PackedVec3f* left,
     const mv::math::PackedVec3f* right,
     mv::math::PackedVec3f* output,
     std::size_t count,
     float scale) noexcept
 {
-    using mv::math::experimental::NativeVec3f;
+    using mv::math::test::NativeVec3f;
 
     for (std::size_t index = 0; index < count; ++index)
     {
@@ -65,7 +65,7 @@ extern "C" MV_PHASE_A_NOINLINE void PhaseANativeVec3Chain(
     }
 }
 
-extern "C" MV_PHASE_A_NOINLINE void PhaseATransformPackedToGpu(
+extern "C" MV_REPRESENTATION_NOINLINE void RepresentationTransformPackedToGpu(
     const mv::math::PackedVec3f* input,
     mv::math::gpu::Float3Slot16* output,
     std::size_t count,
@@ -76,7 +76,7 @@ extern "C" MV_PHASE_A_NOINLINE void PhaseATransformPackedToGpu(
         std::span<mv::math::gpu::Float3Slot16>(output, count));
 }
 
-extern "C" MV_PHASE_A_NOINLINE void PhaseACompactVec2Chain(
+extern "C" MV_REPRESENTATION_NOINLINE void RepresentationCompactVec2Chain(
     mv::math::Vec2f* values,
     std::size_t count,
     mv::math::Vec2f increment,
@@ -88,10 +88,10 @@ extern "C" MV_PHASE_A_NOINLINE void PhaseACompactVec2Chain(
     }
 }
 
-extern "C" MV_PHASE_A_NOINLINE void PhaseAAlignedVec2Chain(
-    mv::math::experimental::AlignedVec2f16* values,
+extern "C" MV_REPRESENTATION_NOINLINE void RepresentationAlignedVec2Chain(
+    mv::math::test::AlignedVec2f16* values,
     std::size_t count,
-    mv::math::experimental::AlignedVec2f16 increment,
+    mv::math::test::AlignedVec2f16 increment,
     float scale) noexcept
 {
     for (std::size_t index = 0; index < count; ++index)
@@ -100,7 +100,7 @@ extern "C" MV_PHASE_A_NOINLINE void PhaseAAlignedVec2Chain(
     }
 }
 
-extern "C" MV_PHASE_A_NOINLINE void PhaseARotateVector(
+extern "C" MV_REPRESENTATION_NOINLINE void RepresentationRotateVector(
     const mv::math::Rotation3f* rotation,
     const mv::math::Vec3f* vector,
     mv::math::PackedVec3f* output) noexcept

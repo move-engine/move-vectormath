@@ -4,7 +4,7 @@
 
 #include <mv/math/detail/VectorOps.hpp>
 
-namespace mv::math::experimental
+namespace mv::math::test
 {
     class alignas(16) FixedStorageVec3f
     {
@@ -162,17 +162,14 @@ namespace mv::math::experimental
 
         float Components_[4]{};
     };
-}  // namespace mv::math::experimental
+}  // namespace mv::math::test
 
-static_assert(sizeof(mv::math::experimental::NativeVec3f) == 16);
-static_assert(alignof(mv::math::experimental::NativeVec3f) == 16);
-static_assert(
-    std::is_trivially_copyable_v<mv::math::experimental::NativeVec3f>);
-static_assert(sizeof(mv::math::experimental::FixedStorageVec3f) == 16);
-static_assert(alignof(mv::math::experimental::FixedStorageVec3f) == 16);
-static_assert(
-    std::is_trivially_copyable_v<mv::math::experimental::FixedStorageVec3f>);
-static_assert(sizeof(mv::math::experimental::AlignedVec2f16) == 16);
-static_assert(alignof(mv::math::experimental::AlignedVec2f16) == 16);
-static_assert(
-    std::is_trivially_copyable_v<mv::math::experimental::AlignedVec2f16>);
+static_assert(sizeof(mv::math::test::NativeVec3f) == 16);
+static_assert(alignof(mv::math::test::NativeVec3f) == 16);
+static_assert(std::is_trivially_copyable_v<mv::math::test::NativeVec3f>);
+static_assert(sizeof(mv::math::test::FixedStorageVec3f) == 16);
+static_assert(alignof(mv::math::test::FixedStorageVec3f) == 16);
+static_assert(std::is_trivially_copyable_v<mv::math::test::FixedStorageVec3f>);
+static_assert(sizeof(mv::math::test::AlignedVec2f16) == 16);
+static_assert(alignof(mv::math::test::AlignedVec2f16) == 16);
+static_assert(std::is_trivially_copyable_v<mv::math::test::AlignedVec2f16>);

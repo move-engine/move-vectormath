@@ -39,7 +39,7 @@ namespace mv::math
                              float parallelTolerance) noexcept
         {
             const float tolerance = std::abs(parallelTolerance);
-            if (!ray.IsFinite() || !std::isfinite(tolerance))
+            if (!std::isfinite(tolerance))
             {
                 return std::nullopt;
             }
@@ -71,15 +71,14 @@ namespace mv::math
 
         // Moller-Trumbore ray/triangle test (JGT 1997,
         // doi:10.1080/10867651.1997.10487468); Move adds explicit culling,
-        // finite-input, tolerance, and boundary policy.
+        // finite-construction, tolerance, and boundary policy.
         [[nodiscard]] inline std::optional<RayTriangleSolution>
         TryIntersectRayTriangle(const Ray3f& ray,
                                 const Triangle3f& triangle,
                                 RayTriangleOptions options) noexcept
         {
             const float tolerance = std::abs(options.ParallelTolerance);
-            if (!ray.IsFinite() || !triangle.IsFinite() ||
-                !std::isfinite(tolerance))
+            if (!std::isfinite(tolerance))
             {
                 return std::nullopt;
             }
