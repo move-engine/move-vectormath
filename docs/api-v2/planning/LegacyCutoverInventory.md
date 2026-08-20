@@ -28,7 +28,7 @@ construction costs are measured separately from prevalidated hot paths.
 | Integral vectors | Ready | Fixed-width aliases and arithmetic-domain constraints are published and correctness-tested. |
 | Dot, cross, squared length | Ready | Consistent 2D/3D/4D coverage and distance helpers exist. |
 | Length, distance, normalization | Ready | Floating-point vector metrics and scaling-safe invariant-bearing normalization exist. |
-| Interpolation, clamp, reflect/refract, angle helpers | Ready | Practical scalar/vector interpolation, smoothing, clamp, reflect, refraction, and typed angles exist; native-lane Vec3 Min/Max preserves scalar exceptional-value semantics, and further helpers remain workload-driven. |
+| Interpolation, clamp, reflect/refract, angle helpers | Ready | Practical scalar/vector interpolation, smoothing, clamp, reflect, refraction, and typed angles exist; native-lane Vec3 Min/Max preserves scalar NaN operand-order semantics, and further helpers remain workload-driven. |
 | Scalar helpers and constants | Ready | Move-specific PascalCase helpers and C++20 constants exist; standard-library operations are documented rather than redundantly wrapped. |
 | Packed vectors and explicit load/store | Ready | Keep layout tests and batch conversion benchmarks. |
 

@@ -132,8 +132,8 @@ and packaging checkpoints have passed hosted CI.
   and legacy operations now compile identically, and correctness-checked
   working-set measurements show current runtime at parity or slightly faster
 - Replaced `Vec3f` componentwise Min/Max scalar extraction with native-lane
-  selection while preserving the existing `std::min`/`std::max` NaN and
-  signed-zero behavior under both RTM and forced-scalar backends
+  selection while preserving the existing `std::min`/`std::max` NaN
+  operand-order behavior under both RTM and forced-scalar backends
 - Corrected the cross-library ray/AABB workload so Sony Vectormath uses its
   full-precision division path rather than the approximate `_mm_rcp_ps` helper
 

@@ -337,8 +337,8 @@ namespace mv::math::detail
 
         [[nodiscard]] static Native Min(Native left, Native right) noexcept
         {
-            // The comparison order reproduces std::min exactly, including
-            // NaN and signed-zero behavior, using RTM 2.3.1's MIT-licensed
+            // The comparison order reproduces std::min's NaN operand-order
+            // behavior using RTM 2.3.1's MIT-licensed
             // primitives (commit 745bd25673d93b46941eda55e0993327dbc12b53b).
 #if defined(__SSE4_1__) && !defined(__AVX__)
             // Intel's SSE4.1 blend intrinsic expresses the same selection in
@@ -352,8 +352,8 @@ namespace mv::math::detail
 
         [[nodiscard]] static Native Max(Native left, Native right) noexcept
         {
-            // The comparison order reproduces std::max under the same rules
-            // and uses the same RTM source revision as Min.
+            // The comparison order reproduces std::max's NaN operand-order
+            // behavior and uses the same RTM source revision as Min.
 #if defined(__SSE4_1__) && !defined(__AVX__)
             return _mm_blendv_ps(left, right, _mm_cmplt_ps(left, right));
 #else
