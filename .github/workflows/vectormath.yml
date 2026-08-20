@@ -217,6 +217,7 @@ jobs:
             tests/consumer/main.cpp \
             tests/representation.cpp \
             tests/representation_codegen.cpp \
+            tests/scalar.cpp \
             tests/semantic_transforms.cpp \
             tests/semantic_transforms_codegen.cpp \
             tests/geometry_queries.cpp \

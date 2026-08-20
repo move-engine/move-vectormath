@@ -119,6 +119,9 @@ and packaging checkpoints have passed hosted CI.
 - Migrated the current matrix, geometry/query, culling/graphics,
   representation, and semantic-transform behavior suites to Catch2 while
   retaining separate RTM and forced-scalar execution
+- Added C++20-backed PascalCase constants, saturation, fallible overflow-safe
+  inverse lerp, and explicitly clamped smoothing helpers while documenting
+  standard-library guidance for ordinary scalar math
 
 ## Accepted evidence
 

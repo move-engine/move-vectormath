@@ -6,6 +6,7 @@ This directory contains the proposed public surface and its rationale:
 - [`Approachability.md`](Approachability.md)
 - [`BackendArchitecture.md`](BackendArchitecture.md)
 - [`CoreTypes.md`](CoreTypes.md)
+- [`ScalarUtilities.md`](ScalarUtilities.md)
 - [`DataLayoutAndGpuInterop.md`](DataLayoutAndGpuInterop.md)
 - [`SlangCompanion.md`](SlangCompanion.md)
 - [`SemanticTypes.md`](SemanticTypes.md)

@@ -171,7 +171,7 @@ endif()
 
 if(MOVE_VECTORMATH_BUILD_REPRESENTATION_TESTS)
     add_executable(move-vectormath-representation-rtm-tests
-                   tests/representation.cpp)
+                   tests/representation.cpp tests/scalar.cpp)
     target_link_libraries(move-vectormath-representation-rtm-tests
                           PRIVATE move-vectormath Catch2::Catch2WithMain)
     move_vectormath_enable_strict_warnings(
@@ -180,7 +180,7 @@ if(MOVE_VECTORMATH_BUILD_REPRESENTATION_TESTS)
                          TEST_PREFIX "RTM: ")
 
     add_executable(move-vectormath-representation-scalar-tests
-                   tests/representation.cpp)
+                   tests/representation.cpp tests/scalar.cpp)
     target_link_libraries(move-vectormath-representation-scalar-tests
                           PRIVATE move-vectormath Catch2::Catch2WithMain)
     target_compile_definitions(move-vectormath-representation-scalar-tests

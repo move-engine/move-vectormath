@@ -2,6 +2,8 @@
 
 #include <type_traits>
 
+#include <mv/math/Constants.hpp>
+
 namespace mv::math
 {
     template <typename T>
@@ -54,17 +56,13 @@ namespace mv::math
     template <typename T>
     [[nodiscard]] constexpr Radians<T> ToRadians(Degrees<T> value) noexcept
     {
-        return Radians<T>(
-            value.Value() *
-            static_cast<T>(3.14159265358979323846264338327950288L / 180.0L));
+        return Radians<T>(value.Value() * (Pi<T> / T(180)));
     }
 
     template <typename T>
     [[nodiscard]] constexpr Degrees<T> ToDegrees(Radians<T> value) noexcept
     {
-        return Degrees<T>(
-            value.Value() *
-            static_cast<T>(180.0L / 3.14159265358979323846264338327950288L));
+        return Degrees<T>(value.Value() * (T(180) / Pi<T>));
     }
 
     namespace literals

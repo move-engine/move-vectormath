@@ -7,6 +7,7 @@ packages/move/math/include/mv/math/
   Config.hpp
   Concepts.hpp
   Constants.hpp
+  Scalar.hpp
   Tolerance.hpp
   Angles.hpp
   Vec2.hpp
@@ -126,7 +127,7 @@ not include scalar and RTM implementations simultaneously.
 ## Dependency direction
 
 ```text
-Config/Concepts/Constants
+Config/Concepts/Constants/Scalar
           ↓
 Vec/Angles/Quat/Mat
           ↓
