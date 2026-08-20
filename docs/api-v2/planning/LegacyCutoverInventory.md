@@ -1,6 +1,7 @@
-# Legacy-to-`mv::math` cutover inventory
+# Completed legacy-to-`mv::math` cutover inventory
 
-This inventory is the deletion gate for the public `move::math` header tree.
+This inventory records the deletion gate for the former public `move::math`
+header tree. The gate was completed and the tree was removed during Phase C.
 It records capabilities, not spelling-compatible aliases: the replacement API
 may deliberately change contracts, but Move 1.x must not silently lose required
 game and graphics functionality.
@@ -64,13 +65,13 @@ construction costs are measured separately from prevalidated hot paths.
 | --- | --- | --- |
 | Capability-oriented headers | Ready | Keep focused headers as the implementation source of truth. |
 | `Math.hpp` umbrella | Ready | Track focused and umbrella compilation cost. |
-| CMake consumption | Ready | `mv::math` is canonical for new consumers; remove transitional legacy aliases at final cutover. |
+| CMake consumption | Ready | `mv::math` is the sole namespaced target; transitional legacy aliases are removed. |
 | XMake header consumption | Ready | The upstream XMake target installs headers, pins RTM 2.3.1, and tests RTM/scalar consumers. |
 | `mv.math` C++20 module | Missing | Deliberately scheduled after legacy tests and cross-library benchmarks migrate (item 7); headers remain the source of truth. |
 | User documentation | Ready | README and conventions teach the current namespace, semantic contracts, focused headers, and CMake/XMake usage. |
 | Legacy test migration | Ready | `LegacyContractAudit.md` maps replacement coverage and intentional removals; the dependency-free standalone smoke test now consumes only `mv::math`. |
 | Example package migration | Ready | Transform, camera, character-controller, and ray-tracer examples use only `mv::math`; CI builds the ray tracer and runs their dependency-free smoke test. |
-| Cross-library benchmark migration | Partial | The main ranking suite now measures `mv::math` and has no legacy dependency; temporary direct old/new migration executables remain until their evidence is archived and the remaining differences are explained. |
+| Cross-library benchmark migration | Ready | The main ranking suite measures `mv::math`; direct old/new evidence is archived and the live repository has no legacy dependency. |
 
 ## Intentionally removed legacy design
 
@@ -83,17 +84,21 @@ construction costs are measured separately from prevalidated hot paths.
 - Direct extensions in the third-party `rtm` namespace.
 - Disabled or prototype artifacts in the installed include tree.
 
-## Deletion gate
+## Completed deletion gate
 
-Delete `packages/move/math/include/move/` only when:
+The removed `packages/move/math/include/move/` tree satisfied all of these
+conditions:
 
 1. required **Missing** items have replacements or an explicit removal
    decision;
 2. legacy tests have equivalent replacement-contract coverage;
 3. direct old/new runtime benchmarks have no unexplained regression;
-4. focused-header, umbrella-header, and module compile-time measurements meet
-   their acceptance criteria;
+4. focused-header and umbrella-header compile-time measurements meet their
+   acceptance criteria (the module wrapper is deliberately post-cutover);
 5. README, conventions, CMake/XMake consumers, and Move integration use the
    replacement surface; and
 6. the benchmark repository no longer requires the live legacy implementation
    (historical results may remain archived).
+
+Strict GCC and Clang sanitizer builds, RTM and forced-scalar correctness suites,
+CMake and XMake consumers, and example applications all passed after deletion.

@@ -1,3 +1,9 @@
 # move/math
 
-This is a C++ library package for Move.  You can add whatever you want to the include and src dirs, and they will be compiled into a library and linked into any dependents.
+This package provides Move's C++20 game and graphics math API in `mv::math`.
+Include `<mv/math/Math.hpp>` for the full surface or use the focused headers for
+vectors, transforms, geometry, queries, culling, graphics, and GPU layouts.
+
+The CMake consumer target is `mv::math`. The implementation is header-only and
+uses RTM 2.3.1 when SIMD is available, with a portable scalar backend selected
+by `MV_MATH_FORCE_SCALAR=1`.

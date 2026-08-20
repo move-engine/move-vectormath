@@ -241,7 +241,9 @@ The root configuration now:
 - Enables C++.
 - Requires C++20 through the interface target.
 - Provides `MOVE_VECTORMATH_BUILD_STANDALONE_TESTS`.
-- Provides `MOVE_VECTORMATH_BUILD_TESTS` for the complete Catch2 suite.
+- Originally provided `MOVE_VECTORMATH_BUILD_TESTS` for the legacy Catch2
+  suite; that target was retired after its contracts migrated to the focused
+  RTM/scalar current-API suites.
 - Builds a public-API and numerical-contract executable when that option is on.
 - Enables `-Wall -Wextra -Wconversion` for GCC/Clang and `/W4` for MSVC on that
   target.

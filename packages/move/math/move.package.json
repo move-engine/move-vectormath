@@ -1,8 +1,7 @@
 {
   "Name": "move/math",
   "Aliases": [
-    "move::math",
-    "move-math"
+    "mv::math"
   ],
   "Description": "Header-only vector, matrix, and quaternion math",
   "Version": "0.2.0",

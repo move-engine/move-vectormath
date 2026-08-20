@@ -8,6 +8,8 @@ practical vector parity, complete transform conversion and TRS facilities,
 `Mat4<T>`, OBBs, frustum culling, and explicit projection/view/viewport
 operations. The generic-math, graphics-matrix, transform, culling, graphics,
 and packaging checkpoints have passed hosted CI.
+The legacy `move::math` implementation and compatibility aliases have been
+removed; `mv::math` is the sole public C++ API.
 
 ## Completed
 
@@ -142,6 +144,11 @@ and packaging checkpoints have passed hosted CI.
 - Migrated the transform, camera, character-controller, and ray-tracer examples
   to explicit `mv::math` failure and semantic-type contracts; normal CI now
   builds the application and runs an example smoke test
+- Archived the direct old/new benchmark evidence, removed the benchmark
+  repository's live legacy dependency, and deleted the legacy headers, tests,
+  disabled artifacts, and compatibility target aliases
+- Verified the legacy-free tree with strict GCC, Clang ASan/UBSan, RTM and
+  forced-scalar behavior suites, CMake and XMake consumers, and example builds
 
 ## Accepted evidence
 
@@ -152,9 +159,8 @@ and packaging checkpoints have passed hosted CI.
 - Compact storage, compute-resident values, and explicit GPU transfer layouts
   remain separate first-class representations.
 - Focused headers keep the facade's incremental compile cost small.
-- The main cross-library capability ranking measures `mv::math`; direct
-  `move::math` measurements are isolated in explicitly labeled migration
-  executables.
+- The main cross-library capability ranking measures `mv::math`; terminal
+  direct old/new evidence is archived outside the live benchmark executables.
 - Prepared semantic ray/AABB queries remain within approximately 0--4% of the
   equivalent raw robust kernel. The previously large ranking gap was a raw
   `Vec3f` Min/Max code-generation issue, not geometry-facade overhead; after
@@ -173,5 +179,5 @@ and packaging checkpoints have passed hosted CI.
   `Vec3f` ABI commitment
 - Controlled Phase B benchmark evidence on stable hardware; hosted reports
   remain diagnostic rather than regression gates
-- Archive the explained temporary direct old/new benchmark evidence and remove
-  the legacy headers and aliases before beginning the `mv.math` module wrapper
+- Implement and measure the post-cutover `mv.math` C++20 module wrapper while
+  retaining the focused headers as the implementation source of truth

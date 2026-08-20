@@ -28,13 +28,13 @@ source-compatible spellings. Move 1.x has no legacy-compatibility requirement.
 | Quaternion logarithm and exponential | No Move 1.x workload currently requires them. They remain workload-driven future general-quaternion operations rather than blocking the cutover. |
 | Broad arbitrary swizzles | The retained named swizzles cover demonstrated use without multiplying template instantiations and compile cost. More are workload-driven. |
 
-## Remaining deletion blockers
+## Deletion result
 
-1. Archive the temporary direct old/new benchmark evidence, then remove the
-   benchmark repository's live dependency on legacy headers.
-2. Remove legacy-only test targets, headers, and CMake aliases together, then
-   validate strict GCC/Clang, forced-scalar, sanitizer, CMake consumer, XMake
-   consumer, and hosted CI jobs.
+The direct old/new benchmark evidence is archived, and the live benchmark
+repository has no legacy dependency. The legacy-only tests, installed headers,
+and compatibility aliases were removed together. Strict GCC, Clang ASan/UBSan,
+RTM, forced-scalar, CMake consumer, XMake consumer, and example checks passed
+locally; the hosted compiler/OS matrix is the final publication check.
 
 The C++20 module wrapper remains intentionally sequenced after these deletion
 steps so headers are the sole implementation source of truth.

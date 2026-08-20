@@ -35,7 +35,6 @@ endfunction()
 
 option(MOVE_VECTORMATH_WARNINGS_AS_ERRORS
        "Treat warnings in vectormath-owned test targets as errors" OFF)
-option(MOVE_VECTORMATH_BUILD_TESTS "Build the complete Catch2 test suite" OFF)
 option(MOVE_VECTORMATH_BUILD_STANDALONE_TESTS
        "Build dependency-light public API and numerical contract tests" OFF)
 option(MOVE_VECTORMATH_BUILD_REPRESENTATION_TESTS
@@ -49,8 +48,7 @@ option(MOVE_VECTORMATH_BUILD_MATRIX_TESTS
 option(MOVE_VECTORMATH_BUILD_EXAMPLES
        "Build current API examples and their smoke test" OFF)
 
-if(MOVE_VECTORMATH_BUILD_TESTS OR
-   MOVE_VECTORMATH_BUILD_STANDALONE_TESTS OR
+if(MOVE_VECTORMATH_BUILD_STANDALONE_TESTS OR
    MOVE_VECTORMATH_BUILD_REPRESENTATION_TESTS OR
    MOVE_VECTORMATH_BUILD_SEMANTIC_TRANSFORM_TESTS OR
    MOVE_VECTORMATH_BUILD_GEOMETRY_QUERY_TESTS OR
@@ -71,8 +69,7 @@ if(MOVE_VECTORMATH_BUILD_EXAMPLES)
     add_test(NAME move-vectormath-examples COMMAND move-vectormath-example-tests)
 endif()
 
-if(MOVE_VECTORMATH_BUILD_TESTS OR
-   MOVE_VECTORMATH_BUILD_REPRESENTATION_TESTS OR
+if(MOVE_VECTORMATH_BUILD_REPRESENTATION_TESTS OR
    MOVE_VECTORMATH_BUILD_SEMANTIC_TRANSFORM_TESTS OR
    MOVE_VECTORMATH_BUILD_GEOMETRY_QUERY_TESTS OR
    MOVE_VECTORMATH_BUILD_MATRIX_TESTS)
@@ -261,30 +258,6 @@ if(MOVE_VECTORMATH_BUILD_SEMANTIC_TRANSFORM_TESTS)
         move-vectormath-semantic-transform-scalar-codegen)
 endif()
 
-if(MOVE_VECTORMATH_BUILD_TESTS)
-    add_executable(
-        move-vectormath-tests
-        packages/move/math/tests/mat3x3.cpp
-        packages/move/math/tests/mat4x4.cpp
-        packages/move/math/tests/quat.cpp
-        packages/move/math/tests/smoke.cpp
-        packages/move/math/tests/vec2.cpp
-        packages/move/math/tests/vec3.cpp
-        packages/move/math/tests/vec4.cpp
-    )
-    target_link_libraries(move-vectormath-tests
-                          PRIVATE move-vectormath Catch2::Catch2WithMain)
-    move_vectormath_enable_strict_warnings(move-vectormath-tests)
-    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
-        # Catch2's assertion decomposition compares test literals inside its
-        # own templates. The standalone target still checks the public API
-        # with -Wconversion; suppress the third-party expansion noise here.
-        target_compile_options(move-vectormath-tests PRIVATE -Wno-conversion)
-    endif()
-
-    catch_discover_tests(move-vectormath-tests DISCOVERY_MODE PRE_TEST)
-endif()
-
 if(MOVE_VECTORMATH_BUILD_STANDALONE_TESTS)
     add_executable(move-vectormath-standalone-tests
                    tests/standalone.cpp)
@@ -295,8 +268,4 @@ if(MOVE_VECTORMATH_BUILD_STANDALONE_TESTS)
              COMMAND move-vectormath-standalone-tests)
 endif()
 
-# Aliases
-add_library(move::vectormath ALIAS move-vectormath)
-add_library(move::math ALIAS move-vectormath)
-add_library(move-math ALIAS move-vectormath)
 add_library(mv::math ALIAS move-vectormath)

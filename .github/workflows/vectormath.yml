@@ -69,7 +69,6 @@ jobs:
       - name: Configure
         run: >
           cmake -S . -B build
-          -DMOVE_VECTORMATH_BUILD_TESTS=ON
           -DMOVE_VECTORMATH_BUILD_STANDALONE_TESTS=ON
           -DMOVE_VECTORMATH_BUILD_REPRESENTATION_TESTS=ON
           -DMOVE_VECTORMATH_BUILD_SEMANTIC_TRANSFORM_TESTS=ON
@@ -110,7 +109,6 @@ jobs:
       - name: Configure
         run: >
           cmake -S . -B build
-          -DMOVE_VECTORMATH_BUILD_TESTS=ON
           -DMOVE_VECTORMATH_BUILD_STANDALONE_TESTS=ON
           -DMOVE_VECTORMATH_BUILD_REPRESENTATION_TESTS=ON
           -DMOVE_VECTORMATH_BUILD_SEMANTIC_TRANSFORM_TESTS=ON
@@ -141,7 +139,6 @@ jobs:
       - name: Configure
         run: >
           cmake -S . -B build
-          -DMOVE_VECTORMATH_BUILD_TESTS=ON
           -DMOVE_VECTORMATH_BUILD_STANDALONE_TESTS=ON
           -DMOVE_VECTORMATH_BUILD_REPRESENTATION_TESTS=ON
           -DMOVE_VECTORMATH_BUILD_SEMANTIC_TRANSFORM_TESTS=ON
@@ -164,7 +161,6 @@ jobs:
             --xml-pretty \
             --output coverage.xml \
             --print-summary \
-            build/CMakeFiles/move-vectormath-tests.dir \
             build/CMakeFiles/move-vectormath-standalone-tests.dir \
             build/CMakeFiles/move-vectormath-representation-rtm-tests.dir \
             build/CMakeFiles/move-vectormath-representation-scalar-tests.dir \
@@ -215,7 +211,6 @@ jobs:
       - name: Check maintained test harness formatting
         run: |
           clang-format-16 --dry-run --Werror \
-            packages/move/math/tests/mm_test_common.hpp \
             packages/move/math_examples/src/camera_component.hpp \
             packages/move/math_examples/src/character_controller.hpp \
             packages/move/math_examples/src/simple_ray_tracer.cpp \

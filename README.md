@@ -5,10 +5,6 @@ API lives in `mv::math` and provides arithmetic vectors, invariant-bearing
 semantic values, transforms, matrices, geometry, spatial queries, culling, and
 explicit graphics-convention helpers.
 
-The old `<move/vectormath.hpp>` / `move::math` API remains temporarily for the
-measured migration and will be removed once the cutover inventory is complete.
-New code should not use it.
-
 ## Use the API
 
 Include the full public surface:
