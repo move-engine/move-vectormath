@@ -116,6 +116,9 @@ and packaging checkpoints have passed hosted CI.
   the canonical `mv::math` CMake target, and current public usage documentation
 - Verified the transform, culling, graphics, CMake, and XMake packaging
   checkpoint across the hosted compiler and operating-system matrix
+- Migrated the current matrix, geometry/query, culling/graphics,
+  representation, and semantic-transform behavior suites to Catch2 while
+  retaining separate RTM and forced-scalar execution
 
 ## Accepted evidence
 
@@ -139,5 +142,5 @@ and packaging checkpoints have passed hosted CI.
   `Vec3f` ABI commitment
 - Controlled Phase B benchmark evidence on stable hardware; hosted reports
   remain diagnostic rather than regression gates
-- Migrate the retained legacy correctness suite to Catch2 and all benchmark
-  capabilities before beginning the `mv.math` module wrapper
+- Audit the remaining legacy-only correctness contracts and migrate all
+  benchmark capabilities before beginning the `mv.math` module wrapper

@@ -28,6 +28,8 @@ reject architectural choices.
 
 The Phase A architecture and initial Phase B semantic-transform slice are
 accepted. The current Phase C surface covers the initial Move 1.x transform,
-geometry, culling, and graphics needs. Legacy correctness/benchmark migration,
-final public-header cutover, the post-migration module wrapper, and the
-deferred Slang companion remain subsequent work.
+geometry, culling, and graphics needs. The current behavioral suites now use
+Catch2 across RTM and forced-scalar backends. The remaining legacy-only
+contract audit, benchmark migration, final public-header cutover,
+post-migration module wrapper, and deferred Slang companion remain subsequent
+work.

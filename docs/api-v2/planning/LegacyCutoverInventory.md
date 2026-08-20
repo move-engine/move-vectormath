@@ -68,7 +68,7 @@ construction costs are measured separately from prevalidated hot paths.
 | XMake header consumption | Ready | The upstream XMake target installs headers, pins RTM 2.3.1, and tests RTM/scalar consumers. |
 | `mv.math` C++20 module | Missing | Deliberately scheduled after legacy tests and cross-library benchmarks migrate (item 7); headers remain the source of truth. |
 | User documentation | Ready | README and conventions teach the current namespace, semantic contracts, focused headers, and CMake/XMake usage. |
-| Legacy test migration | Missing | Existing Catch2 and standalone tests primarily certify the old surface. |
+| Legacy test migration | Partial | Current behavior suites run under Catch2 for RTM and forced-scalar backends; audit remaining legacy-only contracts before deleting the old tests. |
 | Cross-library benchmark migration | Partial | New capability suites exist, but the main suite still benchmarks the old surface. |
 
 ## Intentionally removed legacy design

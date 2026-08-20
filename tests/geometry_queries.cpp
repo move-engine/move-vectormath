@@ -2,34 +2,20 @@
 #include <array>
 #include <cmath>
 #include <cstdint>
-#include <cstdio>
-#include <cstdlib>
 #include <limits>
-#include <source_location>
 #include <type_traits>
 
+#include <catch2/catch_test_macros.hpp>
 #include <mv/math/Math.hpp>
 
 namespace
 {
-    void Require(
-        bool condition,
-        const std::source_location& location = std::source_location::current())
-    {
-        if (!condition)
-        {
-            std::fprintf(stderr, "requirement failed at %s:%u\n",
-                         location.file_name(), location.line());
-            std::abort();
-        }
-    }
-
     [[nodiscard]] mv::math::Ray3f MakeRay(mv::math::Point3f origin,
                                           mv::math::Direction3f direction)
     {
         const auto ray =
             mv::math::Ray3f::TryFromOriginDirection(origin, direction);
-        Require(ray.has_value());
+        REQUIRE(ray.has_value());
         return *ray;
     }
 
@@ -39,7 +25,7 @@ namespace
     {
         const auto triangle =
             mv::math::Triangle3f::TryFromPoints(first, second, third);
-        Require(triangle.has_value());
+        REQUIRE(triangle.has_value());
         return *triangle;
     }
 
@@ -315,36 +301,36 @@ namespace
 
         const Ray3f ray =
             MakeRay(Point3f(1.0F, 2.0F, 3.0F), Direction3f::AxisZ());
-        Require(ray.Origin() == Point3f(1.0F, 2.0F, 3.0F));
-        Require(ray.Direction() == Direction3f::AxisZ());
-        Require(ray.PointAt(4.0F) == Point3f(1.0F, 2.0F, 7.0F));
-        Require(!Ray3f::TryFromOriginDirection(
+        REQUIRE(ray.Origin() == Point3f(1.0F, 2.0F, 3.0F));
+        REQUIRE(ray.Direction() == Direction3f::AxisZ());
+        REQUIRE(ray.PointAt(4.0F) == Point3f(1.0F, 2.0F, 7.0F));
+        REQUIRE(!Ray3f::TryFromOriginDirection(
             Point3f(std::numeric_limits<float>::infinity(), 0.0F, 0.0F),
             Direction3f::AxisX()));
 
         const auto plane = Plane3f::TryFromPointNormal(
             Point3f(0.0F, 0.0F, 2.0F), Normal3f::AxisZ());
-        Require(plane.has_value());
-        Require(NearlyEqual(plane->Offset(), -2.0F));
-        Require(NearlyEqual(plane->SignedDistance(Point3f(0.0F, 0.0F, 5.0F)),
+        REQUIRE(plane.has_value());
+        REQUIRE(NearlyEqual(plane->Offset(), -2.0F));
+        REQUIRE(NearlyEqual(plane->SignedDistance(Point3f(0.0F, 0.0F, 5.0F)),
                             3.0F));
-        Require(plane->Classify(Point3f(0.0F, 0.0F, 5.0F)) == PlaneSide::Front);
-        Require(plane->Classify(Point3f(0.0F, 0.0F, 1.0F)) == PlaneSide::Back);
-        Require(plane->Classify(Point3f(0.0F, 0.0F, 2.001F), 0.01F) ==
+        REQUIRE(plane->Classify(Point3f(0.0F, 0.0F, 5.0F)) == PlaneSide::Front);
+        REQUIRE(plane->Classify(Point3f(0.0F, 0.0F, 1.0F)) == PlaneSide::Back);
+        REQUIRE(plane->Classify(Point3f(0.0F, 0.0F, 2.001F), 0.01F) ==
                 PlaneSide::Intersecting);
-        Require(
+        REQUIRE(
             NearlyEqual(plane->ClosestPoint(Point3f(1.0F, 2.0F, 8.0F)).Vector(),
                         Vec3f(1.0F, 2.0F, 2.0F)));
-        Require(plane->Flipped().Normal() == -Normal3f::AxisZ());
-        Require(NearlyEqual(plane->Flipped().Offset(), 2.0F));
+        REQUIRE(plane->Flipped().Normal() == -Normal3f::AxisZ());
+        REQUIRE(NearlyEqual(plane->Flipped().Offset(), 2.0F));
 
         const auto threePointPlane = Plane3f::TryFromPoints(
             Point3f(0.0F, 0.0F, 0.0F), Point3f(1.0F, 0.0F, 0.0F),
             Point3f(0.0F, 1.0F, 0.0F));
-        Require(threePointPlane.has_value());
-        Require(threePointPlane->Normal() == Normal3f::AxisZ());
-        Require(!Plane3f::TryFromPoints(Point3f(), Point3f(), Point3f()));
-        Require(!Plane3f::TryFromNormalAndOffset(
+        REQUIRE(threePointPlane.has_value());
+        REQUIRE(threePointPlane->Normal() == Normal3f::AxisZ());
+        REQUIRE(!Plane3f::TryFromPoints(Point3f(), Point3f(), Point3f()));
+        REQUIRE(!Plane3f::TryFromNormalAndOffset(
             Normal3f::AxisX(), std::numeric_limits<float>::infinity()));
     }
 
@@ -353,28 +339,28 @@ namespace
         using namespace mv::math;
 
         const Line3f line(Point3f(1.0F, 2.0F, 3.0F), Direction3f::AxisX());
-        Require(line.Origin() == Point3f(1.0F, 2.0F, 3.0F));
-        Require(line.Direction() == Direction3f::AxisX());
-        Require(line.PointAt(-2.0F) == Point3f(-1.0F, 2.0F, 3.0F));
-        Require(line.IsFinite());
+        REQUIRE(line.Origin() == Point3f(1.0F, 2.0F, 3.0F));
+        REQUIRE(line.Direction() == Direction3f::AxisX());
+        REQUIRE(line.PointAt(-2.0F) == Point3f(-1.0F, 2.0F, 3.0F));
+        REQUIRE(line.IsFinite());
 
         const Segment3f segment(Point3f(), Point3f(0.0F, 0.0F, 4.0F));
-        Require(segment.Start() == Point3f());
-        Require(segment.End() == Point3f(0.0F, 0.0F, 4.0F));
-        Require(segment.Displacement() == Vec3f(0.0F, 0.0F, 4.0F));
-        Require(segment.LengthSquared() == 16.0F);
-        Require(segment.Length() == 4.0F);
-        Require(!segment.IsDegenerate());
-        Require(segment.TryDirection() == Direction3f::AxisZ());
-        Require(segment.PointAtFraction(0.25F) == Point3f(0.0F, 0.0F, 1.0F));
-        Require(segment.PointAtFraction(2.0F) == Point3f(0.0F, 0.0F, 8.0F));
-        Require(segment.IsFinite());
+        REQUIRE(segment.Start() == Point3f());
+        REQUIRE(segment.End() == Point3f(0.0F, 0.0F, 4.0F));
+        REQUIRE(segment.Displacement() == Vec3f(0.0F, 0.0F, 4.0F));
+        REQUIRE(segment.LengthSquared() == 16.0F);
+        REQUIRE(segment.Length() == 4.0F);
+        REQUIRE(!segment.IsDegenerate());
+        REQUIRE(segment.TryDirection() == Direction3f::AxisZ());
+        REQUIRE(segment.PointAtFraction(0.25F) == Point3f(0.0F, 0.0F, 1.0F));
+        REQUIRE(segment.PointAtFraction(2.0F) == Point3f(0.0F, 0.0F, 8.0F));
+        REQUIRE(segment.IsFinite());
 
         const Segment3f degenerate(Point3f(1.0F, 2.0F, 3.0F),
                                    Point3f(1.0F, 2.0F, 3.0F));
-        Require(degenerate.IsDegenerate());
-        Require(!degenerate.TryDirection());
-        Require(degenerate.PointAtFraction(0.75F) == degenerate.Start());
+        REQUIRE(degenerate.IsDegenerate());
+        REQUIRE(!degenerate.TryDirection());
+        REQUIRE(degenerate.PointAtFraction(0.75F) == degenerate.Start());
     }
 
     void CheckTriangleAndSphere()
@@ -384,33 +370,33 @@ namespace
         const Triangle3f triangle =
             MakeTriangle(Point3f(0.0F, 0.0F, 0.0F), Point3f(2.0F, 0.0F, 0.0F),
                          Point3f(0.0F, 2.0F, 0.0F));
-        Require(triangle.Edge01() == Vec3f(2.0F, 0.0F, 0.0F));
-        Require(triangle.Edge02() == Vec3f(0.0F, 2.0F, 0.0F));
-        Require(NearlyEqual(triangle.Centroid().Vector(),
+        REQUIRE(triangle.Edge01() == Vec3f(2.0F, 0.0F, 0.0F));
+        REQUIRE(triangle.Edge02() == Vec3f(0.0F, 2.0F, 0.0F));
+        REQUIRE(NearlyEqual(triangle.Centroid().Vector(),
                             Vec3f(2.0F / 3.0F, 2.0F / 3.0F, 0.0F)));
-        Require(NearlyEqual(triangle.Area(), 2.0F));
-        Require(triangle.TryNormal() == Normal3f::AxisZ());
+        REQUIRE(NearlyEqual(triangle.Area(), 2.0F));
+        REQUIRE(triangle.TryNormal() == Normal3f::AxisZ());
 
         const Triangle3f degenerate = MakeTriangle(
             Point3f(), Point3f(1.0F, 0.0F, 0.0F), Point3f(2.0F, 0.0F, 0.0F));
-        Require(!degenerate.TryNormal());
-        Require(NearlyEqual(degenerate.Area(), 0.0F));
+        REQUIRE(!degenerate.TryNormal());
+        REQUIRE(NearlyEqual(degenerate.Area(), 0.0F));
 
-        Require(!Triangle3f::TryFromPoints(
+        REQUIRE(!Triangle3f::TryFromPoints(
             Point3f(), Point3f(),
             Point3f(0.0F, std::numeric_limits<float>::quiet_NaN(), 0.0F)));
 
-        Require(!Sphere3f::TryFromCenterRadius(Point3f(), -1.0F));
-        Require(!Sphere3f::TryFromCenterRadius(
+        REQUIRE(!Sphere3f::TryFromCenterRadius(Point3f(), -1.0F));
+        REQUIRE(!Sphere3f::TryFromCenterRadius(
             Point3f(std::numeric_limits<float>::infinity(), 0.0F, 0.0F), 1.0F));
         const auto sphere =
             Sphere3f::TryFromCenterRadius(Point3f(1.0F, 2.0F, 3.0F), 2.0F);
-        Require(sphere.has_value());
-        Require(sphere->Center() == Point3f(1.0F, 2.0F, 3.0F));
-        Require(sphere->Radius() == 2.0F);
-        Require(sphere->Diameter() == 4.0F);
-        Require(sphere->Contains(Point3f(3.0F, 2.0F, 3.0F)));
-        Require(!sphere->Contains(Point3f(3.01F, 2.0F, 3.0F)));
+        REQUIRE(sphere.has_value());
+        REQUIRE(sphere->Center() == Point3f(1.0F, 2.0F, 3.0F));
+        REQUIRE(sphere->Radius() == 2.0F);
+        REQUIRE(sphere->Diameter() == 4.0F);
+        REQUIRE(sphere->Contains(Point3f(3.0F, 2.0F, 3.0F)));
+        REQUIRE(!sphere->Contains(Point3f(3.01F, 2.0F, 3.0F)));
     }
 
     void CheckAabb()
@@ -418,61 +404,61 @@ namespace
         using namespace mv::math;
 
         const Aabb3f empty;
-        Require(empty.IsEmpty());
-        Require(empty.IsValid());
-        Require(!empty.TryCenter());
-        Require(!empty.TrySize());
-        Require(!empty.TryCorners());
-        Require(empty.Volume() == 0.0F);
-        Require(empty.SurfaceArea() == 0.0F);
+        REQUIRE(empty.IsEmpty());
+        REQUIRE(empty.IsValid());
+        REQUIRE(!empty.TryCenter());
+        REQUIRE(!empty.TrySize());
+        REQUIRE(!empty.TryCorners());
+        REQUIRE(empty.Volume() == 0.0F);
+        REQUIRE(empty.SurfaceArea() == 0.0F);
 
-        Require(!Aabb3f::TryFromMinMax(Point3f(1.0F, 0.0F, 0.0F),
+        REQUIRE(!Aabb3f::TryFromMinMax(Point3f(1.0F, 0.0F, 0.0F),
                                        Point3f(0.0F, 1.0F, 1.0F)));
-        Require(!Aabb3f::TryFromCenterHalfExtents(Point3f(),
+        REQUIRE(!Aabb3f::TryFromCenterHalfExtents(Point3f(),
                                                   Vec3f(1.0F, -1.0F, 1.0F)));
 
         const auto box = Aabb3f::TryFromCenterHalfExtents(
             Point3f(1.0F, 2.0F, 3.0F), Vec3f(1.0F, 2.0F, 3.0F));
-        Require(box.has_value());
-        Require(box->Minimum() == Point3f(0.0F, 0.0F, 0.0F));
-        Require(box->Maximum() == Point3f(2.0F, 4.0F, 6.0F));
-        Require(box->TryCenter() == Point3f(1.0F, 2.0F, 3.0F));
-        Require(box->TrySize() == Vec3f(2.0F, 4.0F, 6.0F));
-        Require(box->TryHalfExtents() == Vec3f(1.0F, 2.0F, 3.0F));
-        Require(box->Contains(box->Minimum()));
-        Require(box->Contains(box->Maximum()));
-        Require(!box->Contains(Point3f(2.01F, 2.0F, 3.0F)));
-        Require(box->Volume() == 48.0F);
-        Require(box->SurfaceArea() == 88.0F);
-        Require(box->TryCorners()->size() == 8U);
-        Require(box->TryClosestPoint(Point3f(-1.0F, 5.0F, 2.0F)) ==
+        REQUIRE(box.has_value());
+        REQUIRE(box->Minimum() == Point3f(0.0F, 0.0F, 0.0F));
+        REQUIRE(box->Maximum() == Point3f(2.0F, 4.0F, 6.0F));
+        REQUIRE(box->TryCenter() == Point3f(1.0F, 2.0F, 3.0F));
+        REQUIRE(box->TrySize() == Vec3f(2.0F, 4.0F, 6.0F));
+        REQUIRE(box->TryHalfExtents() == Vec3f(1.0F, 2.0F, 3.0F));
+        REQUIRE(box->Contains(box->Minimum()));
+        REQUIRE(box->Contains(box->Maximum()));
+        REQUIRE(!box->Contains(Point3f(2.01F, 2.0F, 3.0F)));
+        REQUIRE(box->Volume() == 48.0F);
+        REQUIRE(box->SurfaceArea() == 88.0F);
+        REQUIRE(box->TryCorners()->size() == 8U);
+        REQUIRE(box->TryClosestPoint(Point3f(-1.0F, 5.0F, 2.0F)) ==
                 Point3f(0.0F, 4.0F, 2.0F));
 
         const auto touching = Aabb3f::TryFromMinMax(Point3f(2.0F, 1.0F, 1.0F),
                                                     Point3f(3.0F, 2.0F, 2.0F));
-        Require(touching.has_value());
-        Require(box->Intersects(*touching));
+        REQUIRE(touching.has_value());
+        REQUIRE(box->Intersects(*touching));
         const Aabb3f overlap = box->Intersection(*touching);
-        Require(!overlap.IsEmpty());
-        Require(overlap.Minimum().X() == 2.0F);
-        Require(overlap.Maximum().X() == 2.0F);
+        REQUIRE(!overlap.IsEmpty());
+        REQUIRE(overlap.Minimum().X() == 2.0F);
+        REQUIRE(overlap.Maximum().X() == 2.0F);
 
         const auto disjoint = Aabb3f::TryFromMinMax(Point3f(3.0F, 0.0F, 0.0F),
                                                     Point3f(4.0F, 1.0F, 1.0F));
-        Require(disjoint.has_value());
-        Require(!box->Intersects(*disjoint));
-        Require(box->Intersection(*disjoint).IsEmpty());
-        Require(box->Merged(*disjoint).Maximum() == Point3f(4.0F, 4.0F, 6.0F));
-        Require(empty.Merged(*box) == *box);
+        REQUIRE(disjoint.has_value());
+        REQUIRE(!box->Intersects(*disjoint));
+        REQUIRE(box->Intersection(*disjoint).IsEmpty());
+        REQUIRE(box->Merged(*disjoint).Maximum() == Point3f(4.0F, 4.0F, 6.0F));
+        REQUIRE(empty.Merged(*box) == *box);
 
         const std::array points = {Point3f(-2.0F, 3.0F, 1.0F),
                                    Point3f(4.0F, -1.0F, 6.0F)};
         const auto fromPoints = Aabb3f::TryFromPoints(points);
-        Require(fromPoints.has_value());
-        Require(fromPoints->Minimum() == Point3f(-2.0F, -1.0F, 1.0F));
-        Require(fromPoints->Maximum() == Point3f(4.0F, 3.0F, 6.0F));
-        Require(Aabb3f::TryFromPoints(std::span<const Point3f>{})->IsEmpty());
-        Require(!box->TryExpanded(
+        REQUIRE(fromPoints.has_value());
+        REQUIRE(fromPoints->Minimum() == Point3f(-2.0F, -1.0F, 1.0F));
+        REQUIRE(fromPoints->Maximum() == Point3f(4.0F, 3.0F, 6.0F));
+        REQUIRE(Aabb3f::TryFromPoints(std::span<const Point3f>{})->IsEmpty());
+        REQUIRE(!box->TryExpanded(
             Point3f(std::numeric_limits<float>::quiet_NaN(), 0.0F, 0.0F)));
     }
 
@@ -482,22 +468,22 @@ namespace
 
         const auto plane =
             Plane3f::TryFromPointNormal(Point3f(), Normal3f::AxisZ());
-        Require(plane.has_value());
+        REQUIRE(plane.has_value());
         const Ray3f frontRay =
             MakeRay(Point3f(0.0F, 0.0F, 2.0F), -Direction3f::AxisZ());
         const auto planeHit = Intersect(frontRay, *plane);
-        Require(planeHit.has_value());
-        Require(planeHit->Distance == 2.0F);
-        Require(planeHit->Point == Point3f());
-        Require(planeHit->Normal == Normal3f::AxisZ());
-        Require(planeHit->Face == FaceOrientation::Front);
+        REQUIRE(planeHit.has_value());
+        REQUIRE(planeHit->Distance == 2.0F);
+        REQUIRE(planeHit->Point == Point3f());
+        REQUIRE(planeHit->Normal == Normal3f::AxisZ());
+        REQUIRE(planeHit->Face == FaceOrientation::Front);
 
         const Ray3f backRay =
             MakeRay(Point3f(0.0F, 0.0F, -2.0F), Direction3f::AxisZ());
-        Require(Intersect(backRay, *plane)->Face == FaceOrientation::Back);
-        Require(!Intersect(
+        REQUIRE(Intersect(backRay, *plane)->Face == FaceOrientation::Back);
+        REQUIRE(!Intersect(
             MakeRay(Point3f(0.0F, 0.0F, 1.0F), Direction3f::AxisX()), *plane));
-        Require(!Intersect(MakeRay(Point3f(), Direction3f::AxisX()), *plane));
+        REQUIRE(!Intersect(MakeRay(Point3f(), Direction3f::AxisX()), *plane));
 
         const Triangle3f triangle =
             MakeTriangle(Point3f(0.0F, 0.0F, 0.0F), Point3f(1.0F, 0.0F, 0.0F),
@@ -505,24 +491,24 @@ namespace
         const Ray3f triangleRay =
             MakeRay(Point3f(0.25F, 0.25F, 1.0F), -Direction3f::AxisZ());
         const auto triangleHit = Intersect(triangleRay, triangle);
-        Require(triangleHit.has_value());
-        Require(triangleHit->Distance == 1.0F);
-        Require(triangleHit->Point == Point3f(0.25F, 0.25F, 0.0F));
-        Require(triangleHit->GeometricNormal == Normal3f::AxisZ());
-        Require(
+        REQUIRE(triangleHit.has_value());
+        REQUIRE(triangleHit->Distance == 1.0F);
+        REQUIRE(triangleHit->Point == Point3f(0.25F, 0.25F, 0.0F));
+        REQUIRE(triangleHit->GeometricNormal == Normal3f::AxisZ());
+        REQUIRE(
             NearlyEqual(triangleHit->Barycentric, Vec3f(0.5F, 0.25F, 0.25F)));
-        Require(triangleHit->Face == FaceOrientation::Front);
+        REQUIRE(triangleHit->Face == FaceOrientation::Front);
 
         const Ray3f triangleBackRay =
             MakeRay(Point3f(0.25F, 0.25F, -1.0F), Direction3f::AxisZ());
-        Require(Intersect(triangleBackRay, triangle)->Face ==
+        REQUIRE(Intersect(triangleBackRay, triangle)->Face ==
                 FaceOrientation::Back);
-        Require(!Intersect(triangleBackRay, triangle,
+        REQUIRE(!Intersect(triangleBackRay, triangle,
                            RayTriangleOptionsf{BackFaceMode::Cull}));
-        Require(!Intersect(
+        REQUIRE(!Intersect(
             MakeRay(Point3f(2.0F, 2.0F, 1.0F), -Direction3f::AxisZ()),
             triangle));
-        Require(!Intersect(triangleRay,
+        REQUIRE(!Intersect(triangleRay,
                            MakeTriangle(Point3f(), Point3f(), Point3f())));
     }
 
@@ -533,33 +519,33 @@ namespace
         const Point3f point(2.0F, 3.0F, 0.0F);
         const Line3f line(Point3f(), Direction3f::AxisX());
         const PointLineClosest3f lineClosest = ClosestPoints(point, line);
-        Require(lineClosest.PointOnLine == Point3f(2.0F, 0.0F, 0.0F));
-        Require(lineClosest.LineDistance == 2.0F);
-        Require(lineClosest.SquaredDistance == 9.0F);
-        Require(lineClosest.Distance() == 3.0F);
-        Require(ClosestPoint(point, line) == lineClosest.PointOnLine);
-        Require(DistanceSquared(point, line) == 9.0F);
-        Require(Distance(point, line) == 3.0F);
+        REQUIRE(lineClosest.PointOnLine == Point3f(2.0F, 0.0F, 0.0F));
+        REQUIRE(lineClosest.LineDistance == 2.0F);
+        REQUIRE(lineClosest.SquaredDistance == 9.0F);
+        REQUIRE(lineClosest.Distance() == 3.0F);
+        REQUIRE(ClosestPoint(point, line) == lineClosest.PointOnLine);
+        REQUIRE(DistanceSquared(point, line) == 9.0F);
+        REQUIRE(Distance(point, line) == 3.0F);
 
         const PointLineClosest3f negativeLineClosest =
             ClosestPoints(Point3f(-2.0F, 1.0F, 0.0F), line);
-        Require(negativeLineClosest.LineDistance == -2.0F);
-        Require(negativeLineClosest.PointOnLine == Point3f(-2.0F, 0.0F, 0.0F));
+        REQUIRE(negativeLineClosest.LineDistance == -2.0F);
+        REQUIRE(negativeLineClosest.PointOnLine == Point3f(-2.0F, 0.0F, 0.0F));
 
         const Ray3f ray = MakeRay(Point3f(), Direction3f::AxisX());
         const PointRayClosest3f rayClosest =
             ClosestPoints(Point3f(-2.0F, 1.0F, 0.0F), ray);
-        Require(rayClosest.RayDistance == 0.0F);
-        Require(rayClosest.PointOnRay == Point3f());
-        Require(rayClosest.SquaredDistance == 5.0F);
+        REQUIRE(rayClosest.RayDistance == 0.0F);
+        REQUIRE(rayClosest.PointOnRay == Point3f());
+        REQUIRE(rayClosest.SquaredDistance == 5.0F);
 
         const Segment3f segment(Point3f(), Point3f(4.0F, 0.0F, 0.0F));
         const PointSegmentClosest3f segmentClosest =
             ClosestPoints(point, segment);
-        Require(segmentClosest.PointOnSegment == Point3f(2.0F, 0.0F, 0.0F));
-        Require(segmentClosest.SegmentFraction == 0.5F);
-        Require(segmentClosest.SquaredDistance == 9.0F);
-        Require(
+        REQUIRE(segmentClosest.PointOnSegment == Point3f(2.0F, 0.0F, 0.0F));
+        REQUIRE(segmentClosest.SegmentFraction == 0.5F);
+        REQUIRE(segmentClosest.SquaredDistance == 9.0F);
+        REQUIRE(
             ClosestPoints(Point3f(6.0F, 1.0F, 0.0F), segment).SegmentFraction ==
             1.0F);
 
@@ -567,53 +553,53 @@ namespace
                                      Point3f(1.0F, 2.0F, 3.0F));
         const PointSegmentClosest3f pointSegmentClosest =
             ClosestPoints(Point3f(4.0F, 6.0F, 3.0F), pointSegment);
-        Require(pointSegmentClosest.PointOnSegment == pointSegment.Start());
-        Require(pointSegmentClosest.SegmentFraction == 0.0F);
-        Require(pointSegmentClosest.SquaredDistance == 25.0F);
+        REQUIRE(pointSegmentClosest.PointOnSegment == pointSegment.Start());
+        REQUIRE(pointSegmentClosest.SegmentFraction == 0.0F);
+        REQUIRE(pointSegmentClosest.SquaredDistance == 25.0F);
 
         const auto plane =
             Plane3f::TryFromPointNormal(Point3f(), Normal3f::AxisZ());
-        Require(plane.has_value());
+        REQUIRE(plane.has_value());
         const PointPlaneClosest3f planeClosest =
             ClosestPoints(Point3f(1.0F, 2.0F, -3.0F), *plane);
-        Require(planeClosest.PointOnPlane == Point3f(1.0F, 2.0F, 0.0F));
-        Require(planeClosest.SignedDistance == -3.0F);
-        Require(planeClosest.SquaredDistance == 9.0F);
+        REQUIRE(planeClosest.PointOnPlane == Point3f(1.0F, 2.0F, 0.0F));
+        REQUIRE(planeClosest.SignedDistance == -3.0F);
+        REQUIRE(planeClosest.SquaredDistance == 9.0F);
 
         const Triangle3f triangle =
             MakeTriangle(Point3f(0.0F, 0.0F, 0.0F), Point3f(2.0F, 0.0F, 0.0F),
                          Point3f(0.0F, 2.0F, 0.0F));
         const PointTriangleClosest3f faceClosest =
             ClosestPoints(Point3f(0.5F, 0.5F, 2.0F), triangle);
-        Require(faceClosest.PointOnTriangle == Point3f(0.5F, 0.5F, 0.0F));
-        Require(
+        REQUIRE(faceClosest.PointOnTriangle == Point3f(0.5F, 0.5F, 0.0F));
+        REQUIRE(
             NearlyEqual(faceClosest.Barycentric, Vec3f(0.5F, 0.25F, 0.25F)));
-        Require(faceClosest.SquaredDistance == 4.0F);
+        REQUIRE(faceClosest.SquaredDistance == 4.0F);
 
         const PointTriangleClosest3f firstClosest =
             ClosestPoints(Point3f(-1.0F, -1.0F, 0.0F), triangle);
-        Require(firstClosest.PointOnTriangle == triangle.First());
-        Require(firstClosest.Barycentric == Vec3f(1.0F, 0.0F, 0.0F));
+        REQUIRE(firstClosest.PointOnTriangle == triangle.First());
+        REQUIRE(firstClosest.Barycentric == Vec3f(1.0F, 0.0F, 0.0F));
 
         const PointTriangleClosest3f edge01Closest =
             ClosestPoints(Point3f(0.5F, -1.0F, 0.0F), triangle);
-        Require(edge01Closest.PointOnTriangle == Point3f(0.5F, 0.0F, 0.0F));
-        Require(
+        REQUIRE(edge01Closest.PointOnTriangle == Point3f(0.5F, 0.0F, 0.0F));
+        REQUIRE(
             NearlyEqual(edge01Closest.Barycentric, Vec3f(0.75F, 0.25F, 0.0F)));
 
         const PointTriangleClosest3f edge12Closest =
             ClosestPoints(Point3f(2.0F, 2.0F, 0.0F), triangle);
-        Require(edge12Closest.PointOnTriangle == Point3f(1.0F, 1.0F, 0.0F));
-        Require(
+        REQUIRE(edge12Closest.PointOnTriangle == Point3f(1.0F, 1.0F, 0.0F));
+        REQUIRE(
             NearlyEqual(edge12Closest.Barycentric, Vec3f(0.0F, 0.5F, 0.5F)));
 
         const Triangle3f lineTriangle = MakeTriangle(
             Point3f(), Point3f(2.0F, 0.0F, 0.0F), Point3f(1.0F, 0.0F, 0.0F));
         const PointTriangleClosest3f lineTriangleClosest =
             ClosestPoints(Point3f(1.0F, 2.0F, 0.0F), lineTriangle);
-        Require(lineTriangleClosest.PointOnTriangle ==
+        REQUIRE(lineTriangleClosest.PointOnTriangle ==
                 Point3f(1.0F, 0.0F, 0.0F));
-        Require(NearlyEqual(lineTriangleClosest.Barycentric,
+        REQUIRE(NearlyEqual(lineTriangleClosest.Barycentric,
                             Vec3f(0.5F, 0.5F, 0.0F)));
 
         const Triangle3f pointTriangle =
@@ -621,9 +607,9 @@ namespace
                          Point3f(3.0F, 4.0F, 5.0F));
         const PointTriangleClosest3f pointTriangleClosest =
             ClosestPoints(Point3f(), pointTriangle);
-        Require(pointTriangleClosest.PointOnTriangle == pointTriangle.First());
-        Require(pointTriangleClosest.Barycentric == Vec3f(1.0F, 0.0F, 0.0F));
-        Require(pointTriangleClosest.SquaredDistance == 50.0F);
+        REQUIRE(pointTriangleClosest.PointOnTriangle == pointTriangle.First());
+        REQUIRE(pointTriangleClosest.Barycentric == Vec3f(1.0F, 0.0F, 0.0F));
+        REQUIRE(pointTriangleClosest.SquaredDistance == 50.0F);
     }
 
     void CheckBoundsClosestAndSegmentPairs()
@@ -632,28 +618,28 @@ namespace
 
         const auto box = Aabb3f::TryFromMinMax(Point3f(-1.0F, -2.0F, -3.0F),
                                                Point3f(1.0F, 2.0F, 3.0F));
-        Require(box.has_value());
+        REQUIRE(box.has_value());
         const auto boxClosest =
             TryClosestPoints(Point3f(4.0F, 1.0F, -5.0F), *box);
-        Require(boxClosest.has_value());
-        Require(boxClosest->PointInAabb == Point3f(1.0F, 1.0F, -3.0F));
-        Require(boxClosest->SquaredDistance == 13.0F);
-        Require(TryClosestPoint(Point3f(), *box) == Point3f());
-        Require(TryDistanceSquared(Point3f(), *box) == 0.0F);
-        Require(TryDistance(Point3f(4.0F, 1.0F, -5.0F), *box) ==
+        REQUIRE(boxClosest.has_value());
+        REQUIRE(boxClosest->PointInAabb == Point3f(1.0F, 1.0F, -3.0F));
+        REQUIRE(boxClosest->SquaredDistance == 13.0F);
+        REQUIRE(TryClosestPoint(Point3f(), *box) == Point3f());
+        REQUIRE(TryDistanceSquared(Point3f(), *box) == 0.0F);
+        REQUIRE(TryDistance(Point3f(4.0F, 1.0F, -5.0F), *box) ==
                 std::sqrt(13.0F));
-        Require(!TryClosestPoints(Point3f(), Aabb3f::Empty()));
+        REQUIRE(!TryClosestPoints(Point3f(), Aabb3f::Empty()));
 
         const auto sphere =
             Sphere3f::TryFromCenterRadius(Point3f(1.0F, 2.0F, 3.0F), 2.0F);
-        Require(sphere.has_value());
+        REQUIRE(sphere.has_value());
         const PointSphereClosest3f sphereOutside =
             ClosestPoints(Point3f(5.0F, 2.0F, 3.0F), *sphere);
-        Require(sphereOutside.PointInSphere == Point3f(3.0F, 2.0F, 3.0F));
-        Require(sphereOutside.SquaredDistance == 4.0F);
+        REQUIRE(sphereOutside.PointInSphere == Point3f(3.0F, 2.0F, 3.0F));
+        REQUIRE(sphereOutside.SquaredDistance == 4.0F);
         const Point3f inside(1.5F, 2.0F, 3.0F);
-        Require(ClosestPoint(inside, *sphere) == inside);
-        Require(DistanceSquared(inside, *sphere) == 0.0F);
+        REQUIRE(ClosestPoint(inside, *sphere) == inside);
+        REQUIRE(DistanceSquared(inside, *sphere) == 0.0F);
 
         const Segment3f first(Point3f(-1.0F, 0.0F, 0.0F),
                               Point3f(1.0F, 0.0F, 0.0F));
@@ -661,40 +647,40 @@ namespace
                                  Point3f(0.0F, 1.0F, 0.0F));
         const SegmentSegmentClosest3f crossingClosest =
             ClosestPoints(first, crossing);
-        Require(crossingClosest.PointOnFirst == Point3f());
-        Require(crossingClosest.PointOnSecond == Point3f());
-        Require(crossingClosest.FirstFraction == 0.5F);
-        Require(crossingClosest.SecondFraction == 0.5F);
-        Require(crossingClosest.SquaredDistance == 0.0F);
+        REQUIRE(crossingClosest.PointOnFirst == Point3f());
+        REQUIRE(crossingClosest.PointOnSecond == Point3f());
+        REQUIRE(crossingClosest.FirstFraction == 0.5F);
+        REQUIRE(crossingClosest.SecondFraction == 0.5F);
+        REQUIRE(crossingClosest.SquaredDistance == 0.0F);
 
         const Segment3f skew(Point3f(0.0F, -1.0F, 3.0F),
                              Point3f(0.0F, 1.0F, 3.0F));
         const SegmentSegmentClosest3f skewClosest = ClosestPoints(first, skew);
-        Require(skewClosest.PointOnFirst == Point3f());
-        Require(skewClosest.PointOnSecond == Point3f(0.0F, 0.0F, 3.0F));
-        Require(skewClosest.SquaredDistance == 9.0F);
-        Require(Distance(first, skew) == 3.0F);
+        REQUIRE(skewClosest.PointOnFirst == Point3f());
+        REQUIRE(skewClosest.PointOnSecond == Point3f(0.0F, 0.0F, 3.0F));
+        REQUIRE(skewClosest.SquaredDistance == 9.0F);
+        REQUIRE(Distance(first, skew) == 3.0F);
 
         const Segment3f pointSegment(Point3f(3.0F, 2.0F, 0.0F),
                                      Point3f(3.0F, 2.0F, 0.0F));
         const SegmentSegmentClosest3f pointClosest =
             ClosestPoints(pointSegment, first);
-        Require(pointClosest.PointOnFirst == pointSegment.Start());
-        Require(pointClosest.PointOnSecond == Point3f(1.0F, 0.0F, 0.0F));
-        Require(pointClosest.FirstFraction == 0.0F);
-        Require(pointClosest.SecondFraction == 1.0F);
-        Require(pointClosest.SquaredDistance == 8.0F);
+        REQUIRE(pointClosest.PointOnFirst == pointSegment.Start());
+        REQUIRE(pointClosest.PointOnSecond == Point3f(1.0F, 0.0F, 0.0F));
+        REQUIRE(pointClosest.FirstFraction == 0.0F);
+        REQUIRE(pointClosest.SecondFraction == 1.0F);
+        REQUIRE(pointClosest.SquaredDistance == 8.0F);
 
         const Segment3f secondPoint(Point3f(1.0F, 2.0F, 3.0F),
                                     Point3f(1.0F, 2.0F, 3.0F));
         const auto pointsClosest = ClosestPoints(pointSegment, secondPoint);
-        Require(pointsClosest.PointOnFirst == pointSegment.Start());
-        Require(pointsClosest.PointOnSecond == secondPoint.Start());
-        Require(pointsClosest.SquaredDistance == 13.0F);
+        REQUIRE(pointsClosest.PointOnFirst == pointSegment.Start());
+        REQUIRE(pointsClosest.PointOnSecond == secondPoint.Start());
+        REQUIRE(pointsClosest.SquaredDistance == 13.0F);
 
         const Segment3f nearlyParallel(Point3f(-1.0F, 0.001F, 0.0F),
                                        Point3f(1.0F, 0.001001F, 0.0F));
-        Require(NearlyEqual(DistanceSquared(first, nearlyParallel), 1.0e-6F,
+        REQUIRE(NearlyEqual(DistanceSquared(first, nearlyParallel), 1.0e-6F,
                             2.0e-9F));
     }
 
@@ -702,51 +688,51 @@ namespace
     {
         using namespace mv::math;
 
-        Require(!Capsule3f::TryFromEndpointsRadius(
+        REQUIRE(!Capsule3f::TryFromEndpointsRadius(
             Point3f(), Point3f(0.0F, 1.0F, 0.0F), -1.0F));
         const auto capsule = Capsule3f::TryFromEndpointsRadius(
             Point3f(0.0F, -1.0F, 0.0F), Point3f(0.0F, 1.0F, 0.0F), 0.5F);
-        Require(capsule.has_value());
-        Require(capsule->Start() == Point3f(0.0F, -1.0F, 0.0F));
-        Require(capsule->End() == Point3f(0.0F, 1.0F, 0.0F));
-        Require(capsule->Radius() == 0.5F);
-        Require(!capsule->IsDegenerate());
-        Require(capsule->IsFinite());
+        REQUIRE(capsule.has_value());
+        REQUIRE(capsule->Start() == Point3f(0.0F, -1.0F, 0.0F));
+        REQUIRE(capsule->End() == Point3f(0.0F, 1.0F, 0.0F));
+        REQUIRE(capsule->Radius() == 0.5F);
+        REQUIRE(!capsule->IsDegenerate());
+        REQUIRE(capsule->IsFinite());
 
         const PointCapsuleClosest3f side =
             ClosestPoints(Point3f(2.0F, 0.0F, 0.0F), *capsule);
-        Require(side.PointInCapsule == Point3f(0.5F, 0.0F, 0.0F));
-        Require(side.CenterLineFraction == 0.5F);
-        Require(side.SquaredDistance == 2.25F);
-        Require(Contains(*capsule, Point3f(0.25F, 0.0F, 0.0F)));
-        Require(!Contains(*capsule, Point3f(0.75F, 0.0F, 0.0F)));
+        REQUIRE(side.PointInCapsule == Point3f(0.5F, 0.0F, 0.0F));
+        REQUIRE(side.CenterLineFraction == 0.5F);
+        REQUIRE(side.SquaredDistance == 2.25F);
+        REQUIRE(Contains(*capsule, Point3f(0.25F, 0.0F, 0.0F)));
+        REQUIRE(!Contains(*capsule, Point3f(0.75F, 0.0F, 0.0F)));
 
         const PointCapsuleClosest3f cap =
             ClosestPoints(Point3f(0.0F, 2.0F, 0.0F), *capsule);
-        Require(cap.PointInCapsule == Point3f(0.0F, 1.5F, 0.0F));
-        Require(cap.CenterLineFraction == 1.0F);
-        Require(cap.SquaredDistance == 0.25F);
+        REQUIRE(cap.PointInCapsule == Point3f(0.0F, 1.5F, 0.0F));
+        REQUIRE(cap.CenterLineFraction == 1.0F);
+        REQUIRE(cap.SquaredDistance == 0.25F);
 
         const auto touchingSphere =
             Sphere3f::TryFromCenterRadius(Point3f(1.5F, 0.0F, 0.0F), 1.0F);
-        Require(touchingSphere.has_value());
-        Require(Intersects(*capsule, *touchingSphere));
-        Require(Intersects(*touchingSphere, *capsule));
+        REQUIRE(touchingSphere.has_value());
+        REQUIRE(Intersects(*capsule, *touchingSphere));
+        REQUIRE(Intersects(*touchingSphere, *capsule));
 
         const auto touchingCapsule = Capsule3f::TryFromEndpointsRadius(
             Point3f(1.0F, -1.0F, 0.0F), Point3f(1.0F, 1.0F, 0.0F), 0.5F);
-        Require(touchingCapsule.has_value());
-        Require(Intersects(*capsule, *touchingCapsule));
+        REQUIRE(touchingCapsule.has_value());
+        REQUIRE(Intersects(*capsule, *touchingCapsule));
         const auto separatedCapsule = Capsule3f::TryFromEndpointsRadius(
             Point3f(1.01F, -1.0F, 0.0F), Point3f(1.01F, 1.0F, 0.0F), 0.5F);
-        Require(separatedCapsule.has_value());
-        Require(!Intersects(*capsule, *separatedCapsule));
+        REQUIRE(separatedCapsule.has_value());
+        REQUIRE(!Intersects(*capsule, *separatedCapsule));
 
         const auto sphereCapsule = Capsule3f::TryFromEndpointsRadius(
             Point3f(2.0F, 3.0F, 4.0F), Point3f(2.0F, 3.0F, 4.0F), 2.0F);
-        Require(sphereCapsule.has_value());
-        Require(sphereCapsule->IsDegenerate());
-        Require(Contains(*sphereCapsule, Point3f(4.0F, 3.0F, 4.0F)));
+        REQUIRE(sphereCapsule.has_value());
+        REQUIRE(sphereCapsule->IsDegenerate());
+        REQUIRE(Contains(*sphereCapsule, Point3f(4.0F, 3.0F, 4.0F)));
     }
 
     void CheckBoundsQueries()
@@ -754,87 +740,87 @@ namespace
         using namespace mv::math;
 
         const auto sphere = Sphere3f::TryFromCenterRadius(Point3f(), 1.0F);
-        Require(sphere.has_value());
+        REQUIRE(sphere.has_value());
         const Ray3f sphereRay =
             MakeRay(Point3f(-3.0F, 0.0F, 0.0F), Direction3f::AxisX());
         const auto sphereHit = Intersect(sphereRay, *sphere);
-        Require(sphereHit.has_value());
-        Require(sphereHit->EntryDistance == 2.0F);
-        Require(sphereHit->ExitDistance == 4.0F);
-        Require(!sphereHit->StartsInside);
-        Require(sphereHit->EntryNormal == -Normal3f::AxisX());
-        Require(sphereHit->ExitNormal == Normal3f::AxisX());
+        REQUIRE(sphereHit.has_value());
+        REQUIRE(sphereHit->EntryDistance == 2.0F);
+        REQUIRE(sphereHit->ExitDistance == 4.0F);
+        REQUIRE(!sphereHit->StartsInside);
+        REQUIRE(sphereHit->EntryNormal == -Normal3f::AxisX());
+        REQUIRE(sphereHit->ExitNormal == Normal3f::AxisX());
 
         const auto insideSphereHit =
             Intersect(MakeRay(Point3f(), Direction3f::AxisX()), *sphere);
-        Require(insideSphereHit.has_value());
-        Require(insideSphereHit->EntryDistance == 0.0F);
-        Require(insideSphereHit->ExitDistance == 1.0F);
-        Require(insideSphereHit->StartsInside);
-        Require(!insideSphereHit->EntryNormal);
-        Require(insideSphereHit->ExitNormal == Normal3f::AxisX());
+        REQUIRE(insideSphereHit.has_value());
+        REQUIRE(insideSphereHit->EntryDistance == 0.0F);
+        REQUIRE(insideSphereHit->ExitDistance == 1.0F);
+        REQUIRE(insideSphereHit->StartsInside);
+        REQUIRE(!insideSphereHit->EntryNormal);
+        REQUIRE(insideSphereHit->ExitNormal == Normal3f::AxisX());
 
         const auto pointSphere = Sphere3f::TryFromCenterRadius(Point3f(), 0.0F);
-        Require(pointSphere.has_value());
+        REQUIRE(pointSphere.has_value());
         const auto pointHit =
             Intersect(MakeRay(Point3f(-1.0F, 0.0F, 0.0F), Direction3f::AxisX()),
                       *pointSphere);
-        Require(pointHit.has_value());
-        Require(!pointHit->EntryNormal);
-        Require(!pointHit->ExitNormal);
-        Require(!Intersect(
+        REQUIRE(pointHit.has_value());
+        REQUIRE(!pointHit->EntryNormal);
+        REQUIRE(!pointHit->ExitNormal);
+        REQUIRE(!Intersect(
             MakeRay(Point3f(-3.0F, 2.0F, 0.0F), Direction3f::AxisX()),
             *sphere));
 
         const auto box = Aabb3f::TryFromMinMax(Point3f(-1.0F, -1.0F, -1.0F),
                                                Point3f(1.0F, 1.0F, 1.0F));
-        Require(box.has_value());
+        REQUIRE(box.has_value());
         const Ray3f boxRay =
             MakeRay(Point3f(-3.0F, 0.0F, 0.0F), Direction3f::AxisX());
         const auto boxHit = Intersect(boxRay, *box);
-        Require(boxHit.has_value());
-        Require(boxHit->EntryDistance == 2.0F);
-        Require(boxHit->ExitDistance == 4.0F);
-        Require(!boxHit->StartsInside);
-        Require(boxHit->EntryNormal == -Normal3f::AxisX());
-        Require(boxHit->ExitNormal == Normal3f::AxisX());
-        Require(Intersect(PreparedRay3f(boxRay), *box) == boxHit);
+        REQUIRE(boxHit.has_value());
+        REQUIRE(boxHit->EntryDistance == 2.0F);
+        REQUIRE(boxHit->ExitDistance == 4.0F);
+        REQUIRE(!boxHit->StartsInside);
+        REQUIRE(boxHit->EntryNormal == -Normal3f::AxisX());
+        REQUIRE(boxHit->ExitNormal == Normal3f::AxisX());
+        REQUIRE(Intersect(PreparedRay3f(boxRay), *box) == boxHit);
 
         const auto insideBoxHit =
             Intersect(MakeRay(Point3f(), Direction3f::AxisY()), *box);
-        Require(insideBoxHit.has_value());
-        Require(insideBoxHit->EntryDistance == 0.0F);
-        Require(insideBoxHit->ExitDistance == 1.0F);
-        Require(insideBoxHit->StartsInside);
-        Require(!insideBoxHit->EntryNormal);
-        Require(insideBoxHit->ExitNormal == Normal3f::AxisY());
+        REQUIRE(insideBoxHit.has_value());
+        REQUIRE(insideBoxHit->EntryDistance == 0.0F);
+        REQUIRE(insideBoxHit->ExitDistance == 1.0F);
+        REQUIRE(insideBoxHit->StartsInside);
+        REQUIRE(!insideBoxHit->EntryNormal);
+        REQUIRE(insideBoxHit->ExitNormal == Normal3f::AxisY());
 
-        Require(
+        REQUIRE(
             Intersect(MakeRay(Point3f(-3.0F, 1.0F, 0.0F), Direction3f::AxisX()),
                       *box)
                 .has_value());
-        Require(!Intersect(
+        REQUIRE(!Intersect(
             MakeRay(Point3f(-3.0F, 2.0F, 0.0F), Direction3f::AxisX()), *box));
-        Require(!Intersect(boxRay, Aabb3f::Empty()));
+        REQUIRE(!Intersect(boxRay, Aabb3f::Empty()));
 
         const auto touchingSphere =
             Sphere3f::TryFromCenterRadius(Point3f(2.0F, 0.0F, 0.0F), 1.0F);
-        Require(touchingSphere.has_value());
-        Require(Intersects(*sphere, *touchingSphere));
-        Require(Intersects(*box, *box));
-        Require(Intersects(*sphere, *box));
+        REQUIRE(touchingSphere.has_value());
+        REQUIRE(Intersects(*sphere, *touchingSphere));
+        REQUIRE(Intersects(*box, *box));
+        REQUIRE(Intersects(*sphere, *box));
         const auto separatedSphere =
             Sphere3f::TryFromCenterRadius(Point3f(3.0F, 3.0F, 3.0F), 1.0F);
-        Require(separatedSphere.has_value());
-        Require(!Intersects(*separatedSphere, *box));
-        Require(!Intersects(Aabb3f::Empty(), *sphere));
+        REQUIRE(separatedSphere.has_value());
+        REQUIRE(!Intersects(*separatedSphere, *box));
+        REQUIRE(!Intersects(Aabb3f::Empty(), *sphere));
 
         const auto boundarySphereHit = Intersect(
             MakeRay(Point3f(1.0F, 0.0F, 0.0F), Direction3f::AxisX()), *sphere);
-        Require(boundarySphereHit.has_value());
-        Require(!boundarySphereHit->StartsInside);
-        Require(boundarySphereHit->EntryDistance == 0.0F);
-        Require(boundarySphereHit->EntryNormal == Normal3f::AxisX());
+        REQUIRE(boundarySphereHit.has_value());
+        REQUIRE(!boundarySphereHit->StartsInside);
+        REQUIRE(boundarySphereHit->EntryDistance == 0.0F);
+        REQUIRE(boundarySphereHit->EntryNormal == Normal3f::AxisX());
     }
 
     void CheckAabbReferenceParity()
@@ -851,19 +837,19 @@ namespace
                                     std::abs(NextValue(state)) + 0.01F);
             const auto box =
                 Aabb3f::TryFromCenterHalfExtents(center, halfExtents);
-            Require(box.has_value());
+            REQUIRE(box.has_value());
 
             const Vec3f directionValue(NextValue(state), NextValue(state),
                                        NextValue(state));
             const auto direction = Direction3f::TryFrom(directionValue);
-            Require(direction.has_value());
+            REQUIRE(direction.has_value());
             const Ray3f ray = MakeRay(
                 Point3f(NextValue(state), NextValue(state), NextValue(state)),
                 *direction);
 
             const bool reference = ReferenceRayAabb(ray, *box);
-            Require(Intersects(ray, *box) == reference);
-            Require(Intersects(PreparedRay3f(ray), *box) == reference);
+            REQUIRE(Intersects(ray, *box) == reference);
+            REQUIRE(Intersects(PreparedRay3f(ray), *box) == reference);
         }
     }
 
@@ -883,12 +869,12 @@ namespace
             const PointTriangleClosest3f result =
                 ClosestPoints(point, triangle);
             const Double3 reference = ReferencePointTriangle(point, triangle);
-            Require(NearlyEqual(result.PointOnTriangle.Vector(),
+            REQUIRE(NearlyEqual(result.PointOnTriangle.Vector(),
                                 Vec3f(static_cast<float>(reference.X),
                                       static_cast<float>(reference.Y),
                                       static_cast<float>(reference.Z)),
                                 2.0e-4F));
-            Require(NearlyEqual(result.Barycentric.X() +
+            REQUIRE(NearlyEqual(result.Barycentric.X() +
                                     result.Barycentric.Y() +
                                     result.Barycentric.Z(),
                                 1.0F, 2.0e-4F));
@@ -896,7 +882,7 @@ namespace
                 triangle.First().Vector() * result.Barycentric.X() +
                 triangle.Second().Vector() * result.Barycentric.Y() +
                 triangle.Third().Vector() * result.Barycentric.Z());
-            Require(NearlyEqual(reconstructed.Vector(),
+            REQUIRE(NearlyEqual(reconstructed.Vector(),
                                 result.PointOnTriangle.Vector(), 2.0e-4F));
         }
     }
@@ -930,17 +916,17 @@ namespace
             const SegmentSegmentClosest3f result = ClosestPoints(first, second);
             const ReferenceSegmentPairResult reference =
                 ReferenceSegmentPair(first, second);
-            Require(NearlyEqual(result.SquaredDistance,
+            REQUIRE(NearlyEqual(result.SquaredDistance,
                                 static_cast<float>(reference.SquaredDistance),
                                 3.0e-4F));
-            Require(result.FirstFraction >= 0.0F &&
-                    result.FirstFraction <= 1.0F);
-            Require(result.SecondFraction >= 0.0F &&
-                    result.SecondFraction <= 1.0F);
-            Require(NearlyEqual(
+            REQUIRE((result.FirstFraction >= 0.0F &&
+                     result.FirstFraction <= 1.0F));
+            REQUIRE((result.SecondFraction >= 0.0F &&
+                     result.SecondFraction <= 1.0F));
+            REQUIRE(NearlyEqual(
                 result.PointOnFirst.Vector(),
                 first.PointAtFraction(result.FirstFraction).Vector(), 2.0e-5F));
-            Require(NearlyEqual(
+            REQUIRE(NearlyEqual(
                 result.PointOnSecond.Vector(),
                 second.PointAtFraction(result.SecondFraction).Vector(),
                 2.0e-5F));
@@ -971,51 +957,51 @@ namespace
         using namespace mv::math;
 
         const auto direction = Direction3d::TryFrom(Vec3d(0.0, 0.0, 2.0));
-        Require(direction.has_value());
+        REQUIRE(direction.has_value());
         const auto ray = Ray3d::TryFromOriginDirection(Point3d(), *direction);
-        Require(ray.has_value());
+        REQUIRE(ray.has_value());
         const auto plane = Plane3d::TryFromPointNormal(Point3d(0.0, 0.0, 5.0),
                                                        Normal3d::AxisZ());
-        Require(plane.has_value());
+        REQUIRE(plane.has_value());
         const auto planeHit = Intersect(*ray, *plane);
-        Require(planeHit.has_value());
-        Require(IsNearlyEqual(planeHit->Distance, 5.0));
+        REQUIRE(planeHit.has_value());
+        REQUIRE(IsNearlyEqual(planeHit->Distance, 5.0));
 
         const auto triangle = Triangle3d::TryFromPoints(
             Point3d(-1.0, -1.0, 5.0), Point3d(1.0, -1.0, 5.0),
             Point3d(0.0, 1.0, 5.0));
-        Require(triangle.has_value());
-        Require(Intersect(*ray, *triangle).has_value());
-        Require(IsNearlyEqual(
+        REQUIRE(triangle.has_value());
+        REQUIRE(Intersect(*ray, *triangle).has_value());
+        REQUIRE(IsNearlyEqual(
             ClosestPoints(Point3d(0.0, 0.0, 7.0), *triangle).SquaredDistance,
             4.0));
 
         const auto sphere =
             Sphere3d::TryFromCenterRadius(Point3d(0.0, 0.0, 5.0), 2.0);
-        Require(sphere.has_value());
+        REQUIRE(sphere.has_value());
         const auto sphereHit = Intersect(*ray, *sphere);
-        Require(sphereHit.has_value());
-        Require(IsNearlyEqual(sphereHit->EntryDistance, 3.0));
-        Require(IsNearlyEqual(sphereHit->ExitDistance, 7.0));
+        REQUIRE(sphereHit.has_value());
+        REQUIRE(IsNearlyEqual(sphereHit->EntryDistance, 3.0));
+        REQUIRE(IsNearlyEqual(sphereHit->ExitDistance, 7.0));
 
         const auto box = Aabb3d::TryFromMinMax(Point3d(-1.0, -1.0, 4.0),
                                                Point3d(1.0, 1.0, 6.0));
-        Require(box.has_value());
-        Require(Intersect(PreparedRay3d(*ray), *box).has_value());
-        Require(Intersects(*sphere, *box));
+        REQUIRE(box.has_value());
+        REQUIRE(Intersect(PreparedRay3d(*ray), *box).has_value());
+        REQUIRE(Intersects(*sphere, *box));
 
         const Segment3d first(Point3d(0.0, 0.0, 0.0), Point3d(2.0, 0.0, 0.0));
         const Segment3d second(Point3d(1.0, -1.0, 1.0), Point3d(1.0, 1.0, 1.0));
-        Require(IsNearlyEqual(DistanceSquared(first, second), 1.0));
+        REQUIRE(IsNearlyEqual(DistanceSquared(first, second), 1.0));
 
         const auto integerBox =
             Aabb3i::TryFromMinMax(Point3i(-4, -3, -2), Point3i(4, 3, 2));
-        Require(integerBox.has_value());
-        Require(integerBox->Contains(Point3i(0, 0, 0)));
-        Require(integerBox->TrySize() == Vec3i(8, 6, 4));
-        Require(integerBox->TryClosestPoint(Point3i(10, 0, -10)) ==
+        REQUIRE(integerBox.has_value());
+        REQUIRE(integerBox->Contains(Point3i(0, 0, 0)));
+        REQUIRE(integerBox->TrySize() == Vec3i(8, 6, 4));
+        REQUIRE(integerBox->TryClosestPoint(Point3i(10, 0, -10)) ==
                 Point3i(4, 0, -2));
-        Require(integerBox->Intersection(Aabb3i::Empty()).IsEmpty());
+        REQUIRE(integerBox->Intersection(Aabb3i::Empty()).IsEmpty());
 
         static_assert(sizeof(Ray3d) == 64);
         static_assert(sizeof(Aabb3d) == 64);
@@ -1024,21 +1010,71 @@ namespace
     }
 }  // namespace
 
-int main()
+TEST_CASE("mv::math ray and plane geometry", "[mv][geometry][ray][plane]")
 {
     CheckRayAndPlane();
+}
+
+TEST_CASE("mv::math line and segment geometry", "[mv][geometry][linear]")
+{
     CheckLineAndSegment();
+}
+
+TEST_CASE("mv::math triangle and sphere geometry",
+          "[mv][geometry][triangle][sphere]")
+{
     CheckTriangleAndSphere();
+}
+
+TEST_CASE("mv::math AABB geometry", "[mv][geometry][aabb]")
+{
     CheckAabb();
+}
+
+TEST_CASE("mv::math linear queries", "[mv][query][linear]")
+{
     CheckLinearQueries();
+}
+
+TEST_CASE("mv::math closest-point queries", "[mv][query][closest]")
+{
     CheckClosestPointQueries();
     CheckBoundsClosestAndSegmentPairs();
+}
+
+TEST_CASE("mv::math capsule queries", "[mv][query][capsule]")
+{
     CheckCapsule();
+}
+
+TEST_CASE("mv::math bounds queries", "[mv][query][bounds]")
+{
     CheckBoundsQueries();
+}
+
+TEST_CASE("mv::math AABB reference parity", "[mv][query][oracle][aabb]")
+{
     CheckAabbReferenceParity();
+}
+
+TEST_CASE("mv::math triangle closest-point reference parity",
+          "[mv][query][oracle][triangle]")
+{
     CheckTriangleClosestReferenceParity();
+}
+
+TEST_CASE("mv::math segment-pair reference parity",
+          "[mv][query][oracle][segment]")
+{
     CheckSegmentPairReferenceParity();
+}
+
+TEST_CASE("mv::math geometry layouts", "[mv][geometry][layout]")
+{
     CheckLayouts();
+}
+
+TEST_CASE("mv::math generic geometry", "[mv][geometry][double][integer]")
+{
     CheckGenericGeometry();
-    return 0;
 }

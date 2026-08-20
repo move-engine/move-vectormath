@@ -76,8 +76,9 @@ advance.
 
 ## Sequencing
 
-Primary behavioral tests will migrate to Catch2 with item 7; dependency-light
-executables remain only for smoke, consumer, and code-generation checks after
-that migration. Named-module work also remains after item 7. Headers are the
+Primary current-API behavioral tests now run under Catch2 for both RTM and
+forced-scalar backends. Dependency-light executables remain for smoke,
+consumer, and code-generation checks. The remaining legacy-only contract audit
+and benchmark migration still precede named-module work. Headers are the
 implementation source of truth, allowing the module to be a thin export
 wrapper once the public surface and performance evidence are stable.
