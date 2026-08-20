@@ -919,8 +919,8 @@ namespace
             REQUIRE(NearlyEqual(result.SquaredDistance,
                                 static_cast<float>(reference.SquaredDistance),
                                 3.0e-4F));
-            REQUIRE((result.FirstFraction >= 0.0F &&
-                     result.FirstFraction <= 1.0F));
+            REQUIRE(
+                (result.FirstFraction >= 0.0F && result.FirstFraction <= 1.0F));
             REQUIRE((result.SecondFraction >= 0.0F &&
                      result.SecondFraction <= 1.0F));
             REQUIRE(NearlyEqual(
