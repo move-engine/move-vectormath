@@ -2,11 +2,15 @@
 
 #include <algorithm>
 #include <cmath>
+#include <optional>
 
+#include <mv/math/geometry/Aabb3.hpp>
+#include <mv/math/geometry/Capsule3.hpp>
 #include <mv/math/geometry/Line3.hpp>
 #include <mv/math/geometry/Plane3.hpp>
 #include <mv/math/geometry/Ray3.hpp>
 #include <mv/math/geometry/Segment3.hpp>
+#include <mv/math/geometry/Sphere3.hpp>
 #include <mv/math/geometry/Triangle3.hpp>
 #include <mv/math/queries/QueryTypes.hpp>
 
@@ -18,6 +22,17 @@ namespace mv::math
             const Point3f& first, const Point3f& second) noexcept
         {
             return LengthSquared(first - second);
+        }
+
+        [[nodiscard]] inline double DotDouble(const Vec3f& first,
+                                              const Vec3f& second) noexcept
+        {
+            return static_cast<double>(first.X()) *
+                       static_cast<double>(second.X()) +
+                   static_cast<double>(first.Y()) *
+                       static_cast<double>(second.Y()) +
+                   static_cast<double>(first.Z()) *
+                       static_cast<double>(second.Z());
         }
 
         [[nodiscard]] inline PointTriangleClosest3f MakePointTriangleClosest(
@@ -206,6 +221,147 @@ namespace mv::math
                   thirdWeight));
     }
 
+    // Component clamping is the point/AABB distance construction in Ericson,
+    // Real-Time Collision Detection (2005), section 5.1.3. Empty boxes and
+    // non-finite query points preserve Aabb3f's existing fallible contract.
+    [[nodiscard]] inline std::optional<PointAabbClosest3f> TryClosestPoints(
+        const Point3f& point, const Aabb3f& box) noexcept
+    {
+        const std::optional<Point3f> closest = box.TryClosestPoint(point);
+        if (!closest)
+        {
+            return std::nullopt;
+        }
+        return PointAabbClosest3f{
+            *closest, detail::PointDistanceSquared(point, *closest)};
+    }
+
+    // Radial projection is the solid-sphere specialization of Ericson,
+    // Real-Time Collision Detection (2005), section 5.1.4. A contained point
+    // is already the nearest member of the bounding volume and has distance 0.
+    [[nodiscard]] inline PointSphereClosest3f ClosestPoints(
+        const Point3f& point, const Sphere3f& sphere) noexcept
+    {
+        const Point3f center = sphere.Center();
+        const Vec3f offset = point - center;
+        const float squaredCenterDistance = LengthSquared(offset);
+        const float squaredRadius = sphere.Radius() * sphere.Radius();
+        if (squaredCenterDistance <= squaredRadius)
+        {
+            return PointSphereClosest3f{point, 0.0F};
+        }
+
+        const float scale = sphere.Radius() / std::sqrt(squaredCenterDistance);
+        const Point3f pointInSphere = center + offset * scale;
+        return PointSphereClosest3f{
+            pointInSphere, detail::PointDistanceSquared(point, pointInSphere)};
+    }
+
+    // A capsule is a segment swept by a sphere (Ericson, Real-Time Collision
+    // Detection, 2005, sections 4.5 and 4.5.1). Project to the center line,
+    // then apply the same radial solid-volume rule as point/sphere.
+    [[nodiscard]] inline PointCapsuleClosest3f ClosestPoints(
+        const Point3f& point, const Capsule3f& capsule) noexcept
+    {
+        const PointSegmentClosest3f centerLineClosest =
+            ClosestPoints(point, capsule.CenterLine());
+        if (centerLineClosest.SquaredDistance <=
+            capsule.Radius() * capsule.Radius())
+        {
+            return PointCapsuleClosest3f{
+                point, centerLineClosest.SegmentFraction, 0.0F};
+        }
+
+        const Vec3f radialOffset = point - centerLineClosest.PointOnSegment;
+        const float scale =
+            capsule.Radius() / std::sqrt(centerLineClosest.SquaredDistance);
+        const Point3f pointInCapsule =
+            centerLineClosest.PointOnSegment + radialOffset * scale;
+        return PointCapsuleClosest3f{
+            pointInCapsule, centerLineClosest.SegmentFraction,
+            detail::PointDistanceSquared(point, pointInCapsule)};
+    }
+
+    // ClosestPtSegmentSegment from Ericson, Real-Time Collision Detection
+    // (2005), section 5.1.9. Double intermediates reduce cancellation for
+    // nearly parallel float segments; degenerate segments remain valid.
+    [[nodiscard]] inline SegmentSegmentClosest3f ClosestPoints(
+        const Segment3f& first, const Segment3f& second) noexcept
+    {
+        const Vec3f firstDirection = first.Displacement();
+        const Vec3f secondDirection = second.Displacement();
+        const Vec3f startOffset = first.Start() - second.Start();
+        const double firstLengthSquared =
+            detail::DotDouble(firstDirection, firstDirection);
+        const double secondLengthSquared =
+            detail::DotDouble(secondDirection, secondDirection);
+        const double secondProjection =
+            detail::DotDouble(secondDirection, startOffset);
+
+        double firstFraction = 0.0;
+        double secondFraction = 0.0;
+        if (firstLengthSquared == 0.0 && secondLengthSquared == 0.0)
+        {
+            // Both segments are points; the initialized fractions are final.
+        }
+        else if (firstLengthSquared == 0.0)
+        {
+            secondFraction =
+                std::clamp(secondProjection / secondLengthSquared, 0.0, 1.0);
+        }
+        else
+        {
+            const double firstProjection =
+                detail::DotDouble(firstDirection, startOffset);
+            if (secondLengthSquared == 0.0)
+            {
+                firstFraction =
+                    std::clamp(-firstProjection / firstLengthSquared, 0.0, 1.0);
+            }
+            else
+            {
+                const double directionsDot =
+                    detail::DotDouble(firstDirection, secondDirection);
+                const double denominator =
+                    firstLengthSquared * secondLengthSquared -
+                    directionsDot * directionsDot;
+                if (denominator > 0.0)
+                {
+                    firstFraction =
+                        std::clamp((directionsDot * secondProjection -
+                                    firstProjection * secondLengthSquared) /
+                                       denominator,
+                                   0.0, 1.0);
+                }
+
+                secondFraction =
+                    (directionsDot * firstFraction + secondProjection) /
+                    secondLengthSquared;
+                if (secondFraction < 0.0)
+                {
+                    secondFraction = 0.0;
+                    firstFraction = std::clamp(
+                        -firstProjection / firstLengthSquared, 0.0, 1.0);
+                }
+                else if (secondFraction > 1.0)
+                {
+                    secondFraction = 1.0;
+                    firstFraction = std::clamp(
+                        (directionsDot - firstProjection) / firstLengthSquared,
+                        0.0, 1.0);
+                }
+            }
+        }
+
+        const float firstFloat = static_cast<float>(firstFraction);
+        const float secondFloat = static_cast<float>(secondFraction);
+        const Point3f pointOnFirst = first.PointAtFraction(firstFloat);
+        const Point3f pointOnSecond = second.PointAtFraction(secondFloat);
+        return SegmentSegmentClosest3f{
+            pointOnFirst, pointOnSecond, firstFloat, secondFloat,
+            detail::PointDistanceSquared(pointOnFirst, pointOnSecond)};
+    }
+
     [[nodiscard]] inline Point3f ClosestPoint(const Point3f& point,
                                               const Line3f& line) noexcept
     {
@@ -234,6 +390,26 @@ namespace mv::math
         const Point3f& point, const Triangle3f& triangle) noexcept
     {
         return ClosestPoints(point, triangle).PointOnTriangle;
+    }
+
+    [[nodiscard]] inline std::optional<Point3f> TryClosestPoint(
+        const Point3f& point, const Aabb3f& box) noexcept
+    {
+        const auto result = TryClosestPoints(point, box);
+        return result ? std::optional<Point3f>(result->PointInAabb)
+                      : std::nullopt;
+    }
+
+    [[nodiscard]] inline Point3f ClosestPoint(const Point3f& point,
+                                              const Sphere3f& sphere) noexcept
+    {
+        return ClosestPoints(point, sphere).PointInSphere;
+    }
+
+    [[nodiscard]] inline Point3f ClosestPoint(const Point3f& point,
+                                              const Capsule3f& capsule) noexcept
+    {
+        return ClosestPoints(point, capsule).PointInCapsule;
     }
 
     [[nodiscard]] inline float DistanceSquared(const Point3f& point,
@@ -266,6 +442,32 @@ namespace mv::math
         return ClosestPoints(point, triangle).SquaredDistance;
     }
 
+    [[nodiscard]] inline std::optional<float> TryDistanceSquared(
+        const Point3f& point, const Aabb3f& box) noexcept
+    {
+        const auto result = TryClosestPoints(point, box);
+        return result ? std::optional<float>(result->SquaredDistance)
+                      : std::nullopt;
+    }
+
+    [[nodiscard]] inline float DistanceSquared(const Point3f& point,
+                                               const Sphere3f& sphere) noexcept
+    {
+        return ClosestPoints(point, sphere).SquaredDistance;
+    }
+
+    [[nodiscard]] inline float DistanceSquared(
+        const Point3f& point, const Capsule3f& capsule) noexcept
+    {
+        return ClosestPoints(point, capsule).SquaredDistance;
+    }
+
+    [[nodiscard]] inline float DistanceSquared(const Segment3f& first,
+                                               const Segment3f& second) noexcept
+    {
+        return ClosestPoints(first, second).SquaredDistance;
+    }
+
     [[nodiscard]] inline float Distance(const Point3f& point,
                                         const Line3f& line) noexcept
     {
@@ -294,5 +496,36 @@ namespace mv::math
                                         const Triangle3f& triangle) noexcept
     {
         return ClosestPoints(point, triangle).Distance();
+    }
+
+    [[nodiscard]] inline std::optional<float> TryDistance(
+        const Point3f& point, const Aabb3f& box) noexcept
+    {
+        const auto result = TryClosestPoints(point, box);
+        return result ? std::optional<float>(result->Distance()) : std::nullopt;
+    }
+
+    [[nodiscard]] inline float Distance(const Point3f& point,
+                                        const Sphere3f& sphere) noexcept
+    {
+        return ClosestPoints(point, sphere).Distance();
+    }
+
+    [[nodiscard]] inline float Distance(const Point3f& point,
+                                        const Capsule3f& capsule) noexcept
+    {
+        return ClosestPoints(point, capsule).Distance();
+    }
+
+    [[nodiscard]] inline bool Contains(const Capsule3f& capsule,
+                                       const Point3f& point) noexcept
+    {
+        return ClosestPoints(point, capsule).SquaredDistance == 0.0F;
+    }
+
+    [[nodiscard]] inline float Distance(const Segment3f& first,
+                                        const Segment3f& second) noexcept
+    {
+        return ClosestPoints(first, second).Distance();
     }
 }  // namespace mv::math

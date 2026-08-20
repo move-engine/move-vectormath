@@ -14,6 +14,8 @@ reject architectural choices.
   compile-cost, and correctness evidence.
 - [`PhaseCClosestPoint.md`](PhaseCClosestPoint.md) records the line, segment,
   closest-point, distance, degeneracy, provenance, and verification slice.
+- [`PhaseCCapsule.md`](PhaseCCapsule.md) records the compact sphere-swept
+  segment representation and its first proximity and overlap queries.
 - [`AlgorithmProvenance.md`](AlgorithmProvenance.md) records the exact papers,
   compatible-licensed implementations, deliberate deviations, and historical
   source status of Codex-generated algorithms.

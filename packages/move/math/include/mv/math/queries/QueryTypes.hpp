@@ -95,6 +95,70 @@ namespace mv::math
             const PointTriangleClosest3f&) noexcept = default;
     };
 
+    struct PointAabbClosest3f
+    {
+        Point3f PointInAabb;
+        float SquaredDistance;
+
+        [[nodiscard]] float Distance() const noexcept
+        {
+            return std::sqrt(SquaredDistance);
+        }
+
+        [[nodiscard]] friend bool operator==(
+            const PointAabbClosest3f&,
+            const PointAabbClosest3f&) noexcept = default;
+    };
+
+    struct PointSphereClosest3f
+    {
+        Point3f PointInSphere;
+        float SquaredDistance;
+
+        [[nodiscard]] float Distance() const noexcept
+        {
+            return std::sqrt(SquaredDistance);
+        }
+
+        [[nodiscard]] friend bool operator==(
+            const PointSphereClosest3f&,
+            const PointSphereClosest3f&) noexcept = default;
+    };
+
+    struct PointCapsuleClosest3f
+    {
+        Point3f PointInCapsule;
+        float CenterLineFraction;
+        float SquaredDistance;
+
+        [[nodiscard]] float Distance() const noexcept
+        {
+            return std::sqrt(SquaredDistance);
+        }
+
+        [[nodiscard]] friend bool operator==(
+            const PointCapsuleClosest3f&,
+            const PointCapsuleClosest3f&) noexcept = default;
+    };
+
+    struct SegmentSegmentClosest3f
+    {
+        Point3f PointOnFirst;
+        Point3f PointOnSecond;
+        float FirstFraction;
+        float SecondFraction;
+        float SquaredDistance;
+
+        [[nodiscard]] float Distance() const noexcept
+        {
+            return std::sqrt(SquaredDistance);
+        }
+
+        [[nodiscard]] friend bool operator==(
+            const SegmentSegmentClosest3f&,
+            const SegmentSegmentClosest3f&) noexcept = default;
+    };
+
     struct RayPlaneHit3f
     {
         float Distance;
@@ -153,3 +217,7 @@ static_assert(std::is_trivially_copyable_v<mv::math::PointRayClosest3f>);
 static_assert(std::is_trivially_copyable_v<mv::math::PointSegmentClosest3f>);
 static_assert(std::is_trivially_copyable_v<mv::math::PointPlaneClosest3f>);
 static_assert(std::is_trivially_copyable_v<mv::math::PointTriangleClosest3f>);
+static_assert(std::is_trivially_copyable_v<mv::math::PointAabbClosest3f>);
+static_assert(std::is_trivially_copyable_v<mv::math::PointSphereClosest3f>);
+static_assert(std::is_trivially_copyable_v<mv::math::PointCapsuleClosest3f>);
+static_assert(std::is_trivially_copyable_v<mv::math::SegmentSegmentClosest3f>);

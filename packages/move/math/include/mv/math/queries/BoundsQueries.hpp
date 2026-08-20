@@ -9,6 +9,7 @@
 #include <mv/math/geometry/Aabb3.hpp>
 #include <mv/math/geometry/Ray3.hpp>
 #include <mv/math/geometry/Sphere3.hpp>
+#include <mv/math/queries/ClosestPointQueries.hpp>
 #include <mv/math/queries/PreparedRay3.hpp>
 #include <mv/math/queries/QueryTypes.hpp>
 
@@ -332,5 +333,30 @@ namespace mv::math
                                          const Sphere3f& sphere) noexcept
     {
         return Intersects(sphere, box);
+    }
+
+    // Sphere-swept-volume reduction from Ericson, Real-Time Collision
+    // Detection (2005), section 4.5.1: compare the distance between the inner
+    // structures with the sum of sweep radii. Touching intersects.
+    [[nodiscard]] inline bool Intersects(const Capsule3f& capsule,
+                                         const Sphere3f& sphere) noexcept
+    {
+        const float combinedRadius = capsule.Radius() + sphere.Radius();
+        return DistanceSquared(sphere.Center(), capsule.CenterLine()) <=
+               combinedRadius * combinedRadius;
+    }
+
+    [[nodiscard]] inline bool Intersects(const Sphere3f& sphere,
+                                         const Capsule3f& capsule) noexcept
+    {
+        return Intersects(capsule, sphere);
+    }
+
+    [[nodiscard]] inline bool Intersects(const Capsule3f& first,
+                                         const Capsule3f& second) noexcept
+    {
+        const float combinedRadius = first.Radius() + second.Radius();
+        return DistanceSquared(first.CenterLine(), second.CenterLine()) <=
+               combinedRadius * combinedRadius;
     }
 }  // namespace mv::math

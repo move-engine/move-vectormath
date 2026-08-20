@@ -76,6 +76,12 @@ locally and on the hosted compiler/OS matrix.
   point/plane, and point/triangle closest-point and distance queries
 - Added deterministic lower-dimensional triangle handling and an independent
   1,024-case double-precision triangle closest-point oracle
+- Added point/AABB and solid-sphere closest/distance conveniences with explicit
+  empty-box and contained-point semantics
+- Added detailed segment/segment closest-point queries, degenerate handling,
+  and a 2,048-case independent double-precision critical-point oracle
+- Added compact 32-byte `Capsule3f`, point/capsule proximity and containment,
+  and sphere/capsule and capsule/capsule overlap predicates
 
 ## Accepted evidence
 

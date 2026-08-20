@@ -40,3 +40,27 @@ extern "C" void mv_phase_c_closest_points_on_segments(
         output[index] = mv::math::ClosestPoint(points[index], segments[index]);
     }
 }
+
+extern "C" void mv_phase_c_segment_pair_distances(
+    const mv::math::Segment3f* first,
+    const mv::math::Segment3f* second,
+    float* output,
+    std::size_t count)
+{
+    for (std::size_t index = 0; index < count; ++index)
+    {
+        output[index] = mv::math::DistanceSquared(first[index], second[index]);
+    }
+}
+
+extern "C" void mv_phase_c_intersect_capsules(const mv::math::Capsule3f* first,
+                                              const mv::math::Capsule3f* second,
+                                              std::uint8_t* output,
+                                              std::size_t count)
+{
+    for (std::size_t index = 0; index < count; ++index)
+    {
+        output[index] = static_cast<std::uint8_t>(
+            mv::math::Intersects(first[index], second[index]));
+    }
+}

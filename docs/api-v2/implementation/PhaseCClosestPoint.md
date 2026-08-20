@@ -18,6 +18,13 @@ It remains CPU-first; the deferred Slang companion is unaffected.
   fraction, plane signed distance, and triangle barycentrics.
 - `ClosestPoint`, `DistanceSquared`, and `Distance` provide concise overloads
   when the detailed parameter data is unnecessary.
+- Point/AABB queries preserve the empty-box contract through
+  `TryClosestPoints`, `TryClosestPoint`, `TryDistanceSquared`, and
+  `TryDistance`.
+- Point/sphere queries use solid bounding-volume semantics: points already in
+  the sphere have zero distance and remain unchanged.
+- Segment/segment queries return both closest points, both endpoint fractions,
+  and squared distance, including when either segment degenerates to a point.
 
 All operations are allocation-free. `Line3f` and `Segment3f` are 32-byte,
 16-byte-aligned, trivially copyable values. The RTM and scalar backends share
@@ -52,7 +59,9 @@ to each implementation. Exact revisions, licenses, and classifications are in
 - David Eberly, “Distance Between Point and Triangle in 3D,” created 1999 and
   revised 2020, CC BY 4.0;
 - Christer Ericson, *Real-Time Collision Detection*, 2005, sections 5.1.1,
-  5.1.2, and 5.1.5.
+  5.1.2, 5.1.3, 5.1.4, 5.1.5, and 5.1.9;
+- David Eberly, “Robust Computation of Distance Between Line Segments,” created
+  2018 and revised 2023, CC BY 4.0.
 
 No upstream source was copied verbatim. The triangle query uses the documented
 Voronoi-region formulation and adds an explicit lower-dimensional fallback.
@@ -67,6 +76,8 @@ Voronoi-region formulation and adds an explicit lower-dimensional fallback.
 - a focused-header compile fixture;
 - 1,024 deterministic random point/triangle comparisons against a separately
   written double-precision projection-plus-exhaustive-edge oracle.
+- 2,048 deterministic random segment-pair comparisons against an independent
+  double-precision exhaustive-critical-point oracle.
 
 The separate benchmark repository also verifies 4,096 point/segment cases
 against a raw `Vec3f` implementation, GLM 0.9.9.8, and DirectXMath dec2022 for
@@ -100,10 +111,7 @@ powersave timing as a gate.
 
 ## Remaining related work
 
-- add point/AABB and point/sphere distance conveniences around their existing
-  containment/closest facilities;
-- implement closest segment/segment and segment/triangle pairs;
-- build `Capsule3f` on the segment foundation;
+- implement closest segment/triangle pairs;
 - add segment casts against the existing plane, triangle, sphere, and AABB;
 - repeat the diagnostic runtime measurements under a controlled performance
   governor before treating small differences as stable.

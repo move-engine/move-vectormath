@@ -32,10 +32,11 @@ All subsequent nontrivial algorithms are source-first under
 | `P-RAY-TRIANGLE` | Tomas Möller and Ben Trumbore, “Fast, Minimum Storage Ray-Triangle Intersection,” JGT 2(1), 1997, [DOI 10.1080/10867651.1997.10487468](https://doi.org/10.1080/10867651.1997.10487468) | Original algorithm paper |
 | `P-RAY-BOX` | Amy Williams, Steve Barrus, R. Keith Morley, and Peter Shirley, “An Efficient and Robust Ray-Box Intersection Algorithm,” JGT 10(1), 2005, [DOI 10.1080/10867651.2005.10487503](https://doi.org/10.1080/10867651.2005.10487503), [author-hosted PDF](https://perso.univ-lyon1.fr/jean-claude.iehl/Public/educ/M1IMAGE/williams_box.pdf) | Original robustness/optimization paper |
 | `A-POINT-TRIANGLE-EBERLY` | David Eberly, [“Distance Between Point and Triangle in 3D”](https://www.geometrictools.com/Documentation/DistancePoint3Triangle3.pdf), created 1999, revised 2020 | Author algorithm paper; CC BY 4.0 |
-| `B-RTCD-ERICSON` | Christer Ericson, *Real-Time Collision Detection*, 2005, sections 5.1.1, 5.1.2, and 5.1.5; [author site](https://realtimecollisiondetection.net/) | Authoritative game-oriented textbook |
+| `A-SEGMENT-PAIR-EBERLY` | David Eberly, [“Robust Computation of Distance Between Line Segments”](https://www.geometrictools.com/Documentation/DistanceLine3Line3.pdf), created 2018, revised 2023 | Author algorithm paper; CC BY 4.0 |
+| `B-RTCD-ERICSON` | Christer Ericson, *Real-Time Collision Detection*, 2005, sections 4.5, 4.5.1, 5.1.1–5.1.5, and 5.1.9; [author site](https://realtimecollisiondetection.net/) | Authoritative game-oriented textbook |
 | `A-NORMAL-LENGYEL` | Eric Lengyel, [“Transforming Normals”](https://terathon.com/blog/transforming-normals.html), 2024 | Author derivation of adjugate-transpose normal transformation |
 | `L-RTM-231` | RTM v2.3.1 at [`745bd25673d93b46941eda55e0993327dbc12b53`](https://github.com/nfrechette/rtm/tree/745bd25673d93b46941eda55e0993327dbc12b53), particularly `vector4f.h`, `quatf.h`, and `qvf.h` | MIT; exact production dependency |
-| `L-GTE-2026` | David Eberly's Geometric Tools at [`d29e7758ae2615e5e37da3eb573b7bf90ee94e9b`](https://github.com/davideberly/GeometricTools/tree/d29e7758ae2615e5e37da3eb573b7bf90ee94e9b), particularly `GTE/Mathematics/DistPointLine.h`, `DistPointRay.h`, `DistPointSegment.h`, and `DistPointTriangle.h` | Boost Software License 1.0; author-maintained implementation cross-check |
+| `L-GTE-2026` | David Eberly's Geometric Tools at [`d29e7758ae2615e5e37da3eb573b7bf90ee94e9b`](https://github.com/davideberly/GeometricTools/tree/d29e7758ae2615e5e37da3eb573b7bf90ee94e9b), particularly `GTE/Mathematics/DistPointLine.h`, `DistPointRay.h`, `DistPointSegment.h`, `DistPointTriangle.h`, and `DistSegmentSegment.h` | Boost Software License 1.0; author-maintained implementation cross-check |
 | `L-DXM-2026` | DirectXMath at [`d33ba2f150aeb6d3cf62d10f454652ee83672200`](https://github.com/microsoft/DirectXMath/tree/d33ba2f150aeb6d3cf62d10f454652ee83672200), particularly [`Inc/DirectXCollision.inl`](https://github.com/microsoft/DirectXMath/blob/d33ba2f150aeb6d3cf62d10f454652ee83672200/Inc/DirectXCollision.inl) and [`Inc/DirectXMathMisc.inl`](https://github.com/microsoft/DirectXMath/blob/d33ba2f150aeb6d3cf62d10f454652ee83672200/Inc/DirectXMathMisc.inl) | MIT; production-library cross-check |
 | `L-GLM-2026` | GLM at [`6f14f4792a0cde5d0cf2c910506724d61cb95834`](https://github.com/g-truc/glm/tree/6f14f4792a0cde5d0cf2c910506724d61cb95834), particularly [`glm/gtx/intersect.inl`](https://github.com/g-truc/glm/blob/6f14f4792a0cde5d0cf2c910506724d61cb95834/glm/gtx/intersect.inl) and [`glm/ext/quaternion_exponential.inl`](https://github.com/g-truc/glm/blob/6f14f4792a0cde5d0cf2c910506724d61cb95834/glm/ext/quaternion_exponential.inl) | Dual Modified-MIT/MIT; production-library cross-check |
 | `L-BOOST-189` | Boost.Test 1.89.0 [floating-point comparison rationale](https://www.boost.org/doc/libs/1_89_0/libs/test/doc/html/boost_test/testing_tools/extended_comparison/floating_point.html) | Boost Software License 1.0; conceptual cross-check only |
@@ -267,6 +268,43 @@ branch conditions, conventions, and edge handling.
   cases run on scalar and RTM backends. A 1,024-case double-precision oracle
   independently uses plane projection followed by exhaustive edge tests rather
   than the production Voronoi-region decision tree.
+
+### Phase C point/bounds and segment-pair closest queries
+
+- **Coverage:** point/AABB, point/solid-sphere, and segment/segment detailed and
+  concise queries in `queries/ClosestPointQueries.hpp`.
+- **Classification:** book-derived implementation with an independent
+  paper-derived oracle and compatible implementation cross-check.
+- **Sources:** `B-RTCD-ERICSON` sections 5.1.3, 5.1.4, and 5.1.9;
+  `A-SEGMENT-PAIR-EBERLY` for the constrained quadratic and exhaustive
+  critical-point oracle; `L-GTE-2026` `DistSegmentSegment.h` for degenerate and
+  nearly parallel behavior.
+- **Differences:** AABB queries are fallible because Move has an explicit empty
+  box. Sphere queries treat `Sphere3f` as its existing solid bounding volume,
+  so a contained point is its own closest member with zero distance. The
+  segment-pair implementation uses Ericson's compact decision tree with double
+  intermediates and permits either or both segments to degenerate to points.
+- **Validation:** fixed interior, exterior, crossing, skew, nearly parallel,
+  and degenerate cases run on scalar and RTM backends. A 2,048-case
+  double-precision oracle evaluates the boundary and interior critical points
+  from Eberly's formulation rather than following the production decision
+  tree.
+
+### Phase C capsule foundation
+
+- **Coverage:** `geometry/Capsule3.hpp`, point/capsule proximity in
+  `queries/ClosestPointQueries.hpp`, and sphere/capsule and capsule/capsule
+  predicates in `queries/BoundsQueries.hpp`.
+- **Classification:** elementary composition of previously sourced proximity
+  operations using the sphere-swept-volume construction.
+- **Source:** `B-RTCD-ERICSON` sections 4.5 and 4.5.1.
+- **Differences:** Move stores start+radius in one `Vec4f` and the end point in
+  another 16-byte lane group, producing a compact 32-byte semantic value.
+  Point proximity uses solid-volume semantics, and zero-length center lines are
+  valid spheres rather than invalid capsules.
+- **Validation:** fixed side-wall, end-cap, containment, touching, separation,
+  and degenerate-sphere cases run on scalar and RTM backends, with layout,
+  focused-compile, and generated-loop coverage.
 
 ## Non-algorithmic generated code
 
