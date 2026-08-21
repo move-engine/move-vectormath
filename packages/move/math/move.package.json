@@ -4,7 +4,7 @@
     "mv::math"
   ],
   "Description": "Header-only vector, matrix, and quaternion math",
-  "Version": "0.2.0",
+  "Version": "0.5.0",
   "Type": "CppLibrary",
   "Dependencies": [
     "rtm"

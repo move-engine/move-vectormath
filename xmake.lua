@@ -1,5 +1,5 @@
 set_project("move-vectormath")
-set_version("0.2.0")
+set_version("0.5.0")
 set_languages("c++20")
 set_policy("build.c++.modules.std", false)
 

@@ -4,7 +4,7 @@ include(cmake/cpm.cmake)
 
 project(
     move-vectormath
-    VERSION 0.2.0
+    VERSION 0.5.0
     DESCRIPTION "The vectormath module of the Move engine"
     HOMEPAGE_URL "https://github.com/move-engine/move-vectormath"
     LANGUAGES CXX
